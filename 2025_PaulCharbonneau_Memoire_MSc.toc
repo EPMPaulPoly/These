@@ -21,20 +21,24 @@
 \contentsline {section}{\numberline {2.2}Méthodes d'inventaire basées sur des données géoréférencées}{5}{section.2.2}%
 \contentsline {section}{\numberline {2.3}Méthodes d'inventaire basées sur l'imagerie aérienne}{6}{section.2.3}%
 \contentsline {section}{\numberline {2.4}Politiques de stationnement}{7}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Stationnement hors-rue}{7}{subsection.2.4.1}%
 \contentsline {section}{\numberline {2.5}Coûts de provision}{7}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Propriétaires fonciers et municipalités}{7}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.1}Propriétaires fonciers et municipalités}{8}{subsection.2.5.1}%
 \contentsline {section}{\numberline {2.6}Effet de l'offre de stationnement sur la mobilité}{8}{section.2.6}%
 \contentsline {section}{\numberline {2.7}Allocation, tarification et ratissage}{10}{section.2.7}%
 \contentsline {section}{\numberline {2.8}Utilisation de la capacité existante}{11}{section.2.8}%
 \contentsline {section}{\numberline {2.9}Stationnement et utilisation du territoire}{11}{section.2.9}%
-\contentsline {section}{\numberline {2.10}Reconnaissance d'images}{11}{section.2.10}%
+\contentsline {section}{\numberline {2.10}Reconnaissance d'images}{12}{section.2.10}%
 \contentsline {chapter}{\numberline {3}MÉTHODOLOGIE}{13}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Données}{13}{section.3.1}%
 \contentsline {section}{\numberline {3.2}Illustration des données acquises}{16}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}Illustration - Cas 1: Coin Gomin / Marguerite-Bourgeoys / Laurier}{16}{subsection.3.2.1}%
-\contentsline {section}{\numberline {3.3}Données de panneaux de stationnement}{18}{section.3.3}%
-\contentsline {chapter}{\numberline {4}RÉSULTATS}{20}{chapter.4}%
-\contentsline {chapter}{\numberline {5}CONCLUSION}{21}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Synthèse des travaux}{21}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Limitations de la solution proposée}{21}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Améliorations futures}{21}{section.5.3}%
+\contentsline {subsection}{\numberline {3.2.2}Illustration - Cas 2: Coin de la Canardières - Desroches}{18}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Données de panneaux de stationnement}{19}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Règlementation de stationnement hors Rue}{21}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Données d'entrainement d'apprentissage machine}{22}{section.3.5}%
+\contentsline {chapter}{\numberline {4}RÉSULTATS}{23}{chapter.4}%
+\contentsline {chapter}{\numberline {5}CONCLUSION}{24}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Synthèse des travaux}{24}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Limitations de la solution proposée}{24}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Améliorations futures}{24}{section.5.3}%

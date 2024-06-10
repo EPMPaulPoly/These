@@ -1178,6 +1178,7 @@
       \strng{editornamehash}{ac6afa1e5c8a35acdb4f120bedf10c43}
       \strng{editorfullhash}{ac6afa1e5c8a35acdb4f120bedf10c43}
       \strng{editorfullhashraw}{ac6afa1e5c8a35acdb4f120bedf10c43}
+      \field{extraname}{1}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
@@ -1199,6 +1200,63 @@
       \range{pages}{1}
       \verb{file}
       \verb C\:\\Users\\paulc\\Zotero\\storage\\VJEKPF8Z\\Le stationnement dans la métropole bâtir des conn.pdf;C\:\\Users\\paulc\\Zotero\\storage\\4XJ8XISF\\le-stationnement-dans-la-metropole-batir-des-connaissances-pour-une-mobilite-urbaine-durable-1.html
+      \endverb
+    \endentry
+    \entry{Morency:DeveloppementMise:2022}{report}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=4dbcb8bedf4afd701631d93446b857f7}{%
+           family={Morency},
+           familyi={M\bibinitperiod},
+           given={Catherine},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c6b7ed4ddc84fc9b1c8670c7c4a92d8}{%
+           family={Bourdeau},
+           familyi={B\bibinitperiod},
+           given={Jean-Simon},
+           giveni={J\bibinithyphendelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=13aaa87be9209af2441bebfe99ea5d03}{%
+           family={Verreault},
+           familyi={V\bibinitperiod},
+           given={Hubert},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Polytechnique Montréal}%
+      }
+      \list{location}{1}{%
+        {Montréal, QC}%
+      }
+      \strng{namehash}{69eef977b4c559d0287cf17d51430e81}
+      \strng{fullhash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{fullhashraw}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{bibnamehash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{authorbibnamehash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{authornamehash}{69eef977b4c559d0287cf17d51430e81}
+      \strng{authorfullhash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{authorfullhashraw}{40b5aaebe43047f34f2989710e31a96c}
+      \field{extraname}{2}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{2}
+      \field{title}{Développement et Mise En Place d'un Inventaire Dynamique de Stationnement à {{Montréal}}}
+      \field{type}{techreport}
+      \field{urlday}{29}
+      \field{urlmonth}{5}
+      \field{urlyear}{2024}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \field{pages}{47}
+      \range{pages}{1}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\HYZ5V2IF\rapport_final_AMD_inventaire_dynamique.pdf
       \endverb
     \endentry
     \entry{Scharnhorst:QuantifiedParking:2018}{report}{}{}
@@ -1529,8 +1587,10 @@
       \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
       \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
       \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{1}
       \field{sortinit}{V}
       \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
@@ -1548,6 +1608,114 @@
       \field{urldateera}{ce}
       \verb{file}
       \verb C:\Users\paulc\Zotero\storage\RNCWY5ZV\27480cd1-ab19-47fe-a93b-9d526a0eb1e3.html
+      \endverb
+    \endentry
+    \entry{VilledeQuebec:AdoptionReglement:2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=cccc2b5b59cd37b5ddd1c642dcbf3004}{%
+           family={{Ville de Québec}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{bibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorbibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{2}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{5}
+      \field{title}{Adoption Du {{Règlement}} Modifiant Le {{Règlement}} d'harmonisation Sur l'urbanisme et Les Règlements d'arrondissement Sur l'urbanisme Relativement Au Nombre Minimal de Cases de Stationnement Requis Pour Un Usage de La Classe {{Habitation}}, {{R}}.{{V}}.{{Q}}. 3303}
+      \field{urlday}{10}
+      \field{urlmonth}{6}
+      \field{urlyear}{2024}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\BAKHPNU9\PA2024-048.pdf
+      \endverb
+    \endentry
+    \entry{VilledeQuebec:GrilleSpecifications:2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=cccc2b5b59cd37b5ddd1c642dcbf3004}{%
+           family={{Ville de Québec}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{bibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorbibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{3}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Grille de spécifications du zonage de la Ville de Québec.}
+      \field{howpublished}{https://www.donneesquebec.ca/recherche/dataset/grille-de-specifications-du-zonage/resource/85b49cce-7756-41c6-b77f-8df395aea201}
+      \field{langid}{french}
+      \field{month}{6}
+      \field{title}{{Grille de spécifications du zonage - Grille de spécifications du zonage - Données Québec}}
+      \field{urlday}{10}
+      \field{urlmonth}{6}
+      \field{urlyear}{2024}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\EI3CIYXH\85b49cce-7756-41c6-b77f-8df395aea201.html
+      \endverb
+    \endentry
+    \entry{VilledeQuebec:ZonageMunicipal:2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=cccc2b5b59cd37b5ddd1c642dcbf3004}{%
+           family={{Ville de Québec}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{bibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorbibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{4}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartographie des limites de zonage municipal.}
+      \field{howpublished}{https://www.donneesquebec.ca/recherche/dataset/vque\_56}
+      \field{langid}{french}
+      \field{month}{6}
+      \field{title}{{Zonage municipal - Zones - Données Québec}}
+      \field{urlday}{10}
+      \field{urlmonth}{6}
+      \field{urlyear}{2024}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\WI23FC5X\vque_56.html
       \endverb
     \endentry
     \entry{Voulgaris:SynergisticNeighborhood:2017}{article}{}{}
@@ -2793,6 +2961,63 @@
       \verb C:\Users\paulc\Zotero\storage\DL9CYMB5\McCahill et al. - 2016 - Effects of Parking Provision on Automobile Use in .pdf
       \endverb
     \endentry
+    \entry{Morency:DeveloppementMise:2022}{report}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=4dbcb8bedf4afd701631d93446b857f7}{%
+           family={Morency},
+           familyi={M\bibinitperiod},
+           given={Catherine},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c6b7ed4ddc84fc9b1c8670c7c4a92d8}{%
+           family={Bourdeau},
+           familyi={B\bibinitperiod},
+           given={Jean-Simon},
+           giveni={J\bibinithyphendelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=13aaa87be9209af2441bebfe99ea5d03}{%
+           family={Verreault},
+           familyi={V\bibinitperiod},
+           given={Hubert},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Polytechnique Montréal}%
+      }
+      \list{location}{1}{%
+        {Montréal, QC}%
+      }
+      \strng{namehash}{69eef977b4c559d0287cf17d51430e81}
+      \strng{fullhash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{fullhashraw}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{bibnamehash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{authorbibnamehash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{authornamehash}{69eef977b4c559d0287cf17d51430e81}
+      \strng{authorfullhash}{40b5aaebe43047f34f2989710e31a96c}
+      \strng{authorfullhashraw}{40b5aaebe43047f34f2989710e31a96c}
+      \field{extraname}{1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{2}
+      \field{title}{Développement et Mise En Place d'un Inventaire Dynamique de Stationnement à {{Montréal}}}
+      \field{type}{techreport}
+      \field{urlday}{29}
+      \field{urlmonth}{5}
+      \field{urlyear}{2024}
+      \field{year}{2022}
+      \field{urldateera}{ce}
+      \field{pages}{47}
+      \range{pages}{1}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\HYZ5V2IF\rapport_final_AMD_inventaire_dynamique.pdf
+      \endverb
+    \endentry
     \entry{Morency:StationnementDans:2017}{report}{}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=4dbcb8bedf4afd701631d93446b857f7}{%
@@ -2836,6 +3061,7 @@
       \strng{editornamehash}{ac6afa1e5c8a35acdb4f120bedf10c43}
       \strng{editorfullhash}{ac6afa1e5c8a35acdb4f120bedf10c43}
       \strng{editorfullhashraw}{ac6afa1e5c8a35acdb4f120bedf10c43}
+      \field{extraname}{2}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
@@ -3187,8 +3413,10 @@
       \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
       \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
       \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{1}
       \field{sortinit}{V}
       \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
@@ -3206,6 +3434,114 @@
       \field{urldateera}{ce}
       \verb{file}
       \verb C:\Users\paulc\Zotero\storage\RNCWY5ZV\27480cd1-ab19-47fe-a93b-9d526a0eb1e3.html
+      \endverb
+    \endentry
+    \entry{VilledeQuebec:AdoptionReglement:2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=cccc2b5b59cd37b5ddd1c642dcbf3004}{%
+           family={{Ville de Québec}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{bibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorbibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{2}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{5}
+      \field{title}{Adoption Du {{Règlement}} Modifiant Le {{Règlement}} d'harmonisation Sur l'urbanisme et Les Règlements d'arrondissement Sur l'urbanisme Relativement Au Nombre Minimal de Cases de Stationnement Requis Pour Un Usage de La Classe {{Habitation}}, {{R}}.{{V}}.{{Q}}. 3303}
+      \field{urlday}{10}
+      \field{urlmonth}{6}
+      \field{urlyear}{2024}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\BAKHPNU9\PA2024-048.pdf
+      \endverb
+    \endentry
+    \entry{VilledeQuebec:GrilleSpecifications:2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=cccc2b5b59cd37b5ddd1c642dcbf3004}{%
+           family={{Ville de Québec}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{bibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorbibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{3}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Grille de spécifications du zonage de la Ville de Québec.}
+      \field{howpublished}{https://www.donneesquebec.ca/recherche/dataset/grille-de-specifications-du-zonage/resource/85b49cce-7756-41c6-b77f-8df395aea201}
+      \field{langid}{french}
+      \field{month}{6}
+      \field{title}{{Grille de spécifications du zonage - Grille de spécifications du zonage - Données Québec}}
+      \field{urlday}{10}
+      \field{urlmonth}{6}
+      \field{urlyear}{2024}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\EI3CIYXH\85b49cce-7756-41c6-b77f-8df395aea201.html
+      \endverb
+    \endentry
+    \entry{VilledeQuebec:ZonageMunicipal:2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=cccc2b5b59cd37b5ddd1c642dcbf3004}{%
+           family={{Ville de Québec}},
+           familyi={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{fullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{bibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorbibnamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authornamehash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhash}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \strng{authorfullhashraw}{cccc2b5b59cd37b5ddd1c642dcbf3004}
+      \field{extraname}{4}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradate}{4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cartographie des limites de zonage municipal.}
+      \field{howpublished}{https://www.donneesquebec.ca/recherche/dataset/vque\_56}
+      \field{langid}{french}
+      \field{month}{6}
+      \field{title}{{Zonage municipal - Zones - Données Québec}}
+      \field{urlday}{10}
+      \field{urlmonth}{6}
+      \field{urlyear}{2024}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb C:\Users\paulc\Zotero\storage\WI23FC5X\vque_56.html
       \endverb
     \endentry
     \entry{Voulgaris:SynergisticNeighborhood:2017}{article}{}{}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.11)  28 MAY 2024 22:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.11)  10 JUN 2024 18:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1026,7 +1026,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[9] (2025_PaulCharbonneau_Memoire_MSc.lot)
+[9] (2025_PaulCharbonneau_Memoire_MSc.lot
+Overfull \hbox (31.40358pt too wide) detected at line 6
+\T1/lmr/m/n/12 Tableau \T1/lmr/m/sc/12 Tableau 3.3 
+ []
+
+)
 \tf@lot=\write6
 \openout6 = `2025_PaulCharbonneau_Memoire_MSc.lot'.
 
@@ -1107,12 +1112,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
  (6-Revue_litterature.tex
 Chapitre 2.
-<images/Typologie_Stationnement_hors_rue.png, id=346, 697.60625pt x 456.70625pt>
+<images/Typologie_Stationnement_hors_rue.png, id=374, 697.60625pt x 456.70625pt>
 File: images/Typologie_Stationnement_hors_rue.png Graphic file (type png)
 <use images/Typologie_Stationnement_hors_rue.png>
 Package pdftex.def Info: images/Typologie_Stationnement_hors_rue.png  used on input line 11.
 (pdftex.def)             Requested size: 472.03111pt x 309.02997pt.
-<images/Typologie_Stationnement_sur_rue.png, id=349, 721.19438pt x 471.7625pt>
+<images/Typologie_Stationnement_sur_rue.png, id=377, 721.19438pt x 471.7625pt>
 File: images/Typologie_Stationnement_sur_rue.png Graphic file (type png)
 <use images/Typologie_Stationnement_sur_rue.png>
 Package pdftex.def Info: images/Typologie_Stationnement_sur_rue.png  used on input line 17.
@@ -1159,15 +1164,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [7]
 
-LaTeX Warning: Citation 'Yin:BuiltEnvironment:2018' on page 8 undefined on input line 48.
+LaTeX Warning: Citation 'Yin:BuiltEnvironment:2018' on page 8 undefined on input line 53.
 
 
-LaTeX Warning: Citation '' on page 8 undefined on input line 48.
+LaTeX Warning: Citation '' on page 8 undefined on input line 53.
 
 Package acronym Info: Label `acro:TC' newly defined as it shall be overridden
-although it is yet undefined on input line 49.
+although it is yet undefined on input line 54.
 Package acronym Info: Label `acro:PLUTO' newly defined as it shall be overridden
-although it is yet undefined on input line 49.
+although it is yet undefined on input line 54.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1177,12 +1182,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [8]
 
-LaTeX Warning: Citation 'Yin:BuiltEnvironment:2018' on page 9 undefined on input line 51.
-
-
-LaTeX Warning: Citation '' on page 9 undefined on input line 51.
-
-
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
 (fancyhdr)                \setlength{\headheight}{14.49998pt}.
@@ -1190,6 +1189,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [9]
+
+LaTeX Warning: Citation 'Yin:BuiltEnvironment:2018' on page 10 undefined on input line 56.
+
+
+LaTeX Warning: Citation '' on page 10 undefined on input line 56.
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1241,12 +1246,17 @@ Underfull \hbox (badness 4621) in paragraph at lines 26--26
  []
 
 
-Overfull \hbox (53.96112pt too wide) in paragraph at lines 12--37
+Underfull \hbox (badness 2941) in paragraph at lines 28--28
+[]|\T1/lmr/m/n/12 Réseau de trans-
+ []
+
+
+Overfull \hbox (55.42786pt too wide) in paragraph at lines 12--39
  [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 45--45
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
 []|\T1/lmr/m/n/12 Type
  []
 
@@ -1271,16 +1281,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [15]
-<images/donnees_disponible_Laurier_legende.png, id=465, 1175.39125pt x 614.295pt>
-File: images/donnees_disponible_Laurier_legende.png Graphic file (type png)
-<use images/donnees_disponible_Laurier_legende.png>
-Package pdftex.def Info: images/donnees_disponible_Laurier_legende.png  used on input line 66.
-(pdftex.def)             Requested size: 472.03111pt x 246.69785pt.
-<images/utilisation_sols_Laurier.png, id=466, 1019.81pt x 566.115pt>
-File: images/utilisation_sols_Laurier.png Graphic file (type png)
-<use images/utilisation_sols_Laurier.png>
-Package pdftex.def Info: images/utilisation_sols_Laurier.png  used on input line 71.
-(pdftex.def)             Requested size: 472.03111pt x 262.0314pt.
+<images/donnees_disponible_Laurier_legende_v2.png, id=497, 866.23625pt x 429.10312pt>
+File: images/donnees_disponible_Laurier_legende_v2.png Graphic file (type png)
+<use images/donnees_disponible_Laurier_legende_v2.png>
+Package pdftex.def Info: images/donnees_disponible_Laurier_legende_v2.png  used on input line 68.
+(pdftex.def)             Requested size: 472.03111pt x 233.82709pt.
+<images/utilisation_sols_Laurier_v2.png, id=498, 803.0pt x 388.95313pt>
+File: images/utilisation_sols_Laurier_v2.png Graphic file (type png)
+<use images/utilisation_sols_Laurier_v2.png>
+Package pdftex.def Info: images/utilisation_sols_Laurier_v2.png  used on input line 73.
+(pdftex.def)             Requested size: 472.03111pt x 228.64352pt.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1299,17 +1309,17 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[17 <./images/donnees_disponible_Laurier_legende.png> <./images/utilisation_sols_Laurier.png>]
-<images/enjeux_BD_panneaux_stationnement_Laurier.png, id=479, 1387.1825pt x 479.29062pt>
-File: images/enjeux_BD_panneaux_stationnement_Laurier.png Graphic file (type png)
-<use images/enjeux_BD_panneaux_stationnement_Laurier.png>
-Package pdftex.def Info: images/enjeux_BD_panneaux_stationnement_Laurier.png  used on input line 90.
-(pdftex.def)             Requested size: 472.03111pt x 163.0956pt.
-<images/enjeux_BD_panneaux_stationnement_Desroches.png, id=480, 1166.3575pt x 520.94624pt>
-File: images/enjeux_BD_panneaux_stationnement_Desroches.png Graphic file (type png)
-<use images/enjeux_BD_panneaux_stationnement_Desroches.png>
-Package pdftex.def Info: images/enjeux_BD_panneaux_stationnement_Desroches.png  used on input line 96.
-(pdftex.def)             Requested size: 472.03111pt x 210.83104pt.
+[17 <./images/donnees_disponible_Laurier_legende_v2.png> <./images/utilisation_sols_Laurier_v2.png>]
+<images/donnees_disponible_Desroches_legende_v2.png, id=512, 774.39313pt x 419.06563pt>
+File: images/donnees_disponible_Desroches_legende_v2.png Graphic file (type png)
+<use images/donnees_disponible_Desroches_legende_v2.png>
+Package pdftex.def Info: images/donnees_disponible_Desroches_legende_v2.png  used on input line 87.
+(pdftex.def)             Requested size: 377.62633pt x 204.35281pt.
+<images/utilisation_sols_Desroches_v2.png, id=513, 750.30313pt x 385.94188pt>
+File: images/utilisation_sols_Desroches_v2.png Graphic file (type png)
+<use images/utilisation_sols_Desroches_v2.png>
+Package pdftex.def Info: images/utilisation_sols_Desroches_v2.png  used on input line 93.
+(pdftex.def)             Requested size: 377.62633pt x 194.24837pt.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1320,7 +1330,51 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [18
 
- <./images/enjeux_BD_panneaux_stationnement_Laurier.png>])
+ <./images/donnees_disponible_Desroches_legende_v2.png> <./images/utilisation_sols_Desroches_v2.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 106--106
+[]|\T1/lmr/m/n/12 DUREE
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--106
+\T1/lmr/m/n/12 _MAX_
+ []
+
+
+Overfull \hbox (6.70479pt too wide) in paragraph at lines 110--110
+[]|\T1/lmr/m/n/12 Date_debut_1| 
+ []
+
+
+Overfull \hbox (6.70479pt too wide) in paragraph at lines 112--112
+[]|\T1/lmr/m/n/12 Date_debut_2| 
+ []
+
+
+Overfull \hbox (1.63948pt too wide) in paragraph at lines 124--124
+[]|\T1/lmr/m/n/12 MA_debut_1| 
+ []
+
+
+Overfull \hbox (1.63948pt too wide) in paragraph at lines 126--126
+[]|\T1/lmr/m/n/12 MA_debut_2| 
+ []
+
+
+Overfull \hbox (0.82599pt too wide) in paragraph at lines 129--129
+[]|\T1/lmr/m/n/12 ME_debut_1| 
+ []
+
+
+Overfull \hbox (0.82599pt too wide) in paragraph at lines 131--131
+[]|\T1/lmr/m/n/12 ME_debut_2| 
+ []
+
+
+Overfull \hbox (5.53458pt too wide) in alignment at lines 102--157
+ [] [] [] [] 
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1328,7 +1382,37 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[19 <./images/enjeux_BD_panneaux_stationnement_Desroches.png>]
+[19]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[20]
+<images/Types_unites_voisinage.png, id=535, 488.32437pt x 390.45876pt>
+File: images/Types_unites_voisinage.png Graphic file (type png)
+<use images/Types_unites_voisinage.png>
+Package pdftex.def Info: images/Types_unites_voisinage.png  used on input line 171.
+(pdftex.def)             Requested size: 236.01555pt x 188.71689pt.
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[21])
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[22 <./images/Types_unites_voisinage.png>]
 \openout2 = `7-2-Resultats_Solution.aux'.
 
  (7-2-Resultats_Solution.tex
@@ -1341,7 +1425,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[20
+[23
 
 
 
@@ -1359,7 +1443,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[21
+[24
 
 
 
@@ -1408,7 +1492,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[22
+[25
 
 
 
@@ -1435,6 +1519,10 @@ Package biblatex Warning: Bibliography string 'et' undefined
 
 
 Package biblatex Warning: Bibliography string 'et' undefined
+(biblatex)                at entry 'Morency:DeveloppementMise:2022' on input line 258.
+
+
+Package biblatex Warning: Bibliography string 'et' undefined
 (biblatex)                at entry 'Morency:StationnementDans:2017' on input line 258.
 
 
@@ -1443,17 +1531,17 @@ Overfull \hbox (15.75873pt too wide) in paragraph at lines 258--258
  []
 
 
-Package biblatex Warning: Bibliography string 'et' undefined
-(biblatex)                at entry 'Translink:2018Regional:2019' on input line 258.
-
-
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
 (fancyhdr)                \setlength{\headheight}{14.49998pt}.
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[23]
+[26]
+
+Package biblatex Warning: Bibliography string 'et' undefined
+(biblatex)                at entry 'Translink:2018Regional:2019' on input line 258.
+
 
 Package biblatex Warning: Bibliography string 'et' undefined
 (biblatex)                at entry 'vanOmmeren:RealPrice:2011' on input line 258.
@@ -1481,29 +1569,29 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[24] (2025_PaulCharbonneau_Memoire_MSc.aux (1-Dedicace.aux) (2-Remerciements.aux) (3-Resume_sujet.aux) (3-Abstract.aux) (4-Sigles_Abrev.aux) (5-Introduction.aux) (6-Revue_litterature.aux) (7-1-Details_Solution.aux) (7-2-Resultats_Solution.aux) (8-Conclusion.aux))
+[27] (2025_PaulCharbonneau_Memoire_MSc.aux (1-Dedicace.aux) (2-Remerciements.aux) (3-Resume_sujet.aux) (3-Abstract.aux) (4-Sigles_Abrev.aux) (5-Introduction.aux) (6-Revue_litterature.aux) (7-1-Details_Solution.aux) (7-2-Resultats_Solution.aux) (8-Conclusion.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-04-11>
  ***********
 Package rerunfilecheck Info: File `2025_PaulCharbonneau_Memoire_MSc.out' has not changed.
-(rerunfilecheck)             Checksum: 17976640940BC18C866E2D034E2D99C8;7493.
+(rerunfilecheck)             Checksum: DD899A9D553123742F5C95F5C9092372;8719.
 Package logreq Info: Writing requests to '2025_PaulCharbonneau_Memoire_MSc.run.xml'.
 \openout1 = `2025_PaulCharbonneau_Memoire_MSc.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 28013 strings out of 474370
- 568875 string characters out of 5740535
- 1943754 words of memory out of 5000000
- 49849 multiletter control sequences out of 15000+600000
+ 28070 strings out of 474370
+ 570926 string characters out of 5740535
+ 1961754 words of memory out of 5000000
+ 49894 multiletter control sequences out of 15000+600000
  593381 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  66i,12n,81p,7495b,4990s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/paulc/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/paulc/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.pfb><C:/Users/paulc/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/paulc/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/paulc/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/paulc/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri12.pfb>
-Output written on 2025_PaulCharbonneau_Memoire_MSc.pdf (35 pages, 11299195 bytes).
+Output written on 2025_PaulCharbonneau_Memoire_MSc.pdf (38 pages, 8260801 bytes).
 PDF statistics:
- 597 PDF objects out of 1000 (max. 8388607)
- 118 named destinations out of 1000 (max. 500000)
- 327 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 657 PDF objects out of 1000 (max. 8388607)
+ 130 named destinations out of 1000 (max. 500000)
+ 364 words of extra memory for PDF output out of 10000 (max. 10000000)
 
