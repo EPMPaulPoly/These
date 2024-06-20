@@ -24,7 +24,7 @@ Il est important de noter qu'il n'existe pas à la connaissance de l'auteur un i
 \section{Méthodes d'inventaire basées sur des données géoréférencées}
 La revue de littérature a révélé plusieurs différentes méthodologies utilisées pour recenser l'offre de stationnement hors rue et sur rue. 
 \subsection{Hors-Rue}
-{Chester:ParkingInfrastructure:2015}utilisent des données basées sur le rôle foncier, un modèle de croissance de la construction et des données de recensement croisées avec les minimums de stationnement issus des codes d'urbanisme pour inférer la capacité de stationnement de la région de Los Angeles depuis les années '50. Les auteurs indiquent qu'ils estiment que les minimums mis en place sont probablement le nombre de places construites du fait de la valeur marginale basse de la place de stationnement par rapport à la construction de bâtiments. \citeauthor{Chester:InventoryingSan:2022} estime la capacité de stationnement en utilisant une méthode similaire basée sur les codes d'urbanismes et les données foncières pour la région de San Francisco \parencite{Chester:InventoryingSan:2022} et Phoenix \parencite{Hoehne:ValleySundrenched:2019}. \textcite{Scharnhorst:QuantifiedParking:2018} fait pour sa part un inventaire de 5 régions métropolitaines aux États-Unis utilisant encore une fois des méthodes basées sur les codes d'urbanisme en vigueur à la période de construction. Ce dernier n'est cependant pas revu par les pairs. \par 
+\textcite{Chester:ParkingInfrastructure:2015} utilisent des données basées sur le rôle foncier, un modèle de croissance de la construction et des données de recensement croisées avec les minimums de stationnement issus des codes d'urbanisme pour inférer la capacité de stationnement de la région de Los Angeles depuis les années '50. Les auteurs indiquent qu'ils estiment que les minimums mis en place sont probablement le nombre de places construites du fait de la valeur marginale basse de la place de stationnement par rapport à la construction de bâtiments. \citeauthor{Chester:InventoryingSan:2022} estime la capacité de stationnement en utilisant une méthode similaire basée sur les codes d'urbanismes et les données foncières pour la région de San Francisco \parencite{Chester:InventoryingSan:2022} et Phoenix \parencite{Hoehne:ValleySundrenched:2019}. \textcite{Scharnhorst:QuantifiedParking:2018} fait pour sa part un inventaire de 5 régions métropolitaines aux États-Unis utilisant encore une fois des méthodes basées sur les codes d'urbanisme en vigueur à la période de construction. Ce dernier n'est cependant pas revu par les pairs. \par 
 Il est important de noter que ce type d'inventaire fait l'hypothèse que les promoteurs construisent selon la norme. \textcite{Stangl:ParkingLots:2019} indiquent que les promoteurs immobiliers ne respectent pas nécessairement cette hypothèse car leur but est de minimiser les risques d'invendus et leurs perceptions ne sont pas alignées avec l'utilisation réelle des stationnements. Ironiquement, les développeurs ont tendance à bâtir plus de stationnements dans des voisinages de typologie \og{Old Urban} \fg{} \parencite{Voulgaris:SynergisticNeighborhood:2017} alors que ce sont précisément les quartiers où les gens ont une plus faible propension à conduire. \textcite{Stangl:ParkingLots:2019} comporte des entrevues avec des promoteurs immobiliers qui illustrent l'effet structurant des minimums de stationnement sur les décisions de construction, mais aussi certains biais dans la prise de décision vis-a-vis du stationnement.
 \subsection{Sur-rue}
 \textcite{Bourdeau:MethodologieAnalyse:2014} détaille une méthode d'inventaire de places de stationnement sur rue basé sur l'utilisation des données de réseaux routiers, de panneaux de stationnement et d'archive cadastrale pour déterminer le nombre de places de stationnements sur rue. Cette approche permet de mieux identifier les limites règlementaires et temporelles que les approches utilisées par \textcite{Chester:InventoryingSan:2022} et \textcite{Scharnhorst:QuantifiedParking:2018}. En effet, ces dernières n'enlèvent de la capacité que sur une base de moyennes pour les intersections, arrêts de bus sans prendre en compte la géométrie locale ou des contraintes qui ne peuvent être adéquatement capturées par \ac{OSM}. Dans les 3 cas, l'inventaire sur rue est fait avec des largeurs d'intersection moyenne, avec des retraits pour les entrées et la règlementation utilisant des heuristiques plutôt que la règlementation. \par
@@ -92,7 +92,7 @@ Les problèmes de reconnaissance d'images se divisent en trois types de solution
   \caption{Résultat de différentes méthodes de vision par ordinateur pour une même image.\hl{vérifier droits d'auteurs} Source: \cite{Minaee:ImageSegmentation:2022}}
   \label{fig:computer_vision_problems}
 \end{figure}
-Les processus varient aussi dans leur résultante. Tandis que les méthodes de segmentation d'image donnent un masque par pixel donnant un résultat en raster, les méthodes de détection peuvent donner un résultat vectoriel potentiellement plus facile à diviser.
+Les processus varient aussi dans leur résultante. Tandis que les modèles de segementation pure feront une affectation de la même couleur à plusieurs objets d'un même type, la segmentation d'instance rend le processus de post traitement des raster plus simple en donnant une couleur différente à chaque instance d'un même type d'objet. Cette dernière propriété a le mérite de potentiellement faciliter le post traitement des résults.
 \FloatBarrier
 \subsection{Algorithmes de détection}
 
@@ -100,16 +100,18 @@ Les processus varient aussi dans leur résultante. Tandis que les méthodes de s
 
 \subsection{Algorithmes de segmentation d'instance}
 La première est la segmentation sémantique qui consiste à séparer des pixels dans une image par classe. La deuxième est la segmentation d'instance. Cette dernière reconnait des objets, le classifie et en extraie le contour. \textcite{He:MaskRCNN:2018} est l'article original sur la méthode qui a par la suite été adapté dans un contexte de reconnaissance SIG \parencite{Pesek:MaskRCNN:2018} ou pour la reconnaissance automatique de terrains sportifs pour réinjecter les polygones directement dans \ac{OSM} \parencite{Remillard:JremillardImagestoosm:2024}.\par
+\textcite{Fritz:InstanceSegmentation:2020} développe plusieurs estimés de segmentation d'instance pour des bâtiments à l'aide de deux modèles. Le premier est celui cité plus haut\parencite{He:MaskRCNN:2018} tandis que le deuxième est un modèle de segmentation d'image modifié pour segmenter les instances \parencite{Iglovikov:TernausNetV2Fully:2018} une fois la segementation d'image complétée
 
 \subsection{Bases de données disponibles}
 Deux enjeux sont critiques au succès d'un projet d'apprentissage machine. La présence d'un modèle adapté à la tâche en cours et la présence d'un jeu de donnée annoté qui peut être utilisé pour ajuster les poids initiaux du modèle pour permettre de modifier les poids du modèle et permettre de l'appliquer à de grands ensembles de données. Le tableau suivant résumera les jeux de données actuellement disponibles pour la segmentation sémantique en milieu urbain:
 \begin{table}
  \centering
-    \begin{tabular}{l l l l } 
+    \begin{tabular}{l l l p{0.4\textwidth}} 
     \hline
-    Nom du jeu de données & Origine & Nombres de classes & Classes pertinentes\\
+    Nom & Origine & $N_{classes}$ & Classes pertinentes au stationnement\\
     \hline
-    
+    APKLot & \cite{Hurst-Tarrab:RobustParking:2020} & 1 & Grappes\\
+    Skyscapes & \cite{Azimi:SkyScapesFineGrained:2019} & 31 & Aires pavées, aires non-pavées\\
    \end{tabular}
    \caption{Jeux de données annotés de segmentation sémantique en milieu urbain}
    \label{tab:jeux_donnees_segmentation_urbain}
