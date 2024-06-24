@@ -7,23 +7,40 @@ La section méthodologique sera divisée en trois sections. La première présen
 \section{Données}
 Le tableau \ref{tab:donnees_disponibles_Québec} résume les données disponibles pour la ville de Québec et leur source.
 \begin{landscape}
-\begin{table}[h!]
-  \centering
-   \begin{tabular}{p{.2 \linewidth} l p{.3 \linewidth} p{.15\linewidth} l } 
+  \LTcapwidth=\textwidth
+\begin{longtable}[h!]{p{.2 \linewidth} p{.1 \linewidth} p{.3 \linewidth} p{.15\linewidth} p{.125\linewidth} }
+   
+  
+  \hline
+   Géobase & Type & Description  & Source & Date téléchargement.\\ 
    \hline
-   Géobase & Type & Description  & Source & Date public.\\ 
    \hline
-   vdq-panneauxstationnement    & Points        & Panneaux de stationnement sur rue          & Ville de Québec / Données Québec  & 5 mai 2024 \\
+   \endhead
+   \hline
+   \endfoot
+   \hline
+   \caption{Géobases pour le territoire de la ville de Québec}
+   \label{tab:donnees_disponibles_Québec}
+   \endlastfoot
+  
+  
+   vdq-panneaux stationnement    & Points        & Panneaux de stationnement sur rue          & Ville de Québec / Données Québec  & 5 mai 2024 \\
+   \hline
+   vq\_quartiers & Polygones & SIG des quartiers de la ville de Québec & Ville de Québec / Données Québec & 5 mai 2024 \\
    \hline
    vdq-bornesfontaines          & Points        & Bornes fontaines sur rue                   & Ville de Québec / Données Québec & 12 mai 2024 \\
    \hline
    vq\_reseau\_routier\_2023 & Polylignes    & Bords de voiries pour circulation automobile  & Ville de Québec / Geo-index  & 12 juin 2023\\ 
    \hline
-   vq\_stationnement\_2021  & Polylignes    & Bords des aires de stationnement           & Ville de Québec / Geo-index & 8 mai 2021\\
+   vq\_stationnement\_2021  & Polylignes    & Bords des aires de stationnement hors rue & Ville de Québec / Geo-index & 8 mai 2021\\
    \hline
    vdq\_voie\_publique            & Lignes        & Centres de chaussées trottoirs séparés et pistes cyclables & Ville de Québec / Données Québec & 16 avril 2024 \\
    \hline
-   vdq\_intersection\_voie \_publique & Lignes & intersections avec les dispositifs de contrôle & Ville de Québec / Données Québec & 8 mai 2024 \\
+   vdq-zonage-grille.xlsx          & Tableau        & Usages autorisés et classification (urbain/structurant/général) & Ville de Québec / Données Québec & 8 juin 2024 \\
+   \hline
+   vdq-zonagemunicipalzones          & Polygones        & Unités de voisinages selon le zonage municipal & Ville de Québec / Données Québec & 6 mai 2024 \\
+   \hline
+   vdq\_intersection\_voie \_publique & Points & Intersections avec les dispositifs de contrôle & Ville de Québec / Données Québec & 8 mai 2024 \\
    \hline
    vdq\_quartiers & Polygones &Séparation de la ville en quartiers & Ville de Québec / Données Québec & 8 mai 2024\\
    \hline
@@ -33,16 +50,18 @@ Le tableau \ref{tab:donnees_disponibles_Québec} résume les données disponible
    \hline
    Année de construction des chaussées & Polylignes & Année de construction des rues & Ville de Québec / Géoindex & 28 mai 2024 \\
    \hline
+   Rôle foncier & Entrées de tableaux & Données en format xml du rôle foncier & Ministère des Affaires municipales et de l'Habitation & 28 mai 2024 \\
+   \hline
+   Rôle foncier géobase & FGDB (Points + tables) & Données SIG du rôle foncier & Ministère des Affaires municipales et de l'Habitation & 28 mai 2024 \\
+   \hline
    highway & Polylignes & Centres de chaussées & \ac{OSM} & 13 mai 2024\\
    \hline
    parking & points et polygones & Stationnement recensés dans \ac{OSM} & \ac{OSM} & 2 mai 2024 \\
    \hline
     parking entrance & Points & Entrées de stationnement sous-terrains  & \ac{OSM} & 2 mai 2024 \\
     \hline
-   \end{tabular}
-   \caption{Géobases pour le territoire de la ville de Québec}
-   \label{tab:donnees_disponibles_Québec}
-\end{table}
+   
+\end{longtable}
 
 \begin{table}[h!]
   \centering
@@ -63,50 +82,59 @@ Le tableau \ref{tab:donnees_disponibles_Québec} résume les données disponible
 \end{landscape}
 
 \section{Illustration des données acquises}
-La section suivante va donner un aperçu de quelques intersections typiques pour illustrer les données disponibles. Les mêmes quelque cas seront illustrés à des fins illustratives. Le but principal est d'illustrer les enjeux.
-\subsection{Illustration - Cas 1: Coin Gomin / Marguerite-Bourgeoys / Laurier}
-Les figures \ref{fig:donnes_panneaux_Laurier} et \ref{fig:donnes_polygone_panneaux_Laurier} donnent un aperçu des données disponibles pour l'intersection nommée ci-dessus. On constate que plusieurs panneaux sur un même poteau ne sont pas représentés géographiquement au même endroit. D'autre part, la présence de panonceaux donne des exceptions aux limitations de temsp de stationnement. De plus, la ville a à sa disposition une géobase de bords de rue mais aucune information n'est disponible pour associer le bord de rue à un tronçon donné. Le même constat est possible pour les panneaux de stationnement dont les seuls informations sont un identifiant, la description et un identifiant de panneau. Ils ne sont pas associés à un tronçon ou un côté de rue. L'une des conséquences de la dispersion des panneaux est aussi la difficulté d'assigner les panneaux à un tronçon aux intersections puisque le panneau peut être plus proche d'un bord de rue autre du fait du décalage des panneaux dans l'espace. Dans ce cas-ci, le panneau Stat. int. (fl. ga.) est à 6m de la rue Marguerite Bourgeoys et 9m de la rue Gomin.
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}{\linewidth}
-    \includegraphics[width=1.0\textwidth]{images/donnees_disponible_Laurier_legende_v2.png}
-  \caption{Données linéaires disponibles}
-  \label{fig:donnes_panneaux_Laurier}
-  \end{subfigure} \\
-  \begin{subfigure}{\linewidth}
-    \includegraphics[width=1.0\textwidth]{images/utilisation_sols_Laurier_v2.png}
-  \caption{Données polygonales disponibles}
-  \label{fig:donnes_polygone_panneaux_Laurier}
-  \end{subfigure}
-  \caption{Données disponicles intersection Laurier}
-\end{figure}
+  La section suivante va donner un aperçu de quelques intersections typiques pour illustrer les données disponibles. Les mêmes quelque cas seront illustrés à des fins illustratives. Le but principal est d'illustrer les enjeux.
+    \subsection{Illustration - Cas 1: Coin Gomin / Marguerite-Bourgeoys / Laurier}
+      Les figures \ref{fig:donnes_panneaux_Laurier} et \ref{fig:donnes_polygone_panneaux_Laurier} donnent un aperçu des données disponibles pour l'intersection nommée ci-dessus. On constate que plusieurs panneaux sur un même poteau ne sont pas représentés géographiquement au même endroit. D'autre part, la présence de panonceaux donne des exceptions aux limitations de temsp de stationnement. De plus, la ville a à sa disposition une géobase de bords de rue mais aucune information n'est disponible pour associer le bord de rue à un tronçon donné. Le même constat est possible pour les panneaux de stationnement dont les seuls informations sont un identifiant, la description et un identifiant de panneau. Ils ne sont pas associés à un tronçon ou un côté de rue. L'une des conséquences de la dispersion des panneaux est aussi la difficulté d'assigner les panneaux à un tronçon aux intersections puisque le panneau peut être plus proche d'un bord de rue autre du fait du décalage des panneaux dans l'espace. Dans ce cas-ci, le panneau Stat. int. (fl. ga.) est à 6m de la rue Marguerite Bourgeoys et 9m de la rue Gomin.
+      \begin{figure}[ht]
+        \centering
+        \begin{subfigure}{\linewidth}
+          \includegraphics[width=1.0\textwidth]{images/donnees_disponible_Laurier_legende_v2.png}
+        \caption{Données linéaires disponibles}
+        \label{fig:donnes_panneaux_Laurier}
+        \end{subfigure} \\
+        \begin{subfigure}{\linewidth}
+          \includegraphics[width=1.0\textwidth]{images/utilisation_sols_Laurier_v2.png}
+        \caption{Données polygonales disponibles}
+        \label{fig:donnes_polygone_panneaux_Laurier}
+        \end{subfigure}
+        \caption{Données disponicles intersection Laurier}
+      \end{figure}
 
-\FloatBarrier
-\subsection{Illustration - Cas 2: Coin de la Canardières - Desroches}
-Les figures \ref{fig:donnes_panneaux_Desroches} et \ref{fig:donnes_polygone_panneaux_Desroches} illustre les mêmes données à un autre coin de rue. Ici, la localisation des panneaux porte encore plus à confusion puisque les panneaux de 2 tronçons de rue sont quasiment superposés. Il sera donc difficile d'assigner les panneaux aux bords de rues automatiquement lorsque ces derniers sont aux abords des intersections.
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}{\linewidth}
+      \FloatBarrier
+  \subsection{Illustration - Cas 2: Coin de la Canardières - Desroches}
+  Les figures \ref{fig:donnes_panneaux_Desroches} et \ref{fig:donnes_polygone_panneaux_Desroches} illustre les mêmes données à un autre coin de rue. Ici, la localisation des panneaux porte encore plus à confusion puisque les panneaux de 2 tronçons de rue sont quasiment superposés. Il sera donc difficile d'assigner les panneaux aux bords de rues automatiquement lorsque ces derniers sont aux abords des intersections.
+  \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/donnees_disponible_Desroches_legende_v2.png}
-  \caption{Données linéaires disponibles}
-  \label{fig:donnes_panneaux_Desroches}
-  \end{subfigure} \\
-  \begin{subfigure}{\linewidth}
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/utilisation_sols_Desroches_v2.png}
-  \caption{Données polygonales disponibles}
-  \label{fig:donnes_polygone_panneaux_Desroches}
-  \end{subfigure}
-  \caption{Données disponicles intersection Laurier}
-\end{figure}
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=0.8\textwidth]{images/donnees_disponible_Desroches_legende_v2.png}
+    \caption{Données linéaires disponibles}
+    \label{fig:donnes_panneaux_Desroches}
+    \end{subfigure} \\
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=0.8\textwidth]{images/utilisation_sols_Desroches_v2.png}
+    \caption{Données polygonales disponibles}
+    \label{fig:donnes_polygone_panneaux_Desroches}
+    \end{subfigure}
+    \caption{Données disponibles intersection Desroches / De la Canardière}
+  \end{figure}
 \FloatBarrier
 \section{Données de panneaux de stationnement}
-  Les panneaux ne sont pas classifiés de manière à être facilement lisible par machine. Aucun index des panneaux de stationnement n'existe à la connaissance de l'auteur. Une classification semi automatisée en isolant certains morceaux de chaînes de caractères a donc été crée pour rendre les panneaux de stationnement compatibles avec la structure de base de données énoncée dans \textcite{Bourdeau:MethodologieAnalyse:2014} et \textcite{Morency:DeveloppementMise:2022}. Pour être plus explicite, les champs suivants sont assignés à chaque panneau:
+  Les panneaux ne sont pas classifiés de manière à être facilement lisible par machine. Aucun index des panneaux de stationnement n'existe à la connaissance de l'auteur. Une classification semi automatisée en isolant certains morceaux de chaînes de caractères a donc été crée pour rendre les panneaux de stationnement compatibles avec la structure de base de données énoncée dans \textcite{Bourdeau:MethodologieAnalyse:2014} et \textcite{Morency:DeveloppementMise:2022}. Le tableau \ref{tab:donnees_requises} liste les champs requis pour définir la fonction d'un panneau de stationnement:
+  \LTcapwidth=\textwidth
+
   \begin{longtable}{p{0.15 \linewidth}  l p{0.5\linewidth} l  }
     \hline
     Champs & Type & Description & Valeur possibles \\
     \hline
+    \endhead
+    \hline
+    \endfoot
+    \hline
+    \caption{Champs requis dans la base de données de stationnement}
+    \label{tab:donnees_requises}
+    \endlastfoot
     DUREE \_MAX\_ MINUTES & Entier & Durée maximale de stationnement & 0-120 \\
     TYPE\_1 & Entier & Clientèle spécifique de ce panneau & 0-11\\
     TYPE\_2 & Entier & Clientèle spécifique de ce panneau & 0-11\\
@@ -118,7 +146,7 @@ Les figures \ref{fig:donnes_panneaux_Desroches} et \ref{fig:donnes_polygone_pann
     Q & Booléen & Règlementation applicable de manière quotidienne & Vrai - Faux \\
     Q\_d\_1 & Float & Heure d'entrée en vigueur de la règlementation & 0-24 \\
     Q\_f\_1 & Float & Heure de fin de la règlementation & 0-24\\
-    Q\_d\_2 & Float & Heure de début de la deuxième période de validité de la règlementation  & 0-24\\
+    Q\_d\_2 & Float & Heure de début de la deuxième période de validité de la règlementation 0-24\\
     LU & Booléen & Règlementation applicable un lundi (Q est nécessairement faux) & Vrai - Faux \\
     LU\_debut\_1 & Float & Heure d'entrée en vigueur de la règlementation & 0-24\\
     LU\_fin\_1 & Float & Heure d'arrêt de la règlementation & 0-24\\
@@ -139,7 +167,7 @@ Les figures \ref{fig:donnes_panneaux_Desroches} et \ref{fig:donnes_polygone_pann
     JE\_fin\_1 & Float & Heure d'arrêt de la règlementation & 0-24\\
     JE\_debut\_2 & Float & Deuxième Heure d'entrée en vigueur de la règlementation & 0-24\\
     JE\_fin\_2 & Float & Deuxième Heure d'arrêt de la règlementation & 0-24 \\
-    VE & Booléen & Règlementation applicable un vendredi (Q est nécessairement faux) & Vrai - Faux \\
+    VE & Booléen & Règlementation applicable un vendredi (Q est nécessairement faux) & Vrai - Faux\\
     VE\_debut\_1 & Float & Heure d'entrée en vigueur de la règlementation & 0-24\\
     VE\_fin\_1 & Float & Heure d'arrêt de la règlementation & 0-24\\
     VE\_debut\_2 & Float & Deuxième Heure d'entrée en vigueur de la règlementation & 0-24\\
@@ -151,14 +179,11 @@ Les figures \ref{fig:donnes_panneaux_Desroches} et \ref{fig:donnes_polygone_pann
     SA\_fin\_2 & Float & Deuxième Heure d'arrêt de la règlementation & 0-24 \\
     DI & Booléen & Règlementation applicable un samedi (Q est nécessairement faux) & Vrai - Faux \\
     DI\_debut\_1 & Float & Heure d'entrée en vigueur de la règlementation & 0-24\\
-    Di\_fin\_1 & Float & Heure d'arrêt de la règlementation & 0-24\\
+    DI\_fin\_1 & Float & Heure d'arrêt de la règlementation & 0-24\\
     DI\_debut\_2 & Float & Deuxième Heure d'entrée en vigueur de la règlementation & 0-24\\
-    DI\_fin\_2 & Float & Deuxième Heure d'arrêt de la règlementation & 0-24 \\
-    
-    \hline
-   \caption{Champs requis dans la base de données de stationnement}
-   \label{tab:donnees_requises}
+    DI\_fin\_2 & Float & Deuxième Heure d'arrêt de la règlementation & 0-24 \\  
   \end{longtable}
+
   \FloatBarrier
 
   \section{Règlementation de stationnement hors Rue}
