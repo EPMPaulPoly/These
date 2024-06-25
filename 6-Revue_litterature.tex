@@ -79,14 +79,34 @@ Une littérature économique riche existe sur les différents mécanismes d'allo
 \section{Reconnaissance d'images}
 Les problèmes de reconnaissance d'images se divisent en trois types de solution; la classification consiste à dire si une image contient un objet ou appartient à une classe d'image; la détection consiste à trouver un objet dans une image et à l'illustrer typiquement au moyen d'une boîte englobante; la segmentation sert à illustrer les contours détaillés d'un objet, les classifications se font typiquement pixel par pixel selon différentes classes. Les méthodes de segmentation d'instance sont un hybride des méthodes de détection et de segmentation. Dans ces problèmes, des instances de chaque type sont identifiées au moyen de boites englobantes puis un masque est généré pour le type pour illustrer l'objet. La figure \ref{fig:computer_vision_problems} représente le résultat de différents processus d'apprentissages sur une même image:
 
-\begin{figure}
+\begin{figure}[!h]
   \centering
   \includegraphics[width = 0.5\textwidth]{Recognition-problems-related-to-generic-object-detection-a-image-level-object.png}
   \caption{Résultat de différentes méthodes de vision par ordinateur pour une même image.\hl{vérifier droits d'auteurs} Source: \cite{Minaee:ImageSegmentation:2022}}
   \label{fig:computer_vision_problems}
 \end{figure}
-Les processus varient aussi dans leur résultante. Tandis que les modèles de segementation pure feront une affectation de la même couleur à plusieurs objets d'un même type, la segmentation d'instance rend le processus de post traitement des raster plus simple en donnant une couleur différente à chaque instance d'un même type d'objet. Cette dernière propriété a le mérite de potentiellement faciliter le post traitement des résults.
-\FloatBarrier
+Les processus varient aussi dans leur résultante. Tandis que les modèles de segementation pure feront une affectation de la même couleur à plusieurs objets d'un même type, la segmentation d'instance rend le processus de post traitement des raster plus simple en donnant une couleur différente à chaque instance d'un même type d'objet. Cette dernière propriété a le mérite de potentiellement faciliter le post traitement des résultats.
+
+\subsection{Description des réseaux neuronaux}
+\hl{CETTE SECTION DOIT ÊTRE MIEUX SOURCÉE. PRÉSENTEMENT TIRÉ DE BRIBES SUR INTERNET}\par
+\subsubsection{Principe de base}
+Les réseaux neuronaux sont un procédé basé sur une conception du fonctionnement du système nerveux des êtres vivants. L'idée est qu'un ensemble de données est pondéré plusieurs fois en succession pour extraire une idée abstraite de cet ensemble. Les neurones ou résultantes des multiplications sont dites activées si elles ont des valeur hautes relatives aux autres résultantes. Les multiplications (ou couches) du réseau visent à pondérer les données pour identifier des patrons. Le fait de multiplier successivement les données par des poids augmente le niveau d'abstraction à chaque étape. La prémisse de l'apprentissage profond est qu'en modifiant les pondérations successives avec des données annotées, il est possible pour le réseau neuronal de faire de l'inférence sur des tâches et des données similaires avec une fidélité similaire ou supérieure à celle d'annoteurs humains plus rapidement et à moindre coûts. \par
+\subsubsection{La convolution pour réduire l'ordre du problème}
+Les premières conceptions de réseau étaient pleinement connectées. Dans ces cas, toutes les données sont connectées à chaque neurone et il incombe donc de trouver un poids pour chaque connection entre l'entrée et la sortie, résultant dans des modèles très demandants. D'autre part,  les réseaux neuronaux convolutifs ou \og{\ac{CNN}}\fg{} réduisent l'ordre du problème de plusieurs manières. Premièrement, plutôt que d'affecter un poids à chaque connection entre l'entrée et la sortie, les \ac{CNN} appliquent les mêmes poids à un sous ensemble des entrées au sein d'une fenêtre et déplacent ensuite la fenêtre d'un pas prédéterminé et ré-appliquent la même formulation.\par
+\subsubsection{Fonctions d'activation}
+La fonction d'activation a pour but de rendre la sortie de la convolution non-linéaire. Cette non-linéarisation facilite la détection de lieux d'intérêt en créant un démarcation claire entre les zones où il y a un fort potentiel d'activation et où il n'y en a pas. 3 fonctions sont typiquement utilisées à cette fin: 
+  \begin{itemize}
+    \item une fonction sigmoide utilsée dans les fonctions logistique pour assurer une frontière entre 1 et zéro $\sigma = 1/1+ e^{-x} $
+    \item une fonction de tangente hyperbolique $\sigma = \tanh(x) $ 
+    \item une fonction de rectification linéaire qui est $\sigma = max(0,x) $
+  \end{itemize}
+  
+\subsubsection{\og{Max Pooling} \fg{}}
+Le max pooling a pour but de réduire la dimensionalité du problème. En effet, si plusieurs fenêtres successives ont des valeurs similaire d'activation puisqu'elles parcourent sensiblement la même zone du domaine, la fonction max pooling trouve le neurone qui a l'activation la plus forte et assigne cette valeur pour l'entièreté de la zone. La fenêtre du max pooling peut être fixée dans l'architecture du réseau. Dans la plupart des cas en analyse d'image, chaque couche de max pooling a une taille de 2 pixels par 2 pixels de sorte que la taille du problème est divisée en deux à chaque niveau d'abstraction
+
+\subsubsection{Normalisation par lots}
+Bien que les multiplications de matrices soient la prémisse centrale des \ac{CNN}, plusieurs modifications ont été introduites au cours des années pour en améliorer la performance. La permière est l'introduction de la normalization par lots(\og{Batch Normalization} \fg{} en anglais). Cette opération a pour but d'assurer une cohérence des entrées dans les couches succesives après application des pondérations. D'autre part, puisque les modèles sont souvent entrainés par lot, un mécanisme permettant de prendre en compte la variation des lots par rapport à la distribution de l'ensemble des donneés. En effet, avec chaque multiplication, les entrées dérivent, potentiellement de manière différente entre les lots.
+
 \subsection{Algorithmes de détection}
 
 \subsection{Algorithmes de segmentation}
