@@ -25,12 +25,6 @@
   howpublished = {https://reglements.ville.quebec.qc.ca/fr/resource/an/V.Q.Z.3\_FR\_004\_0001.pdf}
 }
 
-@misc{:LibKey:,
-  title = {{{LibKey}}},
-  urldate = {2024-06-23},
-  howpublished = {https://libkey.io/libraries/2410/openurl?sid=Compendex\&genre=article\&issn=1863-1703\&date=2023\&volume=17\&issue=4\&spage=1723\&epage=1731\&title=Signal\%2C+Image+and+Video+Processing\&atitle=Semantic+object-based+urban+scene+analysis+for+feature+fusion+of+VHR+imagery+and+Lidar+DSM\&aulast=Tabib+Mahmoudi\&aufirst=Fatemeh\&isbn=\&id=DOI:10.1007\%2Fs11760-022-02383-0\&ABBR=20224713146245}
-}
-
 @techreport{Aignel:ElaborationPolitique:2015,
   title = {{{\'E}laboration de la politique de stationnement. Portrait, diagnostic et assistance {\`a} la r{\'e}daction de la politique}},
   shorttitle = {{Rapport de diagnostic sur le stationnement}},
@@ -186,22 +180,6 @@
   keywords = {associative embedding,deep learning,instance segmentation,parking lots,satellite imagery}
 }
 
-@inproceedings{Berry:ParkingLot:2019a,
-  title = {Parking {{Lot Instance Segmentation}} from {{Satellite Imagery}} through {{Associative Embeddings}}},
-  booktitle = {Proceedings of the 27th {{ACM SIGSPATIAL International Conference}} on {{Advances}} in {{Geographic Information Systems}}},
-  author = {Berry, Tessa and Dronen, Nicholas and Jackson, Brett and Endres, Ian},
-  year = {2019},
-  month = nov,
-  series = {{{SIGSPATIAL}} '19},
-  pages = {528--531},
-  publisher = {Association for Computing Machinery},
-  address = {New York, NY, USA},
-  doi = {10.1145/3347146.3359364},
-  urldate = {2024-06-24},
-  abstract = {In this paper, we apply the technique of instance segmentation through associative image embeddings using stacked hourglass networks to the problem of parking lot instance segmentation in satellite imagery. We sought an instance segmentation method that, unlike other common methods such as Mask R-CNN, was independent of object classification and robust to missing labeled instances. We demonstrate how associative image embeddings can be created, which can provide instance segmentation for use with any semantic segmentation map.},
-  isbn = {978-1-4503-6909-1}
-}
-
 @inproceedings{Beykaei:EvaluatingAccuracy:2010,
   title = {Evaluating the Accuracy of Extracting Urban Land Cover/Use from Remotely Sensed Imagery and Its Potential Application in Urban Planning},
   booktitle = {Annual {{Conference}} of the {{Canadian Society}} for {{Civil Engineering}} 2010, {{CSCE}} 2010},
@@ -243,6 +221,18 @@
   file = {C\:\\Users\\paulc\\Zotero\\storage\\DBKV6FPW\\Bourdeau - 2014 - Méthodologie d'analyse automatisée des stationneme.pdf;C\:\\Users\\paulc\\Zotero\\storage\\YZUHFV2N\\1529.html}
 }
 
+@inproceedings{Boureau:TheoreticalAnalysis:2010,
+  title = {A {{Theoretical Analysis}} of {{Feature Pooling}} in {{Visual Recognition}}},
+  booktitle = {Proceedings of the 27th International Conference on Machine Learning},
+  author = {Boureau, Y-Lan and Ponce, Jean and LeCun, Yann},
+  year = {2010},
+  pages = {111--118},
+  urldate = {2024-06-26},
+  abstract = {Many modern visual recognition algorithms incorporate a step of spatial `pooling', where the outputs of several nearby feature detectors are combined into a local or global `bag of features', in a way that preserves task-related information while removing irrelevant details. Pooling is used to achieve invariance to image transformations, more compact representations, and better robustness to noise and clutter. Several papers have shown that the details of the pooling operation can greatly influence the performance, but studies have so far been purely empirical. In this paper, we show that the reasons underlying the performance of various pooling methods are obscured by several confounding factors, such as the link between the sample cardinality in a spatial pool and the resolution at which low-level features have been extracted. We provide a detailed theoretical analysis of max pooling and average pooling, and give extensive empirical comparisons for object recognition tasks.},
+  langid = {english},
+  file = {C:\Users\paulc\Zotero\storage\HRUM24FM\Boureau et al. - A Theoretical Analysis of Feature Pooling in Visua.pdf}
+}
+
 @article{Chatman:TheoryImplementation:2014,
   title = {Theory versus Implementation in Congestion-Priced Parking: {{An}} Evaluation of {{SFpark}}, 2011--2012},
   shorttitle = {Theory versus Implementation in Congestion-Priced Parking},
@@ -259,6 +249,17 @@
   abstract = {Shortages of street parking can cause cruising, a major source of urban congestion. We used SFpark, a federally funded experiment in market-priced parking in San Francisco, to study how changes in meter prices influenced on-street parking availability. We supervised observations of more than 13,400 vehicles parked on a subset of dynamically priced and control blocks at three points in time during 2011 and 2012. Repeated-observation, change-on-change regressions show that when prices rose, the block-level occupancy of parking fell, suggesting that SFpark worked as intended. But blocks where prices rose showed no discernible improvement in parking availability---the share of time at least one space on a block face was vacant. Price increases also had no association with other factors we would expect to be influenced by price, including parking duration, vehicle turnover, and carpooling. These relationships were robust to controlling for the parking zone, the previous price level, nearby employment, and the weather. A price system designed to improve average occupancy may not improve parking availability, and thus may not reduce cruising. Cities trying to reduce cruising may need to adjust prices based on minimum vacancy, and price changes may need to be larger in many cases.},
   keywords = {Cruising,Parking,Pricing,SFpark},
   file = {C:\Users\paulc\Zotero\storage\KQNCVDSX\S0739885914000067.html}
+}
+
+@article{Chen:RethinkingAtrous:2017,
+  title = {Rethinking {{Atrous Convolution}} for {{Semantic Image Segmentation}}},
+  author = {Chen, Liang-Chieh and Papandreou, G. and Schroff, Florian and Adam, Hartwig},
+  year = {2017},
+  month = jun,
+  journal = {ArXiv},
+  urldate = {2024-06-26},
+  abstract = {In this work, we revisit atrous convolution, a powerful tool to explicitly adjust filter's field-of-view as well as control the resolution of feature responses computed by Deep Convolutional Neural Networks, in the application of semantic image segmentation. To handle the problem of segmenting objects at multiple scales, we design modules which employ atrous convolution in cascade or in parallel to capture multi-scale context by adopting multiple atrous rates. Furthermore, we propose to augment our previously proposed Atrous Spatial Pyramid Pooling module, which probes convolutional features at multiple scales, with image-level features encoding global context and further boost performance. We also elaborate on implementation details and share our experience on training our system. The proposed `DeepLabv3' system significantly improves over our previous DeepLab versions without DenseCRF post-processing and attains comparable performance with other state-of-art models on the PASCAL VOC 2012 semantic image segmentation benchmark.},
+  file = {C:\Users\paulc\Zotero\storage\AI8PHA6N\Chen et al. - 2017 - Rethinking Atrous Convolution for Semantic Image S.pdf}
 }
 
 @techreport{Chester:InventoryingSan:2022,
@@ -623,6 +624,25 @@
   file = {C:\Users\paulc\Zotero\storage\W58WYXZZ\Fritz - 2020 - Instance Segmentation of Buildings in Satellite Im.pdf}
 }
 
+@article{Fukushima:NeocognitronSelforganizing:1980,
+  title = {Neocognitron: {{A}} Self-Organizing Neural Network Model for a Mechanism of Pattern Recognition Unaffected by Shift in Position},
+  shorttitle = {Neocognitron},
+  author = {Fukushima, Kunihiko},
+  year = {1980},
+  month = apr,
+  journal = {Biological Cybernetics},
+  volume = {36},
+  number = {4},
+  pages = {193--202},
+  issn = {0340-1200, 1432-0770},
+  doi = {10.1007/BF00344251},
+  urldate = {2024-06-26},
+  abstract = {A neural network model for a mechanism of visual pattern recognition is proposed in this paper. The network is self-organized by "learning without a teacher", and acquires an ability to recognize stimulus patterns based on the geometrical similarity (Gestalt) of their shapes without affected by their positions. This network is given a nickname "neocognitron". After completion of self-organization, the network has a structure similar to the hierarchy model of the visual nervous system proposed by Hubel and Wiesel. The network consists of an input layer (photoreceptor array) followed by a cascade connection of a number of modular structures, each of which is composed of two layers of cells connected in a cascade. The first layer of each module consists of "S-cells', which show characteristics similar to simple cells or lower order hypercomplex cells, and the second layer consists of "C-cells" similar to complex cells or higher order hypercomplex cells. The afferent synapses to each S-cell have plasticity and are modifiable. The network has an ability of unsupervised learning: We do not need any "teacher" during the process of selforganization, and it is only needed to present a set of stimulus patterns repeatedly to the input layer of the network. The network has been simulated on a digital computer. After repetitive presentation of a set of stimulus patterns, each stimulus pattern has become to elicit an output only from one of the C-cells of the last layer, and conversely, this C-cell has become selectively responsive only to that stimulus pattern. That is, none of the C-cells of the last layer responds to more than one stimulus pattern. The response of the C-cells of the last layer is not affected by the pattern's position at all. Neither is it affected by a small change in shape nor in size of the stimulus pattern.},
+  copyright = {http://www.springer.com/tdm},
+  langid = {english},
+  file = {C:\Users\paulc\Zotero\storage\4RBHI2LL\Fukushima - 1980 - Neocognitron A self-organizing neural network mod.pdf}
+}
+
 @article{Gabbe:ParkingPolicy:2020,
   title = {Parking Policy: {{The}} Effects of Residential Minimum Parking Requirements in {{Seattle}}},
   shorttitle = {Parking Policy},
@@ -717,6 +737,23 @@
   abstract = {The management of parking is an important part of the toolkit that transport and land use planners have to influence travel demand, reduce congestion and improve the nature of the urban environment. Parking supply is generally managed at the local government area level, but in NSW a state government parking space levy (PSL) applies to off-street non-residential parking spaces in six business districts in Sydney. Levy funds are spent on public transport infrastructure in outer urban areas to improve public transport access to those travelling to these CBDs.},
   langid = {english},
   file = {C:\Users\paulc\Zotero\storage\S8UHRMEH\Hay et Shaz - Parking and Mode Choice in Sydney Evidence from t.pdf}
+}
+
+@inproceedings{He:DeepResidual:2016,
+  title = {Deep {{Residual Learning}} for {{Image Recognition}}},
+  booktitle = {2016 {{IEEE Conference}} on {{Computer Vision}} and {{Pattern Recognition}} ({{CVPR}})},
+  author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  year = {2016},
+  month = jun,
+  pages = {770--778},
+  publisher = {IEEE},
+  address = {Las Vegas, NV, USA},
+  doi = {10.1109/CVPR.2016.90},
+  urldate = {2024-06-26},
+  abstract = {Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers---8{\texttimes} deeper than VGG nets [40] but still having lower complexity. An ensemble of these residual nets achieves 3.57\% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task. We also present analysis on CIFAR-10 with 100 and 1000 layers.},
+  isbn = {978-1-4673-8851-1},
+  langid = {english},
+  file = {C:\Users\paulc\Zotero\storage\BBW563MA\He et al. - 2016 - Deep Residual Learning for Image Recognition.pdf}
 }
 
 @misc{He:MaskRCNN:2018,
@@ -868,6 +905,22 @@
   file = {C:\Users\paulc\Zotero\storage\QC4NUAWB\S2212012214000562.html}
 }
 
+@inproceedings{Ioffe:BatchNormalization:2015,
+  title = {Batch {{Normalization}}: {{Accelerating Deep Network Training}} by {{Reducing Internal Covariate Shift}}},
+  shorttitle = {Batch {{Normalization}}},
+  booktitle = {Proceedings of the 32nd {{International Conference}} on {{Machine Learning}}},
+  author = {Ioffe, Sergey and Szegedy, Christian},
+  year = {2015},
+  month = jun,
+  pages = {448--456},
+  publisher = {PMLR},
+  issn = {1938-7228},
+  urldate = {2024-06-26},
+  abstract = {Training Deep Neural Networks is complicated by the fact that the distribution of each layer's inputs changes during training, as the parameters of the previous layers change. This slows down the training by requiring lower learning rates and careful parameter initialization, and makes it notoriously hard to train models with saturating nonlinearities. We refer to this phenomenon as internal covariate shift, and address the problem by normalizing layer inputs. Our method draws its strength from making normalization a part of the model architecture and performing the normalization for each training mini-batch. Batch Normalization allows us to use much higher learning rates and be less careful about initialization, and in some cases eliminates the need for Dropout. Applied to a stateof-the-art image classification model, Batch Normalization achieves the same accuracy with 14 times fewer training steps, and beats the original model by a significant margin. Using an ensemble of batch-normalized networks, we improve upon the best published result on ImageNet classification: reaching 4.82\% top-5 test error, exceeding the accuracy of human raters.},
+  langid = {english},
+  file = {C:\Users\paulc\Zotero\storage\3PZGWJCM\Ioffe and Szegedy - 2015 - Batch Normalization Accelerating Deep Network Tra.pdf}
+}
+
 @book{Ison:ParkingIssues:2014,
   title = {Parking: Issues and Policies},
   shorttitle = {Parking},
@@ -934,6 +987,24 @@
   number = {4},
   langid = {english},
   file = {C:\Users\paulc\Zotero\storage\JM6TUKWE\Layzell et al. - 2021 - Autonomous Vehicles, Parking & the Real Estate Sec.pdf}
+}
+
+@inproceedings{Lecun:ConvolutionalNetworks:1995,
+  title = {Convolutional {{Networks}} for {{Images}}, {{Speech}}, and {{Time-Series}}},
+  booktitle = {The {{Handbook}} of {{Brain Theory}} and {{Neural Networks}}},
+  author = {Lecun, Yann and Bengio, Y.},
+  year = {1995},
+  month = jan,
+  abstract = {INTRODUCTIONThe ability of multilayer back-propagation networks to learn complex, high-dimensional, nonlinearmappings from large collections of examples makes them obvious candidates for imagerecognition or speech recognition tasks (see PATTERN RECOGNITION AND NEURALNETWORKS). In the traditional model of pattern recognition, a hand-designed featureextractor gathers relevant information from the input and eliminates irrelevant variabilities.A trainable classifier then categorizes the...},
+  file = {C:\Users\paulc\Zotero\storage\I463HHGL\Lecun and Bengio - 1995 - Convolutional Networks for Images, Speech, and Tim.pdf}
+}
+
+@article{LeCun:HandwrittenDigit:,
+  title = {Handwritten {{Digit Recognition}} with a {{Back-Propagation Network}}},
+  author = {LeCun, Yann and Boser, Bernhard E and Denker, John S and Henderson, Donnie and Howard, R E and Hubbard, Wayne E and Jackel, Lawrence D},
+  abstract = {We present an application of back-propagation networks to handwritten digit recognition. Minimal preprocessing of the data was required, but architecture of the network was highly constrained and specifically designed for the task. The input of the network consists of normalized images of isolated digits. The method has 1\% error rate and about a 9\% reject rate on zipcode digits provided by the U.S. Postal Service.},
+  langid = {english},
+  file = {C:\Users\paulc\Zotero\storage\GZEYQ9AI\LeCun et al. - Handwritten Digit Recognition with a Back-Propagat.pdf}
 }
 
 @phdthesis{Lefebvre-Ropars:MethodologieEvaluation:2021,
@@ -1344,6 +1415,25 @@
   file = {C:\Users\paulc\Zotero\storage\S37JJT37\Ronneberger et al. - 2015 - U-Net Convolutional Networks for Biomedical Image.pdf}
 }
 
+@article{Rumelhart:LearningRepresentations:1986,
+  title = {Learning Representations by Back-Propagating Errors},
+  author = {Rumelhart, David E. and Hinton, Geoffrey E. and Williams, Ronald J.},
+  year = {1986},
+  month = oct,
+  journal = {Nature},
+  volume = {323},
+  number = {6088},
+  pages = {533--536},
+  publisher = {Nature Publishing Group},
+  issn = {1476-4687},
+  doi = {10.1038/323533a0},
+  urldate = {2024-06-26},
+  abstract = {We describe a new learning procedure, back-propagation, for networks of neurone-like units. The procedure repeatedly adjusts the weights of the connections in the network so as to minimize a measure of the difference between the actual output vector of the net and the desired output vector. As a result of the weight adjustments, internal `hidden' units which are not part of the input or output come to represent important features of the task domain, and the regularities in the task are captured by the interactions of these units. The ability to create useful new features distinguishes back-propagation from earlier, simpler methods such as the perceptron-convergence procedure1.},
+  copyright = {1986 Springer Nature Limited},
+  langid = {english},
+  keywords = {Humanities and Social Sciences,multidisciplinary,Science}
+}
+
 @techreport{Scharnhorst:QuantifiedParking:2018,
   title = {Quantified {{Parking}}: {{Comprehensive Parking Inventories}} for {{Five U}}.{{S}}. {{Cities}}},
   author = {Scharnhorst, Eric},
@@ -1428,6 +1518,25 @@
   urldate = {2024-03-11},
   abstract = {1.0 INTRODUCTION The specifications of this assignment required Stantec to assess four regional growth scenarios for HRM. The first scenario was to reflect Regional Municipal Planning Strategy goals for growth in designated urban (Regional Centre), suburban, and rural portions of the region. The second was to reflect continuation of recent trends that have fallen short of the RMPS goals. The third and fourth were to reflect stronger regional goals emphasizing greater concentration of growth in the core of the region. Stantec and its partners, Gardner Pinfold Consultants, were responsible to determine and compare public, private, and social costs and benefits anticipated from these scenarios over the period from 2011 to 2031. Stantec has also woven an assessment of the health impacts of alternative scenarios through the study to identify qualitative outcomes identifiable through the analysis of individual services. The report sets out a framework for Health Impact Assessment for the purpose and follows it to the conclusion of the study. 2.0 SETTLEMENT IN HRM Population in the area now defined as HRM has shifted erratically since the founding of Halifax in the mid-eighteenth century. Since the 1950s the trend has been strongly toward dispersion of residential population from the urban core. Today, HRM as a whole is one of the most dispersed urban areas in North America, when measured by overall population density within its municipal boundaries. A closer look at the Regional Centre and Suburban Area is more encouraging, as the Regional Centre, in particular, shows high levels of sustainable transportation use. Population quickly dissipates away from the core, however, and costs relative to comparable urban areas in Canada are evident in measures of network length for roadways, and water and wastewater networks servicing the existing Regional Centre and Suburban Area, as opposed to the rural portion of the region. 3.0 SCENARIO CREATION Altus Economic Consulting prepared comprehensive population, household, and labour force projections for HRM in 2004 that were updated in 2009. Stantec has employed these projections, with adjustments as necessary to account for trends apparent in recently released 2011 Census data. Housing unit additions by type calculated to 2031 based on the Altus projections have been distributed within the Regional Centre, and Suburban and Rural Areas of the region using land suitability assessment in GIS, assigning new housing units progressively to areas defined as most desirable/suitable by the GIS model. Related employment estimates were created by HRM staff using methods developed in the VISUM transportation model employed to assess impacts on the region's transportation network. 4.0 TRANSPORTATION SYSTEMS There is a complex two-way relationship between road improvements and regional development patterns. Together with other factors, expanded regional roadways facilitate dispersed development, which in turn generates demand for further road capacity both at the regional and local level. This study addresses the latter aspect of this relationship in terms of the influence of development on transportation. The local road network must be extended with residential development in new areas of HRM. At the same time, additional residential development, depending on its scale and location influences use of the existing road network to degrees that may require strategic improvements. The distribution of development, furthermore, may influence the choice of mode of transportation, the vehicle trips required, and the time required for travel by citizens within the region. Stantec has quantified each of these factors for the four distribution scenarios to assess the influence of development patterns on the cost of transportation in the region. 5.0 WATER AND WASTEWATER SERVICES Municipal networks for water distribution, as well as for collection and disposal of wastewater and stormwater are normally extended in association with new roads constructed in the Regional Centre and Suburban Area of HRM. In the Rural Area, piped networks are not provided as homes rely on wells and onsite septic disposal, with less expensive ditch and culvert systems for stormwater collection. Stantec has assessed the cost of developing the required systems in each area of HRM and the overall cost of their development for all of HRM. 6.0 OTHER PUBLIC SERVICES A wide variety of services is provided to citizens through specialized facilities provided by the Municipality and the Province. While the form of facilities and the interaction between them and the citizens they serve varies considerably, their efficiency and adequacy is strongly associated with the distance between facilities and the public. For each distinct service provided, Stantec has calculated the cumulative distance between existing facilities and the new residential development distributed as assumed for each distribution scenario. We have also assessed the future adequacy of several facility networks to determine the potential need for new facilities under future distribution patterns. 7.0 PRIVATE UTILITIES Several important networked systems are provided to HRM citizens by private companies. Stantec assessed the extension of electricity, telecommunications, and natural gas networks to determine their cost under each distribution scenario. In the case of natural gas, which is being supplied within a limited area of the municipality, Stantec also assessed the potential extent of the future network so as to provide a basis for further estimation of its environmental benefits. 8.0 SUMMARY OF SERVICE IMPACTS Results of our analysis clearly show the benefits of concentrating new residential development. For nearly all services assessed, the best distribution scenario is Scenario B in which the maximum proportion (50 per cent) of new development is located in the Regional Centre. Of 26 measures ranked, Scenario B provides the best outcome for 22. The scenario ranks second in terms of increased transit use and obtains mixed results in terms of elementary and junior high school enrolment balance. It would however create the most stress on parkland supply of any scenario. Scenario A, which allocates 40 per cent of new development to the Regional Centre, generally ranks second, although it ranks ahead of Scenario B in terms of its positive impact on transit use. The current RMPS objective of locating 25 per cent of new residential development in the Regional Centre with 50 per cent in the Suburban Area and 25 per cent in the Rural Area generally ranks third with exceptions being water and wastewater improvements for which costs would be highest, school over and under enrolment, where it is at least tied for the best outcome for all three levels of schooling, and in terms of increased transit usage, in which it ranks very slightly behind the Trend Scenario, partly because achievement of the RMPS Goals would encourage more use of active transportation modes. Continuation of the current trend by which only 16 per cent of new residential development has located in the Regional Centre provides the worst outcome in all cases except for transit usage, where it shows 0.1 per cent edge over the RMPS Scenario, and travel time to the Materials Recycling Facility, where it ties the RMPS scenario. 9.0 ENVIRONMENTAL, ECONOMIC AND HEALTH IMPACTS Assessment of GHG emissions suggests that concentration of development will reduce locally generated greenhouse gas (GHG) emissions to a small degree. Economic assessment of costs to provide and maintain more extensive infrastructure, if sprawl is permitted to continue and for users to employ this infrastructure, suggests very substantial savings available. Between continuation of the current pattern of sprawl and the RMPS Goals, Gardner Pinfold has calculated nearly \$700 million in savings can be achieved. Taking into account the densest alternative considered for this study (Scenario B), modelling suggests more than \$3 billion in reduced costs. Health impacts were assessed qualitatively and Stantec has concluded that more condensed scenarios provide superior outcomes for six of nine factors considered to be related to community health. Evidence is ambivalent for the other three factors but does not alter the overall conclusions of this study},
   file = {C:\Users\paulc\Zotero\storage\ZXB4EIBZ\HRMGrowthScenariosFinalReportJuly82013.pdf}
+}
+
+@article{TabibMahmoudi:SemanticObjectbased:2023,
+  title = {Semantic Object-Based Urban Scene Analysis for Feature Fusion of {{VHR}} Imagery and {{Lidar DSM}}},
+  author = {Tabib Mahmoudi, Fatemeh},
+  year = {2023},
+  month = jun,
+  journal = {Signal, Image and Video Processing},
+  volume = {17},
+  number = {4},
+  pages = {1723--1731},
+  publisher = {Springer London},
+  issn = {1863-1711},
+  doi = {10.1007/s11760-022-02383-0},
+  urldate = {2024-06-26},
+  abstract = {More complexities in urban areas due to the existence of buildings with roofs made of various materials, roads and parking lots, diverse plant species and vehicles along with developed very high spatial resolution (VHR) remote sensing imageries lead to increase the difficulties of urban objects recognition. Defining human cognition semantic categories of land cover objects is proposed in this paper to improve the object-based scene analysis. After performing the segmentation algorithm, semantically feature fusion of the VHR imagery and Lidar DSM is performed in the context of object-based procedures. For this reason, high-level semantics composed of human cognition object categorization and visual--conceptual descriptions of land cover objects in the complex urban scene is used for low-level features measurement followed by classification rules generation. The pan-sharpened WorldView-2 satellite image and Lidar DSM over a complex urban area in Rio de Janeiro (Brazil) are used to evaluate the capabilities of the proposed semantic object-based scene analysis. The evaluation of the obtained object recognition results shows the 93.98\% overall accuracy and 0.937 Kappa coefficient. Comparing the obtained semantic object recognition results with non-semantic object-based procedures indicates the improvements in overall accuracy for 20.68 and 2.18\% in object-based spectral and object-based spectral--structural classifications, respectively. Increasing the true positive pixels of the spectrally and height similar object categories (such as buildings and road), and using threshold training without requiring high-dimensional training samples are some of the advantages of the proposed semantic object-based scene analysis method.},
+  copyright = {2022 The Author(s), under exclusive licence to Springer-Verlag London Ltd., part of Springer Nature},
+  langid = {english},
+  file = {C:\Users\paulc\Zotero\storage\NK9HMPVQ\Tabib Mahmoudi - 2023 - Semantic object-based urban scene analysis for fea.pdf}
 }
 
 @article{Taylor:NatureNurture:2009,
@@ -1657,7 +1766,7 @@
   file = {C:\Users\paulc\Zotero\storage\QN2QLCL9\Weinberger et al. - 2009 - Residential Off-Street Parking Impacts on Car Owne.pdf}
 }
 
-@article{Yin:BuiltEnvironment:2018a,
+@article{Yin:BuiltEnvironment:2018,
   title = {Built {{Environment}} and {{Parking Availability}}: {{Impacts}} on {{Car Ownership}} and {{Use}}},
   shorttitle = {Built {{Environment}} and {{Parking Availability}}},
   author = {Yin, Chaoying and Shao, Chunfu and Wang, Xiaoquan},
