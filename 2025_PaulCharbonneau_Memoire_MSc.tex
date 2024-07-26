@@ -64,14 +64,12 @@
 \usepackage{flafter,placeins}
 %%
 %% Autres modules. / Other packages.
-\usepackage{amsmath,color,soulutf8,longtable,colortbl,setspace,xspace,url,pdflscape,amsthm}
-\usepackage{neuralnetwork} %cite
-\usepackage{tikz}
+\usepackage{amsmath,color,soulutf8,longtable,colortbl,setspace,xspace,url,pdflscape,amsthm,multirow,rotating,neuralnetwork,tikz,makecell}
 \usetikzlibrary{fadings}
 \usetikzlibrary{decorations.pathreplacing}
 \usepackage{sidecap}
 \newtheorem{definition}{Définition}
-
+\newcommand{\STAB}[1]{\begin{tabular}{@{}c@{}}#1\end{tabular}}
 %%
 %% Support des acronymes. / Support for acronyms.
 \usepackage[nolist]{acronym}
@@ -245,6 +243,10 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 %%
 %% Liste des annexes au besoin.
 %% List of appendices, if needed.
+}
+
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
 }
 
 \include{4-Sigles_Abrev}       % Liste des sigles et abréviations.

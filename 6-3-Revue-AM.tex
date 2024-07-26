@@ -234,9 +234,7 @@
         Y^{C}_k &= \phi(x^{C}_k)\\
         E &= \sum^{N_C}_{k=1} f(Y^{C}_k)\\
         \frac{\partial{E}}{\partial{w^{(C)}_{k,i}}}\bigg|_{w=\overrightarrow{w}_{t}} &= \frac{\partial{E}}{\partial{f(Y^{C}_k)}} \cdot \frac{\partial{f(Y^{C}_k)}}{\partial{w^{(C)}_{k,i}}}\\
-        \frac{\partial{E}}{\partial{w^{(C)}_{k,i}}}\bigg|_{w=\overrightarrow{w}_{t}} &= \frac{\partial{E}}{\partial{f(Y^{C}_k)}} \cdot \frac{\partial{f(Y^{C}_k)}}{\partial{Y^{C}_k}} \cdot \frac{\partial{Y^{C}_k}}{\partial{w^{(C)}_{k,i}}} 
-    \end{align}
-    \begin{align}
+        \frac{\partial{E}}{\partial{w^{(C)}_{k,i}}}\bigg|_{w=\overrightarrow{w}_{t}} &= \frac{\partial{E}}{\partial{f(Y^{C}_k)}} \cdot \frac{\partial{f(Y^{C}_k)}}{\partial{Y^{C}_k}} \cdot \frac{\partial{Y^{C}_k}}{\partial{w^{(C)}_{k,i}}} \\
         \frac{\partial{E}}{\partial{w^{(C)}_{k,i}}}\bigg|_{w=\overrightarrow{w}_{t}} &= \frac{\partial{E}}{\partial{f(Y^{C}_k)}} \cdot \frac{\partial{f(Y^{C}_k)}}{\partial{Y^{C}_k}} \cdot \frac{\partial{Y^{C}_k}}{\partial{x^{C}_k}} \cdot \frac{\partial{x^{C}_k}}{\partial{w^{(C)}_{k,i}}}\\
         \underbrace{\frac{\partial{E}}{\partial{w^{(C)}_{k,i}}}\bigg|_{w=\overrightarrow{w}_{t}}}_\text{Perte / poids} &= \underbrace{\frac{\partial{E}}{\partial{f(Y^{C}_k)}}}_\text{Perte / fn perte} \cdot \underbrace{\frac{\partial{f(Y^{C}_k)}}{\partial{Y^{C}_k}}}_\text{Fn perte / sortie activation} \cdot \underbrace{\frac{\partial{Y^{C}_k}}{\partial{x^{C}_k}}}_\text{Activation / fn lin.} \cdot \underbrace{Y^{(C-1)}_i}_\text{fn lin. / pond.}\label{eq:deriv_weights}
       \end{align}
