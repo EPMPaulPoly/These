@@ -8,18 +8,18 @@ On observe trois grandes rafflées de fusions\parencite{VilledeQuebec:ReperesChr
   \SubItem{Le territoire de Wendake s'étend vers le Sud}
   \SubItem{Orsainville cède une péninsule de territoire à Charlesbourg}
   \SubItem{Beauport et Beauport-Ouest fusionnent('66)}
-  \SubItem{Notre-Dame de Lorette deviennent L'Ancienne-Lorette('67)}
-  \item '72-80:
+  \SubItem{Notre-Dame de Lorette devient L'Ancienne-Lorette('67)}
+  \item '72-76:
   \SubItem{Charlesbourg, Orsainville, Charlesbourg-Est et Notre-Dame des Laurentides fusionnent pour devenir Charlesbourg ('76)}
   \SubItem{Charlesbourg-Ouest est annexé par Québec('76)}
-  \SubItem{Giffard,Beauport,Courville,Villeneuve,Montmorency fusionnent('76) pour devenir Beauport}
+  \SubItem{Giffard, Beauport, Courville, Villeneuve et Montmorency fusionnent('76) pour devenir Beauport}
   \SubItem{Val-Belair et Val-Saint-Michel fusionnent et deviennent Val-Belair('73)}
-  \item '80-2001:
+  \item '76-2001:
   \SubItem{Stabilité des limites territoriales}
   \item 2002:
   \SubItem{Fusion de Québec, L'Ancienne-Lorette, St-Augustin de Desmaures, Charlesbourg, Beauport, Val-Belair, Ste-Foy, St-Émile, Lac-St-Charles, Vanier, Cap-Rouge et Loretteville}
   \item 2006
-    \SubItem{Séparation St-Augustin de desmaures et L'Ancienne-Lorette}
+    \SubItem{Séparation St-Augustin de Desmaures et L'Ancienne-Lorette}
 \end{itemize}
 \FloatBarrier
 La figure \ref{fig:municipalites_carto_historique} montre l'évolution des barrières géopolitiques au cours du temps. 
@@ -103,13 +103,15 @@ La figure \ref{fig:municipalites_carto_historique} montre l'évolution des barri
 \section{Stationnement: politiques, couts et effets sur la mobilité}
   \subsection{Stationnement hors rue}
   Selon \textcite{Shoup:HighCost:2005}, les minimums de stationnement ont vu le jour dans les années 50 en réponse à la croissance du parc automobile et pour assurer que les commerçants et citoyens internalisaient les coûts associés à l'automobile. Ce mécanisme règlementaire est encore omniprésent au Québec puisque seuls les arrondissement de Côte des Neiges, du Sud-Ouest, du Plateau Mont-Royal et du Centre-Ville de Montréal \hl{besoin de citations}. La ville de Québec est en processus d'abroger ces requis pour l'habitation pour les zones en milieu dense ou le long des axes de transport en commun \parencite{VilledeQuebec:AdoptionReglement:2024}.\par
-  En plus de l'hétérogénéité spatiale qui est décrite à la section \ref{sec:geopolitique_quebec}, on constate aussi une hétérogénéité au niveau des catégories utilisées pour les requis de stationnement. Ceci est d'autant plus ardu que les catégories utilisées dans les minimums de stationnement n'ont pas nécessairement d'équivalent direct dans le \ac{CUBF} utilisé dans le rôle foncier du Québec \parencite[Annexe 2C.1]{GouvernementduQuebec:ManuelEvaluation:2024}. Le tableau suivant résume les catégories utilisées dans les codes d'urbanismes \parencite{VilledeQuebec:AdoptionReglement:2024,VilledeQuebec:ReglementZonage:1995}. Les codes d'urbanisme des municipalités pré-fusion ne sont pas nécessairement disponibles en ligne. Le tableau \ref{tab:req_stat_presents} est un sommaire des types d'utilisation du territoire listés pour chacune des municipalités.
+  En plus de l'hétérogénéité spatiale qui est décrite à la section \ref{sec:geopolitique_quebec}, on constate aussi une hétérogénéité au niveau des catégories utilisées pour les requis de stationnement. Ceci est d'autant plus ardu que les catégories utilisées dans les minimums de stationnement n'ont pas nécessairement d'équivalent direct dans le \ac{CUBF} utilisé dans le rôle foncier du Québec \parencite[Annexe 2C.1]{GouvernementduQuebec:ManuelEvaluation:2024}. Le tableau \ref{tab:req_stat_presents} et la figure \ref{fig:n_utilisation_CUBF_minimums} résument la présence d'un requis de stationnement explicité ou inféré pour un code \ac{CUBF} donné \parencite{VilledeQuebec:AdoptionReglement:2024,VilledeQuebec:ReglementZonage:1995}. Les codes d'urbanisme des municipalités pré-fusion sont issus d'un résumé fourni par la ville. Cette synthèse est nécessairement arbitraire: les catégories dans le codes d'urbanisme ne sont pas constantes entre les codes avec différents niveaux de superposition ou catégorisation par municipalité, rendant une synthèse difficile. La synthèse est recalé sur les codes \ac{CUBF} pour la simple raison que cette donnée sera exploité pour choisir la règlementation à appliquer pour inférer une capacité de stationnement requise. Les données sont issues d'une synthèse de la ville. Une demande a été complétée auprès du service de greffe pour obtenir les textes de loi.
   %\tiny
   \newcommand{\YCHECK}{\Checkmark}
   \newcommand{\NCHECK}{\cellcolor{red} \XSolid}
   \newcommand{\OCHECK}[1]{\cellcolor{orange} / #1}
   \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
   \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+  
+  \setlength{\LTcapwidth}{\textwidth}
   \begin{landscape}
     \begin{center}
       \begin{longtable}{P{1.0cm} | p{7.5cm} | c || *{12}{P{5mm}}||p{6mm}} 
@@ -197,15 +199,46 @@ La figure \ref{fig:municipalites_carto_historique} montre l'évolution des barri
         \hline
         N/A & Extraction de ressources / Agriculture & 8XXX&\YCHECK&\NCHECK&\NCHECK&\NCHECK&\NCHECK&\NCHECK&\YCHECK&\NCHECK&\YCHECK&\NCHECK&\NCHECK&\NCHECK&3\\
       \end{longtable}
-    \end{center}
-    %
+    \end{center}  
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=22cm]{images/presence_requis_par_CUBF}
+      \caption{Nombre de codes d'urbanisme utilisant les codes d'utilisation listés}\label{fig:n_utilisation_CUBF_minimums}
+    \end{figure}
   \end{landscape}
   %\normalsize
   \FloatBarrier
   
+  Les objets sur lesquels sont basés les codes d'urbanisme sont aussi hétérogènes. Bien que la plupart des requis soient basé sur une surface de plancher, certains sont exprimés en fonction d'autres objets considérés pertinents. D'autre part, la même utilisation du sol n'est pas nécessairement légiférée en utilisant le même objet entre deux juridictions différentes. Le tableau \ref{tab:objet_pour_inference_capacite} synthétise les objets considérés et les usages pour lesquels ils sont utilisés.
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{p{4cm} p{8cm}}
+      \hline
+      Objets considéré & Usages pertinents \\
+      \hline
+      Superficie de plancher & Majoritaire\\
+      Superficie par usage (bureau, plateau TV) & Station télé \\
+      Superficie de terrain & parc, zoo \\
+      Logement & Logement \\
+      Chambres & Maison de chambres, hébergement touristique, établissement de santé\\
+      Lit & Établissement de santé, auberges de jeunesse, établissement carcéral \\
+      Baie de service & Commerces liés à l'automobile\\
+      Siège & Lieux de rassemblement, cinéma, théâtres, stades \\
+      Salle & Cabinet médical, établissement scolaire, salon funéraire\\
+      Personne & Débit d'alcool\\
+      Employé & Services et vente au détail\\
+      Médecin & Établissement de santé\\
+      Étudiant & Établissement scolaire\\
+      Plateau sportif & Golf, tennis, quilles, billards\\
+      Poste de travail & Services personnels (salon de beauté)\\
+      \hline
+    \end{tabular}
+    \caption{Récapitulatif des objets considérés pour fixer les capacité de stationnement}\label{tab:objet_pour_inference_capacite}
+  \end{table}
   
 
-  
+  \FloatBarrier
   \subsection{Coûts de provision}
     Plusieurs coûts sont associés à la provision de stationnements, autant pour les individus, que pour les collectivités locales ou de tierces parties plus difficiles à identifier dans le cas d'externalités. Cette section visera à identifier quels sont les coûts associés et qui les porte.
 
