@@ -104,92 +104,105 @@ La figure \ref{fig:municipalites_carto_historique} montre l'évolution des barri
   \subsection{Stationnement hors rue}
   Selon \textcite{Shoup:HighCost:2005}, les minimums de stationnement ont vu le jour dans les années 50 en réponse à la croissance du parc automobile et pour assurer que les commerçants et citoyens internalisaient les coûts associés à l'automobile. Ce mécanisme règlementaire est encore omniprésent au Québec puisque seuls les arrondissement de Côte des Neiges, du Sud-Ouest, du Plateau Mont-Royal et du Centre-Ville de Montréal \hl{besoin de citations}. La ville de Québec est en processus d'abroger ces requis pour l'habitation pour les zones en milieu dense ou le long des axes de transport en commun \parencite{VilledeQuebec:AdoptionReglement:2024}.\par
   En plus de l'hétérogénéité spatiale qui est décrite à la section \ref{sec:geopolitique_quebec}, on constate aussi une hétérogénéité au niveau des catégories utilisées pour les requis de stationnement. Ceci est d'autant plus ardu que les catégories utilisées dans les minimums de stationnement n'ont pas nécessairement d'équivalent direct dans le \ac{CUBF} utilisé dans le rôle foncier du Québec \parencite[Annexe 2C.1]{GouvernementduQuebec:ManuelEvaluation:2024}. Le tableau suivant résume les catégories utilisées dans les codes d'urbanismes \parencite{VilledeQuebec:AdoptionReglement:2024,VilledeQuebec:ReglementZonage:1995}. Les codes d'urbanisme des municipalités pré-fusion ne sont pas nécessairement disponibles en ligne. Le tableau \ref{tab:req_stat_presents} est un sommaire des types d'utilisation du territoire listés pour chacune des municipalités.
-  \tiny
+  %\tiny
+  \newcommand{\YCHECK}{\Checkmark}
+  \newcommand{\NCHECK}{\cellcolor{red} \XSolid}
+  \newcommand{\OCHECK}[1]{\cellcolor{orange} / #1}
+  \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+  \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
   \begin{landscape}
     \begin{center}
-    \begin{longtable}{m{0.5cm} | p{2.5cm}  *{13}{|m{1.2cm}}|} 
-      \multirow{2}{*}{\STAB{\rotatebox[origin=c]{90}{Categ}}} & Juridiction & \STAB{\rotatebox[origin=c]{90}{Code \ac{CUBF}}} & \rotatebox[origin=c]{90}{VDQ Harmonisée} & \rotatebox[origin=c]{90}{VDQ pré-fusion} & \rotatebox[origin=c]{90}{Beauport} & \rotatebox[origin=c]{90}{Cap-Rouge} & \rotatebox[origin=c]{90}{Charlesbourg} & \rotatebox[origin=c]{90}{Lac St-Charles} & \rotatebox[origin=c]{90}{Loretteville} & \rotatebox[origin=c]{90}{Sillery} & \rotatebox[origin=c]{90}{Ste-Foy} & \rotatebox[origin=c]{90}{St-Émile} & \rotatebox[origin=c]{90}{Val-Belair} & \rotatebox[origin=c]{90}{Vanier} \\
-      & No. Règl. & MEFQ & R.V.Q. 1400 & V.Q.Z.3 & 87-806 & 1151-95 & 96-2921 & 88-257 & 1386 & 950 & 3501 & 310-89 & VB-344-88 & 93-05-1245\\\hline  
-      \endhead
-      \hline
-      \caption{Présence de règlementation de stationnement selon le code \ac{CUBF}}\label{tab:req_stat_presents}
-      \endlastfoot
-      \multirow{7}{*}{\STAB{\rotatebox[origin=c]{90}{Résidentiel}}}& Logement (seuils) & \hspace{3mm}10XX & Oui(4) & Oui(-) & Oui(5-9) & Oui(4) &  Oui(4) & Oui(2-3-5) & Oui(4) & Oui(5) & Oui(9) & Oui(4) & Oui(4) & Oui(4)\\
-      & Logement subventionné & \hspace{3mm}10XX & Oui &Oui &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non &\cellcolor{red} Non \\
-      & Habitation Collectives & \hspace{3mm}15XX & Oui & \cellcolor{red} Non & Oui & Oui & Oui & Oui & Oui & Non & Non & Oui & Oui & \cellcolor{red} Non \\
-      & Maison de chambres & \hspace{6mm} 151X & Oui & Oui & \cellcolor{orange} Par 15XX & \cellcolor{orange} Par 15XX & \cellcolor{orange} Par 15XX & \cellcolor{orange} Par 15XX & Oui & \cellcolor{red} Non & Oui &\cellcolor{red}  Non & Oui & Oui\\
-      & Maison de retraite non autonomes & \hspace{12mm}1541 & \cellcolor{orange} Par 15XX & Oui & Oui & Oui & \cellcolor{orange} Par 15XX & \cellcolor{orange} Par 15XX & Oui & Oui & Oui & \cellcolor{orange} Par 15XX & \cellcolor{orange} Par 15XX & Non \\
-      & Maison de retraite autonomes & \hspace{12mm}1543 & \cellcolor{orange} Par 15XX & Oui & Oui & Oui & \cellcolor{orange} Par 15XX & \cellcolor{orange} Par 15XX & Oui & Oui & Oui & \cellcolor{orange} Par 15XX & \cellcolor{orange} Par 15XX & Non \\ \hline
-      \multirow{4}{*}{\STAB{\rotatebox[origin=c]{90}{\shortstack[c]{Industriel \\ Infra.} }}} & Industriel Général & \makecell[l]{2XXX\\3XXX} & Oui & Oui & Oui & \cellcolor{orange} Pas explicite & Oui & Oui & Oui & Oui & Oui & Oui & Oui & Oui \\
-        & Industrie Haute Technologie & \hspace{6mm}\makecell[l]{355X\\ 356X\\ 357X} & Oui & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX  &  Oui &\cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX\\
-        & Industrie mise en valeur et récupération & \hspace{6mm}487X & Oui & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & Oui & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX \\ 
-        & Service et aménagement pour le transport & \hspace{6mm}492X\\
+      \begin{longtable}{P{1.0cm} | p{7.5cm} | c || *{12}{P{5mm}}||p{6mm}} 
+        \multirow{2}{*}{\STAB{\rotatebox[origin=c]{90}{Categ}}} & Juridiction & \STAB{\rotatebox[origin=c]{90}{Code \ac {CUBF}}} & \rotatebox[origin=c]{90}{  VDQ (2009-présent)} & \rotatebox[origin=c]{90}{VDQ (1995-2009)} & \rotatebox[origin=c]{90}{Beauport} & \rotatebox[origin=c]{90}{Cap-Rouge} & \rotatebox[origin=c]{90}{Charlesbourg} & \rotatebox[origin=c]{90}{Lac St-Charles} & \rotatebox[origin=c]{90}{Loretteville} & \rotatebox[origin=c]{90}{Sillery} & \rotatebox[origin=c]{90}{Ste-Foy} & \rotatebox[origin=c]{90}{St-Émile} & \rotatebox[origin=c]{90}{Val-Belair} & \rotatebox[origin=c]{90}{Vanier} & \rotatebox[origin=c]{90}{Nombre de requis} \\
+        %& No. Règl. & MEFQ & R.V.Q. 1400 & V.Q.Z. 3 & 87-806 & 1151-95 & 96-2921 & 88-257 & 1386 & 950 & 3501 & 310-89 & VB-344-88 & 93-05-1245\\
+        \hline  
+        \endhead
         \hline
-        \multirow{26}{*}{\STAB{\rotatebox[origin=c]{90}{Commerces et Services}}} & Centre Commercial et Immeuble Commercial & \hspace{3mm}50XX\\
-        & Vente en gros & \hspace{3mm}51XX\\
-        & Vente au détail prod. construction et quincaillerie & \hspace{3mm}52XX \\
-        & Vente au détail marchandises & \hspace{3mm}53XX \\
-        & Vente au détail de l'alimentation & \hspace{3mm}54XX \\
-        & Vente au détail de véhicules et produits connexes & \hspace{3mm}55XX \\
-        & Station Essence & \hspace{6mm}553X\\
-        & Vente au détail de vêtements & \hspace{3mm}56XX\\
-        & Vente au détail de mobilier & \hspace{3mm}57XX\\
-        & Restaurant & \hspace{6mm}581X\\
-        & Restaurant plein service & \hspace{6mm}\makecell{5811 \\ 5812 \\ 5815}\\
-        & Restaurant service restreint/libre service& \hspace{6mm}\makecell{5811 \\ 5812 }\\
-        & Débit d'alcool & \hspace{6mm}582X\\
-        & Bar & \hspace{6mm}5821\\
-        & Discothèque & \hspace{6mm}5822\\
-        & Bar à spectacle & \hspace{6mm}5821\\
-        & Établissement d'hébergement & \hspace{6mm}583X\\
-        & Hôtel & \hspace{9mm}5831\\
-        & Môtel & \hspace{9mm}5832\\
-        & Vente au détail Autre & \hspace{3mm}59XX\\
-        & Immeubles à bureaux & \hspace{3mm}60XX\\
-        & Finance, Assurance et Service immobilier & \hspace{3mm}61XX\\
-        & Banque & \hspace{3mm}611X\\
-        & Service personnels & \hspace{3mm}62XX\\
-        & Salon funéraire& \hspace{9mm}6241\\
-        & Services d'affaires & \hspace{3mm}63XX\\
-        & Services de réparation & \hspace{3mm}64XX\\
-        & Service de réparation d'automobiles& \hspace{6mm}641X\\
-        & Service de réparation de mobiliers, d'équipements et de machines & \hspace{6mm}642X\\ 
-        & Service de réparation de véhicules légers& \hspace{6mm}643X\\
-        & Service de réparation et d'entretien de véhicules lourds& \hspace{6mm}644X\\
-        & Service professionnel & \hspace{3mm}65XX\\
-        & Service médical et de santé & \hspace{3mm}651X\\
-        & Service d'hôpital ou maison de repos & \hspace{9mm}\makecell{6516\\ 6513}\\
-        & Service de construction & 66XX & \cellcolor{orange}Par 2XXX-3XXX  & \cellcolor{orange}Par 2XXX-3XXX &\cellcolor{orange}Par 2XXX-3XXX &\cellcolor{orange}Par 2XXX-3XXX &\cellcolor{orange}Par 2XXX-3XXX &\cellcolor{orange}Par 2XXX-3XXX & Oui & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & \cellcolor{orange}Par 2XXX-3XXX & Oui\\
-        & Service gouvernemental \\
-        & Service éducationnel \\
-        & Service de garderie \\
-        & École Maternelle \\
-        & École Primaire \\
-        & École Secondaire \\
-        & Polyvalente \\
-        & Université, CÉGEP \\
-        & Services religieux \\
-        & Autres Services \\\hline
-        \multirow{14}{*}{\STAB{\rotatebox[origin=c]{90}{Culture et Récréation}}} & Rassemblement Public \\
-        & Activité Culturelle(Musée, Biblio)  \\
-        & Assemblée de loisirs(Théâtre, Cinéma) \\
-        & Installation sportive (Stade, Hippodrome) \\
-        & Centre de congrès  \\
-        & Activités récréatives \\
-        & Terrains de golf\\
-        & Arena\\
-        & Parcs \\
-        & Camps divers  \\
-        & Jeux de hasard \\\hline
-      \multirow{2}{*}{\STAB{\rotatebox[origin=c]{45}{Autre}}} & Extraction de ressources / Agriculture & \\
-      
-    \end{longtable}
+        \multicolumn{15}{c}{\Checkmark = Requis présent, \colorbox{red}{\XSolid} = Requis absent, \colorbox{orange}{/} = Requis implicite à une définition plus générale}\\\hline
+        \endfoot
+        \hline
+        \multicolumn{15}{c}{\Checkmark = Requis présent, \colorbox{red}{\XSolid} = Requis absent, \colorbox{orange}{/} = Requis implicite à une définition plus générale}\\\hline
+        \caption{Présence de règlementation de stationnement selon le code \ac{CUBF}}\label{tab:req_stat_presents}
+        \endlastfoot
+        \multirow{6}{*}{\STAB{\rotatebox[origin=c]{90}{Résidentiel}}} & Logement & 10XX & \YCHECK & \YCHECK &\YCHECK & \YCHECK &\YCHECK &\YCHECK& \YCHECK & \YCHECK & \YCHECK &\YCHECK & \YCHECK & \YCHECK&12\\
+        & Logement subventionné & 10XX & \YCHECK & \YCHECK & \NCHECK & \NCHECK & \NCHECK& \NCHECK &\NCHECK &\NCHECK &\NCHECK &\NCHECK &\NCHECK & \NCHECK&2 \\
+        & Habitation Collectives & 15XX & \YCHECK & \NCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \NCHECK & \NCHECK & \YCHECK & \YCHECK & \NCHECK&8 \\
+        & Maison de chambres &  151X & \YCHECK & \YCHECK & \OCHECK{} & \OCHECK{} & \OCHECK{} & \OCHECK{} & \YCHECK & \NCHECK & \YCHECK &\OCHECK{} & \YCHECK & \YCHECK&6\\
+        & Maison de retraite non autonomes & 1541 & \OCHECK{} & \YCHECK & \YCHECK & \YCHECK & \OCHECK{} & \OCHECK{} & \YCHECK & \YCHECK & \YCHECK & \OCHECK{} & \OCHECK{} & \NCHECK &6\\
+        & Maison de retraite autonomes & 1543 & \OCHECK{} & \YCHECK & \YCHECK & \YCHECK & \OCHECK{} & \OCHECK{} & \YCHECK & \YCHECK & \YCHECK & \OCHECK{} & \OCHECK{} & \NCHECK&6 \\ 
+        \hline
+        \multirow{7}{*}{\STAB{\rotatebox[origin=c]{90}{Industriel / Infra.}}}& Industriel Général & \makecell[l]{2XXX\\3XXX} & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK&12 \\
+        & Industrie Haute Technologie & \makecell[l]{355X\\356X\\357X} & \YCHECK & \OCHECK{} & \OCHECK{}  & \OCHECK{}  & \OCHECK{}   & \OCHECK{}   & \OCHECK{}   & \OCHECK{}   &  \YCHECK & \OCHECK{}   & \OCHECK{}& \OCHECK{}&2 \\
+        & Industrie mise en valeur et récupération &487X & \YCHECK & \OCHECK{} & \OCHECK{} & \OCHECK{} & \OCHECK{} & \OCHECK{} & \OCHECK{} & \OCHECK{} & \YCHECK & \OCHECK{} & \OCHECK{} & \OCHECK{}&2 \\ 
+        & Entreposage & 637X & \YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK &7\\
+        & Service de construction & 66XX & \OCHECK{}  & \OCHECK{} &\OCHECK{} &\OCHECK{} &\OCHECK{} &\OCHECK{} & \YCHECK &\OCHECK{} &\OCHECK{} & \OCHECK{} & \OCHECK{} & \YCHECK&2\\
+        \hline
+        \multirow{4}{*}{\STAB{\rotatebox[origin=c]{90}{Commerces}}} & Centre et Immeuble Commercial & 50XX & \YCHECK & \YCHECK & \YCHECK & \YCHECK &\YCHECK&\YCHECK& \YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&12\\
+        & Vente en gros & 51XX &\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&3\\
+        & Vente au détail construction et quincaillerie & 52XX&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&5 \\
+        & Vente au détail marchandises & 53XX&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&0\\
+        \multirow{6}{*}{\STAB{\rotatebox[origin=c]{90}{Commerces}}} & Vente au détail de l'alimentation & 54XX &\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK &10\\
+        & Vente au détail de véhicules et produits connexes & 55XX &\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&8\\
+        & Station Essence & 553X&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&7 \\
+        & Vente au détail de vêtements & 56XX&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&2\\
+        & Vente au détail de mobilier & 57XX&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&3 \\
+        & Vente au détail Autre & 59XX&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&0\\
+        \hline
+        \multirow{7}{*}{\STAB{\rotatebox[origin=c]{90}{Restaurants et bars}}} & Restaurant & 581X & \YCHECK&\NCHECK&\YCHECK&\NCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK &\YCHECK&\YCHECK&\YCHECK&7 \\
+        & Restaurant plein service & \makecell{5811 \\ 5812 \\ 5815}& \OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&2\\
+        & Restaurant service restreint/libre service& \makecell{5811 \\ 5812 }& \OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&2\\
+        & Débit d'alcool & 582X&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&11\\
+        \hline
+        \multirow{3}{*}{\STAB{\rotatebox[origin=c]{90}{Tourisme}}} & Établissement d'hébergement & 583X&\YCHECK&\NCHECK&\NCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&10\\
+        & Hôtel & 5831&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&2\\
+        & Môtel & 5832&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&2\\
+        \hline
+        & Services & 6XXX & \YCHECK & \YCHECK & \YCHECK &\YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK &\YCHECK &\NCHECK &\YCHECK&\NCHECK&10\\
+        & Immeubles à bureaux & 60XX&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\NCHECK&\YCHECK&\NCHECK&9\\
+        \multirow{19}{*}{\STAB{\rotatebox[origin=c]{90}{Services}}}& Finance, Assurance et Service immobilier & 61XX&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&4\\
+        & Banque & 611X&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&7\\
+        & Service personnels & 62XX & \OCHECK{} &\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}& \OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{} &\OCHECK{}&\OCHECK{}&2\\
+        & Salon de beauté / coiffure& 623X& \OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK &3\\
+        & Salon funéraire& 624X&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&12\\
+        & Services d'affaires & 63XX &\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&4\\
+        & Services de réparation & 64XX&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&0\\
+        & Service de réparation d'automobiles&641X&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&9\\
+        & Service de réparation de mobiliers, d'équipements et de machines & 642X&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&1\\ 
+        & Service de réparation de véhicules légers& 643X&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&9\\
+        & Service de réparation et d'entretien de véhicules lourds& 644X&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&9\\
+        & Service professionnel & 65XX&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&0\\
+        & Service médical et de santé & 651X&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK &\YCHECK & \OCHECK{} &\YCHECK & \OCHECK{}&9\\
+        & Service d'hôpital & 6513 &\YCHECK &\YCHECK &\YCHECK &\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&12\\
+        & Sanatorium, maison de convalescence et de repos & 6516 &\YCHECK &\YCHECK &\YCHECK&\OCHECK{}&\YCHECK &\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&11\\
+        \multirow{12}{*}{\STAB{\rotatebox[origin=c]{90}{Services}}}& Service gouvernemental&67XX&\OCHECK{} & \OCHECK{} &\OCHECK{}&\OCHECK{}&\OCHECK{} &\OCHECK{} & \YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK &5 \\
+        & Pompiers/Police &672X&\YCHECK & \YCHECK &\OCHECK{}&\OCHECK{} &\OCHECK{} & \OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&4\\
+        & Service éducationnel&68XX&\YCHECK&\YCHECK&\NCHECK&\YCHECK&\NCHECK&\YCHECK&\YCHECK&\YCHECK&\NCHECK&\YCHECK{}&\YCHECK&\YCHECK &9 \\
+        & Service de garderie&6541&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}& \YCHECK&\OCHECK{}& \YCHECK &\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&5 \\
+        & École Maternelle&6811&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK{}&\YCHECK{}&4 \\
+        & École Primaire&6812&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&11 \\
+        & École Secondaire / Polyvalente&\makecell{6813\\6822}&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK& \YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&10 \\
+        & CÉGEP &6823&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&6\\
+        & Université&6821&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&7\\ 
+        & Services religieux &691X&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&9\\
+        \hline
+        \multirow{8}{*}{\STAB{\rotatebox[origin=c]{90}{Culture et Récréation}}} & Culture, Récréation et Loisirs&7XXX &\NCHECK&\YCHECK&\YCHECK&\NCHECK&\YCHECK&\YCHECK&\NCHECK&\YCHECK&\NCHECK&\YCHECK&\YCHECK&\YCHECK&8\\
+        & Activité Culturelle(Musée, Biblio) &711X&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK &\OCHECK{} &\OCHECK{} &\OCHECK{}&9\\
+        & Assemblée de loisirs(Théâtre, Cinéma) &721X&\YCHECK&\YCHECK&\YCHECK& \YCHECK& \YCHECK&\YCHECK&\YCHECK&\YCHECK&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&10 \\
+        & Installation sportive (Stade, Hippodrome)&722X&\YCHECK&\OCHECK{}&\OCHECK{}&\NCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{}&3\\
+        & Centre de congrès&723X& \OCHECK{} & \YCHECK & \OCHECK{} & \NCHECK & \OCHECK{} & \OCHECK{}& \YCHECK& \OCHECK{} & \OCHECK{} & \OCHECK{} & \OCHECK{} & \OCHECK{}&2 \\
+        & Activités récréatives&74XX&\YCHECK&\OCHECK{}&\YCHECK&\NCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\OCHECK{}&\OCHECK{}&\OCHECK{} &4\\
+        & Terrains de golf&\makecell{7411\\7412}& \YCHECK& \OCHECK{}&\OCHECK{}&\NCHECK&\OCHECK{}&\OCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&\OCHECK{}&4\\
+        & Arena& 7451& \YCHECK&\YCHECK&\OCHECK{}&\NCHECK&\OCHECK{}&\OCHECK{}&\YCHECK{}&\YCHECK&\OCHECK{}&\YCHECK&\YCHECK&\OCHECK{}&6\\
+        & Parcs/Camps &\makecell{75XX\\76XX}&\YCHECK &\NCHECK&\NCHECK&\NCHECK&\NCHECK&\NCHECK&\NCHECK&\NCHECK&\YCHECK&\YCHECK&\NCHECK&\YCHECK&5 \\
+        \hline
+        N/A & Extraction de ressources / Agriculture & 8XXX&\YCHECK&\NCHECK&\NCHECK&\NCHECK&\NCHECK&\NCHECK&\YCHECK&\NCHECK&\YCHECK&\NCHECK&\NCHECK&\NCHECK&3\\
+      \end{longtable}
     \end{center}
     %
   \end{landscape}
-  \normalsize
+  %\normalsize
   \FloatBarrier
-
+  
   
 
   
