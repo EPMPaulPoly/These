@@ -65,6 +65,7 @@
 %%
 %% Autres modules. / Other packages.
 \usepackage{amsmath,color,soulutf8,longtable,colortbl,setspace,xspace,url,pdflscape,amsthm,multirow,rotating,neuralnetwork,tikz,makecell,bbding,xcolor,array,pgfplots,pgfplotstable}
+\pgfplotsset{compat=1.9}
 \usetikzlibrary{fadings}
 \usetikzlibrary{decorations.pathreplacing}
 \usepackage{sidecap}
@@ -111,7 +112,7 @@
 %%
 %% Définitions spécifiques à l'étudiant.
 %% Student-specific definitions.
-\include{0-Definitions_Etudiant}
+\include{00-Definitions_Etudiant}
 \ifthenelse{\equal{\monDiplome}{M}}{
   \newcommand\monSujet{Mémoire de maîtrise}
   \newcommand\monDipl{Maîtrise ès sciences appliquées}
@@ -209,10 +210,10 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \monJury
 %%
 \pagestyle{pagenumber}%
-%\include{1-Dedicace}          % Dédicace du document.
-%\include{2-Remerciements}     % Remerciements / Acknowledments
-%\include{3-Resume_sujet}      % Résumé du sujet en français / Abstract in French
-%\include{3-Abstract}          % Résumé du sujet en anglais / Abstract in English
+\include{01-Dedicace}          % Dédicace du document.
+\include{02-Remerciements}     % Remerciements / Acknowledments
+\include{03-1-Resume}      % Résumé du sujet en français / Abstract in French
+\include{03-2-Abstract}          % Résumé du sujet en anglais / Abstract in English
 
 {\setlength{\parskip}{0pt}
 %%
@@ -249,17 +250,17 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
     {\setlength\itemindent{15pt} \item[-] #1}
 }
 
-\include{4-Sigles_Abrev}       % Liste des sigles et abréviations.
+\include{04-Sigles_Abrev}       % Liste des sigles et abréviations.
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{\listofappendices}{}
 \mainmatter
-\include{5-Introduction}       % Introduction au sujet de recherche.
-\include{6-Revue_litterature}  % Revue de littérature / Literature review
-\include{6-1-Revue-stat-mobilite}
-\include{6-2-Revue-stat-inventaire}
-\include{6-3-Revue-AM}
-\include{7-1-Details_Solution}             %  "Détails de la Solution" (Maîtrise)
-\include{7-2-Resultats_Solution}          %  "Résultats théoriques et expérimentaux" (Maîtrise)
-\include{8-Conclusion}         % Conclusion.
+\include{05-Introduction}       % Introduction au sujet de recherche.
+\include{06-Revue_litterature}  % Revue de littérature / Literature review
+\include{06-1-Revue-stat-mobilite}
+\include{06-2-Revue-stat-inventaire}
+\include{06-3-Revue-AM}
+\include{07-1-Methodologie}             %  "Détails de la Solution" (Maîtrise)
+\include{08-1-Resultats}          %  "Résultats théoriques et expérimentaux" (Maîtrise)
+\include{09-Conclusion}         % Conclusion.
 %\backmatter
 %\ifthenelse{\equal{\Langue}{english}}{
 %	\renewcommand\bibname{REFERENCES}
@@ -274,6 +275,6 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{
 	\appendix%
 	\newcommand{\Annexe}[1]{\annexe{#1}\setcounter{figure}{0}\setcounter{table}{0}\setcounter{footnote}{0}}%
-	\include{9-Annexes}}
+	\include{10-Annexes}}
 {}
 \end{document}
