@@ -1,6 +1,6 @@
 \section{Apprentissage machine}
   \subsection{Principe de base}
-    Selon l'\ac{OQLF}\parencite{OQLF:ApprentissageProfond:2024}, la définition de l'apprentissage profond est la suivante:
+    Selon l'\ac{OQLF}\parencite{oqlf_apprentissage_2024}, la définition de l'apprentissage profond est la suivante:
     \begin{definition}
     Mode d'apprentissage automatique généralement effectué par un réseau de neurones artificiels composé de plusieurs couches de neurones hiérarchisées selon le degré de complexité des concepts, et qui, en interagissant entre elles, permettent à un agent d'apprendre progressivement et efficacement à partir de mégadonnées.
     \end{definition}
@@ -262,34 +262,86 @@
 
   \subsection{Types de problèmes de vision numérique}
     Les problèmes de reconnaissance d'images se divisent en trois types de solution; la classification consiste à dire si une image contient un objet ou appartient à une classe d'image; la détection consiste à trouver un objet dans une image et à l'illustrer typiquement au moyen d'une boîte englobante; la segmentation sert à illustrer les contours détaillés d'un objet, les classifications se font typiquement pixel par pixel selon différentes classes. Les méthodes de segmentation d'instance sont un hybride des méthodes de détection et de segmentation. Dans ces problèmes, des instances de chaque type sont identifiées au moyen de boites englobantes puis un masque est généré pour le type pour illustrer l'objet. La figure \ref{fig:computer_vision_problems} représente le résultat de différents processus d'apprentissages sur une même image:
-  \begin{figure}[!h]
-    \centering
-    \includegraphics[width = 0.5\textwidth]{Recognition-problems-related-to-generic-object-detection-a-image-level-object.png}
-    \caption{Résultat de différentes méthodes de vision par ordinateur pour une même image.\hl{vérifier droits d'auteurs} Source: \cite{Minaee:ImageSegmentation:2022}}
-    \label{fig:computer_vision_problems}
-  \end{figure}
-  Les processus varient aussi dans leur résultante. Tandis que les modèles de segmentation pure feront une affectation de la même couleur à plusieurs objets d'un même type, la segmentation d'instance rend le processus de post traitement des raster plus simple en donnant une couleur différente à chaque instance d'un même type d'objet. Cette dernière propriété a le mérite de potentiellement faciliter le post traitement des résultats.
+
+      \begin{figure}
+          \centering
+          \begin{subfigure}{0.4\textwidth}
+            \centering
+            \begin{tikzpicture}
+              \node at ( -0.66,0)  [circle,draw=blue!50,fill=blue!20,minimum size=5mm] {};
+              \node at ( 0.66,0)  [circle,draw=blue!50,fill=blue!20,minimum size=5mm] {};
+              \node at ( -2,0) [star,draw=blue!50,fill=blue!20] {};
+              \node at ( 2,0)  [isosceles triangle,draw=blue!50,fill=blue!20] {};
+              \node at (0,1.0) [black] {Triangle, étoile, cercle};
+            \end{tikzpicture}
+            \caption{Classification d'objet}
+          \end{subfigure}
+          \begin{subfigure}{0.4\textwidth}
+            \centering
+            \begin{tikzpicture}
+                % Draw the circle
+                \node[circle, draw=blue!50, fill=blue!20, minimum size=5mm] (circle) at (-0.66,0) {};
+                \node[draw=blue!50, very thick, minimum width=10mm, minimum height=10mm, anchor=center,label={Cercle}] at (circle) {};
+                \node[circle, draw=blue!50, fill=blue!20, minimum size=5mm] (circle2) at (0.66,0) {};
+                \node[draw=blue!50, very thick, minimum width=10mm, minimum height=10mm, anchor=center,label={Cercle}] at (circle2) {};
+                \node [star,draw=blue!50,fill=blue!20] (star) at ( -2,0) {};
+                \node[draw=blue!50, very thick, minimum width=10mm, minimum height=10mm, anchor=center,label={Étoile}] at (star) {};
+                \node at ( 2,0)  [isosceles triangle,draw=blue!50,fill=blue!20] (triangle) {};
+                \node[draw=blue!50, very thick, minimum width=12mm, minimum height=10mm, anchor=center,label={Triangle}] at (triangle) {};
+                %\node at (0,2) [black] {Triangle, étoile, carré};
+            \end{tikzpicture}
+            \caption{Détection d'objet}
+          \end{subfigure}~
+          
+          \begin{subfigure}{0.4\textwidth}
+            \centering
+            \begin{tikzpicture}
+                %[background rectangle/.style={fill=black}, show background rectangle]
+                % Draw the circle
+                \node[circle, draw=red, fill=red, minimum size=5mm,label={Cercle}] (circle) at (-0.66,0) {};
+                \node[circle, draw=red, fill=red, minimum size=5mm,label={Cercle}] (circle2) at (0.66,0) {};
+                \node [star,draw=blue,fill=blue,label={Étoile}] (star) at ( -2,0) {};
+                \node at ( 2,0)  [isosceles triangle,draw=green,fill=green,label={Triangle}] (triangle) {};
+            \end{tikzpicture}
+            \caption{Segmentation d'image}
+          \end{subfigure}
+          \begin{subfigure}{0.4\textwidth}
+            \centering
+            \begin{tikzpicture}
+                %[background rectangle/.style={fill=black}, show background rectangle]
+                % Draw the circle
+                \node[circle, draw=red, fill=red, minimum size=5mm,label={Cercle}] (circle) at (-0.66,0) {};
+                \node[circle, draw=purple, fill=purple, minimum size=5mm,label={Cercle}] (circle2) at (0.66,0) {};
+                \node [star,draw=blue,fill=blue,label={Étoile}] (star) at ( -2,0) {};
+                \node at ( 2,0)  [isosceles triangle,draw=green,fill=green,label={Triangle}] (triangle) {};
+            \end{tikzpicture}
+            \caption{Segmentation d'instance}
+          \end{subfigure}
+          \caption{Résultats de différentes méthodes de visiion par ordinateur pour une même image}
+          \label{fig:enter-label}
+      \end{figure}
+  Les processus varient aussi dans leur résultante. Tandis que les modèles de segmentation pure feront une affectation de la même couleur à plusieurs objets d'un même type, la segmentation d'instance rend le processus de post-traitement des raster plus simple en donnant une couleur différente à chaque instance d'un même type d'objet. Cette dernière propriété a le mérite de potentiellement faciliter le post-traitement des résultats.
   \subsection{Algorithmes de segmentation sémantique basés sur la convolution}
 
   \subsubsection{U-Net}
-    U-net a initiallement été développé comme méthode de segmentation d'imagerie médicale par \textcite{Ronneberger:UNetConvolutional:2015}. Dans son implémentation initiale, le diagramme du réseau est donné à la figure \ref{fig:unet_arch}.
+    U-net a initialement été développé comme méthode de segmentation d'imagerie médicale par \textcite{Ronneberger:UNetConvolutional:2015}. Dans son implémentation initiale, le diagramme du réseau est donné à la figure \ref{fig:unet_arch}.
     \begin{figure}[!h]
       \centering
       \includegraphics[width= 0.8 \textwidth]{unet_architecture.png}
       \caption{Architecture de réseau U-net \parencite{Ronneberger:UNetConvolutional:2015}}
       \label{fig:unet_arch}
     \end{figure}
-    L'architecture peut être séparée en deux grandes phases. À gauche, il ya une phase d'encodage qui est constituée de 4 sous blocs. Chaque sous bloque est constituée de deux opérations de convolution 3x3 et d'activation \ac{ReLu} suivi d'un sous-échantillonage utilisant max-pool pour augmenter le niveau d'abstraction, créer un carte de caractéristiques de plus en plus grossière et abstraite. Au niveau d'abstraction le plus haut, une carte de caractéristique de 32x32 est créée au goulot d'étranglement du réseau. La partie de droite constitue le décodeur. Dans cette phase, la carte des caractéristiques des niveaux d'abstraction supérieurs est sur échantillonée, concatennée avec le résultat de convolution, puis passe par une opération de double convolution. Le processus est repété jusqu'à revenir à la résolution de départ pour générer le masque de segmentation de l'image avec un convolution 1x1 finale. Plusieurs implémentations ont été trouvées qui créaient des masque de la même taille que l'image d'origine en utilisant du garnissage de zéro 
+    L'architecture peut être séparée en deux grandes phases. À gauche, il y a une phase d'encodage qui est constituée de 4 sous-blocs. Chaque sous-bloc est constitué de deux opérations de convolution 3x3 et d'activation \ac{ReLu} suivi d'un sous-échantillonnage utilisant max-pool pour augmenter le niveau d'abstraction, créer une carte de caractéristiques de plus en plus grossière et abstraite. Au niveau d'abstraction le plus haut, une carte de caractéristiques de 32x32 est créée au goulot d'étranglement du réseau. La partie de droite constitue le décodeur. Dans cette phase, la carte des caractéristiques des niveaux d'abstraction supérieurs est suréchantillonnée, concaténée avec le résultat de convolution, puis passe par une opération de double convolution. Le processus est répété jusqu'à revenir à la résolution de départ pour générer le masque de segmentation de l'image avec une convolution 1x1 finale. Plusieurs implémentations ont été trouvées qui créaient des masques de la même taille que l'image d'origine en utilisant du garnissage de zéro 
   \subsubsection{Dense U-Net}
 
   \subsubsection{DenseLabV3+}
   \subsection{Algorithmes de segmentation d'instance basés sur la convolution}
-  La première est la segmentation sémantique qui consiste à séparer des pixels dans une image par classe. La deuxième est la segmentation d'instance. Cette dernière reconnait des objets, le classifie et en extraie le contour. \textcite{He:MaskRCNN:2018} est l'article original sur la méthode qui a par la suite été adapté dans un contexte de reconnaissance SIG \parencite{Pesek:MaskRCNN:2018} ou pour la reconnaissance automatique de terrains sportifs pour réinjecter les polygones directement dans \ac{OSM} \parencite{Remillard:JremillardImagestoosm:2024}.\par
-  \textcite{Fritz:InstanceSegmentation:2020} développe plusieurs estimés de segmentation d'instance pour des bâtiments à l'aide de deux modèles. Le premier est celui cité plus haut\parencite{He:MaskRCNN:2018} tandis que le deuxième est un modèle de segmentation d'image modifié pour segmenter les instances \parencite{Iglovikov:TernausNetV2Fully:2018} une fois la segementation d'image complétée
+  La première est la segmentation sémantique qui consiste à séparer des pixels dans une image par classe. La deuxième est la segmentation d'instance. Cette dernière reconnait des objets, le classifie et en extrait le contour. \textcite{He:MaskRCNN:2018} est l'article original sur la méthode qui a par la suite été adaptée dans un contexte de reconnaissance SIG \parencite{Pesek:MaskRCNN:2018} ou pour la reconnaissance automatique de terrains sportifs pour réinjecter les polygones directement dans \ac{OSM} \parencite{Remillard:JremillardImagestoosm:2024}.\par
+  \textcite{Fritz:InstanceSegmentation:2020} développe plusieurs estimés de segmentation d'instance pour des bâtiments à l'aide de deux modèles. Le premier est celui cité plus haut\parencite{He:MaskRCNN:2018} tandis que le deuxième est un modèle de segmentation d'image modifié pour segmenter les instances \parencite{Iglovikov:TernausNetV2Fully:2018} une fois la segmentation d'image complétée
   \subsection{Algorithmes de segmentation sémantique basée sur les transformeurs}
   \subsection{Algorithmes de segmentation d'instance basés sur les transformeurs}
   \subsection{Jeux de données disponibles à l'entrainement}
-    Deux enjeux sont critiques au succès d'un projet d'apprentissage machine. La présence d'un modèle adapté à la tâche en cours et la présence d'un jeu de donnée annoté qui peut être utilisé pour ajuster les poids initiaux du modèle pour permettre de modifier les poids du modèle et permettre de l'appliquer à de grands ensembles de données. Le tableau suivant résumera les jeux de données actuellement disponibles pour la segmentation sémantique en milieu urbain:
+    Deux enjeux sont critiques au succès d'un projet d'apprentissage machine. La présence d'un modèle adapté à la tâche en cours et la présence d'un jeu de données annoté qui peut être utilisé pour ajuster les poids initiaux du modèle pour permettre de modifier les poids du modèle et permettre de l'appliquer à de grands ensembles de données. Le tableau suivant résumera les jeux de données actuellement disponibles pour la segmentation sémantique en milieu urbain:
     \begin{table}
       \centering
          \begin{tabular}{l p{0.2\textwidth} l p{0.3\textwidth}  p{0.2\textwidth} l} 

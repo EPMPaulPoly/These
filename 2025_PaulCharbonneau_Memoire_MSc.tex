@@ -65,6 +65,8 @@
 %%
 %% Autres modules. / Other packages.
 \usepackage{amsmath,color,soulutf8,longtable,colortbl,setspace,xspace,url,pdflscape,amsthm,multirow,rotating,neuralnetwork,tikz,makecell,bbding,xcolor,array,pgfplots,pgfplotstable}
+\usepackage[table]{xcolor}
+\usetikzlibrary{backgrounds}
 \pgfplotsset{compat=1.9}
 \usetikzlibrary{fadings}
 \usetikzlibrary{decorations.pathreplacing}
@@ -102,7 +104,7 @@
 \usepackage{siunitx} % unites SI / SI units
 \usepackage{amssymb} % autres symboles mathematiques / other mathematical symbols
 \usepackage[bottom]{footmisc} % pour avoir les notes de bas de page en dessous des figures... / to have the footnotes below the figures
-%\usepackage{listings} % Si on veut ajouter des lignes de codes dans le texte / If you want to add lines of code to the text
+\usepackage{listings} % Si on veut ajouter des lignes de codes dans le texte / If you want to add lines of code to the text
 
 
 %%
@@ -254,11 +256,18 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{\listofappendices}{}
 \mainmatter
 \include{05-Introduction}       % Introduction au sujet de recherche.
-\include{06-Revue_litterature}  % Revue de littérature / Literature review
+\include{06-0-Revue_litterature}  % Revue de littérature / Literature review
 \include{06-1-Revue-stat-mobilite}
 \include{06-2-Revue-stat-inventaire}
 \include{06-3-Revue-AM}
 \include{07-1-Methodologie}             %  "Détails de la Solution" (Maîtrise)
+\include{07-2-Historique-urbanisme}
+\include{07-3-Donnees_disponibles}
+%\include{07-4-Inventaire-sur-rue}
+\include{07-5-Inventaire-code-urbanisme}
+%\include{07-6-Inventaire-orthophoto}
+\include{07-7-Interface-web-API}
+\include{07-8-Methode-analyse}
 \include{08-1-Resultats}          %  "Résultats théoriques et expérimentaux" (Maîtrise)
 \include{09-Conclusion}         % Conclusion.
 %\backmatter
