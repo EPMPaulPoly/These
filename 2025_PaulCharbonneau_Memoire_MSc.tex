@@ -56,6 +56,7 @@
 %% Charge le module d'affichage graphique. / Loads the graphics package.
 \usepackage{graphicx}
 \usepackage{epstopdf}  % Permet d'utiliser des .eps avec pdfLaTeX. / Allows using .eps with pdfLaTeX.
+\usepackage[normalem]{ulem}% Pour la commande \ul (souligné)
 %%
 %% Recherche des images dans les répertoires. / Search for images in folders.
 \graphicspath{{./images/}{./dia/}{./gnuplot/}}
@@ -67,6 +68,7 @@
 \usepackage{amsmath,color,soulutf8,longtable,colortbl,setspace,xspace,url,pdflscape,amsthm,multirow,rotating,neuralnetwork,tikz,makecell,bbding,xcolor,array,pgfplots,pgfplotstable}
 \usepackage[table]{xcolor}
 \usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
 \pgfplotsset{compat=1.9}
 \usetikzlibrary{fadings}
 \usetikzlibrary{decorations.pathreplacing}
@@ -105,8 +107,34 @@
 \usepackage{amssymb} % autres symboles mathematiques / other mathematical symbols
 \usepackage[bottom]{footmisc} % pour avoir les notes de bas de page en dessous des figures... / to have the footnotes below the figures
 \usepackage{listings} % Si on veut ajouter des lignes de codes dans le texte / If you want to add lines of code to the text
+\renewcommand{\lstlistingname}{Extrait de code}
+\renewcommand{\lstlistlistingname}{LISTE DES EXTRAITS DE CODE}
 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 %%
 %% Définitions spécifiques au format de rédaction de Poly.
 %% Here we define the Poly formatting.
@@ -247,7 +275,7 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 %% Liste des annexes au besoin.
 %% List of appendices, if needed.
 }
-
+\lstlistoflistings
 \newcommand{\SubItem}[1]{
     {\setlength\itemindent{15pt} \item[-] #1}
 }
@@ -269,6 +297,8 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \include{07-7-Interface-web-API}
 \include{07-8-Methode-analyse}
 \include{08-1-Resultats}          %  "Résultats théoriques et expérimentaux" (Maîtrise)
+\include{08-2-Resultats-Outil} 
+\include{08-3-Resultats-Mobilite}
 \include{09-Conclusion}         % Conclusion.
 %\backmatter
 %\ifthenelse{\equal{\Langue}{english}}{

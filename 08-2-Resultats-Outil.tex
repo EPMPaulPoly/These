@@ -1,0 +1,239 @@
+\section{Outil développé}\label{ssec:outil_develope}
+\subsection{Fonctions de l'API serveur}
+Il est ensuite possible de formuler l'ensemble des requêtes que l'on veut potentiellement remplir et montrer sur la machine \og{client} \fg{}. L'implémentation proposée reprend librement le standard \ac{REST} \parencite{fielding_architectural_2000} qui transmet les requêtes et les réponses au moyen du protocole \ac{HTTP}. Ce type d'interface a typiquement 4 grandes fonctions: GET, PUT, POST, DELETE. GET sert à obtenir un élément de la base de données. PUT permet de modifier un élément déjà existant. POST permet de créer un nouvel élément dans une table. DELETE sert à supprimer un élément. Le chemin auquel ces instructions sont transmises détermine quelle table dans la base de données est consultée ou modifiée. Dans les prochaines sections, une liste sera dressée des variations de GET/PUT/POST/DELETE et d'\ac{URI} implémentés dans le cadre de ce mémoire.\clearpage
+\subsubsection{Inventaire} 
+Les appels d'API suivants sont proposés pour les objets de type inventaire:
+\begin{itemize}
+    \item GET /api/inventaire/quartier/$<id_{quartier}>$: Renvoie l'inventaire pour un quartier complet
+    \item GET /api/inventaire/calcul/quartier/$<id_{quartier}>$: renvoie le résultat du calcul détaillé dans la section \ref{sec:meth_urb_based_inventory} pour un quartier d'analyse
+    \item GET /api/inventaire/calcul/lot/$<g\_no\_lot>$: renvoie le résultat du calcul détaillé dans la section \ref{sec:meth_urb_based_inventory} pour un lot cadastral. Pour l'ensemble des identifiants de lots cadastraux, les espaces dans le numéro de lot sont remplacés par des tirets bas. Ce remplacement est nécessaire pour éviter de mettre des espaces dans l'\ac{URL}.
+    \item POST /api/inventaire/calcul/reg-val-man permet de faire un calcul pour des valeurs manuellement entrées par l'utilisateur. Les valeurs manuelles sont transmises dans le corps de la requête. Les entrées suivantes doivent être présentes pour chaque entrée:
+    \begin{itemize}
+        \item g\_no\_lot: l'identifiant de lot
+        \item cubf: le code d'utilisation du bien fond applicable
+        \item id\_reg\_stat: l'identifiant de règlement pertinent
+        \item id\_er: l'identifiant d'ensemble de règlement pertinent
+        \item unite: l'identifiant d'unité de la valeur fournie
+        \item valeur: la valeur manuelle entrée par l'utilisateur
+    \end{itemize}
+    \item PUT /api/inventaire/$<id_{inv}>$: Modification de l'entrée dans la table \ul{inventaire\_ stationnement} dont l'identifiant est égal à la valeur entre <>. Le contenu de l'entrée est communiqué dans le corps du message avec les variables suivantes:
+    \begin{itemize}
+        \item g\_no\_lot
+        \item n\_places\_min
+        \item n\_places\_max
+        \item n\_places\_mesure
+        \item n\_places\_estime
+        \item id\_er
+        \item id\_reg\_stat
+        \item commentaire
+        \item methode\_estime
+        \item cubf
+    \end{itemize}
+    \item POST /api/inventaire: nouvelle entrée dans la table \underline{inventaire\_stationnement}. Les informations suivantes sont fournies dans le corps du message:
+    \begin{itemize}
+        \item g\_no\_lot
+        \item n\_places\_min
+        \item n\_places\_max
+        \item n\_places\_mesure
+        \item n\_places\_estime
+        \item id\_er
+        \item id\_reg\_stat
+        \item commentaire
+        \item methode\_estime
+        \item cubf
+    \end{itemize}
+    \item DELETE /api/inventaire/$<id_{inv}>$: supprime l'entrée dont l'id\_inv est égal à la valeur entre <>.
+\end{itemize}
+
+\subsubsection{Règlements}
+Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement:
+\begin{itemize}
+    \item GET /api/reglements/entete: renvoie toutes les entêtes de règlements (description, information administrative)
+    \item GET /api/reglements/<id\_reg\_stat>: renvoie l'ensemble du règlement dont l'identifiant est égal à celui fourni par l'utilisateur
+    \item PUT /api/reglements/<id\_reg\_stat>: modifie le règlement dont l'identifiant est égal à id\_reg\_stat. Les paramètres à fournir sont les suivants. Ces paramètres suivent les définitions de types montrées au Tableau \ref{tab:definition_entete_reg_stationnement} et \ref{tab:definition_reg_stat_emp}.
+        \begin{itemize}
+            \item entete:
+                \begin{itemize}
+                    \item id\_reg\_stat
+                    \item description
+                    \item annee\_debut\_reg
+                    \item annee\_fin\_reg
+                    \item texte\_loi
+                    \item article\_loi
+                    \item paragraphe\_loi
+                    \item ville
+                \end{itemize}
+            \item definition, un tableau dont les colonnes sont:
+                \begin{itemize}
+                    \item id\_reg\_stat\_emp
+                    \item id\_reg\_stat
+                    \item ss\_ensemble
+                    \item seuil
+                    \item oper
+                    \item cases\_fix\_min
+                    \item cases\_fix\_max
+                    \item pente\_min
+                    \item pente\_max
+                    \item unite
+                \end{itemize}
+        \end{itemize}
+    \item POST /api/reglements permet de créer un nouveau règlement et requiert les mêmes informations que la fonction PUT mais n'a pas d'identifiant dans l'\ac{URL}.
+\end{itemize}\clearpage
+\subsubsection{Ensembles de règlements}
+Les appels d'\ac{API} suivants sont proposés pour les ensembles de règlements.
+\begin{itemize}
+    \item GET /api/ens-reg/entete renvoie l'ensemble des entêtes de règlements de stationnement dont les propriétés sont listées dans le Tableau \ref{tab:definition_er}:
+    \begin{itemize}
+        \item id\_er 
+        \item date\_debut\_er
+        \item date\_fin\_er
+        \item description\_er
+    \end{itemize}
+    \item GET /api/ens-reg/complet/<id\_er> renvoie  les données suivantes pour l'ensemble de règlement dont l'identifiant est égal à id\_er:
+        \begin{itemize}
+            \item entete
+                \begin{itemize}
+                    \item id\_er
+                    \item date\_debut\_er
+                    \item date\_fin\_er
+                    \item description\_er
+                \end{itemize}
+            \item assoc\_util\_sol
+                \begin{itemize}
+                    \item id\_assoc\_er\_reg identifiant primaire
+                    \item id\_reg\_stat, l'identifiant du règlement
+                    \item cubf, le \ac{CUBF} pour l'utilisation du sol
+                    \item id\_er, l'identifiant d'ensemble règlement
+                \end{itemize}
+            \item table\_util\_sol
+                \begin{itemize}
+                    \item \ac{CUBF}
+                    \item description
+                \end{itemize}
+        \end{itemize}
+    \item GET /api/ens-reg/reg-associes/<id\_er> renvoie les entêtes des règlements qui sont utilisés dans l'ensemble de règlements dont l'identifiant est égal à id\_er.
+    \item GET /api/ens-reg/entete-par-territoire/<id\_periode\_geo> renvoie les entêtes des ensembles de règlements associés au territoire dont l'identifiant est égal à id\_periode\_geo.
+    \item PUT /ens-reg/complet/<id\_er> modifie un ensemble de règlements existant. Les données suivantes doivent être fournies dans le corps:
+        \begin{itemize}
+            \item entete
+                \begin{itemize}
+                    \item date\_debut\_er
+                    \item date\_fin\_er
+                    \item description\_er
+                \end{itemize}
+            \item assoc\_util\_sol
+                \begin{itemize}
+                    \item id\_assoc\_er\_reg identifiant primaire
+                    \item id\_reg\_stat, l'identifiant du règlement
+                    \item cubf, le \ac{CUBF} pour l'utilisation du sol
+                \end{itemize}
+        \end{itemize}
+    \item POST /ens-reg/complet permet de créer un nouvel ensemble de règlements en utilisant les mêmes informations que celles listées pour PUT. L'id\_er doit cependant être omis des propriétés et est attribué dans la procédure de création.
+        \begin{itemize}
+            \item entete
+                \begin{itemize}
+                    \item date\_debut\_er
+                    \item date\_fin\_er
+                    \item description\_er
+                \end{itemize}
+            \item assoc\_util\_sol
+                \begin{itemize} 
+                    \item id\_assoc\_er\_reg identifiant primaire
+                    \item id\_reg\_stat, l'identifiant du règlement
+                    \item cubf, le \ac{CUBF} pour l'utilisation du sol
+                \end{itemize}
+        \end{itemize}
+    \item DELETE /api/ens-reg/complet/<id\_er> permet de supprimer un ensemble de règlements. Le serveur s'assure que cet ensemble n'est pas utilisé dans un ensemble de règlements-territoire avant de supprimer.
+    \item PUT /api/ens-reg/assoc/<id\_assoc\_er\_reg> permet de modifier une association spécifique dans un ensemble de règlements. Les champs décrits dans le tableau \ref{tab:definition_association_er_reg_stat}. Les entrées ayant un \ac{CUBF} entre 1 et 9 ne peuvent modifier que le règlement. En effet, au minimum, un ensemble de règlements doit contenir les CUBF 1 à 9. Les variables suivantes doivent être fournies dans le corps de la requête
+    \begin{itemize}
+        \item id\_reg\_stat, l'identifiant du règlement
+        \item cubf, le \ac{CUBF} pour l'utilisation du sol
+        \item id\_er, l'identifiant d'ensemble règlement
+    \end{itemize}
+    \item POST /api/ens-reg/assoc permet de créer une nouvelle association entre un \ac{CUBF} et un règlement. Les variables du tableau \ref{tab:definition_association_er_reg_stat} doivent être fournies:
+    \begin{itemize}
+        \item id\_reg\_stat, l'identifiant du règlement
+        \item cubf, le \ac{CUBF} pour l'utilisation du sol
+        \item id\_er, l'identifiant d'ensemble règlement
+    \end{itemize}
+    \item DELETE /api/ens-reg/assoc/<id\_assoc\_er\_reg> permet de supprimer l'association dont l'identifiant est fourni dans l'\ac{URL}.
+\end{itemize}\clearpage
+\subsubsection{Territoire}
+L'\ac{API} possède les appels suivants pour manipuler les territoires:
+\begin{itemize}
+    \item GET /api/territoire/periode/<id\_periode> permet d'obtenir l'ensemble des territoires associés qui sont associés à la période spécifiée dans l'\ac{URL}.
+    \item GET /api/territoire/periode-geo/<id\_periode\_geo> permet d'obtenir un territoire selon son identifiant unique.
+    \item PUT /api/territoire/periode-geo/<id\_periode\_geo> permet de mettre à jour un territoire.
+    \item POST /api/territoire/periode/<id\_periode> permet d'ajouter des territoires associés à une période. Les colonnes suivantes devront être fournies dans le corps du message en concordance avec les types définis dans le tableau \ref{tab:definition_cartographie_secteurs}:
+    \begin{itemize}
+        \item id\_periode, l'identifiant de la période à laquelle est associée 
+        \item ville
+        \item secteur
+        \item ville\_sec
+        \item geometry, la géométrie sous format WKT en CRS 4326
+    \end{itemize}
+    \item POST /api/territoire/periode-geo permet d'ajouter un territoire à la cartographie. Les colonnes suivantes doivent être fournies dans le corps de la requête:
+    \begin{itemize}
+        \item id\_periode, l'identifiant de la période à laquelle est associée 
+        \item ville
+        \item secteur
+        \item ville\_sec
+        \item geometry, la géométrie sous format WKT en CRS 4326
+    \end{itemize}
+    \item DELETE /api/territoire/periode-geo/<id\_periode\_geo> permet de supprimer des territoires en fonction de l'identifiant du territoire
+\end{itemize}
+\clearpage
+
+\subsubsection{Historique}
+L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville:
+\begin{itemize}
+    \item GET /api/historique obtient l'ensemble des entrées de la table \ul{historique\_geopol} avec les entrées du Tableau \ref{tab:definition_historique_geopol}
+    \item GET /api/historique/<$id_{periode}$> renvoie un item de la table \ul{historique\_geopol} dont l'identifiant est égal à $id_{periode}$
+    \item PUT /api/historique/<$id_{periode}$> permet de modifier un item de la table \ul{historique\_ geopol}. Les colonnes suivantes doivent être dans le corps du message selon les types 
+    \begin{itemize}
+        \item nom\_periode 
+        \item date\_debut\_periode
+        \item date\_fin\_periode
+    \end{itemize}
+    \item POST /api/historique permet de créer une nouvelle période dans la base de données. Les colonnes suivantes doivent être dans le corps du message.
+    \begin{itemize}
+        \item nom\_periode 
+        \item date\_debut\_periode
+        \item date\_fin\_periode
+    \end{itemize}
+    \item DELETE /api/historique/<$id_{periode}$> permet de supprimer la période dont l'identifiant est égal à $id_{periode}$
+\end{itemize}
+\clearpage
+\subsubsection{Secteurs d'analyse}
+L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse qui sont définis à la section \ref{ssec:struct_donnees_sec_analyse}.
+\begin{itemize}
+    \item GET /api/quartiers-analyse obtient l'ensemble des quartiers dans la table \ul{sec\_analyse}
+    \item PUT /quartiers-analyse/<$id_{quartier}$> modifie une entrée. Les propriétés suivantes doivent être dans le corps de la requête selon les types du tableau \ref{tab:definition_sec_analyse}
+        \begin{itemize}
+            \item nom\_quartier
+            \item superf\_quartier la superficie du quartier en mètre carrés
+            \item peri\_quartier le périmètre du quartier en mètres
+            \item geometry, la géométrie du quartier en format WKT en CRS 4326
+        \end{itemize}
+    \item POST /api/quartiers-analyse permet de créer un nouveau quartier. Les propriétés suivantes doivent être dans le corps de la requête
+        \begin{itemize}
+            \item nom\_quartier
+            \item superf\_quartier la superficie du quartier en mètre carrés
+            \item peri\_quartier le périmètre du quartier en mètres
+            \item geometry, la géométrie du quartier en format WKT en CRS 4326
+        \end{itemize}
+    \item POST /api/quartiers-analyse/en-gros permet de créer plusieurs quartiers. Les propriétés suivantes doivent être dans le corps de la requête.
+        \begin{itemize}
+            \item nom\_quartier
+            \item superf\_quartier la superficie du quartier en mètre carrés
+            \item peri\_quartier le périmètre du quartier en mètres
+            \item geometry, la géométrie du quartier en format WKT en CRS 4326
+        \end{itemize}
+    \item DELETE /api/quartiers-analyse/<$id_{quartier}$> permet de supprimer une entrée de la table \ul{sec\_analyse}
+\end{itemize}
+\subsubsection{Lots cadastraux et entrées du rôle foncier}
+Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux et les entrées du rôle:
+\begin{itemize}
+    \item GET
+\end{itemize}
+\subsubsection{Profile d'accumulation véhicule}
