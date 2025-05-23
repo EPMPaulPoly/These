@@ -105,6 +105,15 @@
 \usepackage{subcaption} % figures & sous figures / figures & subfigures
 \usepackage{siunitx} % unites SI / SI units
 \usepackage{amssymb} % autres symboles mathematiques / other mathematical symbols
+\makeatletter
+\newcommand{\disjoint}{\mathrel{\mathpalette\disj@int\relax}}
+\newcommand{\disj@int}[2]{%
+  \ooalign{%
+    \hfil$\m@th#1\cap$\hfil\cr
+    \hfil$\m@th#1\diagup$\hfil\cr
+  }%
+}
+\makeatother
 \usepackage[bottom]{footmisc} % pour avoir les notes de bas de page en dessous des figures... / to have the footnotes below the figures
 \usepackage{listings} % Si on veut ajouter des lignes de codes dans le texte / If you want to add lines of code to the text
 \renewcommand{\lstlistingname}{Extrait de code}

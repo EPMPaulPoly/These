@@ -26,11 +26,13 @@
   \acro{PRS}{ParkingRegulationSet ou ensemble de règlement}
   \acro{TD}{TaxDataset ou ensemble de données foncières}
   \acro{PI}{ParkingInventory ou inventaire de stationnement}
+  \acro{PAV}{Profils d'Accumulation de Véhicules}
   \acro{API}{Application Programming Interface ou interface de Programmation applicative}
   \acro{HTTP}{HyperText Transfer Protocol}
   \acro{REST}{Representational State Transfer}
   \acro{URL}{Uniform Resource Locator}
   \acro{URI}{Uniform Resource Identifier}
+  \acro{TC}{Transport Collectif}
 \end{acronym}
 %
 \begin{longtable}{lp{5in}}
@@ -47,6 +49,7 @@ OQLF    & Office Québécois de la Langue Française                            
 CDS     & Coefficient de Dice Sorensen                                                  \\
 CUBF    & Code d'Utilisation des Biens-Fonds                                            \\
 RST     & RegulationSetTerritory ou Ensembles de Règlements de Territoire               \\
+PAV     & Profils d'Accumulation de Véhicules                                           \\
 PR      & ParkingRegulation ou Règlement de Stationnement                                \\
 PRS     & ParkingRegulationSet ou Ensemble de Règlements de Stationnement               \\
 TD      & TaxDataset ou Ensemble de données foncières                                   \\
@@ -55,5 +58,57 @@ HTTP    & HyperText Transfer Protocol                                           
 REST    & REpresentational State Transfer                                               \\
 URL     & Uniform Resource Locator                                                      \\
 URI     & Uniform Resource Identifier                                                   \\
+$F_{men}$ & Facteur de pondération ménage dans l'enquête OD                             \\
+$v_{men}$ & Nombre de véhicules d'un ménage dans l'enquête OD                           \\
+$T_{men}$ & Variable binaire qui indique la première entrée d'un ménage dans la table de déplacements de l'enquête OD \\
+$F_{per}$ & Facteur de pondération d'une personne dans l'enquête OD                     \\
+$T_{per}$ & Variable binaire qui indique la première entrée d'une personne dans la table de déplacements de l'enquête OD\\
+$PP_{per}$ & Variable catégorielle dénotant la possession du permis de conduire: 1 = Oui, 2 = Non, 3= Refus/NSP, 4=Non applicable\\
+$M_{dep}$ & Variable catégorielle pour le mode du déplacement 1 = Auto-Conducteur, 2 = Auto-Passager, 5 = Vélo, 6 = TC, 7=Bus Scolaire, 13= À pied, 14= Traversier avec véhicule, 15 = Traversier sans véhicule\\
+$H$ & Heure de départ d'un déplacement de l'enquête OD \\ 
+$X_{ori}$ & Longitude de l'origine d'un déplacement dans l'enquête OD \\
+$Y_{ori}$ & Latitude de l'origine d'un déplacement dans l'enquête OD\\
+$P_{ori}$ & Position de l'origine d'un déplacement dans l'enquête OD. Utilisé pour dénoter les intersections spatiales \\ 
+$X_{log}$ & Longitude du lieu de résidence dans l'enquête OD\\
+$Y_{log}$ & Latitude du lieu de résidence dans l'enquête OD\\
+$P_{log}$ & Position du lieu de résidence dans l'enquête OD. Utilisé pour dénoter les intersections spatiales \\
+$X_{des}$ & Longitude de la destination d'un déplacement dans l'enquête OD\\
+$Y_{des}$ & Latitude de la destination d'un déplacement dans l'enquête OD\\
+$P_{des}$ & Position de la destination d'un déplacement dans l'enquête OD. Utilisé pour dénoter les intersections spatiales \\
+$P_{role}$ & Position (Point) d'une entrée du rôle foncier \\
+$p_{AD}$ & Population d'une aire de diffusion\\
+$P_q$ & Population du quartier q\\
+$PT_{q}$ & Nombre de détenteurs de permis de conduire pour le quartier q\\
+$V_q$ & Nombre de véhicule pour le quartier q\\
+$S_q$ & Nombre de places de stationnement du quartier q\\
+$s_l$ & Nombre de places de stationnement d'un lot\\
+$G_l$ & Géométrie d'un lot cadastral \\
+$G_q$ & Géométrie d'un quartier\\
+$G_{AD}$ & Géométrie d'une aire de diffusion\\
+$A(G)$ & Aire de la géométrie G\\
+$D_s$ & Densité de stationnement pour un quartier \\
+$d_s$ & Densite de stationnement pour un lot\\
+$D_{f,T,q}$ & Densité du foncier total pour un quartier q\\
+$D_{f,R,q}$ & Densité du foncier résidentiel pour un quartier q\\
+$d_f$ & Densité du foncier pour un lot\\
+$D_p$ & Densité de population pour un quartier\\
+$O_{res}$ & Taux d'occupation de stationnement des résidents \\
+$O_{max}$ & Taux d'occupation des stationnement maximal \\
+$VS_{res}$ & Nombre de voiture des résidents par place de stationnement dans un secteur. Inverse du taux d'occupation\\ 
+$VS_{max}$ & Nombre de voiture maximales par place de stationnement dans un secteur. Inverse du taux d'occupation\\
+$a_l$ & Superficie d'un lot cadastral\\
+$a_{etage}$ & Aire d'étage d'une entrée du rôle foncier \\
+$n_{logements}$ & Nombre de logements dans une entrée du rôle foncier\\
+$c_{}$
+$A_q$ & Superficie d'un quartier\\
+$f_l$ & Valeur foncière d'une entrée au rôle foncier\\
+$F_{T,q}$ & Valeur foncière totale agrégée pour un quartier\\
+$F_{R,q}$ & Valeur foncière résidentielle totale agrégée pour un quartier\\
+$AS_q$ & Superficie des places de stationnement dans un quartier\\
+$AS_{q,\%}$ & Pourcentage de la superficie du quartier dédiée au stationnement\\
+$N_{auto,q,h}$ & Nombre d'automobiles à l'heure h dans le quartier q. Utilisé dans les profils d'accumulation véhicule\\
+$N_{auto,ent,q,h}$ & Nombre d'automobiles entrant dans le quartier q à l'heure h\\
+$N_{auto,sor,q,h}$ & Nombre d'automobiles sortant du quartier q à l'heure h \\
+$PM_{mode}$ & Part modale du mode en indice. L'indice peut être AC (auto-conducteur), AP (auto-passager), TC (Transport en commun), MV (Marche Vélo) et BS (Bus scolaire) au fins de cette étude 
 \end{longtable}
 
