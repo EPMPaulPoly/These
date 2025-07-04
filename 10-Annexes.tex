@@ -225,7 +225,7 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
         LEFT JOIN inv_321 i321 ON i123.id_quartier = i321.id_quartier;
 \end{lstlisting}
 
-\section{Nombre d'automobiles résidents et nombre maximal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
+\section{Nombre d'automobiles résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
 Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménages pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profiles d'accumulation véhicule \parencite{diallo_methodology_2015}.
 \begin{lstlisting}
     DELETE FROM motorisation_par_quartier;
