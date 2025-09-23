@@ -38,20 +38,28 @@
 
 \ifthenelse{\equal{\Langue}{english}}{
 	\usepackage[french,english]{babel}
+    \usepackage{csquotes}
 }{
 	\usepackage[english,french]{babel} 
+    \usepackage{csquotes}
 }
-\usepackage[style=apa, backend=biber]{biblatex}
-\addbibresource{Maitrise_recherche.bib}
+
+\usepackage[style=apa, backend=biber,language=french]{biblatex}
+
 \DeclareLanguageMapping{french}{french-apa}
+
 \DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
 \DeclareDelimFormat[bib]{finalnamedelim}{
     \ifthenelse{\value{listcount}>\maxprtauth}
     {}
     {\ifthenelse{\ifcurrentname{groupauthor}\AND%
             \value{liststop}=2}
-        {\addspace\bibstring{et}\space}
-        {\finalandcomma\addspace\bibstring{et}\space}}}
+        {\addspace\bibstring{and}\space}
+        {\finalandcomma\addspace\bibstring{and}\space}
+    }
+}
+\addbibresource{Maitrise_Recherche.bib}
 %%
 %% Charge le module d'affichage graphique. / Loads the graphics package.
 \usepackage{graphicx}
@@ -66,13 +74,102 @@
 \usepackage{flafter,placeins}
 %%
 %% Autres modules. / Other packages.
-\usepackage{amsmath,color,soulutf8,longtable,colortbl,setspace,xspace,url,pdflscape,amsthm,multirow,rotating,neuralnetwork,tikz,makecell,bbding,xcolor,array,pgfplots,pgfplotstable}
+\usepackage{amsmath,color,soulutf8,longtable,colortbl,setspace,xspace,url,pdflscape,amsthm,multirow,rotating,neuralnetwork,tikz,makecell,bbding,xcolor,array,pgfplots,pgfplotstable,booktabs,diagbox}
+\pgfplotsset{compat=1.17}
+\makeatletter
+\newbox\LT@firstfoot
+\def\endfirstfoot{\LT@end@hd@ft\LT@firstfoot}
+\newdimen\LT@footdiff
+\def\LT@start{%
+  \let\LT@start\endgraf
+  \endgraf\penalty\z@
+  \vskip\LTpre\endgraf
+  \LT@footdiff-\ht\LT@foot
+  \advance\LT@footdiff\ht\LT@firstfoot
+  \dimen@\pagetotal
+  \advance\dimen@ \ht\ifvoid\LT@firsthead\LT@head\else\LT@firsthead\fi
+  \advance\dimen@ \dp\ifvoid\LT@firsthead\LT@head\else\LT@firsthead\fi
+  \advance\dimen@ \ht\ifvoid\LT@firstfoot\LT@foot\else\LT@firstfoot\fi
+  \dimen@ii\vfuzz
+  \vfuzz\maxdimen
+  \setbox\tw@\copy\z@
+  \setbox\tw@\vsplit\tw@ to \ht\@arstrutbox
+  \setbox\tw@\vbox{\unvbox\tw@}%
+  \vfuzz\dimen@ii
+  \advance\dimen@ \ht
+      \ifdim\ht\@arstrutbox>\ht\tw@\@arstrutbox\else\tw@\fi
+  \advance\dimen@\dp
+      \ifdim\dp\@arstrutbox>\dp\tw@\@arstrutbox\else\tw@\fi
+  \advance\dimen@ -\pagegoal
+  \ifdim \dimen@>\z@\vfil\break\fi
+  \global\@colroom\@colht
+  \ifvoid\LT@firstfoot
+    \ifvoid\LT@foot
+    \else
+      \advance\vsize-\ht\LT@foot
+      \global\advance\@colroom-\ht\LT@foot
+      \dimen@\pagegoal\advance\dimen@-\ht\LT@foot\pagegoal\dimen@
+      \maxdepth\z@
+    \fi
+  \else
+    \advance\vsize-\ht\LT@firstfoot
+    \global\advance\@colroom-\ht\LT@firstfoot
+    \dimen@\pagegoal\advance\dimen@-\ht\LT@firstfoot\pagegoal\dimen@
+    \maxdepth\z@
+  \fi
+  \ifvoid\LT@firsthead\copy\LT@head\else\box\LT@firsthead\fi\nobreak
+  \output{\LT@output}%
+}
+\def\LT@output{%
+  \ifnum\outputpenalty <-\@Mi
+    \ifnum\outputpenalty > -\LT@end@pen
+      \LT@err{floats and marginpars not allowed in a longtable}\@ehc
+    \else
+      \setbox\z@\vbox{\unvbox\@cclv}%
+      \ifdim \ht\LT@lastfoot>\ht\LT@foot
+        \dimen@\pagegoal
+        \advance\dimen@-\ht\LT@lastfoot
+        \ifdim\dimen@<\ht\z@
+          \setbox\@cclv\vbox{\unvbox\z@\copy\LT@foot\vss}%
+          \@makecol
+          \@outputpage
+          \setbox\z@\vbox{\box\LT@head}%
+        \fi
+      \fi  
+      \global\@colroom\@colht
+      \global\vsize\@colht   
+      \vbox
+        {\unvbox\z@\box\ifvoid\LT@lastfoot\LT@foot\else\LT@lastfoot\fi}%
+    \fi
+  \else
+    \ifvoid\LT@firstfoot
+      \setbox\@cclv\vbox{\unvbox\@cclv\copy\LT@foot\vss}%
+      \@makecol
+      \@outputpage
+      \global\vsize\@colroom
+    \else
+      \setbox\@cclv\vbox{\unvbox\@cclv\box\LT@firstfoot\vss}%
+      \@makecol
+      \@outputpage
+      \global\advance\@colroom\LT@footdiff
+      \global\vsize\@colroom
+    \fi
+    \copy\LT@head\nobreak
+  \fi
+}
+\makeatother
 \usepackage[table]{xcolor}
 \usetikzlibrary{backgrounds}
 \usetikzlibrary{calc}
+\usepackage{forest}
 \pgfplotsset{compat=1.9}
 \usetikzlibrary{fadings}
 \usetikzlibrary{decorations.pathreplacing}
+\hyphenation{Dis-po-ni-bi-li-té}
+\hyphenation{Com-pen-dex}
+\hyphenation{ver-kehrs-wende}
+\hyphenation{da-ten-aus-tausch-spe-zi-fi-ka-tio-nen}
+\hyphenation{mul-ti-pli-ca-teur}
 \usepackage{sidecap}
 \newtheorem{definition}{Définition}
 \newcommand{\STAB}[1]{\begin{tabular}{@{}c@{}}#1\end{tabular}}
@@ -96,7 +193,8 @@
 %%
 %% Module qui permet la création des bookmarks dans un fichier PDF. / Package that allows the creation of bookmarks in a PDF file.
 %\usepackage[dvipdfm]{hyperref}
-\usepackage{hyperref}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage{xurl}
 \usepackage{caption}  % Hyperlien vers la figure plutôt que son titre. / Hyperlink to the figure rather than its title.
 \makeatletter
 \providecommand*{\toclevel@compteur}{0}
@@ -171,8 +269,7 @@
   bookmarksnumbered,
   pdfstartview={FitV},
   hidelinks,
-  linktoc=all
-}
+  linktoc=all}
 
 %% Ajoute en 2022 (ajout des titres complets des tables et figure et alignement)
 %% Added in 2022 (added full table and figure titles and alignment)
@@ -194,12 +291,14 @@
 	\renewcommand\cftchapfont{CHAPITRE }
     \renewcommand\cftchappagefont{}
 }
-%
+
 
 %%
 %% Il y a un document par chapitre du mémoire ou thèse.
 %% There is one document per chapter of the thesis or dissertation.
 
+\captionsetup[table]{justification=centering, singlelinecheck=false,labelsep=space,margin=2cm}
+\captionsetup[figure]{justification=centering,singlelinecheck=false,labelsep=space,margin=2cm}
 \begin{document}
 %\bstctlcite{IEEEexample:BSTcontrol}
 
@@ -219,7 +318,7 @@ affiliée à l'Université de Montréal\\
 \textbf{\monTitre}\\
 \vspace*{\stretch{1}}
 \textbf{\MakeUppercase{\monPrenom~\monNom}}\\
-Département de~{\monDepartement}\\
+Département des~{\monDepartement}\\
 \vspace*{\stretch{1}}
 \ifthenelse{\equal{\monDiplome}{M}}{Mémoire présenté}{Thèse présentée} en vue de l'obtention du diplôme de~\emph{\monDipl}\\
 \maDiscipline\\
@@ -297,16 +396,18 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \include{06-0-Revue_litterature}  % Revue de littérature / Literature review
 \include{06-1-Revue-stat-mobilite}
 \include{06-2-Revue-stat-inventaire}
-\include{06-3-Revue-AM}
-\include{07-1-Methodologie}             %  "Détails de la Solution" (Maîtrise)
+%\include{06-3-Revue-AM}
+\include{06-3-Recensement-denombrement-validation}
+\include{06-4-Revue-lacunes-recherche}
+%\include{07-1-Methodologie}             %  "Détails de la Solution" (Maîtrise)
 \include{07-2-Historique-urbanisme}
 \include{07-3-Donnees_disponibles}
 %\include{07-4-Inventaire-sur-rue}
+
 \include{07-5-Inventaire-code-urbanisme}
 %\include{07-6-Inventaire-orthophoto}
 \include{07-7-Interface-web-API}
 \include{07-8-Methode-analyse}
-\include{08-1-Resultats}          %  "Résultats théoriques et expérimentaux" (Maîtrise)
 \include{08-2-Resultats-Outil} 
 \include{08-3-Resultats-Mobilite}
 \include{09-Conclusion}         % Conclusion.
@@ -324,6 +425,7 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{
 	\appendix%
 	\newcommand{\Annexe}[1]{\annexe{#1}\setcounter{figure}{0}\setcounter{table}{0}\setcounter{footnote}{0}}%
-	\include{10-Annexes}}
+	\include{10-0-Annexes}}
+    
 {}
 \end{document}

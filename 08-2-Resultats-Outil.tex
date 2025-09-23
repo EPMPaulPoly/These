@@ -1,63 +1,751 @@
+\Chapter{RÉSULTATS}\label{sec:Resultats}
+Cette section sera divisée en plusieurs sous-sections adressant les différents objectifs de recherche du mémoire. La section \ref{ssec:outil_develope} montre l'interface de l'outil développé, la procédure de travail pour créer un inventaire en utilisant l'outil et les fonctionnalités implémentées. La section \ref{sec:analyse_stationnement} détaille les résultats de l'inventaire  qui a été dressé en utilisant l'outil pour le contexte de la ville de Québec. 
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
+        \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=3cm]
+        \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30,text width=4cm]
+        \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
+        \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
+        \tikzstyle{arrow} = [thick,->,>=stealth]
+        % Nodes de flowchart
+        \node (start) [startstop] {Début};
+        \node (creation_historique) [process, below right of=start,yshift=-1cm,xshift=2cm] {Création / modification de l'historique de la municipalité}; 
+        \node (televerse_secteurs) [process, below of=creation_historique,yshift=-1cm] {Téléversement des limites géographiques des municipalités}; 
+        \node (televerse_role)[process, left of=creation_historique,xshift=-4.5cm] {Téléversement des données foncières};
+        \node (assoc_cadastre_role)[process, below of=televerse_role,yshift=-0.75cm] {Création / modification association cadastre - rôle foncier};
+        \node (televerse_cubf)[process, below of=assoc_cadastre_role,yshift=-0.75cm] {Téléversement de la liste des \ac{CUBF}};
+        \node (donnees_pretes)[decision,below of=start,yshift=-6cm,text width=2cm]{Données prêtes?};
+        \node (creation_unites)[process, below of=donnees_pretes,yshift=-1.5cm,text width=7cm]{Création / modification des conversions d'unités};
+        \node (creation_reglement)[process,below of=creation_unites,yshift=-1.25cm,text width=7cm]{Création / modification des règlements pour les différentes municipalités};
+        \node (creation_ens_reg)[process,below of=creation_reglement,yshift=-1cm,text width=7cm]{Création / modification des ensembles de règlements};
+        \node (association_ens_reg_terr)[process,right of=creation_ens_reg,xshift=7cm,text width=5cm]{Création / modification association ensembles règlements aux territoires};
+        \node (creation_inventaire)[process,above of=association_ens_reg_terr,yshift=0.75cm,text width=5cm]{Création / modification de l'inventaire};
+        \node (identification_lots_mal_estimes)[process,above of=creation_inventaire,yshift=0.5cm,text width=5cm]{Identification lots mals estimés};
+        \node (tous_lots_estimes)[decision,above of=identification_lots_mal_estimes,yshift=1.25cm,text width=3cm]{Lots estimés et valides?};
+        \node (validation_inventaire)[process,above of=tous_lots_estimes,yshift=1cm,text width=5cm]{Validation de l'inventaire};
+        \node (aggreg_data_neighbourhood)[process,above of=validation_inventaire,yshift=0.25cm,text width=5cm]{Aggrégation de l'inventaire à l'échelle d'un quartier};
+        \node (analyse_critique)[process,above of=aggreg_data_neighbourhood,yshift=0.5cm,text width=5cm]{Analyse critique des résultats};
+        \node (vraisemblable)[decision,above of=analyse_critique,yshift=1cm,text width=3cm]{Vraisemblable?};
+        \node (fin)[startstop,above of=vraisemblable,yshift=1cm]{Fin};
+        \draw [arrow] (start.east) -| (creation_historique.north);
+        \draw [arrow] (start.west) -| (televerse_role.north);
+        \draw [arrow] (creation_historique) -- (televerse_secteurs);
+        \draw [arrow] (televerse_secteurs.south) |-  (donnees_pretes.east);
+        \draw [arrow] (televerse_role) -- (assoc_cadastre_role);
+        \draw [arrow] (assoc_cadastre_role) -- (televerse_cubf);
+        \draw [arrow] (televerse_cubf) |- (donnees_pretes);     
+        \draw [arrow] (donnees_pretes.south) -- ++(0,-0.25) node[anchor=west]{O}-- (creation_unites);   
+        \draw [arrow] (donnees_pretes.north) -- ++(0,0.5) node[anchor=west] {N} -- (start);   
+        \draw [arrow] (creation_unites) -- (creation_reglement);
+        \draw [arrow] (creation_reglement) -- (creation_ens_reg);
+        \draw [arrow] (creation_ens_reg) -- (association_ens_reg_terr);
+        \draw [arrow] (tous_lots_estimes.west) -| ++(-0.250,0) node[anchor=north] {N} |- (creation_historique.east);
+        \draw [arrow] (association_ens_reg_terr.north) -- (creation_inventaire);
+        \draw [arrow] (creation_inventaire) -- (identification_lots_mal_estimes);
+        \draw [arrow] (identification_lots_mal_estimes) -- (tous_lots_estimes);
+        \draw [arrow] (tous_lots_estimes.north) -- ++(0,0.1cm) node[anchor=west]{O} -- (validation_inventaire);
+        \draw [arrow] (validation_inventaire) -- (aggreg_data_neighbourhood);
+        \draw [arrow] (aggreg_data_neighbourhood)-- (analyse_critique);
+        \draw [arrow] (analyse_critique)--(vraisemblable);
+        \draw [arrow] (vraisemblable.west) -| ++(-0.5,2.25cm) node[anchor=south]{N}  |- ++(-0.5,0)-|(start.north);
+        \draw [arrow] (vraisemblable.north)-- ++(0,0.25) node [anchor=west]{O}--(fin);
+    \end{tikzpicture}
+    \caption{Procédure de génération de l'inventaire}
+    \label{fig:logigramme_procédural}
+\end{figure}
 \section{Outil développé}\label{ssec:outil_develope}
+
 \subsection{Procédure suggérée de création d'inventaire}
 Le logigramme \ref{fig:logigramme_procédural} montre la procédure générale de création de l'inventaire que devrait entreprendre un analyste pour obtenir un inventaire. Comme tout processus de génération d'ensembles de données, le processus est itératif et requiert des mises à jour pour améliorer l'estimé ainsi qu'une mise à jour avec de nouvelles constructions.
-\begin{figure}[!h]
-            \centering
-            \begin{tikzpicture}
-                \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
-                \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=3cm]
-                \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30,text width=4cm]
-                \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
-                \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
-                \tikzstyle{arrow} = [thick,->,>=stealth]
-                % Nodes de flowchart
-                \node (start) [startstop] {Début};
-                \node (creation_historique) [process, below right of=start,yshift=-1cm,xshift=2cm] {Création / modification de l'historique de la municipalité}; 
-                \node (televerse_secteurs) [process, below of=creation_historique,yshift=-1cm] {Téléversement des limites géographiques des municipalités}; 
-                \node (televerse_role)[process, left of=creation_historique,xshift=-4.5cm] {Téléversement des données foncières};
-                \node (assoc_cadastre_role)[process, below of=televerse_role,yshift=-0.75cm] {Création / modification association cadastre - rôle foncier};
-                \node (televerse_cubf)[process, below of=assoc_cadastre_role,yshift=-0.75cm] {Téléversement de la liste des \ac{CUBF}};
-                \node (donnees_pretes)[decision,below of=start,yshift=-6cm,text width=2cm]{Données prêtes?};
-                \node (creation_unites)[process, below of=donnees_pretes,yshift=-1.5cm,text width=7cm]{Création / modification des conversions d'unités};
-                \node (creation_reglement)[process,below of=creation_unites,yshift=-1.25cm,text width=7cm]{Création / modification des règlements pour les différentes municipalités};
-                \node (creation_ens_reg)[process,below of=creation_reglement,yshift=-1cm,text width=7cm]{Création / modification des ensembles de règlements};
-                \node (association_ens_reg_terr)[process,right of=creation_ens_reg,xshift=7cm,text width=5cm]{Création / modification association ensembles règlements aux territoires};
-                \node (creation_inventaire)[process,above of=association_ens_reg_terr,yshift=0.75cm,text width=5cm]{Création / modification de l'inventaire};
-                \node (identification_lots_mal_estimes)[process,above of=creation_inventaire,yshift=0.5cm,text width=5cm]{Identification lots mals estimés};
-                \node (tous_lots_estimes)[decision,above of=identification_lots_mal_estimes,yshift=1.25cm,text width=3cm]{Lots estimés et valides?};
-                \node (validation_inventaire)[process,above of=tous_lots_estimes,yshift=1cm,text width=5cm]{Validation de l'inventaire};
-                \node (aggreg_data_neighbourhood)[process,above of=validation_inventaire,yshift=0.25cm,text width=5cm]{Aggrégation de l'inventaire à l'échelle d'un quartier};
-                \node (analyse_critique)[process,above of=aggreg_data_neighbourhood,yshift=0.5cm,text width=5cm]{Analyse critique des résultats};
-                \node (vraisemblable)[decision,above of=analyse_critique,yshift=1cm,text width=3cm]{Vraisemblable?};
-                \node (fin)[startstop,above of=vraisemblable,yshift=1cm]{Fin};
-                \draw [arrow] (start.east) -| (creation_historique.north);
-                \draw [arrow] (start.west) -| (televerse_role.north);
-                \draw [arrow] (creation_historique) -- (televerse_secteurs);
-                \draw [arrow] (televerse_secteurs.south) |-  (donnees_pretes.east);
-                \draw [arrow] (televerse_role) -- (assoc_cadastre_role);
-                \draw [arrow] (assoc_cadastre_role) -- (televerse_cubf);
-                \draw [arrow] (televerse_cubf) |- (donnees_pretes);     
-                \draw [arrow] (donnees_pretes.south) -- ++(0,-0.25) node[anchor=west]{O}-- (creation_unites);   
-                \draw [arrow] (donnees_pretes.north) -- ++(0,0.5) node[anchor=west] {N} -- (start);   
-                \draw [arrow] (creation_unites) -- (creation_reglement);
-                \draw [arrow] (creation_reglement) -- (creation_ens_reg);
-                \draw [arrow] (creation_ens_reg) -- (association_ens_reg_terr);
-                \draw [arrow] (tous_lots_estimes.west) -| ++(-0.250,0) node[anchor=north] {N} |- (creation_historique.east);
-                \draw [arrow] (association_ens_reg_terr.north) -- (creation_inventaire);
-                \draw [arrow] (creation_inventaire) -- (identification_lots_mal_estimes);
-                \draw [arrow] (identification_lots_mal_estimes) -- (tous_lots_estimes);
-                \draw [arrow] (tous_lots_estimes.north) -- ++(0,0.1cm) node[anchor=west]{O} -- (validation_inventaire);
-                \draw [arrow] (validation_inventaire) -- (aggreg_data_neighbourhood);
-                \draw [arrow] (aggreg_data_neighbourhood)-- (analyse_critique);
-                \draw [arrow] (analyse_critique)--(vraisemblable);
-                \draw [arrow] (vraisemblable.west) -| ++(-0.5,2.25cm) node[anchor=south]{N}  |- ++(-0.5,0)-|(start.north);
-                \draw [arrow] (vraisemblable.north)-- ++(0,0.25) node [anchor=west]{O}--(fin);
-            \end{tikzpicture}
-            \caption{Procédure de génération de l'inventaire}
-            \label{fig:logigramme_procédural}
-        \end{figure}
+
 \subsection{Fonctions de l'API serveur}
-Il est ensuite possible de formuler l'ensemble des requêtes que l'on veut potentiellement remplir et montrer sur la machine \og{client} \fg{}. L'implémentation proposée reprend librement le standard \ac{REST} \parencite{fielding_architectural_2000} qui transmet les requêtes et les réponses au moyen du protocole \ac{HTTP}. Ce type d'interface a typiquement 4 grandes fonctions: GET, PUT, POST, DELETE. GET sert à obtenir un élément de la base de données. PUT permet de modifier un élément déjà existant. POST permet de créer un nouvel élément dans une table. DELETE sert à supprimer un élément. Le chemin auquel ces instructions sont transmises détermine quelle table dans la base de données est consultée ou modifiée. Dans les prochaines sections, une liste sera dressée des variations de GET/PUT/POST/DELETE et d'\ac{URI} implémentés dans le cadre de ce mémoire.
+Il est ensuite possible de formuler l'ensemble des requêtes que l'on veut potentiellement remplir et montrer sur la machine \og{client} \fg{}. L'implémentation proposée reprend librement le standard \ac{REST} \parencite{fielding_architectural_2000} qui transmet les requêtes et les réponses au moyen du protocole \ac{HTTP}. Ce type d'interface a typiquement 4 grandes fonctions: GET, PUT, POST, DELETE. GET sert à obtenir un élément de la base de données. PUT permet de modifier un élément déjà existant. POST permet de créer un nouvel élément dans une table. DELETE sert à supprimer un élément. Le chemin (\ac{URI}) auquel ces instructions sont transmises détermine quelle table dans la base de données est consultée ou modifiée. Dans les prochaines sections, une liste sera dressée des variations de GET/PUT/POST/DELETE et d'\ac{URI} implémentés dans le cadre de ce mémoire.\par D'autre part, de l'information peut être envoyée dans l'\ac{URI} ou dans le corps du message. Dans le cas de l'\ac{URI}, un identifiant peut être communiqué dans l'adresse directement qui peut être ainsi lu. Ceci est souvent le cas quand on connait l'identifiant unique de l'élément à obtenir. L'autre option pour l'URL consiste à communique l'information au moyen de requête de filtrage (\og{query parameters} \fg{} en anglais). Ces derniers sont implémentés en insérant un point d'interrogation dans l'\ac{URI} et en séparant les paramètres de recherche par des \&. Ce type d'implémentation est souvent mis en place pour faire de la recherche. Dans le cadre de ce mémoire, ce type d'implémentation est principalement mis en place pour la recherche de règlement. Ainsi, un appel d'\ac{API} pour des règlements dont la date de début est après 2008 serait un appel GET à l'adresse \og{/api/reglements/entetes?annee\_debut\_après=2008}\fg{}. Dans le cas de figure où l'on connait l'identifiant, par exemple si l'on veut voir les détails d'un règlement à la requête de l'utilisateur, on pourrait faire l'appel GET à l'adresse \og{/api/reglements/complet/<id>} \fg où l'identifiant est directement spécifié dans l'adresse sans chaîne de caractère supplémentaire.\par
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            \node (api) [api]{API};
+            % routes
+            \node (routes) [domaine_data,right of=api,xshift=2.5cm]{Routes};
+            \node (get-routes) [endpoint,right of=routes,xshift=3cm] {GET /api/routes};
+            
+            % reglements
+            \node (reglement-objt) [domaine_data,below of=api]{Règlement};
+                % regelement gauche
+                \node (get-rule-headers) [endpoint, below of=reglement-objt,xshift=-2.25cm,yshift=-0.15cm]{GET /api/reglements/entete};
+                    \node (annee-fin-avant-rule-query) [opt_query_param, left of=get-rule-headers,xshift=-6.75cm]{annee\_fin\_ avant};
+                    \node (annee-fin-apres-rule-query) [opt_query_param, below of=annee-fin-avant-rule-query,yshift=-0.25cm]{annee\_fin\_ apres};
+                    \node (description-rule-query) [opt_query_param,below of=annee-fin-apres-rule-query,yshift=-0.05cm]{description};
+                    \node (ville-rule-query) [opt_query_param,below of=description-rule-query,yshift=0.1cm]{ville};
+                    \node (texte-rule-query) [opt_query_param,below of=ville-rule-query,yshift=0.1cm]{texte de loi};
+                    \node (article-rule-query) [opt_query_param,below of=texte-rule-query,yshift=0.1cm]{article de loi};
+                    \node (paragraphe-rule-query) [opt_query_param,below of=article-rule-query,yshift=-0.05cm]{paragraphe de loi};
+                    \node (annee-deb-avant-rule-query) [opt_query_param, below of=paragraphe-rule-query,yshift=-0.25cm]{annee\_debut\_ avant};
+                    \node (annee-deb-apres-rule-query) [opt_query_param,below of=annee-deb-avant-rule-query,yshift=-0.25cm]{annee\_debut\_ apres};
+                \node (get-complete-rule) [endpoint,below of=get-rule-headers,yshift=-0.35cm]{GET /api/reglements/complet};
+                    \node (complete-rule-id) [param,left of=get-complete-rule,xshift=-3cm]{id\_reg\_stat};
+                \node (get-reglements-oper) [endpoint, below of=get-complete-rule,yshift=-0.25cm]{GET /api/reglements/operations};
+                \node (get-unites-lot) [endpoint,below of=get-reglements-oper,yshift=-0.25cm]{GET /api/reglements/unites};
+                    \node (id-unite) [opt_query_param,left of=get-unites-lot, xshift=-3cm]{g\_no\_lot};
+                
+                \node (post-entete) [endpoint, below of=get-unites-lot,yshift=-0.4cm]{POST /api/reglements/entete};
+                    \node (entete-a-post) [body] at ($(post-entete-|id-unite)$){Entête de règlement sans identifiant};
+                \node (put-entete) [endpoint, below of=post-entete,yshift=-0.4cm]{PUT /api/reglements/entete};
+                    \node (identifiant-put-reg) [param, left of = put-entete,xshift=-3cm]{id\_reg\_stat};
+                    \node (valeur-entete-reg) [body, below of=identifiant-put-reg,yshift=-0.4cm]{Entête de règlement sans identifiant};
+                \node (delete-entete-reg) [endpoint, below of=put-entete,yshift=-1.75cm]{DELETE /api/reglements/entete};
+                    \node (id-delete-entete-reg) [param, left of=delete-entete-reg,xshift=-3cm]{id\_reg\_stat};
+                % reglement droite
+                \node (post-ligne-def) [endpoint, below of=reglement-objt,xshift=2.25cm,yshift=-0.15cm]{POST /api/reglements/ ligne-def};
+                    \node (corps-post-ligne-def) [body,right of=post-ligne-def,xshift=3.25cm]{Ligne de définition de règlement};
+                \node (put-ligne-def)[endpoint,below of=post-ligne-def,yshift=-0.55cm]{PUT /api/reglements/ ligne-def};
+                    \node (id-put-ligne-def)[param,right of=put-ligne-def,xshift=3.25cm]{id\_reg\_stat\_ emp};
+                    \node (corps-put-ligne-def)[body,below of=id-put-ligne-def,yshift=-0.5cm]{Ligne de définition de règlement};
+                \node (get-unites-all) [endpoint,below of=put-ligne-def,yshift=-0.25cm]{GET /api/reglements/unites};    
+                \node (delete-ligne-def)[endpoint,below of=put-ligne-def,yshift=-2cm]{DELETE /api/reglements/ ligne-def};
+                    \node (id-delete-ligne-def)[param,right of=delete-ligne-def,xshift=3.25cm]{id\_reg\_stat\_ emp};
+                \node (get-graphs)[endpoint,below of=delete-ligne-def,yshift=-0.35cm]{GET /api/reglements/graphiques};
+                    \node (id-reg-graph) [mandat_query_param,right of=get-graphs,xshift=3.25cm]{id\_reg\_stat ou id\_er};
+                    \node (unite-graph) [mandat_query_param, below of=id-reg-graph]{$id_{unite}$};
+                    \node (min-graph) [opt_query_param,below of=unite-graph]{Valeur minimum graphique};
+                    \node (max-graph) [opt_query_param,below of=min-graph,yshift=-0.25cm]{Valeur maximum graphique};
+                    \node (pas-graph) [opt_query_param,below of=max-graph]{Pas graphique};
+            % arrows top level
+            \coordinate (entree-api) at ($(api.east) + (0.1,0)$);
+            \draw (api.east) -- (routes.west);
+            %\draw (entree-api)|-(inventaire.west);
+            %\draw ($(entree-api|-inventaire.west)$) -- ($(entree-api|-reglement-objt.north)$);
+    
+            \draw (api.south)--(reglement-objt.north);
+            % arrows routes
+            \draw (routes.east)--(get-routes.west);
+            
+            % flèches reglements gauche
+            \coordinate (side-get-reglements) at ($(get-rule-headers.east)!0.5!(post-ligne-def.west)$);
+            \coordinate (endpoint-reglements) at ($ (side-get-reglements |- reglement-objt.south) $);
+            \draw (get-rule-headers.east) -| (endpoint-reglements);
+            \draw (endpoint-reglements|-get-rule-headers.east) |-(get-complete-rule.east);
+            \draw (endpoint-reglements|-get-complete-rule.east) |-(get-reglements-oper.east);
+            \draw (endpoint-reglements|-get-reglements-oper.east) |-(get-unites-lot.east);
+            \draw (endpoint-reglements|-get-unites-all.east) |-(post-entete.east);
+            \draw (endpoint-reglements|-post-entete.east) |-(delete-entete-reg.east);
+            \draw (get-rule-headers.west) -- (annee-fin-avant-rule-query.east);
+            \draw (annee-deb-apres-rule-query.east) -| ($(annee-deb-avant-rule-query.east) + (0.2,0)$);
+            \draw (annee-deb-avant-rule-query.east) -| ($(paragraphe-rule-query.east) + (0.2,0)$);
+            \draw (annee-fin-apres-rule-query.east) -| ($(annee-fin-avant-rule-query.east) + (0.2,0)$);
+            \draw (description-rule-query.east) -| ($(annee-fin-apres-rule-query.east) + (0.2,0)$);
+            \draw (ville-rule-query.east) -| ($(description-rule-query.east) + (0.2,0)$);
+            \draw (texte-rule-query.east) -| ($(ville-rule-query.east) + (0.2,0)$);
+            \draw (article-rule-query.east) -| ($(texte-rule-query.east) + (0.2,0)$);
+            \draw (paragraphe-rule-query.east) -| ($(article-rule-query.east) + (0.2,0)$);
+            \draw (get-complete-rule.west) -- (complete-rule-id.east);
+            \draw (get-unites-lot.west) -- (id-unite.east);
+            \draw (entete-a-post.east) -- (post-entete.west);
+            \draw (identifiant-put-reg.east) -- (put-entete.west);
+            \draw (valeur-entete-reg.east) -| ($(identifiant-put-reg.east) + (0.1,0)$);
+            \draw (id-delete-entete-reg.east) -- (delete-entete-reg);
+            % Flèches règlements droite
+            \draw (post-ligne-def.west) --($(side-get-reglements|-post-ligne-def.west)$);
+            \draw (put-ligne-def.west) --($(side-get-reglements|-put-ligne-def.west)$);
+            \draw (delete-ligne-def.west) -- ($(side-get-reglements |- delete-ligne-def.west)$);
+            \draw (get-graphs.west) -- ($(side-get-reglements |- get-graphs.west)$);
+            \draw (post-ligne-def.east) -- (corps-post-ligne-def.west);
+            \draw (put-ligne-def.east) -- (id-put-ligne-def.west);
+            \draw (corps-put-ligne-def.west) -| ($(put-ligne-def.east)!0.5!(id-put-ligne-def.west)$);
+            \draw (delete-ligne-def.east) -- (id-delete-ligne-def.west);
+            \coordinate (jnc-get-graphs) at ($(get-graphs.east)!0.5!(id-reg-graph.west)$);
+            \draw (get-graphs.east) -- (id-reg-graph.west);
+            \draw (unite-graph.west) -| (jnc-get-graphs);
+            \draw (min-graph.west) -| ($(unite-graph.west -| jnc-get-graphs)$);
+            \draw (max-graph.west) -| ($(min-graph.west -| jnc-get-graphs)$);
+            \draw (pas-graph.west) -| ($(max-graph.west -| jnc-get-graphs)$);
+            % Légende
+            \node(leg-oqp) [opt_query_param,above of=api,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-oqp.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+        \end{tikzpicture}
+        \caption{Représentation schématique de l'\ac{API} pour les règlements}
+        \label{fig:schema-api-parking-dev}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,above of=api,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-oqp.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            % Api
+            \node (api) [api, below of=leg-oqp,yshift=-0.75cm,xshift=-7.5cm,text width=2cm]{API};
+            % inventaire
+            \node (inventaire) [domaine_data, right of=api,xshift=2cm]{Inventaire};
+            \node (get-inv-quartier) [endpoint,below of=inventaire,xshift=2.25cm,yshift=-0.4cm]{GET /api/inventaire/quartier};
+                \node (id-quart-get-inv) [param,right of=get-inv-quartier,xshift=3cm]{$id_{quartier}$};
+            \node (get-inv-calc-quartier) [endpoint, below of=get-inv-quartier,yshift=-0.4cm]{GET /api/inventaire/calcul/quartier};
+                \node (id-quartier-calc) [param]  at($(get-inv-calc-quartier-|id-quart-get-inv)$){$id_{quartier}$};
+            \node (get-inv-calc-lot) [endpoint,below of=get-inv-calc-quartier,yshift=-0.4cm]{GET /api/inventaire/calcul/lot};
+                \node (id-lot-calc) [param] at ($(get-inv-calc-lot -| id-quartier-calc)$){g\_no\_lot};
+            \node (post-inventaire-reg-val-man) [endpoint, below of=get-inv-calc-lot,yshift=-0.6cm]{POST /api/inventaire/calcul /reg-val-man};
+                \node (corps-donnees-calc-inv) [body] at ($(post-inventaire-reg-val-man -|id-lot-calc)$){PCI};
+            \node (creation-gros-inventaire) [endpoint,below of=post-inventaire-reg-val-man,yshift=-0.75cm]{POST /api/inventaire/nouv-en-gros};
+                \node (parking-inv-bulk) [body] at ($(creation-gros-inventaire-|corps-donnees-calc-inv)$){PIs sans identifiant};
+            \node (creation-inv-unique)[endpoint,below of=creation-gros-inventaire,yshift=-0.3cm]{POST /api/inventaire};
+                \node (parking-inv-unique)[body] at ($(creation-inv-unique -|parking-inv-bulk)$){PI sans identifiant};
+            
+            \node (supprime-inv) [endpoint,below of=creation-inv-unique,yshift=-0.1cm]{DELETE /api/inventaire};
+                \node (id-supprime-inv) [param] at ($(supprime-inv-|parking-inv-unique)$){$id_{inv}$};
+            \node (maj-inv-en-gros) [endpoint, below of=supprime-inv,yshift=-0.5cm]{PUT /api/inventaire/maj-en-gros};
+                \node (corps-maj-inv-gros) [body,right of=maj-inv-en-gros,xshift=3cm]{PIs avec identifiant};
+            \node (inv-unique-maj)[endpoint,left of=supprime-inv,xshift=-3.5cm,yshift=0.25cm]{PUT /api/inventaire};
+                \node (id-inv-unique-maj)[param, below of=inv-unique-maj,xshift=-0.4cm]{$id_{inv}$};
+                \node (corps-inv-unique-maj) [body, below of=id-inv-unique-maj]{PI sans identifiant};
+            % Flèches inventaire
+            \coordinate (midpoint-inventaire) at ($(inventaire.south-| get-inv-quartier.west) + (-0.2,0)$);
+            \draw (inventaire.south) |- (get-inv-quartier.west);
+            \draw (get-inv-quartier.east) -- (id-quart-get-inv.west);
+            \draw (inventaire.south) |- (get-inv-calc-quartier.west);
+            \draw (get-inv-calc-quartier.east) -- (id-quartier-calc.west);
+            \draw (inventaire.south|-get-inv-calc-quartier.west) |- (get-inv-calc-lot.west);
+            \draw (get-inv-calc-lot.east) -- (id-lot-calc.west);
+            \draw (inventaire.south|-get-inv-calc-lot.west) |- (post-inventaire-reg-val-man.west);
+            \draw (post-inventaire-reg-val-man.east)-- (corps-donnees-calc-inv.west);
+            \draw (inventaire.south|-post-inventaire-reg-val-man.west) |- (creation-gros-inventaire.west);
+            \draw (creation-gros-inventaire.east) -- (parking-inv-bulk.west);
+            \draw (inventaire.south|-creation-gros-inventaire.west) |- (creation-inv-unique.west);
+            \draw (creation-inv-unique.east)--(parking-inv-unique.west);
+            \draw (inventaire.south|-creation-inv-unique.west) |- (maj-inv-en-gros.west);
+            \draw (maj-inv-en-gros.east) -- (corps-maj-inv-gros.west);
+            \draw (inventaire.south|-maj-inv-en-gros.west) |- (inv-unique-maj.east);
+            \draw (id-inv-unique-maj.east)-| ($(id-inv-unique-maj.east|-inv-unique-maj.south) + (0.2,0)$);
+            \draw (corps-inv-unique-maj.east) -| ($(id-inv-unique-maj.east)+(0.2,0)$); 
+            \draw (inventaire.south|-inv-unique-maj.east) |-(supprime-inv.west);
+            \draw (supprime-inv.east)--(id-supprime-inv.west);
+            % Ensembles règlement
+                \node (get-er-entete) [endpoint,below of=api,xshift=0.25cm,yshift=-0.5cm]{GET /api/ens-reg/entete};
+                \node (get-graph-info) [endpoint, left of=get-er-entete,xshift=-3.5cm,yshift=-0.25cm]{GET /api/ens-reg/informations-pour-graphique};
+            \coordinate (mid-er)  at ($(get-er-entete)!0.5!(get-graph-info)$);
+            \node (er) at ($(mid-er|-api) + (-1,-0.2)$)[domaine_data]{Ensembles de règlements};
+                    \node(id-graph-info) [param,left of=get-graph-info,xshift=-3cm]{$id_{er}$};
+                \node (get-reg-associe) [endpoint, below of=get-graph-info,yshift=-0.5cm]{GET /api/ens-reg/regs-associes};
+                    \node(id-get-reg-ass) [param,left of=get-reg-associe,xshift=-3cm]{$id_{er}$};
+                \node (get-par-role) [endpoint, below of=get-reg-associe,yshift=-0.25cm]{GET /api/ens-reg/par-role};
+                    \node (id-provinc) [param,left of=get-par-role,xshift=-3cm]{id\_provinc};
+                \node (entete-par-territoire) [endpoint,below of=get-par-role,yshift=-0.5cm]{GET /api/ens-reg/entete-par-territoire};
+                    \node (id-territoire) [param,left of= entete-par-territoire,xshift=-3cm]{id\_periode\_geo};
+                \node (post-er-entete)[endpoint, below of=get-er-entete,yshift=-0.25cm]{POST /api/ens-reg/entete};
+                    \node(post-er-entete-body)[body,below of=post-er-entete,xshift=0.4cm,yshift=-0.5cm]{Entête ensemble règlements sans identifiant};
+                \node (put-er-entete)[endpoint,below of=post-er-entete,yshift=-2cm]{PUT /api/ens-reg/entete};
+                    \node (id-put-er-entete)[param,below of=put-er-entete,xshift=0.4cm,yshift=-0.2cm]{$id_{er}$};
+                    \node (corps-put-er-entete)[body,below of=id-put-er-entete,yshift=-0.35cm]{Entête ensemble règlements sans identifiant};
+                \node (post-er-assoc)[endpoint, below of=entete-par-territoire,yshift=-0.5cm]{POST /api/ens-reg/assoc};
+                    \node (corps-post-er-assoc)[body,left of=post-er-assoc,xshift=-3cm]{Association règlement CUBF};
+                \node (put-er-assoc)[endpoint, below of=post-er-assoc,yshift=-0.4cm]{PUT /api/ens-reg/assoc};
+                    \node (id-put-er-assoc)[param,left of=put-er-assoc,xshift=-3cm]{Identifiant assocation};
+                    \node (corps-put-er-assoc) [body,below of=id-put-er-assoc,yshift=-0.25cm]{Association règlement CUBF};
+                \node (delete-er-assoc)[endpoint, below of=put-er-assoc,yshift=-1.5cm]{DELETE /api/ens-reg/assoc};
+                    \node(id-delete-er-assoc) [param,left of=delete-er-assoc,xshift=-3cm]{Identifiant association};
+                \node (delete-er)[endpoint, below of=delete-er-assoc,yshift=-0.25cm ]{DELETE /api/ens-reg};
+                    \node(id-delete-er) [param,left of=delete-er,xshift=-3cm]{$id_{er}$};
+            % Flèches top
+            \coordinate (blend-spot) at ($(api.west)!0.5!(er.east)$);
+            \draw (api.west) -| (blend-spot) |- (er.east);
+            \draw (api.east) -- (inventaire.west);
+            % Flèches Er
+            \draw (get-er-entete.west) -| ($(mid-er|-er.south)$);
+            \draw (get-graph-info.east) -| ($(mid-er|-get-er-entete.west)$);
+            \draw (post-er-entete.west) -| ($(get-graph-info.east -| mid-er)$);
+            \draw (get-reg-associe.east) -| ($(post-er-entete.west-| mid-er)$);
+            \draw (put-er-entete.west) -| ($(get-reg-associe.east-|mid-er)$);
+            \draw (get-par-role.east)-| ($(put-er-entete.west -| mid-er)$);
+            \draw (entete-par-territoire.east) -| ($(get-par-role.east-| mid-er)$);
+            \draw (post-er-assoc.east) -| ($(entete-par-territoire.east -| mid-er)$);
+            \draw (put-er-assoc.east) -| ($(post-er-assoc.east -|mid-er)$);
+            \draw (delete-er-assoc.east) -| ($(put-er-assoc.east -| mid-er)$);
+            \draw (delete-er.east) -| ($(delete-er-assoc.east -| mid-er)$);
+            \draw (get-graph-info.west) -- (id-graph-info.east);
+            \draw (get-reg-associe.west) -- (id-get-reg-ass.east);
+            \draw (get-par-role.west) -- (id-provinc.east);
+            \draw (entete-par-territoire.west) -- (id-territoire.east);
+            \draw (post-er-assoc.west) -- (corps-post-er-assoc.east);
+            \draw (put-er-assoc.west) -- (id-put-er-assoc.east);
+            \draw (corps-put-er-assoc.east) -| ($(id-put-er-assoc.east)!0.5!(put-er-assoc.west)$);
+            \draw (id-delete-er-assoc.east) -- (delete-er-assoc.west);
+            \draw (id-delete-er.east) -- (delete-er.west);
+            \draw (post-er-entete-body.west) -| ($(post-er-entete-body.west |- post-er-entete.south) + (-0.2,0)$);
+            \coordinate (location-put-er-entete) at ($(id-put-er-entete.west|-put-er-entete.south) + (-0.2,0)$);
+            \draw (id-put-er-entete.west) -| (location-put-er-entete);
+            \draw (corps-put-er-entete.west) -| ($(location-put-er-entete |-id-put-er-entete.west)$);
+        \end{tikzpicture}
+        \caption{Représentation schématique de l'\ac{API} pour l'inventaire et les ensembles de règlements}
+        \label{fig:api-schema-2}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,above of=api,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-oqp.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            % Api
+            \node (api) [api, below of=leg-oqp,yshift=-0.75cm,xshift=-7cm]{API}; 
+            % Territoires
+            \node (territoire)[domaine_data,left of=api,xshift=-2cm]{Territoires};
+            \node (get-territoire-periode) [endpoint,below of=territoire,xshift=-0.8cm,yshift=-0.15cm]{GET /api/territoire/periode};
+                \node (get-territoire-periode-id) [param, left of=get-territoire-periode,xshift=-3cm]{$id_{periode}$};
+            \node (get-territoire-periode-geo)[endpoint,below of=get-territoire-periode,yshift=-0.35cm]{GET /api/territoire/ periode-geo};
+                \node (get-territoire-periode-geo-id)[param,left of=get-territoire-periode-geo,xshift=-3cm]{$id_{periode_{geo}}$};
+            % Flèches territoires
+            \coordinate (flex-territoire) at ($(get-territoire-periode.east|-territoire.south) + (+0.2,0)$);
+            \draw (get-territoire-periode.east) -| (flex-territoire);
+            \draw (get-territoire-periode-geo.east) -| ($(get-territoire-periode.east -|flex-territoire)$);
+            \draw (get-territoire-periode-id.east) -- (get-territoire-periode.west);
+            \draw (get-territoire-periode-geo.west) -- (get-territoire-periode-geo-id.east);
+            % Ens Reg Terr
+            \node (ens-reg-terr) [domaine_data,below of=api,xshift=1cm,yshift=-0.25cm]{Ensembles de règlements territoires};
+                \node (get-ens-reg-terr-par-terr) [endpoint, below of=ens-reg-terr,xshift=1cm,yshift=-0.5cm]{GET /api/ens-reg-terr/par-territoire};
+                    \node (id-territoire) [param, right of=get-ens-reg-terr-par-terr,xshift=3.25cm]{id\_periode\_geo};
+                \node (get-ens-reg-terr-assoc) [endpoint,below of=get-ens-reg-terr-par-terr,yshift=-0.25cm]{GET /api/ens-reg-terr/associations};
+                    \node (lat-long)[opt_query_param, right of=get-ens-reg-terr-assoc,xshift=7cm]{Lat/Long};
+                    \node (annee_deb_avant)[opt_query_param, below of=lat-long]{annee\_debut\_ avant};
+                    \node (annee_deb_apres) [opt_query_param, below of=annee_deb_avant,yshift=-0.25cm]{annee\_debut\_ apres};
+                    \node (annee_fin_avant) [opt_query_param, below of=annee_deb_apres,yshift=-0.25cm]{annee\_fin\_ avant};
+                    \node (annee_fin_apres) [opt_query_param,below of=annee_fin_avant,yshift=-0.25cm]{annee\_fin\_ apres};
+                    \node (ville_comme) [opt_query_param,below of=annee_fin_apres,yshift=-0.05cm]{ville\_comme};
+                    \node (secteur_comme) [opt_query_param,below of=ville_comme,yshift=0.15cm]{secteur\_comme};
+                \node (post-ens-reg-terr-assoc) [endpoint,below of=get-ens-reg-terr-assoc,yshift=-0.25cm]{POST /api/ens-reg-terr/association};
+                    \node (corps-post-ens-reg-terr-assoc)[body,right of=post-ens-reg-terr-assoc,xshift=3.25cm]{Association ER territoire sans id};
+                \node (put-ens-reg-terr-assoc) [endpoint, below of=post-ens-reg-terr-assoc,yshift=-0.25cm]{PUT /api/ens-reg-terr/association};
+                    \node (id-put-assoc-ens-reg-terr) [param, right of=put-ens-reg-terr-assoc,xshift=3.25cm]{Identifiant association};
+                    \node (corps-put-ens-reg-terr-assoc)[body,below of=id-put-assoc-ens-reg-terr,yshift=-0.3cm]{Association ER territoire sans id};
+                \node (delete-ens-reg-terr-assoc)[endpoint, below of=put-ens-reg-terr-assoc,yshift=-1.5cm]{DELETE /api/ens-reg-terr/association};
+                    \node (id-delete-ens-reg-terr-assoc)[param,right of=delete-ens-reg-terr-assoc,xshift=3.25cm]{Identifiant association};
+            % Flèches ens reg terr
+            \coordinate(offset-ens-reg-terr) at ($(get-ens-reg-terr-par-terr.west |- ens-reg-terr.south) + (-0.2,0)$);
+            \draw (get-ens-reg-terr-par-terr.west)-|(offset-ens-reg-terr);
+            \draw (get-ens-reg-terr-assoc)-|($(get-ens-reg-terr-par-terr.west -| offset-ens-reg-terr)$);
+            \draw (post-ens-reg-terr-assoc) -|($(get-ens-reg-terr-assoc.west -| offset-ens-reg-terr)$);
+            \draw (put-ens-reg-terr-assoc)-|($(post-ens-reg-terr-assoc.west -| offset-ens-reg-terr)$);
+            \draw (delete-ens-reg-terr-assoc)-|($(put-ens-reg-terr-assoc -| offset-ens-reg-terr)$);
+            \draw (get-ens-reg-terr-par-terr.east) -- (id-territoire.west);
+            \draw (get-ens-reg-terr-assoc.east) --(lat-long.west);
+            \draw (post-ens-reg-terr-assoc.east)--(corps-post-ens-reg-terr-assoc.west);
+            \draw (put-ens-reg-terr-assoc.east) -- (id-put-assoc-ens-reg-terr.west);
+            \draw (corps-put-ens-reg-terr-assoc.west) -| ($(put-ens-reg-terr-assoc.east)!0.5!(id-put-assoc-ens-reg-terr.west)$);
+            \draw (delete-ens-reg-terr-assoc.east) -- (id-delete-ens-reg-terr-assoc.west);
+            \coordinate (flex-query-ens-reg-terr) at ($(lat-long.west) +(-0.2,0)$);
+            \draw (annee_deb_avant.west) -|(flex-query-ens-reg-terr);
+            \draw (annee_deb_apres.west) -|($(annee_deb_avant.west -| flex-query-ens-reg-terr)$);
+            \draw (annee_fin_avant.west) -| ($(annee_deb_apres.west -| flex-query-ens-reg-terr)$);
+            \draw (annee_fin_apres.west) -| ($(annee_fin_avant.west -| flex-query-ens-reg-terr)$);
+            \draw (ville_comme.west) -| ($(annee_fin_apres.west-| flex-query-ens-reg-terr)$);
+            \draw (secteur_comme.west) -| ($(ville_comme.west-| flex-query-ens-reg-terr)$);
+            % historique
+            \node (historique) [domaine_data,below of=territoire,yshift=-2.75cm]{Historique};
+                \node (get-historique) [endpoint,below of=historique,xshift=-1cm]{GET /api/historique};
+                \node (post-historique) [endpoint, below of=get-historique]{POST /api/historique};
+                    \node (corps-post-historique) [body,left of=post-historique,xshift=-3cm]{Données période sans identifiant};
+                \node (put-historique) [endpoint, below of=post-historique]{PUT /api/historique};
+                    \node (put-id-periode) [param,left of=put-historique,xshift=-3cm]{$id_{periode}$};
+                    \node (corps-put-historique) [body,below of=put-id-periode]{Données période sans identifiant};
+                \node (delete-historique) [endpoint, below of=put-historique,yshift=-1cm]{DELETE /api/historique};
+                    \node (delete-id-periode) [param, left of=delete-historique,xshift=-3cm]{$id_{periode}$};
+            % Flèches historique
+            \coordinate(flex-historique) at ($(get-historique.east|-historique.south) + (0.2,0)$);
+            \draw (get-historique.east) -| (flex-historique);
+            \draw (post-historique.east) -| ($(get-historique.east -| flex-historique)$);
+            \draw (corps-post-historique.east) -- (post-historique.west);
+            \draw (put-historique.east) -| ($(post-historique.east -| flex-historique)$);
+            \draw (delete-historique.east) -| ($(put-historique.east -| flex-historique)$);
+            \draw (put-historique.west) -- (put-id-periode.east);
+            \draw (corps-put-historique.east) -| ($(put-historique.west)!0.5!(put-id-periode.east)$);
+            \draw (delete-id-periode.east) -- (delete-historique.west);
+            % flèches top
+            \draw (api.west) -- (territoire.east);
+            \coordinate (flex-top) at ($(api.west)!0.5!(territoire.east)$);
+            \coordinate (flex-api) at ($(ens-reg-terr.west |- api.south) + (-0.2,0)$);
+            \draw (historique.east) -| (flex-top);
+            \draw (ens-reg-terr.west) -| (flex-api);
+            
+        \end{tikzpicture}
+        \caption{Représentation schématique de l'\ac{API} pour les territoires et ensembles de règlement territoire}
+        \label{fig:schema-api-3}
+    \end{figure}
+    \begin{figure}
+        \centering
+        % forest setup
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,above of=api,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-oqp.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            \node(API) [api,below of=leg-ep,yshift=-1cm]{API};
+            % Cadastre
+            \node(cad) [domaine_data,below of=API,xshift=-2cm]{Cadastre et rôle};
+                \node(get-lot-par-quartier)[endpoint,below of=cad,xshift=-1cm,yshift=-0.4cm]{GET /api/lot/quartier- ana};
+                    \node (id_quartier)[param,left of=get-lot-par-quartier,xshift=-3.25cm]{$id_{quartier}$} ;
+                \node (get-lot-query)[endpoint,below of=get-lot-par-quartier,yshift=-0.25cm]{GET /api/lot-query};
+                    \node (id-lot)[opt_query_param,left of=get-lot-query,xshift=-3.25cm]{g\_no\_lot};
+                    \node (bbox)[opt_query_param,below of=id-lot]{Boite englobante};
+                    \node (superf_plus_grand)[opt_query_param,below of=bbox,yshift=-0.25cm]{superf\_plus \_grand};
+                    \node (estime)[opt_query_param,below of=superf_plus_grand]{estime};
+                    \node (inv_plus_grand) [opt_query_param,below of=estime]{inv\_plus\_ grand};
+                    \node (inv_surf_plus_grand)[opt_query_param,below of=inv_plus_grand,yshift=-0.25cm]{inv\_surf\_ plus\_grand};
+                    \node (id_strate) [opt_query_param,below of=inv_surf_plus_grand]{$id_{strate}$};
+                \node (get-lot-id) [endpoint,below of=get-lot-query,yshift=0.15cm]{GET /api/lot};
+                    \node (lot-id-lot) [param,below of=get-lot-id,yshift=0.15cm]{g\_no\_lot};
+                \node (get-role-assoc) [endpoint, below of=lot-id-lot]{GET /api/role-associe};
+                    \node (lot-id-role) [param, below of=get-role-assoc]{g\_no\_lot};
+            % Fleches cadastre
+            \coordinate (flex-cad) at ($(get-lot-par-quartier.east|-cad.south) + (0.2,0)$);
+            \draw (get-lot-par-quartier.east)-|(flex-cad);
+                \draw (id_quartier.east)--(get-lot-par-quartier.west);
+            \draw (get-lot-query.east) -| (flex-cad|-get-lot-par-quartier.east);
+                \draw (id-lot.east) -- (get-lot-query.west);
+                \coordinate (loc-query) at ($(id-lot.east)!0.5!(get-lot-query.west)$);
+                \draw (bbox.east) -| (loc-query);
+                \draw (superf_plus_grand.east) -| ($(loc-query|-bbox.east)$);
+                \draw (estime.east) -| ($(loc-query|-superf_plus_grand.east)$);
+                \draw (inv_plus_grand.east) -| ($(loc-query|-estime.east)$);
+                \draw (inv_surf_plus_grand.east) -| ($(loc-query|-inv_plus_grand.east)$);
+                \draw (id_strate.east) -| ($(loc-query|-inv_surf_plus_grand.east)$);
+            \draw (get-lot-id) -| (flex-cad|-get-lot-query.east);
+                \draw (lot-id-lot.east) -| ($(get-lot-id.south-|lot-id-lot.east)+(0.2,0)$);
+            \draw (get-role-assoc.east) (flex-cad|-get-lot-id);
+                \draw (lot-id-role.east) -| ($(get-role-assoc.south-|lot-id-role.east)+(0.2,0)$);
+            % CUBF
+            \node (cubf-top)[domaine_data,below of=API,xshift=2cm]{CUBF};
+                \node (get-cubf)[endpoint, below of=cubf-top,xshift=1cm]{GET /api/cubf};
+                    \node (cubf)[opt_query_param,right of=get-cubf,xshift=3cm]{CUBF};
+                    \node (niveau)[opt_query_param,below of=cubf]{niveau};
+               \node(get-n-entree)[endpoint,below of=get-cubf,yshift=-0.25cm]{GET /api/cubf/n\_entrees};
+            % Flèches CUBF
+            \coordinate(flex-cubf) at ($(get-cubf.west|-cubf-top.south)+ (-0.2,0)$);
+            \draw (get-cubf.west) -| (flex-cubf);
+                \draw (get-cubf.east) -- (cubf.west);
+                \draw (niveau.west) -| ($(get-cubf.east)!0.5!(cubf.west)$);
+            \draw (get-n-entree.west) -|($(flex-cubf|-get-cubf.west)$);
+            % analyse Agrégée
+            \node (ana-quartier)[domaine_data,below of=cubf-top,yshift=-2.4cm]{Analyse agrégée};
+                \node (get-carto)[endpoint] at ($(get-cubf|-ana-quartier)+(0,-1.25)$) {GET /api/ana-par-quartier/carto};
+                    \node (variable-carto) [mandat_query_param,right of=get-carto,xshift=3.25cm]{variable};
+                    \node (ordre-carto) [mandat_query_param,below of=variable-carto,yshift=0.2cm]{ordre};
+                \node (get-histo)[endpoint,below of=get-carto,yshift=-0.7cm]{GET /api/ana-par-quartier/histo};
+                    \node (variable-histo) [mandat_query_param,right of=get-histo,xshift=3.25cm]{variable};
+                    \node (ordre-histo) [mandat_query_param,below of=variable-histo,yshift=0.2cm]{ordre};
+                \node (get-xy) [endpoint, below of=get-histo,yshift=-0.7cm]{GET /api/ana-par-quartier/XY};
+                    \node (variable-X) [mandat_query_param, right of=get-xy,xshift=3.25cm]{X};
+                    \node (variable-Y) [mandat_query_param, below of=variable-X,yshift=0.2cm]{Y};
+                    \node (ordre-XY) [mandat_query_param, below of=variable-Y,yshift=0.2cm]{ordre};
+                \node (recalcule-inv-agg) [endpoint, left of=get-xy,xshift=-3.75cm]{GET /api/ana-par-quartier/recalcule-stat-agreg};
+                \node (recalcule-val-autres) [endpoint, below of=get-xy,yshift=-0.5cm]{GET /api/ana-par-quartier/recalcule-val-autres};
+            % Flèches analyse-agrégée 
+            \coordinate (flex-ana-quartier) at ($(get-carto.west|-ana-quartier.south)+(-0.2,0)$);
+            \draw (get-carto.west)-|(flex-ana-quartier);
+                \draw (get-carto.east)--(variable-carto.west);
+                \draw (ordre-carto.west) -| ($(get-carto.east)!0.5!(variable-carto.west)$);
+            \draw (get-histo.west) -| (flex-ana-quartier |-get-carto.west);
+                \draw (get-histo.east)--(variable-histo.west);
+                \draw (ordre-histo.west) -| ($(get-histo.east)!0.5!(variable-histo.west)$);
+            \draw (get-xy.west) -- (recalcule-inv-agg.east);
+                \draw (get-xy.east) --(variable-X.west);
+                \coordinate(flex-xy) at ($(get-xy.east)!0.5!(variable-X.west)$);
+                \draw (variable-Y.west) -| (flex-xy) ;
+                \draw (ordre-XY.west) -| (variable-Y.west-|flex-xy);
+            \draw (recalcule-val-autres.west) -| (flex-ana-quartier|-get-histo.west);
+            % flèches top
+            \draw (ana-quartier.west) -| (API.south);
+            \draw (cad.east) -- (cubf-top.west); 
+        \end{tikzpicture}
+        \caption{Représentation schématique de l'\ac{API} pour les données cadastrales, les \ac{CUBF} et l'analyse agrégée}
+        \label{fig:schema-api-4}
+    \end{figure}
+    \begin{figure}
+        \centering
+        % forest setup
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,above of=api,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-oqp.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            \node(API) [api,below of=leg-ep,yshift=-1.25cm,xshift=3cm]{API};
+            % Analyse de variabilite
+            \node(ana-var) [domaine_data,left of=API,xshift=-5.25cm]{Analyse de variabilité};
+                \node (get-boxplot-usage) [endpoint, below of=ana-var,yshift=-0.3cm,xshift=-2.25cm]{GET /api/ana-var/boxplot-par-usage};
+                    \node (id-er-boxplot-noscale) [opt_query_param, below of=get-boxplot-usage,xshift=-2cm,yshift=-.1cm]{id\_er};
+                    \node (cubf-boxplot-noscale)[opt_query_param, below of=id-er-boxplot-noscale,yshift=0.15cm]{cubf\_n1};
+                    \draw (id-er-boxplot-noscale.east)-|(get-boxplot-usage.south);
+                    \draw (cubf-boxplot-noscale.east) -| (id-er-boxplot-noscale.east-|get-boxplot-usage.south);
+                \node (get-boxplot-scales)[endpoint, below of=ana-var,yshift=-0.3cm,xshift=2.25cm]{GET /api/ana-var/boxplot-facteurs};
+                    \node (cubf-boxplot-scales)[opt_query_param,below of=get-boxplot-scales,xshift=2cm,yshift=-.1cm]{cubf\_n1};
+                    \node (id-er-boxplot-scales)[opt_query_param, below of=cubf-boxplot-scales,yshift=0.15cm]{id\_er};
+                    \draw (cubf-boxplot-scales.west)-|(get-boxplot-scales.south);
+                    \draw (id-er-boxplot-scales.west) -| (cubf-boxplot-scales.west-|get-boxplot-scales.south);
+                \draw (get-boxplot-scales.west) -- (get-boxplot-usage.east);
+                \node (get-varia-histo)[endpoint, below of=get-boxplot-usage,yshift=-2.25cm]{GET /api/ana-var/histo-varia};
+                    \node (id-er-histo) [opt_query_param,below of=get-varia-histo,xshift=-2cm,yshift=-0.3cm]{id\_er};
+                    \node (cubf-histo) [opt_query_param,below of=id-er-histo,yshift=0.15cm]{cubf\_n1};
+                    \node (ratio-inv-act) [opt_query_param,below of=cubf-histo,yshift=0.15cm]{ratio\_inv\_act};
+                    \node (echelle-histo) [opt_query_param,below of=ratio-inv-act,yshift=0.1cm]{echelle};
+                    \coordinate(flex-histo-ana-var) at ($(id-er-histo.east|-get-varia-histo.south) +(0.2,0)$);
+                    \draw (id-er-histo.east)-|(flex-histo-ana-var);
+                    \draw (cubf-histo.east) -| (id-er-histo.east-|flex-histo-ana-var);
+                    \draw (ratio-inv-act.east) -| (cubf-histo.east-|flex-histo-ana-var);
+                    \draw (echelle-histo.east) -| (ratio-inv-act.east-|flex-histo-ana-var);
+                \node(get-data-varia) [endpoint] at ($(get-varia-histo-|get-boxplot-scales)$){GET /api/ana-var/obtiens-donnees-varia};
+                    \node(id-er-varia)[opt_query_param,below of=get-data-varia,xshift=2cm,yshift=-0.3cm]{id\_er};
+                    \node (cubf-varia)[opt_query_param,below of=id-er-varia,yshift=0.15cm]{cubf\_n1};
+                    \node (voir-inv-varia) [opt_query_param,below of=cubf-varia,yshift=0.15cm]{voir\_inv};
+                    \node (fac-ech-varia) [opt_query_param,below of=voir-inv-varia,yshift=0.15cm]{echelle};
+                    \coordinate (flex-data-ana-var) at ($(id-er-varia.west|-get-data-varia.south) + (-0.2,0)$);
+                    \draw (id-er-varia.west) -| (flex-data-ana-var);
+                    \draw (cubf-varia.west) -| (flex-data-ana-var|-id-er-varia.west);
+                    \draw (voir-inv-varia.west) -| (flex-data-ana-var |- cubf-varia.west);
+                    \draw (fac-ech-varia.west) -| (flex-data-ana-var |-voir-inv-varia.west);
+                \draw (get-data-varia.west) -- (get-varia-histo.east);
+                \node (recalcule-ana-var) [endpoint, below of=ana-var,yshift=-6cm]{GET /api/ana-var/recalcule-inventaires-tous-ens-regs};
+                \draw (recalcule-ana-var.north) -- (ana-var.south);
+            % validation inventaire
+            \node (domaine-pav)[domaine_data,below of=API,yshift=-0.5cm,xshift=2cm]{Profils d'accumulation véhicules};
+                \node (get-pav-quartier)[endpoint,below of=domaine-pav,xshift=1cm,yshift=-0.5cm]{GET /api/pav};
+                    \node (id-quartier-get) [param,right of=get-pav-quartier,xshift=3cm]{id\_quartier};
+                    \draw (id-quartier-get.west) -- (get-pav-quartier.east);
+                \coordinate (flex-pav) at ($(get-pav-quartier.west |-domaine-pav.south) + (-0.2,0)$);
+                \draw (get-pav-quartier.west) -| (flex-pav);
+                \node (calcul-pav-quartier)[endpoint, below of=get-pav-quartier]{GET /api/pav/recalcule};
+                    \node (id-quartier-calcul) [param, right of=calcul-pav-quartier,xshift=3cm]{id\_quartier};
+                    \draw (id-quartier-calcul.west)-- (calcul-pav-quartier.east);
+                \draw (calcul-pav-quartier.west) -| (flex-pav|-get-pav-quartier.west);
+                \node (maj-pav-quartier) [endpoint, below of=calcul-pav-quartier]{POST /api/pav};
+                    \node (id-quartier-maj)[param, right of=maj-pav-quartier,xshift=3cm]{id\_quartier};
+                    \draw (id-quartier-maj.west) -- (maj-pav-quartier.east);
+                    \node (corps-maj-quartier) [body,below of=id-quartier-maj,yshift=-0.3cm]{Profile d'accumulation vehicule};
+                    \draw (corps-maj-quartier.west) -| ($(id-quartier-maj.west)!0.5!(maj-pav-quartier.east)$);
+                \draw (maj-pav-quartier.west) -| (flex-pav|-calcul-pav-quartier.west);
+            \node(domaine-sec-analyse) [domaine_data,below of=domaine-pav,yshift=-4cm]{Secteurs d'analyse};
+                \node(get-sec-analyse) [endpoint, below of=domaine-sec-analyse,xshift=1cm,yshift=-0.4cm]{GET /api/quartiers-analyse};
+                \draw (get-sec-analyse.west) -| ($(get-sec-analyse.west|-domaine-sec-analyse.south)+(-0.2,0)$);
+            \draw (API.west) -- (ana-var.east);
+            \draw(domaine-pav.west) -| (API.south);
+            \draw (domaine-sec-analyse.west) -| (domaine-pav.west-|API.south);
+        \end{tikzpicture}
+        \caption{Représentation schématique de l'\ac{API} pour l'analyse de variabilité, les secteurs d'analyse et les profils d'accumulation véhicules}
+        \label{fig:schema-api-5}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,above of=api,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-oqp.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            \node(API) [api,below of=leg-ep,yshift=-1cm,xshift=-1.5cm]{API};
+            % Validation
+            \node (domaine-valid)[domaine_data, below of=API,yshift=-0.25cm]{Validation inventaire};
+                % obtiens strates
+                \node (get-strata)[endpoint, below of=domaine-valid,xshift=-2.25cm,yshift=-0.25cm]{GET /api/valid/strate};
+                    % parametres get strate
+                    \node (id-strate-get) [opt_query_param,left of=get-strata,xshift=-3cm]{id\_strate};
+                    \node (n-samples-ge)[opt_query_param, above of=id-strate-get,yshift=-0.15cm]{n\_samples\_ge};
+                    \node (n-samples-se) [opt_query_param,above of=n-samples-ge,yshift=-0.15cm]{n\_samples\_se};
+                    \node (colonne-sample) [opt_query_param, above of=n-samples-se,yshift=-0.15cm]{colonne\_sample};
+                    % fleches get-strate
+                    \draw (id-strate-get.east) -- (get-strata.west);
+                    \coordinate(flex-get-strate) at ($(id-strate-get.east)!0.5!(get-strata.west)$);
+                    \draw (n-samples-ge.east) -| (flex-get-strate);
+                    \draw (n-samples-se.east) -| (n-samples-ge.east-| flex-get-strate);
+                    \draw (colonne-sample.east) -| (n-samples-se.east -| flex-get-strate);
+                % nouvelle strate
+                \node (post-strata) [endpoint, below of=get-strata,yshift=-0.25cm]{POST /api/valid/strate};
+                    \node (corps-strate-post) [body, left of=post-strata,xshift=-3cm]{Strate échantillonage sans identifiant};
+                    \node (parent-strate-post) [body,below of=corps-strate-post,yshift=-0.25cm]{id\_parent};
+                    \draw (corps-strate-post.east) -- (post-strata.west);
+                    \draw (parent-strate-post.east) -| ($(corps-strate-post.east)+ (0.1,0)$);
+                
+                
+                \node (create-data) [endpoint, below of=post-strata,yshift=-0.25cm]{GET /api/valid/donnees\_intrantes};
+                
+                \node (get-valid-columns) [endpoint, below of=create-data,yshift=-0.25cm]{GET /api/valid/colonnes\_possibles};
+                \node (put-strata) [endpoint, below of=get-valid-columns,yshift=-0.25cm]{PUT /api/valid/strate};
+                    \node (id-strate-put) [param]  at ($(corps-strate-post |-put-strata)$){id\_strate};
+                    \node (corps-strate-put) [body, above of=id-strate-put,yshift=0.25cm]{Strate échantillonage sans identifiant};
+                    \draw (id-strate-put.east) -- (put-strata.west);
+                    \draw (corps-strate-put.east) -| ($(id-strate-put.east)+(0.1,0)$);
+                \node (get-resultats)[endpoint, below of=domaine-valid,xshift=2.25cm,yshift=-0.25cm]{GET /api/valid/resultats};
+                    \node (id-strate-get-res) [opt_query_param,right of=get-resultats,xshift=3cm]{id\_strate};
+                    \node (no-lot-get-res) [opt_query_param, above of=id-strate-get-res,yshift=-0.15cm]{g\_no\_lot};
+                    \node (fond-tuile-get-res) [opt_query_param, above of=no-lot-get-res,yshift=-0.15cm]{fond\_tuile};
+                    \node (id-val-get-res) [opt_query_param, above of=fond-tuile-get-res,yshift=-0.15cm]{id\_val};
+                    \draw (id-strate-get-res.west) -- (get-resultats.east);
+                    \coordinate (flex-res-strates) at ($(id-strate-get-res.west)!0.5!(get-resultats.east)$);
+                    \draw (no-lot-get-res.west) -| (flex-res-strates);
+                    \draw (fond-tuile-get-res.west) -| (flex-res-strates|-no-lot-get-res.west);
+                    \draw (id-val-get-res.west) -| (flex-res-strates|-fond-tuile-get-res.west);
+                \node (post-resultats) [endpoint, below of=get-resultats,yshift=-0.25cm]{POST /api/valid/resultats};
+                    \node (res-echantillonage) [body, right of=post-resultats,xshift=3cm]{Résultat validation sans identifiant};
+                    \draw (res-echantillonage.west) -- (post-resultats.east); 
+                
+                
+                \node (feuilles) [endpoint,below of=post-resultats,yshift=-0.25cm]{GET /api/valid/feuilles};
+                
+                \node (get-graphs) [endpoint, below of=feuilles,yshift=-0.25cm]{GET /api/valid/graphiques};
+                    \node (id-strate-graph) [mandat_query_param,right of=get-graphs,xshift=3.5cm,text width=2.5cm]{id\_strate};
+                    \node (type-graph) [mandat_query_param, above of=id-strate-graph,text width=2.5cm,yshift=-0.2cm]{type};
+                        \node (type-stat) [enum, right of=type-graph,xshift=3cm]{stationnement};
+                        \node (type-stat-reel) [enum, above of=type-stat,yshift=-0.15cm]{stationnement\_reel};
+                        \node (type-stat-pred) [enum,above of=type-stat-reel,yshift=-0.15cm]{stationnement\_predit};
+                        \node (type-pred-reel) [enum, above of=type-stat-pred,yshift=-0.15cm]{pred\_par\_reel};
+                        \node (type-reel-pred) [enum, above of=type-pred-reel,yshift=-0.15cm]{reel\_par\_pred};
+                        \draw (type-graph.east) -- (type-stat.west);
+                        \coordinate(flex-type-graph) at ($(type-graph.east)!0.5!(type-stat.west)$);
+                        \draw (type-stat-reel.west) -| (flex-type-graph);
+                        \draw (type-stat-pred.west) -| (flex-type-graph|-type-stat-reel.west);
+                        \draw (type-pred-reel.west) -| (flex-type-graph|-type-stat-pred.west);
+                        \draw (type-reel-pred.west) -| (flex-type-graph|-type-pred-reel.west);
+                    \node (x-max-graph) [opt_query_param, below of=id-strate-graph, text width= 2.5cm,yshift=0.2cm]{x\_max};
+                    \draw (id-strate-graph.west) -- (get-graphs.east);
+                    \draw (type-graph.west) -| ($(id-strate-graph.west)+(-0.2,0)$);
+                    \draw (x-max-graph.west) -| ($(id-strate-graph.west)+(-0.2,0)$);
+                \node (put-resultats) [endpoint, below of=get-graphs,yshift=-0.25cm]{PUT /api/valid/resultats};
+                    \node (id-val-put) [param,right of=put-resultats,xshift=6.75cm]{id\_val};
+                    \node (res-echant-put) [body,below of=id-val-put,yshift=-0.25cm]{Résultat validation sans identifiant};
+                    \draw (id-val-put.west) -- (put-resultats.east);
+                    \draw (res-echant-put.west) -| ($(id-val-put.west) + (-0.2,0)$);
+                \node (delete-strata) [endpoint, below of=put-strata,yshift=-0.25cm]{DELETE /api/valid/strate};
+                    \node (id-delete-strate) [param] at ($(id-strate-get|-delete-strata)$){id\_strate};
+                    \draw (id-delete-strate.east)-- (delete-strata.west);
+                \node (delete-resultats) [endpoint,below of=put-resultats,yshift=-0.25cm]{DELETE /api/valid/resultats};
+                    \node (id-val-delete) [param, right of=delete-resultats,xshift=3cm,text width=2cm]{id\_val};
+                    \draw (id-val-delete.west) -- (delete-resultats.east);
+                \draw (get-valid-columns.east)-- (get-graphs.west);
+                \draw (create-data.east) -- (feuilles.west);
+                \draw (delete-strata.east) -- (delete-resultats.west);
+                \draw (put-strata.east) -- (put-resultats.west);
+                \draw (post-strata.east) -- (post-resultats.west);
+                \draw (get-strata.east) -- (get-resultats.west);
+                \draw (domaine-valid.south) -- ($(get-valid-columns.east)!0.5!(get-graphs.west)$);
+                \draw (API.south) -- (domaine-valid.north);
+        \end{tikzpicture}
+        \caption{Représentation schématique de l'\ac{API} pour la validation de l'inventaire}
+        \label{fig:schema-api-6}
+    \end{figure}
+\end{landscape}
+
+En contraste, de l'information peut aussi être contenue dans le corps du message plutôt que dans l'adresse. Ce type de fonctionnalité est principalement utilisé pour les cas de figure où l'on veut modifier ou créer un élément dans la base de données.\par
+Finalement, bien qu'il soit considéré une bonne pratique de mettre en place des fonctions de validation des intrants reçus particulièrement dans le cas de figure où l'on interagit avec SQL. Ces fonctions de validation n'ont pas été mises en place. Les tests unitaires qui typiquement assurent la qualité et la robustesse du code n'ont pas été implémentées. La figure \ref{fig:schema-api-parking-dev} montre une représentation schématique des fonctionnalités et domaines traités dans l'\ac{API}
+
+\subsubsection{Routes} 
+L'appel routes permet d'énumérer une liste des \ac{URI} disponibles, des méthodes possibles pour chaque \ac{URI} et des fonctions TypeScript appelées par chaque \ac{URI}
+\begin{itemize}
+    \item GET /api/routes renvoie l'ensemble des routes implémentées sur le serveur. Les colonnes disponibles pour chaque entrée sont listées ci-dessous: 
+    \begin{itemize}
+        \item path: renvoie l'\ac{URI} pour la route
+        \item methods: renvoie une liste des méthodes (GET, PUT, POST, DELETE) pour l'\ac{URI} en question
+        \item middlewares: le nom de la fonction TypeScript appelée par le serveur pour renvoyer l'information
+    \end{itemize}
+\end{itemize}
 \subsubsection{Inventaire} 
 Les appels d'API suivants sont proposés pour les objets de type inventaire:
 \begin{itemize}
@@ -73,6 +761,32 @@ Les appels d'API suivants sont proposés pour les objets de type inventaire:
         \item unite: l'identifiant d'unité de la valeur fournie
         \item valeur: la valeur manuelle entrée par l'utilisateur
     \end{itemize}
+    \item POST /api/inventaire/nouv-en-gros: Cette adresse permet de créer des entrées d'inventaire en gros. Les colonnes suivantes doivent être dans le corps de la requête \ac{REST}:
+    \begin{itemize}
+        \item g\_no\_lot
+        \item n\_places\_min
+        \item n\_places\_max
+        \item n\_places\_mesure
+        \item n\_places\_estime
+        \item id\_er
+        \item id\_reg\_stat
+        \item commentaire
+        \item methode\_estime
+        \item cubf
+    \end{itemize}
+     \item POST /api/inventaire: nouvelle entrée dans la table \underline{inventaire\_stationnement}. Les informations suivantes sont fournies dans le corps du message:
+    \begin{itemize}
+        \item g\_no\_lot
+        \item n\_places\_min
+        \item n\_places\_max
+        \item n\_places\_mesure
+        \item n\_places\_estime
+        \item id\_er
+        \item id\_reg\_stat
+        \item commentaire
+        \item methode\_estime
+        \item cubf
+    \end{itemize}
     \item PUT /api/inventaire/$<id_{inv}>$: Modification de l'entrée dans la table \ul{inventaire\_ stationnement} dont l'identifiant est égal à la valeur entre <>. Le contenu de l'entrée est communiqué dans le corps du message avec les variables suivantes:
     \begin{itemize}
         \item g\_no\_lot
@@ -86,66 +800,119 @@ Les appels d'API suivants sont proposés pour les objets de type inventaire:
         \item methode\_estime
         \item cubf
     \end{itemize}
-    \item POST /api/inventaire: nouvelle entrée dans la table \underline{inventaire\_stationnement}. Les informations suivantes sont fournies dans le corps du message:
-    \begin{itemize}
-        \item g\_no\_lot
-        \item n\_places\_min
-        \item n\_places\_max
-        \item n\_places\_mesure
-        \item n\_places\_estime
-        \item id\_er
-        \item id\_reg\_stat
-        \item commentaire
-        \item methode\_estime
-        \item cubf
-    \end{itemize}
+    \item PUT /api/inventaire/maj-en-gros: permet de faire la modification en gros d'inventaire de stationnement. Contrairement à la mise à jour d'un seul élément, l'ensemble des champs de la table \ul{inventaire\_stationnement} doivent être présents dans le corps de la requête.
+   
+    
     \item DELETE /api/inventaire/$<id_{inv}>$: supprime l'entrée dont l'id\_inv est égal à la valeur entre <>.
-\end{itemize}\clearpage
-
+\end{itemize}
 \subsubsection{Règlements}
 Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement:
 \begin{itemize}
-    \item GET /api/reglements/entete: renvoie toutes les entêtes de règlements (description, information administrative)
-    \item GET /api/reglements/<id\_reg\_stat>: renvoie l'ensemble du règlement dont l'identifiant est égal à celui fourni par l'utilisateur
-    \item PUT /api/reglements/<id\_reg\_stat>: modifie le règlement dont l'identifiant est égal à id\_reg\_stat. Les paramètres à fournir sont les suivants. Ces paramètres suivent les définitions de types montrées au Tableau \ref{tab:definition_entete_reg_stationnement} et \ref{tab:definition_reg_stat_emp}.
+    \item GET /api/reglements/entete: renvoie toutes les entêtes de règlements (description, information administrative). Les paramètres de filtrage suivants peuvent être fournis dans l'\ac{URI} pour réduire la liste de règlements renvoyés. Les éléments description, ville, texte, article et paragraphe utilisent les fonctions de recherches incluses dans PostgreSQL \parencite{postgresql_global_development_group_811_2025}
+    \begin{itemize}
+        \item annee\_debut\_avant
+        \item annee\_debut\_apres
+        \item annee\_fin\_avant
+        \item annee\_fin\_apres
+        \item description
+        \item ville
+        \item texte
+        \item article
+        \item paragraphe
+    \end{itemize}
+    \item GET /api/reglements/complet/<id\_reg\_stat>: renvoie un règlement complet (l'entête et la définition mathématique). Le format JSON renvoyé est le suivant: 
+    \begin{itemize}
+        \item entete: un vecteur contenant les éléments suivants
         \begin{itemize}
-            \item entete:
-                \begin{itemize}
-                    \item id\_reg\_stat
-                    \item description
-                    \item annee\_debut\_reg
-                    \item annee\_fin\_reg
-                    \item texte\_loi
-                    \item article\_loi
-                    \item paragraphe\_loi
-                    \item ville
-                \end{itemize}
-            \item definition, un tableau dont les colonnes sont:
-                \begin{itemize}
-                    \item id\_reg\_stat\_emp
-                    \item id\_reg\_stat
-                    \item ss\_ensemble
-                    \item seuil
-                    \item oper
-                    \item cases\_fix\_min
-                    \item cases\_fix\_max
-                    \item pente\_min
-                    \item pente\_max
-                    \item unite
-                \end{itemize}
+            \item id\_reg\_stat: l'identifiant du règlement
+            \item description: description sommaire du règlement
+            \item annee\_debut\_reg: Année d'entrée en vigueur du règlement inclusif
+            \item annee\_fin\_reg: Année d'abrogation du règlement (inclusif)
+            \item texte\_loi: Texte de loi définissant le règlement
+            \item article\_loi: Article de loi où le règlement est défini
+            \item paragraphe\_loi: Paragraphe de la loi où le règlement est défini
+            \item ville: nom commun de la juridiction
         \end{itemize}
-    \item POST /api/reglements permet de créer un nouveau règlement et requiert les mêmes informations que la fonction PUT mais n'a pas d'identifiant dans l'\ac{URL}.
-\end{itemize}\clearpage
+        \item définition: une table contenant la définition du règlement avec les éléments suivants
+        \begin{itemize}
+            \item id\_reg\_stat\_emp: identifiant unique de la ligne de définition mathématique
+            \item id\_reg\_stat: identifiant du règlement
+            \item ss\_ensemble: sous-ensemble du règlement auquel appartient la ligne
+            \item seuil: seuil au dessus duquel le règlement s'applique quand l'opérateur à l'intérieur du sous-ensemble
+            \item oper: colonne contenant les opérateur. Le premier élément du sous-ensemble contient l'opérateur applicable entre ce sous ensemble et le précédent, les autres sont l'opérateur utilisé entre les lignes 
+            \item cases\_fix\_min: ordonnée à l'origine de la droite représentant le stationnement minimum
+            \item pente\_min: pente de la droite représentant le stationnement minimum
+            \item cases\_fix\_max: ordonnée à l'origine de la droite représentant le stationnement maximum
+            \item pente\_max: pente de la droite représentant le stationnement maximum
+            \item unite: unité de l'axes des x de la droite pour les requis minimum et maximum
+        \end{itemize}
+    \end{itemize}
+    \item GET /api/reglements/operations: renvoie le contenu de la table \ul{liste\_operations} (Tableau \ref{tab:operations_table})
+    \item GET /api/reglements/unites: renvoie les informations contenues dans la table \ul{multiplicateur\_facteurs\_ colonnes} (Tableau \ref{tab:unite_pertinentes_minimum_stat})
+    \item GET /api/reglements/unites/<id>: renvoie la ligne de la table \ul{multiplicateur \_facteurs\_colonnes} dont l'identifiant est entre <>
+    \item POST /api/reglements/entete: permet de créer un nouvel entête de règlement. Les éléments suivants doivent être fournis dans le corps du message (voir Tableau \ref{tab:definition_entete_reg_stationnement})
+    \begin{itemize}
+        \item description
+        \item annee\_debut\_reg
+        \item annee\_fin\_reg
+        \item texte\_loi
+        \item article\_loi
+        \item paragraphe\_loi
+        \item ville
+    \end{itemize}
+    \item PUT /api/reglements/entete/<id>: permet de modifier un entête de règlement. Les mêmes champs doivent être fournis dans le corps que pour la fonction POST tandis que l'identifiant id\_reg\_stat doit être dans l'adresse.
+    \item DELETE /api/reglements/<id>: permet de supprimer le règlement dont l'identifiant id\_reg\_stat est égal à la valeur entre <>
+    \item POST /api/reglements/ligne-def: permet de créer une nouvelle entrée dans la table \ul{reg\_stationnement\_empile} (voir Tableau \ref{tab:definition_reg_stat_emp}). Les valeurs suivantes doivent être fournies dans le corps de la requête:
+    \begin{itemize}
+        \item id\_reg\_stat: identifiant du règlement
+        \item ss\_ensemble
+        \item seuil
+        \item oper
+        \item cases\_fix\_min
+        \item pente\_min
+        \item cases\_fix\_max
+        \item pente\_max
+        \item unite
+    \end{itemize}
+    \item PUT /api/reglements/ligne-def/<id>: permet de modifier la ligne de définition mathématique dont l'identifiant (id\_reg\_stat\_emp) est entre <>. Les même champs que la requête POST doivent être fournis.
+    \item DELETE /api/reglements/ligne-def/<id>: permet la suppression de la ligne de définition mathématique dont l'identifiant est entre <>.
+    \item GET /api/reglements/graphiques: renvoit le nombre de places minimums requises pour le règlement en fonction de l'unité fournie dans les paramètres de requête. Au minimum, les identifiants séparés par des virgules et l'identifiant d'unité doivent être fournis. Les paramètres suivants peuvent être fournis pour raffiner le graphique:
+    \begin{itemize}
+        \item min: valeur minimale de l'axe des x
+        \item max: valeur maximale de l'axe des x
+        \item pas: pas pour les valeurs entre min et max
+    \end{itemize}
+\end{itemize}
 \subsubsection{Ensembles de règlements}
 Les appels d'\ac{API} suivants sont proposés pour les ensembles de règlements.
 \begin{itemize}
-    \item GET /api/ens-reg/entete renvoie l'ensemble des entêtes de règlements de stationnement dont les propriétés sont listées dans le Tableau \ref{tab:definition_er}:
+    \item GET /api/ens-reg/entete: renvoie l'ensemble des entêtes de règlements de stationnement dont les propriétés sont listées dans le Tableau \ref{tab:definition_er}:
     \begin{itemize}
         \item id\_er 
         \item date\_debut\_er
         \item date\_fin\_er
         \item description\_er
     \end{itemize}
+    \item PUT /api/ens-reg/entete/<id\_er>: permet de modifier l'entête d'ensemble de règlements dont l'identifiant est entre <>. Les paramètres suivants doivent être fournis dans le corps de la requête (voir Tableau \ref{tab:definition_er}):
+    \begin{itemize}
+        \item description\_er
+        \item date\_debut\_er
+        \item date\_fin\_er
+    \end{itemize}
+    \item POST /api/ens-reg/entete/: permet de créer un l'entête d'un nouvel ensemble de règlements. Les mêmes champs doivent être fournis que la fonction PUT.
+    \item PUT /api/ens-reg/assoc/<id\_assoc\_er\_reg>: permet de modifier une association spécifique dans un ensemble de règlements. Les champs décrits dans le tableau \ref{tab:definition_association_er_reg_stat}. Les entrées ayant un \ac{CUBF} entre 1 et 9 ne peuvent modifier que le règlement. En effet, au minimum, un ensemble de règlements doit contenir les CUBF 1 à 9. Les variables suivantes doivent être fournies dans le corps de la requête
+    \begin{itemize}
+        \item id\_reg\_stat, l'identifiant du règlement
+        \item cubf, le \ac{CUBF} pour l'utilisation du sol
+        \item id\_er, l'identifiant d'ensemble règlement
+    \end{itemize}
+    \item POST /api/ens-reg/assoc permet de créer une nouvelle association entre un \ac{CUBF} et un règlement. Les variables du tableau \ref{tab:definition_association_er_reg_stat} doivent être fournies:
+    \begin{itemize}
+        \item id\_reg\_stat, l'identifiant du règlement
+        \item cubf, le \ac{CUBF} pour l'utilisation du sol
+        \item id\_er, l'identifiant d'ensemble règlement
+    \end{itemize}
+    \item DELETE /api/ens-reg/assoc/<id\_assoc\_er\_reg> permet de supprimer l'association dont l'identifiant est fourni dans l'\ac{URL}.
     \item GET /api/ens-reg/complet/<id\_er> renvoie  les données suivantes pour l'ensemble de règlement dont l'identifiant est égal à id\_er:
         \begin{itemize}
             \item entete
@@ -168,84 +935,50 @@ Les appels d'\ac{API} suivants sont proposés pour les ensembles de règlements.
                     \item description
                 \end{itemize}
         \end{itemize}
-    
-    \item PUT /api/ens-reg/complet/<id\_er> modifie un ensemble de règlements existant. Les données suivantes doivent être fournies dans le corps:
-        \begin{itemize}
-            \item entete
-                \begin{itemize}
-                    \item date\_debut\_er
-                    \item date\_fin\_er
-                    \item description\_er
-                \end{itemize}
-            \item assoc\_util\_sol
-                \begin{itemize}
-                    \item id\_assoc\_er\_reg identifiant primaire
-                    \item id\_reg\_stat, l'identifiant du règlement
-                    \item cubf, le \ac{CUBF} pour l'utilisation du sol
-                \end{itemize}
-        \end{itemize}
+    \item DELETE /api/ens-reg/<id\_er> permet de supprimer un ensemble de règlements. Le serveur s'assure que cet ensemble n'est pas utilisé dans un ensemble de règlements-territoire avant de supprimer.
+
+\end{itemize}
+En plus des adresses basiques fournies ci-dessus, des adresses supplémentaires ont été créées pour certaines pages particulières au sein de l'interface. 
+\begin{itemize}
     \item GET /api/ens-reg/reg-associes/<id\_er> renvoie les entêtes des règlements qui sont utilisés dans l'ensemble de règlements dont l'identifiant est égal à id\_er.
     \item GET /api/ens-reg/entete-par-territoire/<id\_periode\_geo> renvoie les entêtes des ensembles de règlements associés au territoire dont l'identifiant est égal à id\_periode\_geo.
-    \item POST /ens-reg/complet permet de créer un nouvel ensemble de règlements en utilisant les mêmes informations que celles listées pour PUT. L'id\_er doit cependant être omis des propriétés et est attribué dans la procédure de création.
-        \begin{itemize}
-            \item entete
-                \begin{itemize}
-                    \item date\_debut\_er
-                    \item date\_fin\_er
-                    \item description\_er
-                \end{itemize}
-            \item assoc\_util\_sol
-                \begin{itemize} 
-                    \item id\_assoc\_er\_reg identifiant primaire
-                    \item id\_reg\_stat, l'identifiant du règlement
-                    \item cubf, le \ac{CUBF} pour l'utilisation du sol
-                \end{itemize}
-        \end{itemize}
-    \item DELETE /api/ens-reg/complet/<id\_er> permet de supprimer un ensemble de règlements. Le serveur s'assure que cet ensemble n'est pas utilisé dans un ensemble de règlements-territoire avant de supprimer.
-    \item PUT /api/ens-reg/assoc/<id\_assoc\_er\_reg> permet de modifier une association spécifique dans un ensemble de règlements. Les champs décrits dans le tableau \ref{tab:definition_association_er_reg_stat}. Les entrées ayant un \ac{CUBF} entre 1 et 9 ne peuvent modifier que le règlement. En effet, au minimum, un ensemble de règlements doit contenir les CUBF 1 à 9. Les variables suivantes doivent être fournies dans le corps de la requête
-    \begin{itemize}
-        \item id\_reg\_stat, l'identifiant du règlement
-        \item cubf, le \ac{CUBF} pour l'utilisation du sol
-        \item id\_er, l'identifiant d'ensemble règlement
-    \end{itemize}
-    \item POST /api/ens-reg/assoc permet de créer une nouvelle association entre un \ac{CUBF} et un règlement. Les variables du tableau \ref{tab:definition_association_er_reg_stat} doivent être fournies:
-    \begin{itemize}
-        \item id\_reg\_stat, l'identifiant du règlement
-        \item cubf, le \ac{CUBF} pour l'utilisation du sol
-        \item id\_er, l'identifiant d'ensemble règlement
-    \end{itemize}
-    \item DELETE /api/ens-reg/assoc/<id\_assoc\_er\_reg> permet de supprimer l'association dont l'identifiant est fourni dans l'\ac{URL}.
-\end{itemize}\clearpage
+    \item GET /api/ens-reg/par-role/<id\_provinc>: permet d'obtenir les entetes d'ensemble de règlements associées à l'inventaire pour une ou plusieurs entrées du rôle. Plusieurs identifiants séparés par des virgules peuvent être fournis entre <>
+    \item POST /api/ens-reg/informations-pour-graphique: permet d'obtenir les règlements pertinents et les unités formulées pour les ensembles de règlements et le \ac{CUBF} sélectionné. Les identifiants de règlements et le \ac{CUBF} sont envoyés dans le corps de la requête
+\end{itemize}
+
 \subsubsection{Territoire}
-L'\ac{API} possède les appels suivants pour manipuler les territoires:
+L'\ac{API} possède les appels suivants pour obtenir les territoires. Pour l'instant, aucune fonction n'a été implémenté pour modifier ou supprimer les territoires pour l'instant.
 \begin{itemize}
     \item GET /api/territoire/periode/<id\_periode> permet d'obtenir l'ensemble des territoires associés qui sont associés à la période spécifiée dans l'\ac{URL}.
     \item GET /api/territoire/periode-geo/<id\_periode\_geo> permet d'obtenir un territoire selon son identifiant unique.
-    \item PUT /api/territoire/periode-geo/<id\_periode\_geo> permet de mettre à jour un territoire.
-    \item POST /api/territoire/periode/<id\_periode> permet d'ajouter des territoires associés à une période. Les colonnes suivantes devront être fournies dans le corps du message en concordance avec les types définis dans le tableau \ref{tab:definition_cartographie_secteurs}:
-    \begin{itemize}
-        \item id\_periode, l'identifiant de la période à laquelle est associée 
-        \item ville
-        \item secteur
-        \item ville\_sec
-        \item geometry, la géométrie sous format WKT en CRS 4326
-    \end{itemize}
-    \item POST /api/territoire/periode-geo permet d'ajouter un territoire à la cartographie. Les colonnes suivantes doivent être fournies dans le corps de la requête:
-    \begin{itemize}
-        \item id\_periode, l'identifiant de la période à laquelle est associée 
-        \item ville
-        \item secteur
-        \item ville\_sec
-        \item geometry, la géométrie sous format WKT en CRS 4326
-    \end{itemize}
-    \item DELETE /api/territoire/periode-geo/<id\_periode\_geo> permet de supprimer des territoires en fonction de l'identifiant du territoire
 \end{itemize}
-\clearpage
+\subsubsection{Ensembles de règlements territoire}
+Les ensemble de règlements territoire sont l'association entre les ensembles de règlements et les territoires. Il s'agit pour l'essentiel d'un assocation entre le territoire et l'ensemble de règlements. Les dates de validités du \ac{RST} sont inférées à partir des dates de validité de l'ensmble de règlement et du territoire. Cet objet a le complément complet d'options pour modifier les associations (contrairement aux territoires et aux quartiers d'analyse qui doivent être téléversés manuellement). Les adresses d'\ac{API} sont les suivants:
+\begin{itemize}
+    \item GET /api/ens-reg-terr/par-territoire/<id\_periode\_geo>: permet d'obtenir les \ac{RST} associés au territoire dont l'identifiant est spécifié
+    \item GET /api/ens-reg-terr/associations: permet d'obtenir des associations en fonction de la latitude, la longitude ou les dates d'entrée en vigueur et d'abrogation au moyen des paramètres de requêtes suivants:
+    \begin{itemize}
+        \item lat: Latitude en degrés décimal; doit être utilisé avec un longitude
+        \item long: Longitude en degrés décimal; doit être utilisé avec une latitude
+        \item annee\_debut\_avant: année de début de la période ou de l'ensemble de règlements est avant l'année specifiée
+        \item annee\_debut\_apres: année de début de la période ou de l'ensemble de règlements est après l'année spécifiée
+        \item annee\_fin\_avant: année de fin de la période ou de l'ensemble de règlements est avant l'année spécifiée
+        \item annee\_fin\_apres: année de fin de la préiode ou de l'ensemble de règlements est après l'année spécifiée
+        \item ville\_comme: la ville du territoire ressemble à la chaîne de caractères soumise
+        \item secteur\_comme: le secteur du territoire ressemble à la chaîne de caractères soumise
+    \end{itemize}
+    \item POST /api/ens-reg-terr/association: permet de créer une nouvelle association dans la table \underline{association\_er\_territoire} (voir Tableau \ref{tab:definition_association_er_territoire}. Les champs suivants doivent être spécifiés dans le corps de la requête:
+    \begin{itemize}
+        \item id\_er : l'identifiant du \ac{PRS}
+        \item id\_periode\_geo: l'identifiant du territoire
+    \end{itemize}
+    \item PUT /api/ens-reg-terr/association/<id\_asso\_er\_ter>: permet de modifier l'association dont l'identifiant est entre <>. Les mêmes champs doivent être spécifiés que pour la création d'une nouvelle association
+    \item DELETE /api/ens-reg-terr/association/<id\_asso\_er\_ter>: permet de supprimer l'association dont l'identifiant est entre <>.
+\end{itemize}
 \subsubsection{Historique}
 L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville:
 \begin{itemize}
-    \item GET /api/historique obtient l'ensemble des entrées de la table \ul{historique\_geopol} avec les entrées du Tableau \ref{tab:definition_historique_geopol}
-    \item GET /api/historique/<$id_{periode}$> renvoie un item de la table \ul{historique\_geopol} dont l'identifiant est égal à $id_{periode}$
+    \item GET /api/historique obtient l'ensemble des entrées de la table \ul{historique\_geopol} avec les entrées du Tableau \ref{tab:definition_historique_geopol}. Aucun paramètre de filtrage n'a été mis en place à l'heure actuelle pour l'historique du fait de la simplicité des données en cours. 
     \item PUT /api/historique/<$id_{periode}$> permet de modifier un item de la table \ul{historique\_ geopol}. Les colonnes suivantes doivent être dans le corps du message selon les types 
     \begin{itemize}
         \item nom\_periode 
@@ -263,65 +996,209 @@ L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville
 
 
 \subsubsection{Lots cadastraux et entrées du rôle foncier}
-Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux et les entrées du rôle:
+Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux et les entrées du rôle. Il est important de noter que des fonctions d'association, de création, de mise à jour et de suppression du rôle seraient pertinents pour une implémentation en production. Dans le cadre de ce mémoire, les information du rôle et du cadastre ont été créés manuellement dans la base de données. Finalement, les espaces dans la chaîne de caractères des identifiants doivent être remplacées par le caractère \_.
 \begin{itemize}
     \item GET /api/cadastre/lot/quartier-ana/<$id_{quartier}$> permet d'obtenir l'ensemble des lots qui se situent à l'intérieur du quartier d'analyse dont l'identifiant est fourni dans l'\ac{URI}
-    \item GET /api/cadastre/lot/<$g\_no\_lot$> permet d'obtenir le lot dont l'identifiant est égal à la valeur fournie de g\_no\_lot. Comme pour les autres appels reliés à un lot cadastral, les espaces doivent être remplacés par un tiret bas dans l'\ac{URL}.
-    \item GET /api/cadastre/role-associe/<$g\_no\_lot$> permet d'obtenir les entrées du rôle foncier 
-    \item POST /api/cadastre/cadastre permet de créer un nouveau lot cadastral
-    \item POST /api/cadastre/role permet de créer une nouvelle entrée au rôle foncier
-    \item POST /api/cadastre/cadastre/en-gros permet de créer plusieurs nouvelles entrées dans la table \ul{cadastre} dont les colonnes sont détaillées au Tableau \ref{tab:definition_cadastre}
-    \item POST /api/cadastre/role/en-gros permet de créer de nouvelles entrées dans la table \ul{role\_foncier} dont les colonnes sont détaillées au Tableau \ref{tab:definition_role_foncier}
-    \item GET /api/cadastre/creer-association permet d'obtenir le résultat de la jointure spatiale entre les points du rôle foncier et les polygones du cadastre. 
-    \item POST /api/cadastre/association permet de créer une nouvelle entrée dans la table \ul{association\_cadastre\_role} dont les colonnes sont détaillées au Tableau \ref{tab:definition_assoc_role_cadastre}. Seules les colonnes id\_provinc et g\_no\_lot doivent être spécifiées dans le corps de la requête.
-    \item PUT /api/cadastre/association/<$id_{assoc}$> permet de modifier l'association dont l'identifiant est spécifié dans l'\ac{URL}. Comme pour l'opération POST, seules les colonnes id\_ provinc et g\_ no\_lot doivent être spécifiées dans le corps de la requête.
-    \item DELETE /api/cadastre/association/<$id_{assoc}$> permet de supprimer l'association dont l'identifiant est spécifiée dans la l'\ac{URL}
+    \item GET /api/cadastre/lot/<$g\_no\_lot$> permet d'obtenir le lot dont l'identifiant est égal à la valeur fournie de g\_no\_lot.
+    \item GET /api/cadastre/role-associe/<$g\_no\_lot$> permet d'obtenir les entrées du rôle foncier associées au lot dont l'identifiant est fourni entre <>. L'identifiant spécifié est celui du lot
 \end{itemize}
-\subsubsection{Facteurs de conversion}
-Les appels d'\ac{API} suivants doivent être mis en place pour gérer la table \ul{multiplicateur\_ facteurs\_colonnes} qui est décrite au tableau \ref{tab:definition_unite}
+Une fonction permettant de faire des requêtes complexes en utilisant des boites englobantes est en cours de développement mais incomplète. Elle est principalement pensée pour permettre de réduire le nombre de données géospatiales à garder en mémoire en parcourant la carte. 
+\subsubsection{Codes d'utilisation du Bien-Fonds}
+Les appels pour les \ac{CUBF} sont principalement utilisés pour créer les assocations entre les règlements et les utilisations du sol. Pour rendre la recherche plus facile, des paramètres de requête ont été implémentés pour pouvoir obtenir des sous-ensembles pertinents de la liste des \ac{CUBF}. Sans paramètre de requête l'\ac{API} renvoie les 1700 \ac{CUBF}. La création, la modification et la suppression de \ac{CUBF} n'ont pas été implémentés
 \begin{itemize}
-    \item GET /api/conversions/ permet d'obtenir l'ensemble des entrées de la table \ul{multiplicateur\_ facteurs\_colonnes}
-    \item GET /api/conversions/<$id_{unite}$> permet d'obtenir l'entrée dont la variable identifiant d'unité est spécifié dans l'\ac{URL}
-    \item PUT /api/conversions/<$id_{unite}$> permet de modifier l'entrée dont l'identifiant d'unité est spécifié dans l'\ac{URL}. Les variables colonne\_role\_foncier, facteur\_correction, desc\_unite et ordonnee\_ correction doivent être fournies dans le corps de la requête.
-    \item POST /api/conversions/ permet de créer une nouvelle entrée dans la table et les variables doivent être fournies dans le corps de la requête.
-    \item DELETE /api/conversions/<$id_{unite}$> supprime l'entrée dans la table dont l'identifiant est fourni dans l'\ac{URL}
+    \item GET /api/cubf: permet de renvoyer les \ac{CUBF} et leur description. Deux paramètres de requête sont mis en place pour permettre d'extraire des sous-ensembles
+    \begin{itemize}
+        \item cubf: un \ac{CUBF} numérique. Il est souvent fourni pour chercher les \ac{CUBF} enfants
+        \item niveau: donne le niveau du \ac{CUBF}. Un niveau 1 implique un \ac{CUBF} entre 1 et 9, un niveau 2 implique un \ac{CUBF} entre 10 et 99, un niveau 3 implique un \ac{CUBF} entre 100 et 999 et un niveau 4 implique un \ac{CUBF} entre 1000 et 9999
+    \end{itemize}
+    \item GET /api/n\_entrees: permet de renvoyer le nombre de \ac{CUBF} pour chaque niveau.
 \end{itemize}
+Quelques exemples seront fournis pour clarifier. L'appel à l'adresse \og{/api/cubf?niveau=1} \fg{} utilisant la méthode GET renvoie les valeurs listées au tableau \ref{tab:get-cubf-niv1}.\par
+\begin{table}[h]
+    \centering
+    \caption{Réponse à l'appel \og{/api/cubf?niveau=1}\fg{}}
+    \label{tab:get-cubf-niv1}
+    \begin{tabular}{ll}
+        \toprule
+         CUBF & Description \\
+         \midrule
+         1 & RÉSIDENTIELLE \\
+         2 & INDUSTRIES MANUFACTURIÈRES\\
+         3 & INDUSTRIES MANUFACTURIÈRES \\
+         4 & TRANSPORTS, COMMUNICATIONS ET SERVICES PUBLICS \\
+         5 & COMMERCIALE \\
+         6 & SERVICES \\
+         7 & CULTURELLE, RÉCRÉATIVE DE LOISIRS \\
+         8 & PRODUCTION ET EXTRACTION DE RICHESSES NATURELLES \\
+         9 & IMMEUBLES NON EXPLOITÉS ET ÉTENDUES D'EAU\\ \bottomrule
+    \end{tabular}
+\end{table}
+L'appel à la méthode GET à l'adresse \og{/api/cubf?niveau=2\&cubf=6}\fg{} renvoie les entrées au tableau \ref{tab:get-cubf-niv2}\par
+\begin{table}[h]
+    \centering
+    \caption{Réponse à l'appel \og{/api/cubf?niveau=2\&cubf=6}\fg{}}
+    \label{tab:get-cubf-niv2}
+    \begin{tabular}{ll}
+        \toprule
+         CUBF & Description \\
+         \midrule
+         60 & IMMEUBLE À BUREAUX \\
+         61 & FINANCE, ASSURANCE ET SERVICE IMMOBILIER\\
+         62 & SERVICE PERSONNEL\\
+         63 & SERVICE D'AFFAIRES \\
+         64 & SERVICE DE RÉPARATION \\
+         65 & SERVICE PROFESSIONEL \\
+         66 & SERVICE DE CONSTRUCTION \\
+         67 & SERVICE GOUVERNEMENTAL\\
+         68 & SERVICE ÉDUCATIONNEL\\ 
+         69 & SERVICE DIVERS \\\bottomrule
+    \end{tabular}
+    
+\end{table}
+L'appel de la méthode GET à l'adresse \og{/api/cubf?niveau=3\&cubf=65}\fg{} renvoie les résultats présentés au tableau \ref{tab:get-cubf-niv3}.\par
+\begin{table}[h]
+    \centering
+    \caption{Réponse à l'appel \og{/api/cubf?niveau=3\&cubf=65}\fg{}}
+    \label{tab:get-cubf-niv3}
+    \begin{tabular}{ll}
+        \toprule
+         CUBF & Description \\
+         \midrule
+         651 & Service médical et de santé \\
+         652 & Service juridique\\
+         653 & Service Social\\
+         654 & Service social hors institution\\
+         655 & Service informatique\\
+         656 & Service de soins paramédicaux \\
+         657 & Service de soins thérapeutiques\\
+         659 & Autres services thérapeutiques\\\bottomrule
+    \end{tabular}
+    
+\end{table}
+Ainsi, l'inclusion d'un \ac{CUBF} inférieur à 1000 et un niveau approprié permet d'explorer de manière hiérarchique les \ac{CUBF}. Si le niveau n'est pas fourni, seule la description du \ac{CUBF} fourni sera renvoyée.
+L'appel à GET \og{/api/cubf/n\_entrees} \fg{} renvoit essentiellement toujours le même résultat donnée au tableau \ref{tab:get-cubf-n-entrees}
+\begin{table}[h]
+    \centering
+    \caption{Réponse de la méthode GET à l'adresse \og{/api/cubf/n\_entrees} \fg{}}
+    \label{tab:get-cubf-n-entrees}
+    \begin{tabular}{clc}
+        \toprule
+        Niveau & Description & n\_entrees\\
+        \midrule
+        1 & CUBF 1 à 9 & 9 \\
+        2 & CUBF 10 à 99 & 77\\
+        3 & CUBF 100 à 999 & 359 \\
+        4 & CUBF 1000 à 9999 & 1255\\
+        \bottomrule
+    \end{tabular}
+    
+\end{table}
 \subsubsection{Secteurs d'analyse}
-L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse qui sont définis à la section \ref{ssec:struct_donnees_sec_analyse}.
+L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse qui sont définis à la section \ref{ssec:struct_donnees_sec_analyse}. Les fonctions d'édition et de suppression des quartiers d'analyse n'existent pas à l'heure actuelle. Elles devraient être mise en place dans une version de production de l'outil.
 \begin{itemize}
     \item GET /api/quartiers-analyse obtient l'ensemble des quartiers dans la table \ul{sec\_analyse}
-    \item PUT /quartiers-analyse/<$id_{quartier}$> modifie une entrée. Les propriétés suivantes doivent être dans le corps de la requête selon les types du tableau \ref{tab:definition_sec_analyse}.
-        \begin{itemize}
-            \item nom\_quartier
-            \item superf\_quartier la superficie du quartier en mètre carrés
-            \item peri\_quartier le périmètre du quartier en mètres
-            \item geometry, la géométrie du quartier en format WKT en CRS 4326
-        \end{itemize}
-    \item POST /api/quartiers-analyse permet de créer un nouveau quartier. Les propriétés suivantes doivent être dans le corps de la requête :
-        \begin{itemize}
-            \item nom\_quartier
-            \item superf\_quartier la superficie du quartier en mètre carrés
-            \item peri\_quartier le périmètre du quartier en mètres
-            \item geometry, la géométrie du quartier en format WKT en CRS 4326
-        \end{itemize}
-    \item POST /api/quartiers-analyse/en-gros permet de créer plusieurs quartiers. Les propriétés suivantes doivent être dans le corps de la requête.
-        \begin{itemize}
-            \item nom\_quartier
-            \item superf\_quartier la superficie du quartier en mètre carrés
-            \item peri\_quartier le périmètre du quartier en mètres
-            \item geometry, la géométrie du quartier en format WKT en CRS 4326
-        \end{itemize}
-    \item DELETE /api/quartiers-analyse/<$id_{quartier}$> permet de supprimer une entrée de la table \ul{sec\_analyse}
+\end{itemize}
+\subsubsection{Analyse agrégée}
+Plusieurs indicateurs sont agrégés par quartier. Cette section donnera les détails des appels d'\ac{API} permettant de créer les divers graphiques. La ou les variables sélectionnées ainsi que l'ordre de priorité à sélectionner en cas de présence de plusieurs estimés de stationnement sont communiquées au serveur au moyen de paramètre de requête. 3 types d'analyse de quartier sont possibles: cartographique, par diagramme à barre et par diagramme XY. Chaque type d'analyse se voit attribuer un \ac{URI}. Les profils d'accumulation véhicule se voient attribués une \ac{URI} différente de par leur spécificité. D'autre part, les noms de variables doivent être codifiés dans les scripts clients et serveurs tandis que les requêtes SQL ne sont codifiées que dans le script serveur. Une implémentation future devrait permettre de capturer les variables et toutes les informations attenantes dans un seul fichier pour éviter la duplication et de potentielles erreurs. Les codes de variables sont donnés au Tableau \ref{tab:analysis-var-query-vals}.
+\begin{center}
+    \begin{longtable}{p{8cm}m{1.5cm}ll}
+        \caption{Sigles de variables pour les requêtes de graphique}\label{tab:analysis-var-query-vals}\\
+         \toprule
+        Variable & Équation & Sigle requête & Ordre? \\
+        \midrule
+        \endfirsthead
+        \multicolumn{3}{c}{\textsc{Tableau}~\ref{tab:analysis-var-query-vals} (suite)}\\
+        \toprule
+        Variable & Équation & Sigle requête & Ordre?  \\
+        \midrule
+        \endhead
+        \bottomrule
+        \endfoot
+        \bottomrule
+        \endlastfoot
+         Stationnement Total & \ref{eq:stat-tot} & stat-tot & Oui\\
+         Densité stationnement& \ref{eq:stat-sup} & stat-sup & Oui\\
+         Stationnement par personne (2021) & \ref{eq:stat-pop} &stat-popu-2021& Oui\\
+         Stationnement par personne (2016) & \ref{eq:stat-pop} & stat-popu-2016& Oui\\
+         Stationnement par permis &\ref{eq:stat-perm} & stat-perm & Oui\\
+         Stationnement par voiture & \ref{eq:stat-voit}& stat-voit & Oui\\
+         Pourcentage du territoire dédié au stationnement & \ref{eq:stat-perc} & stat-perc & Oui\\
+         Superficie du Quartier& \ref{eq:superf} & superf& Non\\
+         Nombre de permis & \ref{eq:perm} & perm&Non\\
+         Population (2021) &\ref{eq:popu} & popu-2021& Non\\
+         Population (2016) & \ref{eq:popu} & popu-2016& Non\\
+         Voiture par personne (2021) & \ref{eq:voit-par-pers} & voit-par-pers-2021& Non\\
+         Voiture par personne (2016) &\ref{eq:voit-par-pers} & voit-par-pers-2016&Non\\
+         Voiture par permis & \ref{eq:voit-par-perm} & voit-par-perm&Non\\
+         Densité de population (2021)& \ref{eq:dens} & dens-pop-2021 &Non\\
+         Densité de population (2016)& \ref{eq:dens} & dens-pop-2016 & Non\\
+         Valeur moyenne de logements & \ref{eq:val-moy-log} & val-log-moy & Non\\
+         Superficie moyenne des logements& \ref{eq:sup-moy-log} & sup-log-moy & Non\\
+         Valeur foncière totale du quartier & \ref{eq:val-tot-quart}& val-tot-quart & Non\\
+         Valeur foncière résidentielle du quartier& \ref{eq:val-log-tot-quart} &  val-tot-log-quart& Non\\
+         Valeur foncière total par superficie brute de quartier & \ref{eq:val-tot-sup} & val-tot-sup & Non\\
+         Valeur foncière résidentielle par superficie brute de quartier & \ref{eq:val-tot-log-sup}& val-tot-log-sup & Non\\
+         Nombre de voitures des résidents &\ref{eq:nb-voit} &nb-voit & Non\\
+         Delta Voiture jour nuit&\ref{eq:nb-voit-delta} & nb-voit-delta & Non\\
+         Nombre de voitures max& \ref{eq:nb-voit-max} & nb-voit-max & Non\\
+         Stationnement par voiture max& \ref{eq:stat-voit-max}& stat-voit-max & Oui \\
+         Nombre de places de stationnement inutilisés & \ref{eq:stat-inu} & stat-inu & Oui\\
+         Superficie de stationnement inutilisée & \ref{eq:stat-inu-sup} & stat-inu-sup & Oui\\
+         Part modale auto-conducteur des résidents & \ref{eq:pm-res}& pm-ac-res& Non\\
+         Part modale auto-passager des résidents& \ref{eq:pm-res} & pm-ap-res& Non\\
+         Part modale \ac{TC} des résidents& \ref{eq:pm-res} & pm-tc-res & Non\\
+         Part modale marche vélo des résidents & \ref{eq:pm-res} & pm-mv-res& Non\\
+         Part modale bus scolaire des résidents& \ref{eq:pm-res}& pm-bs-res& Non\\
+         Part modale auto-conducteur interne& \ref{eq:pm-int}& pm-ac-int  & Non\\
+         Part modale auto-passager interne& \ref{eq:pm-int} & pm-ap-int& Non \\
+         Part modale \ac{TC} interne& \ref{eq:pm-int} & pm-tc-int& Non\\
+         Part modale marche vélo interne & \ref{eq:pm-int}& pm-mv-int& Non\\
+         Part modale bus scolaire interne & \ref{eq:pm-int}& pm-bs-int& Non\\
+         Part modale auto-conducteur des déplacements à destination du quartier& \ref{eq:pm-des}& pm-ac-des& Non  \\
+         Part modale auto-passager des déplacements à destination du quartier& \ref{eq:pm-des}& pm-ap-des & Non\\
+         Part modale \ac{TC} des déplacements à destination du quartier& \ref{eq:pm-des}& pm-tc-des & Non\\
+         Part modale marche vélo des déplacements à destination du quartier & \ref{eq:pm-des}& pm-mv-des& Non\\
+         Part modale bus scolaire des déplacements à destination du quartier & \ref{eq:pm-des}& pm-bs-des& Non\\
+         Part modale auto-conducteur des déplacements originant du quartier& \ref{eq:pm-ori}& pm-ac-ori& Non  \\
+         Part modale auto-passager des déplacements originant du quartier& \ref{eq:pm-ori}& pm-ap-ori& Non \\
+         Part modale \ac{TC} des déplacements originant du quartier&\ref{eq:pm-ori} & pm-tc-ori & Non\\
+         Part modale marche vélo des déplacements originant du quartier & \ref{eq:pm-ori}& pm-mv-ori& Non\\
+         Part modale bus scolaire des déplacements originant du quartier & \ref{eq:pm-ori}& pm-bs-ori& Non\\
+    \end{longtable}
+\end{center}
+Les \ac{URI} sont listées ci-dessous:
+\begin{itemize}
+    \item GET /api/ana-par-quartier/carto: permet d'obtenir une variable pour une carte choroplèthe. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \begin{itemize}
+        \item variable: identifiant de variable tel que spécifié au tableau \ref{tab:analysis-var-query-vals}
+        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
+    \end{itemize}
+    \item GET /api/ana-par-quartier/histo: permet d'obtenir les variables pour un diagramme à barre en fonction du quartier. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \begin{itemize}
+        \item variable: identifiant de variable tel que spécifié au tableau \ref{tab:analysis-var-query-vals}
+        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
+    \end{itemize}
+    \item GET /api/ana-par-quartier/XY: permet d'obtenir les quantités pour un diagramme XY. Les quartiers sont spécifiés dans l'entête de la réponse. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \begin{itemize}
+        \item X: variable sur l'axe des x
+        \item Y: variable sur l'axe des y
+        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
+    \end{itemize}
+\end{itemize}
+Ainsi, la requête pour obtenir la carte choroplèthe du stationnement total, avec l'ordre de priorité des inventaires étant fixé à \og{Manuel $\rightarrow$ réglementaire manuel $\rightarrow$ Réglementaire automatique} \fg{}  aurait la requête suivante \og{/api/ana-par-quartier/carto?variable=stat-tot\&ordre=1,3,2}\fg{}. Une requête pour les informations d'un graphique XY avec la population en 2021 sur l'axe des X et le stationnement total en axe des y serait \og{/api/ana-par/quartier/XY?X=popu-2021\&Y=stat-tot\&ordre=1,3,2} \fg{}. Les données sont renvoyées de manière à être directement utilisable dans la librairie de graphes de react-chart-js \parencite{ayerst_react-chartjs-2_2017}. Deux adresses supplémentaires sont créées pour recalculer les statistiques agrégées
+\begin{itemize}
+    \item GET /api/ana-par-quartier/recalcule-stat-agreg: permet de recalculer le nombre de places de stationnement pour chaque quartier
+    \item GET /api/ana-par-quartier/recalcule-val-autres: permet de recalculer les statistiques issues de l'enquête OD, du recensement ou du rôle foncier pour chaque quartier
 \end{itemize}
 \subsubsection{Profile d'accumulation véhicule}
-Les appels d'\ac{API} suivants sont mis en place pour gérer les profils d'accumulation véhicule \parencite{diallo_methodology_2015} qui permettent de trouver la \og{population}\fg{} de véhicules dans une géographie en fonction de l'heure de la journée.
+Les appels d'\ac{API} suivants sont mis en place pour gérer les profils d'accumulation véhicule \parencite{diallo_methodology_2015,morency_characterizing_2008} qui permettent de trouver la \og{population}\fg{} de véhicules dans une géographie en fonction de l'heure de la journée.
 \begin{itemize}
-    \item GET /api/PAV?order=<X,Y,Z>\&id\_quartier=<$id_{quartier}$> permet d'accéder au profile d'accumulation véhicule pour le quartier dont l'identifiant est spécifié. L'ordre spécifié donne l'ordre de préséance pour le relevé de l'inventaire du quartier. En effet, l'\ac{API} fournit l'inventaire du quartier en même temps pour visuellement  constater la variation de la capacité au courant de la journée
+    \item GET /api/PAV?order=<X,Y,Z>\&id\_quartier=<$id_{quartier}$> permet d'accéder au profile d'accumulation véhicule pour le quartier dont l'identifiant est spécifié. L'ordre spécifié donne l'ordre de préséance pour le relevé de l'inventaire du quartier. En effet, l'\ac{API} fournit l'inventaire du quartier en même temps pour visuellement constater l'utilisation de la capacité. Les données sont fournies de manière à être utilisées par react-chart-js \parencite{ayerst_react-chartjs-2_2017}.
     \item GET /api/PAV/recalcule/<$id_{quartier}$> permet de refaire le calcul du profile d'accumulation véhicule à partir des données de l'enquête OD
     \item POST /api/PAV/<$id_{quartier}$> permet de mettre à jour le profile d'accumulation dans la base de données une fois que l'utilisateur l'a confirmé
-    \item DELETE /api/PAV/<$id_{quartier}$> permet de supprimer le profile d'accumulation dans la base de données
 \end{itemize}
-
+\subsubsection{Validation}
+L'\ac{API} de validation a été mis en place pour permettre de rapidement assurer la qualité de l'inventaire créé. Bien que des développements méthodologiques demeurent, l'implémentation actuelle a les fonctionnalités de base pour créer une structure d'échantillonnage stratifiée, de sélectionner un ensemble de lots selon la méthodologie choisie, d'entrer les données de validation et de visualiser les résultats. Cette section documentera les appels d'\ac{API} mise en place pour soutenir cette fonctionnalité  
 \clearpage
 \subsection{Pages de l'interface}
 Plusieurs pages ont été développées pour permettre à un analyste de visualiser, modifier les intrants et analyser les résultats de l'inventaire. Ces pages seront décrites dans cette section
@@ -395,7 +1272,7 @@ La figure \ref{fig:page-ens-reg-terr} montre l'interface qui a été complété 
 La page d'analyse de règlements permet de comparer les ensemble de règlements graphiquement. L'utilisateur peut choisir des ensembles de règlements par localisation, par date de validité ou manuellement pour comparer le nombre minimum de places requises au travers du temps et de l'espace pour la municipalité. Une fois les ensembles de règlements choisis, l'utilisateur doit choisir une utilisation du sol en cliquant sur le crayon en haut à gauche de chaque graphique. La figure \ref{fig:params-analyse-ens-reg} montre le menu d'édition des graphiques. Les limites de l'axe des X peuvent aussi être changés dans le panneau d'édition. Les règlements qui n'ont pas d'unité compatibles peuvent ensuite être éliminés de la sélection. Une fois l'utilisation du sol choisie, les ensembles de règlements qui n'ont pas des unités compatibles sont automatiquement enlevées des graphiques. La figure \ref{fig:page-analyse-reg} montre la page avec les graphiques.
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.75\linewidth]{images/AnalyseEnsRegEdition.png}
+    \includegraphics[width=1\linewidth]{images/AnalyseEnsRegEdition.png}
     \caption{Édition des paramètres d'un graphique}
     \label{fig:params-analyse-ens-reg}
 \end{figure}

@@ -1,4 +1,4 @@
-\section{Apprentissage machine}
+\section{Revue de littérature: Apprentissage machine}
   \subsection{Principe de base}
     Selon l'\ac{OQLF}\parencite{oqlf_apprentissage_2024}, la définition de l'apprentissage profond est la suivante:
     \begin{definition}
@@ -347,22 +347,3 @@
   \textcite{fritz_instance_2020} développe plusieurs estimés de segmentation d'instance pour des bâtiments à l'aide de deux modèles. Le premier est celui cité plus haut\parencite{he_mask_2018} tandis que le deuxième est un modèle de segmentation d'image modifié pour segmenter les instances \parencite{iglovikov_ternausnetv2_2018} une fois la segmentation d'image complétée
   \subsection{Algorithmes de segmentation sémantique basée sur les transformeurs}
   \subsection{Algorithmes de segmentation d'instance basés sur les transformeurs}
-  \subsection{Jeux de données disponibles à l'entrainement}
-    Deux enjeux sont critiques au succès d'un projet d'apprentissage machine. La présence d'un modèle adapté à la tâche en cours et la présence d'un jeu de données annoté qui peut être utilisé pour ajuster les poids initiaux du modèle pour permettre de modifier les poids du modèle et permettre de l'appliquer à de grands ensembles de données. Le tableau suivant résumera les jeux de données actuellement disponibles pour la segmentation sémantique en milieu urbain:
-    \begin{table}
-      \centering
-         \begin{tabular}{l p{0.2\textwidth} l p{0.3\textwidth}  p{0.2\textwidth} l} 
-          \hline
-          Nom & Origine & $N_{classes}$ & Classes pertinentes au stationnement & Point de vue\\
-          \hline
-          CNRParkEXT & \cite{amato_deep_2017} & 2 & Places occupées, places libres & Caméra de surveillance \\
-          PKLot & \cite{de_almeida_pklot_2015} & 2 & Places occupées, places libres & Caméra de surveillance \\
-          APKLot & \cite{hurst-tarrab_robust_2020} & 1 & Grappes & Imagerie satellite\\
-          Skyscapes & \cite{azimi_skyscapes_2019} & 31 & Aires pavées, aires non-pavées & Orthophotos\\
-          Grab-PkLot & \cite{yin_context-enriched_2022} & 1 & Aires de stationnement & Orthophotos\\
-          \hline
-        \end{tabular}
-        \caption{Jeux de données annotés de segmentation sémantique en milieu urbain}
-        \label{tab:jeux_donnees_segmentation_urbain}
-    \end{table}
-    \FloatBarrier

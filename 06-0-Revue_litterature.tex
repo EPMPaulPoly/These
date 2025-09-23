@@ -1,18 +1,64 @@
 \Chapter{REVUE DE LITTÉRATURE}\label{sec:RevLitt}
 Cette section aura pour but de dresser l'état des connaissances sur les politiques de stationnement, l'estimation de la capacité de stationnement, les outils d'analyse d'images satellites utilisés pour la détection automatique d'objets, les coûts associés à la provision du stationnement et les méthodes d'estimation basées sur des données géospatiales.
 
+\section{Synthèse}  
+    Le stationnement constitue une partie essentielle du système de transport et est particulièrement critique pour les automobiles qui passent 95\% du temps arrêtées \parencite{morency_identification_2015}. Ce requis terminal consomme d'importantes quantités d'espace en milieu urbain \parencite{chester_inventorying_2022} et reçoit relativement peu d'attention \parencite{shoup_high_2005,inci_review_2015} à part pour en décrier la rareté ou le prix \parencite{de_borger_political_2017}. Pourtant un corpus de littérature lie le stationnement à une possession et une utilisation accrue  de l'automobile \parencite{christiansen_parking_2017,currans_households_2023}. \par 
+    Outre les effets sur la mobilité, le stationnement contribue aux effets d'îlots de chaleur \parencite{hoehne_urban_2022} et à l'imperméabilisation des sols\parencite{arnold_jr_impervious_1996} avec d'importants effets sur la morphologie des bassins versants\parencite{shaikh_impacts_2023} avec des impacts sur la qualité de l'eau \parencite{muller_pollution_2020}. \par
+    D'autre part, la provision de ces infrastructure est mandatée par la plupart des gouvernements municipaux sans requis de tarification menant les acteurs économiques à transmettre ces coûts aux consommateurs \parencite{shoup_high_2005}. Ce mandat coûte cher et est socialisée au travers des taxes municipales et le prix des biens et services \parencite{shoup_high_2005}. Ceci se reflète par une augmentation des coûts \parencite{gabbe_hidden_2017} et une réduction du stock de logements disponible \parencite{shah_impact_2024,anderson_economics_2004,lehe_how_2018}, contraint le développement commercial favorisant une relocalisation à la périphérie \parencite{cutter_parking_2012}. De plus, en réduisant la densité de construction \parencite{shoup_high_2005,smith_low-rise_1964}, les requis de stationnement participent à détériorer la position financière des municipalités en augmentant leurs coûts \parencite{hortas-rico_does_2010,metro_vancouver_regional_planning_cost_2023} tout en réduisant leurs revenus \parencite{blanc_effects_2014}.\par
+    Plusieurs méthodes différentes ont aussi été considérées pour déterminer l'influence de la tarification sur les comportements de mobilité pour différents motifs. À l'exception de certains cas particuliers, la mise en place de tarification incite les gens à utiliser les modes durables ou actifs pour se déplacer (plutôt qu'en automobile solo) et augmente ainsi le bien-être économique\parencite{khordagui_commute_2019,olus_inan_spillover_2019}. 
+    Plusieurs modèles économiques théoriques \parencite{arnott_downtown_2009,arnott_spatial_2006} ont trouvé que le prix des stationnement est trop bas et crée des externalités de congestion qui peuvent être réduites en fixant le prix proche du prix des garages hors-rue avoisinant. Ce constant est supporté par des constats empiriques dans des juridictions où le stationnement sur rue est tarifé de cette manière \parencite{van_ommeren_empirical_2012}. Plusieurs méthodes ont été développées pour inférer les coûts de la congestion créée par le ratissage à l'aide de données de tarification \parencite{inci_external_2017,van_ommeren_novel_2021}. Le constat largement partagé est que pour limiter les coûts du ratissage, le prix du stationnement doit être proche du coût de se stationnement hors-rue.\par 
+    Concernant les méthodes d'inventaire sur-rue, la plupart des méthodes se fient à un identifiant de rue et une coordonnée linéaire de début et de fin de zone ainsi que des conventions sur un ensemble de champs qui définissent les dates, heures et types de véhicules affectés par les restrictions des panneaux \parencite{bourdeau_methodologie_2014,eros_curblr_2025}. Certaines méthodes utilisent simplement un estimé de la longueur moyenne des places de stationnement et des retraits pour certains items (bornes fontaines, arrêts de bus, etc...)\parencite{chester_parking_2015,chester_inventorying_2022,hoehne_valley_2019}. Plus récemment, \textcite{hellekes_parking_2023} a proposé une méthode de classification basé sur une fusion de segmentation d'image par \ac{AP} et d'inférence bayésienne à partir d'ortho-photographies d'une ville. En prenant de multiple images différentes, la méthodologie prédit la classe d'une zone (bâtiment, voie de circulation, stationnement) en prenant le résultat de plusieurs segmentations d'images de sources différentes. Le modèle est aidée en utilisant un masque issue d'\ac{OSM} pour ajouter de l'information à l'entrée du modèle. La segmentation d'image aériennes pour définir l'usage du sol est un domaine émergent avec les développements récents en \ac{AP} \parencite{ronneberger_u-net_2015,vaswani_attention_2017,lv_deep_2023}. \par
+    Trois grandes familles de méthodes ont émergé pour recenser les places de stationnement hors-rue. La première a émergé avec l'amélioration des méthodes d'\ac{AP}. Ces articles donnent des discutent comment identifier les places de stationnement hors-rue sans discuter de la manière de compiler des estimés à des échelles métropolitaines \parencite{hellekes_parking_2023,hurst-tarrab_robust_2020,seo_self-supervised_2009,lichtblau_classification_2019,azimi_skyscapes_2019}. La deuxième catégorie utilise des relevés manuels sur un sous-ensemble du territoire et une régression subséquente pour estimer la quantité de stationnement sur un territoire. Deux exemples principaux de ces méthodes sont \textcite{akbari_analyzing_2003,davis_estimating_2010}. La troisième méthode utilise une combinaison des requis de stationnement issus des codes d'urbanisme simplifiés et une base de données foncières pour estimer le nombre de places requises à la construction \parencite{chester_inventorying_2022,chester_parking_2015,hoehne_valley_2019}.\par
+    Quatre formats de données utilisés pour la représentation cartographique du stationnement ont été recensés. Les deux premiers sont plus focalisés sur le stationnement sur rue\parencite{eros_curblr_2025,open_mobility_foundation_curb_2024-1} tandis que les deux derniers peuvent représenter le stationnement sur rue et hors rue \parencite{organisation_internationale_de_normalisation_intelligent_2023,osm_contributors_key_2025,osm_contributors_amenity_2025}. Le tableau \ref{tab:parking-format-summary} donne un aperçu des caractéristiques des différents formats de données sur 5 dimensions: la représentation de la capacité de stationnement, la capacité de représenter des places individuelles, la représentation des restrictions, la représentation de la tarification, la représentation de la tarification et la capacité de récolter des données sur l'utilisation.
+    \newcommand{\YCHECK}{\Checkmark}
+    \newcommand{\NCHECK}{\cellcolor{red} \XSolid}
+    \newcommand{\OCHECK}[1]{\cellcolor{orange} / #1}
+    \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+    \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+    \begin{table}[h]
+        \caption{Sommaire des formats de données représentant le stationnement}
+        \label{tab:parking-format-summary}
+        \centering
+        \begin{tabular}{l|ccccc|ccccc|}
+            \hline
+            \multirow{2}{*}{\diagbox[width=4.25cm,height=2.8cm]{Format}{Dimension}}
+                & \multicolumn{5}{c}{Sur-rue} \vline
+                & \multicolumn{5}{c}{Hors-rue} \vline\\
+                 \cline{2-11}
+                & \rotatebox[origin=bl]{90}{Capacité} 
+                & \rotatebox[origin=bl]{90}{Place indiv.} 
+                & \rotatebox[origin=bl]{90}{Restriction} 
+                & \rotatebox[origin=bl]{90}{Tarification} 
+                & \rotatebox[origin=bl]{90}{Utilisation} 
+                & \rotatebox[origin=bl]{90}{Capacité}
+                & \rotatebox[origin=bl]{90}{Place indiv.} 
+                & \rotatebox[origin=bl]{90}{Restriction} 
+                & \rotatebox[origin=bl]{90}{Tarification} 
+                & \rotatebox[origin=bl]{90}{Utilisation}   \\
+            \hline
+            CurbLR              & \YCHECK & \NCHECK & \YCHECK & \YCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK \\
+            Curb Data Standard  & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK \\
+            OpenStreetMap       & \OCHECK{} & \OCHECK{} & \YCHECK & \OCHECK{} & \NCHECK & \YCHECK & \YCHECK & \OCHECK{} & \OCHECK{} & \NCHECK\\
+            ISO 5206            & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK &\YCHECK \\
+            % Add more rows as needed
+            \hline
+        \end{tabular}
+        
+    \end{table}
+
 \section{Typologie de stationnement}\label{sec:typologie_stationnement}
   \textcite{morency_stationnement_2017} détaillent des typologies de stationnement hors rue et sur rue pour la région métropolitaine de Montréal. Elles sont montrées aux figures \ref{fig:Typo_Stat_hors_rue} et \ref{fig:Typo_Stat_sur_rue}
   \begin{figure}[ht]
       \centering
-      \includegraphics[width=1.0\textwidth]{dia/Typologie_Stationnement_hors_rue.png}
+      \includegraphics[width=0.9\textwidth]{dia/Typologie_Stationnement_hors_rue.png}
       \caption{Typologie de stationnement hors rue. Source: \cite{morency_stationnement_2017}}
       \label{fig:Typo_Stat_hors_rue}
   \end{figure}
   \begin{figure}[ht]
       \centering
-      \includegraphics[width=1.0\textwidth]{dia/Typologie_Stationnement_sur_rue.png}
+      \includegraphics[width=0.9\textwidth]{dia/Typologie_Stationnement_sur_rue.png}
       \caption{Typologie de stationnement sur rue. Source: \cite{morency_stationnement_2017}}
       \label{fig:Typo_Stat_sur_rue}
   \end{figure}
   Il est important de noter qu'il n'existe pas, à la connaissance de l'auteur, un inventaire tel que celui complété par le ministère des Transports pour la ville de Montréal \parencite{consortium_cima_-_daniel_arbour_et_associes_inventaire_1998}. D'autre part, cet inventaire n'est pas mis à jour et n'est pas en accès libre.
+

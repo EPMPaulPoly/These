@@ -88,16 +88,16 @@
                                     {-1em}%
                                     {\normalfont\normalsize\bfseries}}
 
-\long\def\@makecaption#1#2{%
-  \vskip\abovecaptionskip
-  \sbox\@tempboxa{#1 #2}%
-  \ifdim \wd\@tempboxa >\hsize
-    #1 #2\par
-  \else
-    \global \@minipagefalse
-    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-  \fi
-  \vskip\belowcaptionskip}
+%\long\def\@makecaption#1#2{%
+%  \vskip\abovecaptionskip
+%  \sbox\@tempboxa{#1 #2}%
+%  \ifdim \wd\@tempboxa >\hsize
+%    #1 #2\par
+%  \else
+%    \global \@minipagefalse
+%    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+%  \fi
+%  \vskip\belowcaptionskip}
 
 
 % Définition de \caption pour inclure le mot FIGURE ou TABLEAU.

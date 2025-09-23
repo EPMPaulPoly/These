@@ -14,6 +14,168 @@
 %%  All annexes must be included in this document one after the other.
 \Annexe{Requêtes SQL pertinentes}
 Cette section détaillera certaines requêtes qui n'ont pas été listées dans le texte principal du mémoire, mais qui sont pertinentes.
+\section{Sélection d'entrées du rôle foncier lors d'un calcul par quartier d'analyse}\label{sec:annex-select-tax-data}
+\begin{lstlisting}[language=SQL, caption=Requête 1 dans tax\_database\_for\_analysis\_territory]
+SELECT 
+    points.* 
+FROM 
+    public.role_foncier AS points,
+    public.secteurs_analyse AS polygons 
+WHERE 
+    ST_Within(
+        points.geometry,
+        (SELECT 
+            polygons.geometry 
+        WHERE polygons.id_periode_geo = id_quartier_fourni
+        )
+    )\end{lstlisting}
+    Il est ensuite possible de lister les identifiants provinciaux uniques qui ont été sélectionnés et de trouver les lots associés. Cette opération est faite dans Python avant de lancer une deuxième requête listée ci-dessous.
+    \begin{lstlisting}[language=SQL, caption=Requête 2 dans tax\_database\_for\_analysis\_territory]
+SELECT 
+    *
+FROM
+    public.association_cadastre_role
+WHERE 
+    id_provinc IN (LISTE FOURNIE)\end{lstlisting}
+    La table issue de la requête ci-dessus est gardée en mémoire. Les identifiants de lots uniques issus de cette requête sont ensuite utilisés comme intrants dans la requête suivante:
+        
+        
+    \begin{lstlisting}[language=SQL, caption=Requête 3 dans tax\_database\_for\_analysis\_territory]
+SELECT 
+    * 
+FROM 
+    public.cadastre
+WHERE 
+    g_no_lot IN (LISTE DE LOTS)\end{lstlisting}
+    Ces trois tables forment l'ensemble de données foncières (TaxDataset) pour le calcul en cours.
+
+\section{Assignation des ensembles de règlements aux entrées du rôle à l'intérieur du quartier}\label{sec:annex-assign-rule-to-role}
+\begin{lstlisting}[language=SQL, caption=Sélection des territoires touchant au rôle foncier]
+WITH unioned_geometry AS (
+    SELECT 
+        ST_Union(geometry) AS geom 
+    FROM 
+        public.role_foncier 
+    WHERE 
+        (id_provinc IN (LISTE ID_PROVINCIAUX))
+    )
+SELECT 
+    territories.* 
+FROM 
+    public.cartographie_secteurs AS territories, unioned_geometry 
+WHERE 
+    (ST_Intersects(territories.geometry,unioned_geometry.geom))
+\end{lstlisting}
+
+\begin{lstlisting}[language=python, caption= Ligne de code Python pour extraire les territoires pertinents]
+relevant_territory_ids = relevant_territories[id_periode_geo].unique().tolist()
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption=Sélection des associations d'ensembles de règlements aux territoires]
+SELECT * 
+FROM 
+    public.association_er_territoire
+WHERE 
+    id_periode_geo IN (LISTE DE TERRITOIRES TRANSMISE)\end{lstlisting}
+\begin{lstlisting}[language=SQL, caption=Sélection des territoires pertinents]
+SELECT *
+FROM 
+    public.cartographie_secteurs
+WHERE
+    id_periode_geo IN (LISTE DE TERRITOIRES TRANSMISE)\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption=Sélection des entêtes d'ensembles de règlemements]
+SELECT 
+    *
+FROM
+    public.historique_geopol
+\end{lstlisting}        
+
+\begin{lstlisting}[language=Python, caption=Coeur de la boucle pour créer la liste de RST, label=lst:RST_list_create] 
+ # get the regset id to pull
+reg_set_to_get = association[id_er]
+# get the relevant territory id
+relevant_territory_id = association[id_periode_geo]
+# get actual territory in full
+relevant_territory = territories.loc[territories[id_periode_geo]==relevant_territory_id]
+# pull territory start and end year
+start_year_terr = history.loc[history[id_periode] == relevant_territory[id_periode].values[0],annee_debut_periode].values[0]
+end_year_terr = history.loc[history[id_periode] == relevant_territory[id_periode].values[0],annee_fin_periode].values[0]
+# get the reg set and years
+reg_set:PRS.ParkingRegulationSet = PRS.from_sql(int(reg_set_to_get),con=con)[0]
+start_year_regset = reg_set.start_date
+end_year_regset = reg_set.end_date
+# put the dates into coherence
+if start_year_terr is None and start_year_regset is None:
+    start_year_RST = None
+elif start_year_terr is None:
+    start_year_RST = start_year_regset
+elif start_year_regset is None:
+    start_year_RST = start_year_terr
+else:
+    start_year_RST = max(start_year_terr,start_year_regset)
+
+if (end_year_terr is None or np.isnan(end_year_terr)) and (end_year_regset is None or np.isnan(end_year_regset)):
+    end_year_RST = None
+elif (end_year_terr is None or np.isnan(end_year_terr)):
+    end_year_RST = end_year_regset
+elif  (end_year_regset is None or np.isnan(end_year_regset)) :
+    end_year_RST = end_year_terr
+else:
+    end_year_RST = min(end_year_terr,end_year_regset)
+RST_to_append = RegSetTerritory(relevant_territory,reg_set,start_year_RST,end_year_RST,association[id_assoc_er_ter])
+RST_list_to_return.append(RST_to_append)   
+\end{lstlisting}
+\section{Assignation des données foncières aux RST}
+La section suivant donnera un aperçu du code requis pour assigner les données foncières aux différents \ac{RST}.
+\begin{lstlisting}[language=Python, caption=Procédure d'assignation du rôle foncier aux RST,label=lst:assign_tax_data]
+tax_dataset_match = []
+for rst_to_filter_by in relevant_rsts:
+    filtered_tax_dataset = tax_data.year_filter(rst_to_filter_by.start_year,rst_to_filter_by.end_year).territory_filter(rst_to_filter_by.territory_info)
+    tax_dataset_match.append(filtered_tax_dataset)
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption=Méthode year\_filter, label=lst:year_filter]
+def year_filter(self,start_year=None,end_year=None):
+    '''# year_filter
+    Returns a tax dataset within a year set
+    ## Inputs
+        - start_year: start year of filter
+        - end_year : end year of filter
+    ## Outputs
+        - TaxDataSet'''
+    if start_year is None and end_year is None:
+        raise ValueError
+    elif start_year is None:
+        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table[rl0307a]<= end_year))]
+    elif end_year is None:
+        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table[rl0307a]>= start_year))]
+    else:
+        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table[rl0307a]>= start_year) & (self.tax_table[rl0307a]<= end_year))].copy()
+    
+    tax_ids = new_tax_table[id_provinc].unique().tolist()
+    
+    new_association_table:pd.DataFrame = self.lot_association.loc[self.lot_association[id_provinc].isin(tax_ids)].copy()
+    
+    lot_ids = new_association_table[g_no_lot].unique().tolist()
+    
+    new_lot_table:gpd.GeoDataFrame = self.lot_table.loc[self.lot_table[g_no_lot].isin(lot_ids)].copy()
+    
+    new_tax_data = TaxDataset(new_tax_table,new_association_table,new_lot_table)
+    
+    return new_tax_data
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=Python, caption= fonction territory\_filter, label=lst:territory_filter]
+new_tax_table = self.tax_table.clip(territory).copy()
+tax_ids = new_tax_table[id_provinc].unique().tolist()
+new_association_table = self.lot_association.loc[self.lot_association[id_provinc].isin(tax_ids)].copy()
+lot_ids = new_association_table[g_no_lot].unique().tolist()
+new_lot_table = self.lot_table.loc[self.lot_table[g_no_lot].isin(lot_ids)].copy()
+tax_data_to_out = TaxDataset(new_tax_table,new_association_table,new_lot_table)
+return tax_data_to_out
+\end{lstlisting}
 \section{Identification lots problématiques}\label{sec:annexe_identification_lots_problématiques}
 Du fait de problèmes de complétude des données du rôle foncier, il est potentiellement nécessaire d'aider l'analyste à identifier des lots qui doivent potentiellement être revisités.
 \begin{lstlisting}
@@ -357,7 +519,7 @@ Certaines valeurs foncières sont agrégées pour donner une indication du degr�
 \end{lstlisting}
 
 \section{Parts modales}\label{sec:annexe_parts_modales}
-Cette section va donner la requête SQL qui compile les différentes parts modales définies dans la section \label{sec:meth_analyse}. 
+Cette section va donner la requête SQL qui compile les différentes parts modales définies dans la section \ref{sec:meth_analyse}. 
 \begin{lstlisting}
     DELETE FROM parts_modales;
     INSERT INTO parts_modales(id_quartier,ac_res,ap_res,tc_res,mv_res,bs_res,ac_ori,ap_ori,tc_ori,mv_ori,bs_ori,ac_des,ap_des,tc_des,mv_des,bs_des,ac_int,ap_int,tc_int,mv_int,bs_int)
