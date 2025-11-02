@@ -47,6 +47,7 @@
   \acro{5D}{Design, Densité, Diversité, Distance au TC, Accessibilité aux destinations}
   \acro{OBNL}{Organisme à But Non Lucratif}
   \acro{CDS}{Curb Data Specification}
+  \acro{GLM}{Generalized Linear Model ou Modèle Linéaire Généralisé}
 \end{acronym}
 %
 \begin{longtable}{lp{5in}}
@@ -60,6 +61,7 @@ CDS     & Curb Data Standard                                                    
 CNN		& Convolutionnal Neural Networks                                                \\
 OSM     & OpenStreetMap                                                                 \\
 ISO     & Orgnanisation Internationale de Normalisation                                 \\
+GLM     & Generalized Linear Model ou Modèle Linéaire Généralisé                        \\
 ITE     & Institute of Transportation Engineers                                         \\
 TC      & Transport en Commun                                                           \\
 PLUTO   & Primary Land Use Tax Lot Output                                               \\
@@ -88,9 +90,11 @@ $F_{men}$ & Facteur de pondération ménage dans l'enquête OD                  
 $v_{men}$ & Nombre de véhicules d'un ménage dans l'enquête OD                           \\
 $T_{men}$ & Variable binaire qui indique la première entrée d'un ménage dans la table de déplacements de l'enquête OD \\
 $F_{per}$ & Facteur de pondération d'une personne dans l'enquête OD                     \\
+$F_{dep}$ & Facteur de pondération d'un déplacement dans l'enquête OD\\
 $T_{per}$ & Variable binaire qui indique la première entrée d'une personne dans la table de déplacements de l'enquête OD\\
 $PP_{per}$ & Variable catégorielle dénotant la possession du permis de conduire: 1 = Oui, 2 = Non, 3= Refus/NSP, 4=Non applicable\\
 $M_{dep}$ & Variable catégorielle pour le mode du déplacement 1 = Auto-Conducteur, 2 = Auto-Passager, 5 = Vélo, 6 = TC, 7=Bus Scolaire, 13= À pied, 14= Traversier avec véhicule, 15 = Traversier sans véhicule\\
+$m_{dep}$ & Variable catégorielle pour le motif du déplacement 1=Travail au lieu habituel, 2=Travail lieu autre, 3=Sur la route pour le travail, 4=Études, 5=Magasinage, 6=Restaurant, 7=Loisirs, 8=Visite amis, 9=Santé, 10=Reconduire quelqu'un, 11=Aller chercher quelqu'un, 12=Retour au domicile, 13=Autre, 14=NSP \\
 $H$ & Heure de départ d'un déplacement de l'enquête OD \\ 
 $X_{ori}$ & Longitude de l'origine d'un déplacement dans l'enquête OD \\
 $Y_{ori}$ & Latitude de l'origine d'un déplacement dans l'enquête OD\\
@@ -108,7 +112,7 @@ $PT_{q}$ & Nombre de détenteurs de permis de conduire pour le quartier q\\
 $V_q$ & Nombre de véhicule pour le quartier q\\
 $S_q$ & Nombre de places de stationnement du quartier q\\
 $I_q$ & Nombre de places de stationnement inutilisées du quartier q\\
-$A_{I,q}$ Superficie de stationnement inutilisée du quartier q \\
+$A_{I,q}$ &Superficie de stationnement inutilisée du quartier q \\
 $s_l$ & Nombre de places de stationnement d'un lot\\
 $G_l$ & Géométrie d'un lot cadastral \\
 $G_q$ & Géométrie d'un quartier\\

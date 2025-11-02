@@ -24,55 +24,11 @@
                 Limites géographiques municipales  & Polygones & Limites municipales du Québec en 1965, 1972, 1980, 1985, 1988, 1992, 2001, 2008 & Élections Québec & 24 Juillet 2025 \\
                 \hline
             \end{tabular}
-            
             \end{table}
         \end{landscape}
-        
+        Les données foncières sont un des éléments principaux utilisés pour déterminer la capacité de stationnement. La principale information de cette donnée est reliée à la valeur du terrain mais certaines informations physiques(superficie, date de construction, superficie d'étages) sont aussi disponibles pour la plupart des entrées. Les données ne sont pas nécessairement en lien 1-à-1 avec le cadastre requérant quelques manipulations et hypothèses pour associer les données du rôle au cadastre. Leurs attributs utiles dans le cadre de cette étude sont données dans le tableau \ref{tab:definition_role_foncier}. Un dictionnaire complet des données est mis à disposition par le gouvernement \parencite{gouvernement_du_quebec_rodevaluation_2024}.
         \subsection{Enquête OD}
-        L'enquête Origine-Destination est une enquête de transport descriptive caractérisant les habitudes de déplacement des Québecois. L'enquête est commandée par le \ac{MTMD} ou l'\ac{ARTM} dans la région de Montréal. Dans le cadre de ce mémoire, les données ont été obtenues auprès de la Chaire Mobilité pour la région de Québec pour complémenter l'inventaire de stationnement et pour permettre de calculer certains indicateurs. \textcite{ministere_des_transports_et_de_la_mobilite_durable_mobilite_2019} donne un aperçu de la stratégie d’échantillonnage et des principaux constats et \textcite{ministere_des_transports_et_de_la_mobilite_durable_enquete_2017} donne les définitions des différents champs. Le fichier donne un relevé des déplacements de tous les membres des ménages enquêtés. Les résultats sont pondérés en se basant sur les données du recensement pour assurer la représentativité de l'échantillon. Les caractéristiques de ménages et des personnes doivent être pondérées de manière différente. Les données O-D sont principalement utilisées pour estimer le parc de véhicules et sont la base des profils d'accumulation véhicules, des taux d'occupation. Le tableau \ref{tab:data-enquete-od} donne un aperçu des principales variables du fichier plat qui sont pertinentes à ces évaluations.
+        L'enquête Origine-Destination est une enquête de transport descriptive caractérisant les habitudes de déplacement des Québecois. L'enquête est commandée par le \ac{MTMD} ou l'\ac{ARTM} dans la région de Montréal. Dans le cadre de ce mémoire, les données ont été obtenues auprès de la Chaire Mobilité pour la région de Québec pour complémenter l'inventaire de stationnement et pour permettre de calculer certains indicateurs. \textcite{ministere_des_transports_et_de_la_mobilite_durable_mobilite_2019} donne un aperçu de la stratégie d’échantillonnage et des principaux constats et \textcite{ministere_des_transports_et_de_la_mobilite_durable_enquete_2017} donne les définitions des différents champs. Le fichier donne un relevé des déplacements de tous les membres des ménages enquêtés. Les résultats sont pondérés en se basant sur les données du recensement pour assurer la représentativité de l'échantillon. Les caractéristiques de ménages et des personnes doivent être pondérées de manière différente. Les données O-D sont principalement utilisées pour estimer le parc de véhicules et sont la base des profils d'accumulation véhicules, des taux d'occupation. La section \ref{ssec:ana-data-struct} donne les détails des données utilisées et comment elle sont entreposées dans l'interface. 
         \subsection{Recensement}
-        Les données du recensement sont récoltées par Statistique Canada pour donner un portrait de la population du Canada  \parencite{statistique_canada_guide_2021} sur un ensemble de sujets comme le lieu de naissance, le lieu de résidence , le lieu et le type de travail, le niveau de scolarisation et les limitations physiques. Les données sont agrégées à différents échelles spatiales. Dans le cadre de ce mémoire, les données de population ont été utilisées au niveau des aires de diffusion pour trouver la population des quartiers d'analyse. Les limites de la géographie du recensement sont disponibles en ligne \parencite{statistique_canada_fichier_2021} et les données ont été téléchargées à partir de CHASS \parencite{university_of_toronto_chass_canadian_2024}. Il est important de noter que ces données pourraient être obtenues directement du site web de Statistique Canada au besoin \parencite{statistique_canada_telechargements_2022} si un utilisateur n'avait pas accès à CHASS. Les aires de diffusions représentent des aires entre 0 et 5000 habitants dans la région de Québec.
-        \begin{landscape}
-            \begin{table}[!h]
-                \caption{Description des données d'enquête OD pertinentes}
-                \label{tab:data-enquete-od}
-                \centering
-                \begin{tabular}{lll}
-                    \hline
-                    Nom de variable & Description & Type ou valeurs possibles \\
-                    \hline
-                    ipere & Identifiant unique de déplacement & Entier\\
-                    tlog & Première ligne d'un logis si vraie & Booléen \\
-                    tper & Première ligne d'une personne si vraie & Booléen \\
-                    facper & Facteur de pondération d'une personne & Double \\
-                    facmen & Facteur de pondération du ménage & Double \\
-                    facdep & Facteur de pondération de déplacement & Double\\
-                    heure & Heure de départ du déplacement & Entier entre 4 et 28\\
-                    mode1 & Premier mode emprunté & \makecell[l]{1 - Auto-conducteur \\
-                                                                 2 - Auto-passager  \\
-                                                                 3 - Taxi \\
-                                                                 4 - Moto ou scooter \\
-                                                                 5 - Vélo \\
-                                                                 6 - Autobus RTC ou STL \\
-                                                                 7 - Autobus scolaire\\
-                                                                 8 - Autre autobus \\
-                                                                 9 - Transport Adapté \\
-                                                                 10 - Bus interurbain\\
-                                                                 11 - Train VIA Rail \\
-                                                                 12 - Avion \\
-                                                                 13 - À pied\\ 
-                                                                 14 - Traversier (avec véhicule) \\
-                                                                 15 - Traversier (sans véhicule)\\
-                                                                 16 - Autres\\
-                                                                 17 - Refus / Ne sait pas}\\
-                     mode2 & Deuxième mode emprunté & Voir mode1\\
-                     stat & Type de stationnement & \makecell[l]{1 - Gratuit, sur rue ou hors rue, public ou privé \\
-                                                                 2 - Fourni par l'employeur \\
-                                                                 3 - Payant\\
-                                                                 4 - Refus / Ne sait pas}\\
-                    nbveh & Nombre de véhicules du ménage & Entier \\
-                    \hline
-                \end{tabular}
-                
-            \end{table}
-        \end{landscape}
+        Les données du recensement sont récoltées par Statistique Canada pour donner un portrait de la population du Canada  \parencite{statistique_canada_guide_2021} sur un ensemble de sujets comme le lieu de naissance, le lieu de résidence , le lieu et le type de travail, le niveau de scolarisation et les limitations physiques. Les données sont agrégées à différents échelles spatiales. Dans le cadre de ce mémoire, les données de population ont été utilisées au niveau des aires de diffusion pour trouver la population des quartiers d'analyse. Les limites de la géographie du recensement sont disponibles en ligne \parencite{statistique_canada_fichier_2021} et les données ont été téléchargées à partir de CHASS \parencite{university_of_toronto_chass_canadian_2024}. Il est important de noter que ces données pourraient être obtenues directement du site web de Statistique Canada au besoin \parencite{statistique_canada_telechargements_2022} si un utilisateur n'avait pas accès à CHASS. Les aires de diffusions représentent des aires entre 0 et 5000 habitants dans la région de Québec. Les détails des données et comment elles sont entreposées sont données à la section \ref{ssec:ana-data-struct}
+        

@@ -1,0 +1,93 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber,language=french]{biblatex}
+\DeclareLanguageMapping{french}{french-apa}
+
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
+\DeclareDelimFormat[bib]{finalnamedelim}{
+    \ifthenelse{\value{listcount}>\maxprtauth}
+    {}
+    {\ifthenelse{\ifcurrentname{groupauthor}\AND%
+            \value{liststop}=2}
+        {\addspace\bibstring{and}\space}
+        {\finalandcomma\addspace\bibstring{and}\space}
+    }
+}
+\addbibresource{Maitrise_Recherche.bib}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{tikzpicture}
+    \tikzstyle{classe} = [rectangle, rounded corners, text width = 2cm, text centered, draw=black, fill=blue!30]
+    \tikzstyle{propriete} = [rectangle, rounded corners, text width = 2cm, text centered, draw=black, fill=green!30]
+    % Eligibilité
+    \node (eligibilite) [classe] {Eligibilité};
+    % Table de taux
+    \node (table-de-taux) [classe,right of=eligibilite,xshift=1.75cm] {Table\\Taux};
+    \draw (eligibilite.east) -- (table-de-taux.west);
+    \node (info) [propriete,below of=table-de-taux,xshift=0.3cm,yshift=-0.2cm] {URL Info};
+    \draw (info.west) -| ++(-0.1,0.1)|-([yshift=0cm]table-de-taux.south);
+    \node (disponibilite) [propriete,below of=info,yshift=-0.6cm] {Dispo: \\ Privé \\Public \\Restreint};
+    \draw (disponibilite.west) -| ++(-0.1,0.1)|-(info.west);
+    \node (responsable)[propriete,below of=disponibilite,yshift=-0.8cm] {Respon-\\sable};
+    \draw (responsable.west) -| ++(-0.1,0.1)|-(disponibilite.west);
+    \node (type) [propriete,below of=responsable,yshift=-1cm]{Type:\\ Horaire \\ Journée \\Évènement \\Contrat};
+    \draw (type.west) -| ++(-0.1,0.1)|-(responsable.west);
+    % Collection Ligne taux
+    \node (collection-ligne-taux) [classe, right of=table-de-taux,xshift=1.75cm] {Collection\\Lignes\\Taux};
+    \draw (collection-ligne-taux.west) -- (table-de-taux.east);
+    \node (monnaie) [propriete,below of=collection-ligne-taux,xshift=0.3cm,yshift=-0.2cm]{Devise};
+    \draw (monnaie.west) -| ++(-0.1,0.1)|-([yshift=0cm]collection-ligne-taux.south);
+    \node (validite-tarif) [propriete, below of=monnaie,yshift=-0.1cm] {Période validité};
+    \draw (validite-tarif.west) -| ++(-0.1,0.1) |- (monnaie.west);
+    \node (duree-min-max) [propriete,below of=validite-tarif,yshift=-0.3cm] {Durée min. max.};
+    \draw (duree-min-max.west) -| ++(-0.1,0.1) |- (validite-tarif.west);
+    \node (cout-min-max) [propriete,below of=duree-min-max,yshift=-0.3cm] {Coût min. max.};
+    \draw (cout-min-max.west) -| ++(-0.1,0.1) |- (duree-min-max.west);
+    \node (taxation) [propriete,below of=cout-min-max,yshift=-0.3cm] {Taux ou valeur taxe};
+    \draw (taxation.west) -| ++(-0.1,0.1) |- (cout-min-max.west);
+    \node (sequence)[propriete,below of=taxation,yshift=-0.6cm]{Séquence de la collection};
+    \draw (sequence.west) -| ++(-0.1,0.1) |- (taxation.west);
+    \node (heure-raz)[propriete,below of=sequence,yshift=-0.8cm]{Heure remise à zéro};
+    \draw (heure-raz.west) -| ++(-0.1,0.1) |- (sequence.west);
+    \node (reference-heure)[propriete, below of=heure-raz,yshift=-1cm]{Référence Heure: UTC \\ Évènement};
+    \draw (reference-heure.west) -| ++(-0.1,0.1) |- (heure-raz.west);
+    % Ligne taux
+    \node (ligne-taux) [classe,right of=collection-ligne-taux,xshift=1.75cm] {Ligne \\ Taux};
+    \draw (ligne-taux.west) -- (collection-ligne-taux.east);
+    \node (rate-duree-min-max) [propriete,below of=ligne-taux,xshift=0.3cm,yshift=-0.5cm] {Début / fin période};
+    \draw (rate-duree-min-max.west) -| ++(-0.1,0.1)|-([yshift=0cm]ligne-taux.south);
+    \node (rate-value-min-max) [propriete,below of=rate-duree-min-max,yshift=-0.4cm]{Paiement début / fin};
+    \draw (rate-value-min-max.west) -| ++(-0.1,0.1)|-(rate-duree-min-max.west);
+    \node (valeur) [propriete,below of=rate-value-min-max,yshift=-.6cm] {Paiement (valeur unique)};
+    \draw (valeur.west) -| ++(-0.1,0.1) |- (rate-value-min-max.west);
+    \node (periode-increment) [propriete, below of=valeur, yshift=-1cm] {Durée d'incrément valeur};
+    \draw (periode-increment.west) -| ++(-0.1,0.1) |- (valeur.west);
+    \node (type-rate-line) [propriete, below of=periode-increment,yshift=-0.5cm] {Type ligne};
+    \draw (type-rate-line.west) -| ++(-0.1,0.1) |- (periode-increment.west);
+    \node (condition-rate-line) [propriete, below of=type-rate-line] {Condition taux};
+    \draw (condition-rate-line.west) -| ++(-0.1,0.1) |- (type-rate-line.west);
+    \node (sequence-rate-line) [propriete, below of=condition-rate-line] {Séquence};
+    \draw (sequence-rate-line.west) -| ++(-0.1,0.1) |- (condition-rate-line.west);
+    % Surtaxe
+    \node (surtaxe) [classe, right of=ligne-taux,xshift=2cm,yshift=2cm] {Surtaxe};
+    \draw (ligne-taux.east) -| ++(0.5,0.1) |- (surtaxe.west);
+    \node (valeur-taux-surtaxe) [propriete, right of=surtaxe,xshift=2cm] {Valeur ou taux surtaxe};
+    \draw (surtaxe.east) -- (valeur-taux-surtaxe.west);
+    % Taxe
+    \node (taxe) [classe, right of=ligne-taux,xshift=2cm] {Taxe\\Ligne\\Taux};
+    \draw (ligne-taux.east) -- (taxe.west);
+    \node (taxe-incluse) [propriete, right of=taxe,xshift=2cm,yshift=0.5cm] {Taxe incluse ?};
+    \draw (taxe.east) -| ++(0.35,0.1) |-(taxe-incluse.west);
+    \node (valeur-taxe) [propriete,below of=taxe-incluse, yshift=-0.2cm]{Valeur ou taux taxe};
+    \draw (taxe.east) -| ++(0.35,-0.1) |-(valeur-taxe.west);
+    % UNite
+    \node (info-unite) [classe, right of=ligne-taux,xshift=2cm,yshift=-2cm] {InfoUnite};
+    \draw (ligne-taux.east) -| ++(0.5,-0.1) |- (info-unite.west);
+    \node (substance) [propriete, right of=info-unite,xshift=2cm] {Unité livraison};
+    \draw (info-unite.east)--(substance.west);
+\end{tikzpicture}
+\end{document}

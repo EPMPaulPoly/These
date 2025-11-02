@@ -1,0 +1,101 @@
+
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+
+    \begin{tikzpicture}
+        \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
+        \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=2.5cm]
+        \tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30,text width=3cm]
+        \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
+        \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
+        \tikzstyle{arrow} = [thick,->,>=stealth]
+        % Nodes de flowchart
+        \node (start) [startstop] {Début};
+        \node (select_tax_data) [process, below of=start,yshift=-0.25cm] {Obtention rôle}; 
+        \node (in1) [io, left of=select_tax_data, xshift=-3cm] {Quartier ou lot à calculer};
+        \node (tax_data) [io, right of=select_tax_data, xshift=3cm] {Rôle foncier et cadastre};
+        \node (select_municipalities) [process, below of=select_tax_data,yshift=-0.35cm] {Obtention secteurs municipaux};
+        \node (municipalities) [io, left of=select_municipalities, xshift=-3cm] {Historique géopolitique};
+        \node (select_reg_sets) [process, below of=select_municipalities,yshift=-0.05cm] {Obtention RST};
+        \node (reg_sets) [io, right of=select_reg_sets, xshift=3cm] {Ensembles Règlements};
+        \node (select_regs) [process, below of=select_reg_sets,yshift=-0.05cm] {Obtention Règlements};
+        \node (regs)[io, left of=select_regs, xshift=-3cm] {Règlements};
+        \node (segment) [process, below of=select_regs,yshift=-0.15cm] {Association TD-RST};
+        \node (select_RST) [process, below of=segment, yshift=-0.5cm] {Sél. prochain RST-TD};
+        
+        \node (conver_data) [process, left of=select_RST,xshift=-4cm] {Conversion d'unités};
+        \node (select_data) [process, below of=conver_data,yshift=-1cm] {Sél. prochain: PR + TD};
+        \node (calcul_minimum) [process,below of=select_data,yshift=-.6cm] {Sél. ss-ensemble};
+        \node (calcul_ss_ensemble) [process,below of=calcul_minimum,yshift=-0.6cm] {Calcul sous-ensembles};
+        \node (complete_subset) [decision,below of=calcul_ss_ensemble,yshift=-0.5cm] {Complet};
+        \node (resolution_ss_ensemble) [process,below of=complete_subset,yshift=-1.2cm] {Choix estimé sous-ensemble};
+        \node (complete_rule) [decision,below of=resolution_ss_ensemble,yshift=-0.75cm] {Complet};
+        \node (complete_RST) [decision,right of=complete_rule,xshift=4cm] {Complet};
+        \node (agregation) [process,left of=complete_RST,xshift=5cm]{Agrégation estimés par lot};
+        \node (save) [process,above of=agregation,yshift=0.45cm] {Envoi vers front-end};
+        \node (end) [startstop,above of=save, yshift=1.25cm] {Fin};
+        \draw[red,thick,dotted] ($(select_tax_data.north west) + (-0.2,0.2)$) rectangle($(select_tax_data.south east) + (0.2,-0.2)$);
+        \node[above right, text=red] at ($(select_tax_data.north east) + (0.2,0.2)$) {tax\_database\_for\_analysis\_territory};
+        \draw[blue,thick,dotted] ($(select_municipalities.north west) + (-0.2,0.2)$) rectangle($(segment.south east) + (0.2,-0.2)$);
+        \node[below right, text=blue] at ($(segment.south east) + (0.2,1)$) {get\_rst\_by\_tax\_data};
+        \draw[orange,thick,dotted] ($(select_data.north west) + (-2.25,0.75)$) rectangle($(complete_RST.south east) + (1.0,-0.5)$);
+        \node[below left, text=orange] at ($(complete_RST.south east) + (1.0,-0.5)$) {calculate\_parking\_for\_reg\_set\_territories};
+        \draw[green,thick,dotted] ($(select_data.north west) + (-2,0.25)$) rectangle($(complete_rule.south east) + (2.5,-0.4)$);
+        \node[above right, text=green] at ($(select_data.north west) + (-2,0.25)$) {calculate\_parking\_specific\_reg\_set};
+        \draw[cyan,thick,dotted] ($(calcul_minimum.north west) + (-0.5,0.25)$) rectangle($(resolution_ss_ensemble.south east) + (1,-0.4)$);
+        \node[above right, text=cyan] at ($(calcul_minimum.north west) + (-0.5,0.25)$) {calculate\_inventory\_from\_inputs\_class};
+        \draw[magenta,thick,dotted] ($(resolution_ss_ensemble.north west) + (-0.25,0.25)$) rectangle($(resolution_ss_ensemble.south east) + (0.25,-0.25)$);
+        \node[above right, text=magenta] at ($(resolution_ss_ensemble.north west) + (-0.25,0.25)$) {subset\_operation};
+        \draw[teal,thick,dotted] ($(calcul_ss_ensemble.north west) + (-0.25,0.25)$) rectangle($(calcul_ss_ensemble.south east) + (0.25,-0.25)$);
+        \node[above right, text=teal] at ($(calcul_ss_ensemble.north west) + (-0.75,0.25)$) {calculate\_parking\_subset\_from\_inputs\_class};
+        \draw[violet,thick,dotted] ($(agregation.north west) + (-0.25,0.25)$) rectangle($(agregation.south east) + (0.25,-0.25)$);
+        \node[below right, text=violet,text width = 5cm] at ($(agregation.south west) + (-0.25,-0.25)$) {dissolve\_list + inventory\_duplicates\_agg\_function};
+        \draw [olive, thick,dotted]($(conver_data.north west) + (-0.25,0.25)$) rectangle ($(conver_data.south east)+ (0.25,-0.25)$);
+        \node[below right, text=olive, text width=5cm,anchor=south] at ($(conver_data.north) +(0,0.25)$){generate\_input\_from\_PRS\_TD};
+        \draw [arrow] (start) -- (select_tax_data);
+        \draw [arrow] (in1) -- (select_tax_data);
+        \draw [arrow] (tax_data) -- (select_tax_data);
+        \draw [arrow] (select_tax_data) -- (select_municipalities);
+        \draw [arrow] (municipalities) -- (select_municipalities);
+        \draw [arrow] (select_municipalities) -- (select_reg_sets);
+        \draw [arrow] (reg_sets) -- (select_reg_sets);
+        \draw [arrow] (select_reg_sets) -- (select_regs);
+        \draw [arrow] (regs) -- (select_regs);
+        \draw [arrow] (select_regs) -- (segment);
+        \draw [arrow] (segment) -- (select_RST);
+        \draw [arrow] (select_RST) -- (conver_data);
+        \draw [arrow] (conver_data) -- (select_data);
+        \draw [arrow] (select_data) -- (calcul_minimum);
+        \draw [arrow] (calcul_minimum) -- (calcul_ss_ensemble);
+        \draw [arrow] (calcul_ss_ensemble) -- (complete_subset);
+        \draw [arrow] (complete_subset.east) -| ++(0.5,1.5)  node[anchor=west] {Non} |- (calcul_minimum.east);
+        \draw [arrow] (complete_subset.south) -- ++(0,-0.15)  node[anchor=west] {Oui} -- (resolution_ss_ensemble.north);
+        \draw [arrow] (resolution_ss_ensemble) -- (complete_rule);
+        \draw [arrow] (complete_rule.west) -| ++(-1.0,1.5)  node[anchor=east] {Non} |- (select_data.west);
+        \draw [arrow] (complete_rule.east) -- ++(0.5,0)  node[anchor=south] {Oui} -- (complete_RST.west);
+        \draw [arrow] (complete_RST.east) -- ++(0.25,0) node[anchor=north] {Oui} -- (agregation.west);
+        \draw [arrow] (complete_RST.north) |- ++(0,0.75)  node[anchor=east] {Non} -| (select_RST.south);
+        \draw [arrow] (agregation) -- (save);
+        \draw [arrow] (save) -- (end);
+        % Légende
+        \node (legend) [right of=select_RST,xshift=3.5cm,yshift=0.5cm]{\textbf{Légende}};
+        \node (deb_def) [startstop,below of=legend]{Début / Fin};
+        \node (pro_def) [process, below of=deb_def]{Processus};
+        \node (dec_def) [decision, below of=pro_def,yshift=-0.25cm]{Décision};
+        \node (io_def) [io,below of=dec_def,yshift=-0.25cm]{Données BD};
+        \coordinate (box_top_left) at ($(legend.north -| io_def.west) + (-0.2,0.2)$);
+        \coordinate (box_bot_right) at ($(io_def.east |- io_def.south) + (0.2,-0.2)$);
+        \draw (box_top_left) -| (box_bot_right) -| (box_top_left);
+    \end{tikzpicture}
+\end{document}

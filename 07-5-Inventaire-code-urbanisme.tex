@@ -11,22 +11,10 @@
     %Basé sur ces cas d'usage envisagés, la situation idéale serait d'avoir une base de données complètement désagrégée qui liste chaque place de stationnement. A minima, l'information doit être disponible au niveau du lot cadastral. D'autre part, il doit être possible d'encoder les informations relatives à la tarification de l'espace, le nombre disponible par lot , pour permettre d'appliquer des mesures d'écofiscalité. Il doit être possible d'agréger ces mesures au niveau à des zones d'analyse de déplacement pour faire des analyses sur la capacité de stationnement dans une zone dans un modèle de transport. \par
     %Ultimement, l'ensemble de ces requis soulève la nécessité d'une base de données personnalisée. En effet, dans le cas d'un inventaire basé sur la réglementation, \ac{OSM} est mal adapté puisqu'il requiert la localisation précise des places ce qui n'est pas nécessairement faisable. D'autre part, cela ne lie pas le stationnement à un identifiant qui permet à une entité gouvernementale d'appliquer cette fiscalité. Idéalement, la base de données serait capable d'exporter un format importable dans \ac{OSM} pour mettre à jour les données ouvertes au public.
     \subsection{Structure de la section}
-        Cette section va couvrir la structure de données et la méthodologie pour le calcul de l'inventaire. Elle est divisée comme suitÈ
-        \begin{itemize}
-            \item Justification du niveau d'agrégation de l'inventaire
-            \item Schéma relationnel de données d'ensemble
-            \item Structure des données de l'inventaire
-            \item Structure des données de la géopolitique du territoire à l'étude
-            \item Structure de données représentant les règlements et exemples
-            \item Structure de données représentant l'ensemble des règlements applicables sur un territoire à une période donnée
-            \item Structure des données cadastrales et de taxation foncière utilisées pour l'étude
-            \item Structure des données représentant les secteurs d'analyse
-            \item Objets informatiques utilisés dans le calcul de l'inventaire
-            \item Logigramme de la procédure de calcul de l'inventaire
-        \end{itemize}
-    \subsection{Choix d'une unité d'inventaire}
+        Cette section va couvrir la structure de données et la méthodologie pour le calcul de l'inventaire. La section commence par justifier le niveau d'agrégation choisi pour l'inventaire (sec. \ref{ssec:justif-ag-level-inventory}) avant d'introduire le schéma relationnel de données (sec. \ref{ssec:inv-erd-survol}), la structure de l'inventaire est ensuite présentée (sec. \ref{ssec:survol-table-inventaire}) avant d'introduire la représentation de l'historique géopolitique (sec. \ref{ssec:data-geopolitique-territoire}), puis la représentation des règlements (sec. \ref{ssec:survol-repres-reglements}) et comment ils sont associés pour représenter la réglementation en vigueur sur un territoire(sec. \ref{ssec:ensembles_association}). Pour terminer la partie sur les données, le chapitre survole la structure (sec. \ref{ssec:data-cadastre-role}) données cadastrales et du rôle foncier ainsi qu'une analyse descriptive de leur distribution et des données manquantes (sec. \ref{ssec:analyse-descriptive-role-fonc}) et finalement une brève description du découpage de la ville utilisé pour l'analyse agrégée (sec. \ref{ssec:struct_donnees_sec_analyse}). Cette partie du mémoire se tourne ensuite vers les objets informatique implémentés pour représenter les différentes quantités d'intérêt(sec. \ref{ssec:obj-informatique-impl-stat}), l'introduction du logigramme du calcul de l'inventaire (sec. \ref{ssec:logigramme-calcul-stationnement}). Quatre parties du calcul sont ensuite détaillées en profondeur: la procédure de sélection des données foncières (sec. \ref{ssec:selection-donnees-foncieres}), la sélection des données du rôle géopolitiques et de réglementation (sec. \ref{ssec:select-reg-set-territories}), l'assignation des données du rôle foncier à ces dernières (sec. \ref{ssec:meth-assign-td-to-rst}). La section se termine en détaillant la procédure de calcul des minimums de stationnement (sec. \ref{ssec:meth-assign-td-to-rst}).
+    \subsection{Choix d'une unité d'inventaire}\label{ssec:justif-ag-level-inventory}
     Dans un monde idéal, il serait possible d'avoir la localisation de chaque place de stationnement sur le territoire pour permettre de calculer un temps d'accès à chaque place de stationnement. Cela permettrait aussi d'affecter ce temps d'accès en fonction de l'achalandage du stationnement et éviterait des problèmes de micro-agrégation menant à des grands changements de stationnement accessible si un lot a un grand nombre de places de stationnement. Malheureusement, en utilisant la méthode à partir du rôle foncier, ce niveau de détail n'est pas possible et l'échelle la plus petite possible est au niveau du lot cadastral. 
-    \subsection{Schéma relationnel de données}
+    \subsection{Schéma relationnel de données}\label{ssec:inv-erd-survol}
         La figure \ref{fig:offstreet_db_erd} montre la structure de la base de données utilisée pour l'estimation de l'offre de stationnement. De manière simplifiée, les \underline{règlements} sont réunis en \underline{ensembles de règlements}. Ces ensembles de règlements sont associés à un \underline{territoire}. Chaque territoire est associé à une \underline{période} où les limites géographiques des municipalités sont restées stables.
         \begin{landscape}
         \begin{figure}
@@ -36,7 +24,7 @@
         \end{figure}
         \end{landscape}
         La base de données est implémentée dans PostgreSQL avec PostGIS pour pouvoir gérer les données spatiales du rôle foncier, du cadastre ainsi que de la division géopolitique du territoire.\par
-    \subsection{Structure des données de l'inventaire final}
+    \subsection{Structure des données de l'inventaire final}\label{ssec:survol-table-inventaire}
     La table \underline{inventaire\_stationnement} contient l'inventaire de stationnement. La table laisse la possibilité d'avoir plusieurs estimations par lot cadastral. Ainsi, l'usager peut utiliser une estimation réglementaire, entrer une valeur manuellement ou utiliser une méthode d'estimation basée sur les orthophotos pour remplir cette table. La table \ref{tab:definition_table_inventaire} résume les champs, le type de données et une brève description pour chaque variable:
     \begin{table}[h]
         \caption{Colonnes pour la table \underline{inventaire\_stationnement}}
@@ -65,6 +53,7 @@
        
    \end{table}\par
 
+    
     \subsection{Structure des données de la géopolitique du territoire à l'étude} \label{ssec:data-geopolitique-territoire}
         Les règlements régissant la capacité de stationnement changent dans le temps du fait de changements réglementaires et des variations spatiales des municipalités. Cette section va détailler la structure de données permettant de prendre en compte la variation temporelle de la réglementation. Cet historique est représenté au moyen de deux tables: \underline{historique\_geopol} et \underline{cartographie\_secteurs}. \underline{historique\_geopol} représente les grandes périodes où le territoire a été stable. 
         Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table {historique\_geopol} \par
@@ -125,7 +114,7 @@
     \end{figure}
     \FloatBarrier
     
-    \subsection{Structure de données représentant les règlements} 
+    \subsection{Structure de données représentant les règlements} \label{ssec:survol-repres-reglements}
         Puisque la formulation des règlements peut être relativement complexe. Deux tables sont utilisées. La première \underline{entete\_reg\_stationnement} représente les données administratives communes, tandis que \underline{reg\_stationnement\_empile} entrepose la représentation mathématique des règlements. Les champs de la table \underline{entete\_reg\_stationnement} sont énumérés dans le tableau \ref{tab:definition_entete_reg_stationnement}.  \par
         \begin{table}[t]
             \caption{Colonnes pour la table \underline{entete\_reg\_stationnement}}
@@ -247,8 +236,19 @@
             \includegraphics[trim={85cm 106.25cm 0 0cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
             \caption{Structure de données pour les règlements}\label{fig:offstreet_db_erd_rules}
         \end{figure}
-    \FloatBarrier
-    \subsubsection{Exemple 1: Clinique medicale} 
+        \FloatBarrier
+        \subsubsection{Analyse descriptive des règlements recensés}
+        Les graphiques suivants donnent quelques statistiques descriptives sur les règlements sauvegardés. Il est important de noter que les règlements n'ont été recensés que jusqu'au milieu des années '90. Les plus vieux règlements recensés ont été répliqués pour être utilisées pour les plus vieilles juridictions. Ceci implique que même les propriétés construites avant l'avènement de l'automobile sont modélisées comme ayant du stationnement. Cette approche peut sembler contre-intuitive puisque ces règlements n'existaient pas auparavant mais beaucoup de vieilles propriétés ont vu des stationnement aménagés après construction. Aucune analyse de sensibilité n'a été complétée pour voir quel effet cela aurait sur l'offre de stationnement prédite, particulièrement dans les quartiers centraux.\par
+        La figure \ref{fig:nombre-reg-date} montre la distribution des règlements par ville, texte de loi, année d'entrée en vigueur et d'abrogation et ville. On constate que les règlements post harmonisation dominent les comptes. Ceci est du au fait que ces règlements étaient facilement disponibles et constitue un important biais de l'étude.  
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=1\linewidth]{figures/distr-reg-par-ville.pdf}
+            \caption{Nombre de règlements par ville, règlement et date d'entrée en vigueur}
+            \label{fig:nombre-reg-date}
+        \end{figure}
+        Tel que mentionné plus haut, des réglements qui sont des duplications des règlements les plus vieux sondés ont été créés
+        \FloatBarrier
+    \subsubsection{Exemple 1: Clinique médicale} 
         Admettons un règlement qui requiert 1 place par salle de consultation  plus une place par employé plus une place par médecin ou une place par 20 mètres carrés, au plus contraignant. Les entrées dans la table reg\_stat\_empile seraient telles que montrées au tableau \ref{tab:ex_reg_stat_clinique}
         \begin{table}[h]
             \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour une clinique médicale}
@@ -389,66 +389,20 @@
         \begin{figure}[h]
             \begin{subfigure}[t]{0.5\textwidth}
             \centering
-                \begin{tikzpicture}[scale = 0.9]
-                    \begin{axis}[
-                        xlabel={$N_{sièges}$[-]},
-                        ylabel={$N_{places}$[-]},
-                        xmin=0, xmax=1000,
-                        ymin=0, ymax=200,
-                        xtick={0,200,400,600,800,1000},
-                        ytick={0,50,100,150,200},
-                            legend pos=north west,
-                        ymajorgrids=true,
-                        grid style=dashed,
-                    ]
-                
-                        \addplot[
-                            color=blue
-                            ]
-                            coordinates {
-                            (0,0)(500,71.4285)(800,114.2856)(1000,136.507938)
-                            };
-                        \addplot[
-                            color = red
-                            ]
-                            coordinates{
-                                (500,100)(1000,200)
-                            };
-                        \legend{Stationnement min, Stationnement max}
-                    \end{axis}
-                \end{tikzpicture}
+                \includegraphics[width=1\textwidth]{figures/exemple_stationnement_assemblee_sieges.pdf}
                 \caption{Avec sièges}
             \end{subfigure}
             \begin{subfigure}[t]{0.5\textwidth}
                 \centering
-                \begin{tikzpicture}[scale = 0.9]
-                \begin{axis}[
-                    xlabel={Espace de plancher [$m^2$]},
-                    ylabel={Nombres de places[-]},
-                    xmin=0, xmax=1000,
-                    ymin=0, ymax=200,
-                    xtick={0,200,400,600,800,1000},
-                    ytick={0,50,100,150,200},
-                        legend pos=north west,
-                    ymajorgrids=true,
-                    grid style=dashed,
-                ]
-                    \addplot[
-                        color=blue
-                        ]
-                    coordinates {
-                    (0,0)(500,50)(800,80)(1000,100)
-                    };
-                    \legend{Stationnement min}
-                \end{axis}
-            \end{tikzpicture}
-            \caption{Sans sièges}
-        \end{subfigure}
+                \includegraphics[width=1\textwidth]{figures/exemple_stationnement_assemblee_sans_sieges.pdf}
+                \caption{Sans sièges}
+            \end{subfigure}
         \captionsetup{justification=centering}
         \caption{Exemple de règle de stationnement pour lieux d'assemblée}
         \end{figure}
         \FloatBarrier
-    \subsection{Structure de données représentant l'ensemble des règlements applicables sur un territoire à une période donnée} \label{sec:ensembles_association}
+        
+    \subsection{Structure de données représentant l'ensemble des règlements applicables sur un territoire à une période donnée} \label{ssec:ensembles_association}
         Cette section va introduire le schéma relationnel de données qui permet d'associer un ensemble de règlements à un territoire pour une période donnée. Quatre tables sont utilisées pour représenter la variation spatio-temporelle de la réglementation: \underline{ensembles\_reglements\_stat}, \underline{cubf}, \underline{association\_er\_reg\_stat} et \underline{assoc\_er\_territoire}.\par
         \underline{ensembles\_reglements\_stat} est une entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} montre les colonnes de la table \underline{ensembles\_reglements\_stat}. \par
         \begin{table}[h]
@@ -540,6 +494,13 @@
             \item Les règlements, ensembles de règlements ou territoires n'ayant pas de date de fin capturent les entrées du rôle ayant été construits après la date de début des dits items jusqu'à aujourd'hui
         \end{itemize}
     \subsection{Structure des données cadastrales et de taxation foncière utilisées pour l'étude} \label{ssec:data-cadastre-role}
+
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[trim={110cm 50cm 0cm 49cm},clip,width=15cm]{dia/ERD_stationnement_propre.png}
+            \caption{Schéma relationnel pour le rôle foncier et le cadastre}
+            \label{fig:offstreet_db_erd_input_data}
+        \end{figure}
         Les données de départ sont le rôle foncier brut ainsi que le cadastre représentés dans les tables \underline{cadastre} et \underline{role\_foncier}. Le tableau \ref{tab:definition_role_foncier} donne une définition des colonnes pertinentes à ce mémoire. Ces tables ont cependant d'autres colonnes qui ne sont pas nécessairement pertinentes aux activités de ce mémoire. Cette section en détaillera seulement une partie. Le tableau \ref{tab:definition_role_foncier} montre les colonnes pertinentes dans le rôle foncier. Les descriptions sont tirées de \textcite{gouvernement_du_quebec_donnees_2022}.\par
         \begin{table}[h]
             \caption{Colonnes pour la table \underline{role\_foncier}}
@@ -600,13 +561,57 @@
            
         \end{table}   
         La figure \ref{fig:offstreet_db_erd_input_data} montre les tables pertinentes en intrant. Il est concevable que ces tables soient entreposées dans un serveur différent si cette méthodologie était implémentée dans un milieu municipal.
-        \begin{figure}[ht!]
-            \centering
-            \includegraphics[trim={110cm 50cm 0cm 49cm},clip,width=15cm]{dia/ERD_stationnement_propre.png}
-            \caption{Schéma relationnel pour le rôle foncier et le cadastre}
-            \label{fig:offstreet_db_erd_input_data}
-        \end{figure}
+        
         \FloatBarrier
+    \subsection{Analyse descriptive des données foncières}\label{ssec:analyse-descriptive-role-fonc}
+    Les données foncières sont centrales à la création de l'estimé. Il semble donc important de faire une courte description d'observations émises sur les données au fil de cette étude. Dans un premier temps, il semble important de noter à quel point la classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:lots-per-land-use}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans un même entrée du rôle foncier.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\linewidth]{figures/distro-usage-lots.pdf}
+        \caption{Nombre de lots par utilisation du sol principale}
+        \label{fig:lots-per-land-use}
+    \end{figure}
+    D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal mais est aussi présente dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une inférence de certaines propriétés en fonction de la valeur au rôle au besoin.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.9\linewidth]{figures/distro-data-role-manquant.pdf}
+        \caption{Pourcentage des lots avec des propriétés manquantes}
+        \label{fig:role-missing-data}
+    \end{figure}
+    On peut aussi regarder le logement de manière plus fine en segmentant le logement en termes de logements par lot. On constate que même si une majorité de lots sont unifamiliaux, la plupart des logements disponibles sont sur des lots multi-logements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lot avec de multiples logements.
+    \begin{figure}
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{figures/distro-typ-log.pdf}
+        \caption{Compte par type}
+        \label{fig:distro-typ-log}
+    \end{subfigure}
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{figures/distro-typ-log-quartier.pdf}
+        \caption{Répartition par type et quartier}
+        \label{fig:distro-typ-log-quartier}
+    \end{subfigure}
+    \caption{Nombre de logements et de lots par compte de logement par lot et quartier}
+    \end{figure}
+    On peut aussi constater que les lots avec des données manquantes n'ont pas nécessairement des propriétés physiques similaires aux autres lots. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
+    Pour conclure, les données du rôle foncier donnent un portrait  désagrégé de l'utilisation des sols partout dans la métropole, permettant lorsque les données sont présentes, d'inférer les différentes variables requises pour estimer une capacité de stationnement. Des acronymes ont été attribués au quartier pour rendre les graphiques plus lisibles. Le tableau \ref{tab:acro-quartiers} énumère les acronymes.
+    \begin{landscape}
+        \begin{figure}
+            \centering  
+            \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
+            \caption{Distribution des valeurs selon d'utilisation et l'absence de données physiques}
+            \label{fig:missing-data-value-distr}
+        \end{figure}  
+        \begin{figure}
+            \centering
+            \includegraphics[width=1\linewidth]{images/valeur_au_role_vs_variable_interet.png}
+            \caption{Relation entre la valeur au rôle et la principale variable d'intérêt}
+            \label{fig:rel-val-role-vs-var-int}
+        \end{figure}
+    \end{landscape}
+    
+    \FloatBarrier
     \subsection{Structure des données représentant les secteurs d'analyse}\label{ssec:struct_donnees_sec_analyse}
         Les quartiers énumérés par la ville de Québec sont utilisés comme base de comparaison et pour diviser le territoire dans la table sec\_analyse. Les colonnes du tableau sont listées dans le tableau \ref{tab:definition_sec_analyse}.
         \begin{table}[h]
@@ -619,6 +624,7 @@
                 \hline
                 id\_quartier & Clé primaire & Entier & CP \\
                 nom\_quartier & Nom du quartier & Texte & \\
+                acro & Acronyme du quartier & Texte & \\ 
                 superf\_quartier & Superficie du quartier & Réel & \\
                 peri\_quartier & Périmètre du quartier & Réel & \\
                 geometry & Géométrie des quartier & Géométrie & \\
@@ -626,16 +632,68 @@
            \end{tabular}
            
         \end{table}   
-        La figure \ref{fig:sec-analyse} montre les secteurs utilisés qui sont les quartiers listés dans les données ouvertes de la ville. Une autre division géographique (comme les secteurs de l'enquête OD) pourrait être substituée au besoin.
+        
+        \begin{longtable}[c]{lll}
+            \caption{Acronymes affectés aux quartiers}\label{tab:acro-quartiers}\\
+            \hline
+             ID & Nom & Acronyme  \\ \hline
+            \endfirsthead
+            \multicolumn{3}{c}%
+            {{\tablename\ \thetable{} -- suite de la page précédente}} \\[0.5ex]
+            \hline
+            ID & Nom & Acronyme \\ \hline
+            \endhead
+            \hline
+            \multicolumn{3}{r}{{Suite à la page suivante}} \\[0.5ex]
+            \endfoot
+            \hline                                 % from booktabs (optional)
+            \endlastfoot
+                 1 & Saint-Jean-Baptiste & SJBA\\
+                 2 & Cap-Rouge & CARO\\
+                 3 & Cité-Universitaire & CUNI \\
+                 4 & Vieux Québec - Cap Blanc - Colline Parlementaire & VQ-CP \\
+                 5 & Des Châtels & CHAT \\
+                 6 & Duberger-Les Saules & DU-LS\\
+                 7 & L'Aéroport & AERO \\
+                 8 & Lac-St-Charles & LSC \\
+                 9 & Lairet & LAIR \\
+                 10 & Vieux-Limoilou & VLIM \\
+                 11 & Loretteville & LRTV \\
+                 12 & Maizerets & MAIZ \\
+                 13 & Montcalm & MCLM \\
+                 14 & Neufchatel Est - Lebourgneuf & NE-LB \\
+                 15 & Notre-Dame-des-Laurentides & NDL \\
+                 16 & Plateau & PLAT \\
+                 17 & Saint-Louis & STLO \\
+                 18 & Pointe-de-Sainte-Foy & PSFO \\
+                 19 & Orsainville & ORSA \\
+                 20 & Quartier 4-3 & 4-3 \\
+                 21 & Jésuites & JESU \\
+                 22 & Quartier 4-5 & 4-5 \\
+                 23 & Quartier 4-6 & 4-6 \\
+                 24 & Sainte-Thérèse-de-Lisieux & STLI \\
+                 25 & Quartier 5-2 & 5-2 \\
+                 26 & Chutes-Montmorency & CHMO \\
+                 27 & Vieux-Bourg & VIBO \\
+                 28 & Saint-Émile & STEM \\
+                 29 & Saint-Sacrament & SSAC \\
+                 30 & Saint-Roch & STRO \\
+                 31 & Saint-Sauveur & SSAU \\
+                 32 & Sillery & SILR\\
+                 33 & Val-Bélair & VBEL \\
+                 34 & Vanier & VANI \\
+                 35 & Vieux-Moulin & VIMO\\
+        \end{longtable}
+        La figure \ref{fig:sec-analyse} montre les secteurs utilisés qui sont les quartiers listés dans les données ouvertes de la ville. Une autre division géographique (comme les secteurs de l'enquête OD) pourrait être substituée au besoin.\par
         \begin{figure}[h]
             \centering
             \includegraphics[width=0.7\linewidth]{images/secteurs_analyse.png}
             \caption{Secteurs utilisés pour l'analyse}
             \label{fig:sec-analyse}
         \end{figure}
-        \FloatBarrier
-    
-    \subsection{Objets informatiques utilisés dans le calcul de l'inventaire}
+        
+        
+    \subsection{Objets informatiques utilisés dans le calcul de l'inventaire} \label{ssec:obj-informatique-impl-stat}
         Selon l'\ac{OQLF} \parencite{oqlf_langage_2006}, les langages à objets sont définis de la manière suivante: 
         \begin{definition}
             Langage de programmation dans lequel les composantes d'un programme sont modulaires et définies comme des objets indépendants.[...] Les concepts d'encapsulation et d'héritage sont à la base des langages orientés objet. Ainsi, l'encapsulation permet la réunion des données et des procédures dans une même entité appelée objet.
@@ -690,165 +748,105 @@
         \end{itemize}
         
         \subsubsection{ParkingRegulationSet ou ensemble de règlement}
-        Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il se distingue du règlement de deux manières. D'une part, il associe les règlements aux \ac{CUBF}. D'autre part, il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les paramètres suivants:
-        \begin{itemize}
-            \item start\_date: date d'entrée en vigueur de l'ensemble de règlements
-            \item end\_data: date d'abrogation de l'ensemble de règlements
-            \item description: chaîne de caractères décrivant textuellement l'ensemble
-            \item association\_table: table contenant les associations entre les \ac{CUBF} et les identifiants de règlements. Ces dernières sont définies par l'utilisateur.
-            \item expanded\_table: table qui représente les associations à l'ensemble des \ac{CUBF} en utilisant la convention décrite en \ref{sec:reg_association}. Cette table est générée automatiquement à partir de association\_table
-            \item ruleset\_id: identifiant de l'ensemble de règlements
-            \item land\_use\_table: table des \ac{CUBF} (cf. Tableau \ref{tab:definition_cubf})
-        \end{itemize}
-        Les méthodes suivantes ont été implémentées pour cet objet:
-        \begin{itemize}
-            \item validate\_dates: vérifie que les règlements qui constituent l'ensemble de règlement sont valides pour l'ensemble de sa validité
-            \item verify\_minimum\_fill: vérifie qu'au minimum, il y a les entreées pour les \ac{CUBF} 1 à 10 pour pouvoir généraliser à l'ensemble des \ac{CUBF}
-            \item expand\_land\_use\_table: génère expanded\_table à partir de association\_table
-            \item get\_unique\_reg\_ids: renvoie une liste des règlements utilisés dans l'ensembles de règlements
-            \item get\_unique\_reg\_ids\_using\_land\_use: renvoie une liste de règlements qui sont utilisés pour la liste de \ac{CUBF} fournis en entrée
-            \item get\_parking\_reg\_by\_id: renvoie un règlement dont l'identifiant est égal à l'entier fourni en entrée
-        \end{itemize}
-        En plus de ces méthodes, les fonctions suivantes sont implémentées dans ce fichier:
-        \begin{itemize}
-            \item from\_sql: renvoie un ensemble de règlements dont l'identifiant est égal à l'entier fourni
-        \end{itemize}
+            Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il se distingue du règlement de deux manières. D'une part, il associe les règlements aux \ac{CUBF}. D'autre part, il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les paramètres suivants:
+            \begin{itemize}
+                \item start\_date: date d'entrée en vigueur de l'ensemble de règlements
+                \item end\_data: date d'abrogation de l'ensemble de règlements
+                \item description: chaîne de caractères décrivant textuellement l'ensemble
+                \item association\_table: table contenant les associations entre les \ac{CUBF} et les identifiants de règlements. Ces dernières sont définies par l'utilisateur.
+                \item expanded\_table: table qui représente les associations à l'ensemble des \ac{CUBF} en utilisant la convention décrite en \ref{sec:reg_association}. Cette table est générée automatiquement à partir de association\_table
+                \item ruleset\_id: identifiant de l'ensemble de règlements
+                \item land\_use\_table: table des \ac{CUBF} (cf. Tableau \ref{tab:definition_cubf})
+            \end{itemize}
+            Les méthodes suivantes ont été implémentées pour cet objet:
+            \begin{itemize}
+                \item validate\_dates: vérifie que les règlements qui constituent l'ensemble de règlement sont valides pour l'ensemble de sa validité
+                \item verify\_minimum\_fill: vérifie qu'au minimum, il y a les entreées pour les \ac{CUBF} 1 à 10 pour pouvoir généraliser à l'ensemble des \ac{CUBF}
+                \item expand\_land\_use\_table: génère expanded\_table à partir de association\_table
+                \item get\_unique\_reg\_ids: renvoie une liste des règlements utilisés dans l'ensembles de règlements
+                \item get\_unique\_reg\_ids\_using\_land\_use: renvoie une liste de règlements qui sont utilisés pour la liste de \ac{CUBF} fournis en entrée
+                \item get\_parking\_reg\_by\_id: renvoie un règlement dont l'identifiant est égal à l'entier fourni en entrée
+            \end{itemize}
+            En plus de ces méthodes, les fonctions suivantes sont implémentées dans ce fichier:
+            \begin{itemize}
+                \item from\_sql: renvoie un ensemble de règlements dont l'identifiant est égal à l'entier fourni
+            \end{itemize}
         
         \subsubsection{RegSetTerritory ou ensemble de règlements de territoires}
-        Un \ac{RST} associe un territoire à un ensemble de règlements. Ces paramètres sont listés ci-dessous:
-        \begin{itemize}
-            \item assoc\_id: identifiant d'association
-            \item territory\_info: une entrée dans la table \underline{cartographie\_secteurs}
-            \item parking\_regulation\_set: un \ac{PRS} qui est associé au territoire
-            \item start\_year: année de début de l'association qui est le maximum de l'année de début du \ac{PRS} et de la période à laquelle appartient le territoire
-            \item end\_year: année de fin de l'association qui est le minimum de l'année de fin du \ac{PRS} et de la fin de la période à laquelle appartient le territoire
-        \end{itemize}
-        Aucune méthode n'existe au sein de cet objet, mais certaines fonctions sont implémentées dans le même fichier pour les créer à partir de la base de données. Elles sont listées ci-dessous:
-        \begin{itemize}
-            \item get\_postgis\_rst\_by\_terr\_id: renvoie une liste de \ac{RST} qui sont associés au territoire dont l'identifiant est égal à l'entier fourni en entrée
-            \item get\_rst\_by\_tax\_data: renvoie deux listes. La première contient une liste de \ac{RST} qui ont une intersection spatiale avec les points du rôle foncier dans le \ac{TD}. La deuxième est une liste de \ac{TD}, les points du rôle dans ce \ac{TD} ont été construits pendant la période de validité du \ac{RST} et sont à l'intérieur de territoire
-            \item explore\_RST\_TD: crée une carte dynamique dans un fichier HTML pour pouvoir visualiser les ensembles de données.
-        \end{itemize}
+            Un \ac{RST} associe un territoire à un ensemble de règlements. Ces paramètres sont listés ci-dessous:
+            \begin{itemize}
+                \item assoc\_id: identifiant d'association
+                \item territory\_info: une entrée dans la table \underline{cartographie\_secteurs}
+                \item parking\_regulation\_set: un \ac{PRS} qui est associé au territoire
+                \item start\_year: année de début de l'association qui est le maximum de l'année de début du \ac{PRS} et de la période à laquelle appartient le territoire
+                \item end\_year: année de fin de l'association qui est le minimum de l'année de fin du \ac{PRS} et de la fin de la période à laquelle appartient le territoire
+            \end{itemize}
+            Aucune méthode n'existe au sein de cet objet, mais certaines fonctions sont implémentées dans le même fichier pour les créer à partir de la base de données. Elles sont listées ci-dessous:
+            \begin{itemize}
+                \item get\_postgis\_rst\_by\_terr\_id: renvoie une liste de \ac{RST} qui sont associés au territoire dont l'identifiant est égal à l'entier fourni en entrée
+                \item get\_rst\_by\_tax\_data: renvoie deux listes. La première contient une liste de \ac{RST} qui ont une intersection spatiale avec les points du rôle foncier dans le \ac{TD}. La deuxième est une liste de \ac{TD}, les points du rôle dans ce \ac{TD} ont été construits pendant la période de validité du \ac{RST} et sont à l'intérieur de territoire
+                \item explore\_RST\_TD: crée une carte dynamique dans un fichier HTML pour pouvoir visualiser les ensembles de données.
+            \end{itemize}
 
+        
         \subsubsection{ParkingInventory ou inventaire de stationnement}
-        L'inventaire de stationnement a un seul paramètre: 
-        \begin{itemize}
-            \item parking\_frame: table décrivant l'inventaire (cf. Tableau \ref{tab:definition_table_inventaire})
-        \end{itemize}
-        Les méthodes suivantes sont implémentées:
-        \begin{itemize}
-            \item concat: permet de concaténer deux inventaires
-            \item to\_postgis: sauvegarde l'inventaire dans la base de données
-            \item merge\_lot\_data: vérifie pour de multiples inventaires pour un même lot et additionne les inventaires
-        \end{itemize}
-        Les fonctions suivantes sont implémentées dans le même fichier: 
-        \begin{itemize}
-            \item subset\_operation: arbitre entre deux estimés si le règlement met en place des règlements
-            \item dissolve\_list: permet de dissoudre une liste d'inventaire en un seul objet d'inventaire
-            \item inventory\_duplicates\_agg\_function: Permet d'agréger des estimés de plusieurs périodes pour un même lot en ajoutant les estimés les uns aux autres et en concaténant les références aux règlements, ensembles de règlements et \ac{CUBF}
-            \item calculate\_inventory\_by\_analysis\_sector: fonction d'entrée pour calculer un inventaire pour un secteur d'analyse
-            \item calculate\_inventory\_by\_lot: fonction d'entrée pour calculer la capacité de stationnement pour un lot défini
-            \item to\_sql: fonction de sauvegarde de l'inventaire. Inclut une logique pour regarder si certains lots ont déjà un estimé dans la base de donnée et permet à l'utilisateur 
-            \item calculate\_parking\_for\_reg\_set\_territories: fonction d'aide qui itère sur les \ac{RST} fournis et appelle les fonctions nécessaires pour calculer le stationnement
-            \item calculate\_parking\_specific\_reg\_set: fonction d'aide qui itère sur les \ac{PR} au sein d'un \ac{RST} et appelle les fonctions nécessaires au calcule de l'inventaire.
-            \item calculate\_parking\_specific\_reg: fonction qui itère sur les sous-ensembles de chaque \ac{PR} pour appeller la fonction de calcul de l'estimé
-            \item calculate\_parking\_specific\_reg\_subset: fonction qui calcule la capacité de stationnement requise par chaque sous-ensemble au sein d'un règlement.
-        \end{itemize}
-        \subsubsection{ParkingInventaory}
-    \subsection{Logigramme de la procédure de calcul de l'inventaire}
-        La méthode suivante est proposée pour le calcul de la capacité de stationnement basé sur les règlements de l'urbanisme. Ce calcul est déclenché soit en sélectionnant un quartier à analyser, soit en demandant de calculer pour un lot particulier. Dans les deux cas, la procédure est la même. Le script de calcul a été implémenté en utilisant le langage Python. La figure \ref{fig:logigramme_calcul_urbanisme} montre le logigramme de haut niveau pour l'approche par les minimums. \par
-        \begin{figure}[h]
+            L'inventaire de stationnement a un seul paramètre: 
+            \begin{itemize}
+                \item parking\_frame: table décrivant l'inventaire (cf. Tableau \ref{tab:definition_table_inventaire})
+            \end{itemize}
+            Les méthodes suivantes sont implémentées:
+            \begin{itemize}
+                \item concat: permet de concaténer deux inventaires
+                \item to\_postgis: sauvegarde l'inventaire dans la base de données
+                \item merge\_lot\_data: vérifie pour de multiples inventaires pour un même lot et additionne les inventaires
+            \end{itemize}
+            Les fonctions suivantes sont implémentées dans le même fichier: 
+            \begin{itemize}
+                \item subset\_operation: arbitre entre deux estimés si le règlement met en place des règlements
+                \item dissolve\_list: permet de dissoudre une liste d'inventaire en un seul objet d'inventaire
+                \item inventory\_duplicates\_agg\_function: Permet d'agréger des estimés de plusieurs périodes pour un même lot en ajoutant les estimés les uns aux autres et en concaténant les références aux règlements, ensembles de règlements et \ac{CUBF}
+                \item calculate\_inventory\_by\_analysis\_sector: fonction d'entrée pour calculer un inventaire pour un secteur d'analyse
+                \item calculate\_inventory\_by\_lot: fonction d'entrée pour calculer la capacité de stationnement pour un lot défini
+                \item to\_sql: fonction de sauvegarde de l'inventaire. Inclut une logique pour regarder si certains lots ont déjà un estimé dans la base de donnée et permet à l'utilisateur 
+                \item calculate\_parking\_for\_reg\_set\_territories: fonction d'aide qui itère sur les \ac{RST} fournis et appelle les fonctions nécessaires pour calculer le stationnement
+                \item calculate\_parking\_specific\_reg\_set: fonction d'aide qui itère sur les \ac{PR} au sein d'un \ac{RST} et appelle les fonctions nécessaires au calcule de l'inventaire.
+                \item calculate\_parking\_specific\_reg: fonction qui itère sur les sous-ensembles de chaque \ac{PR} pour appeller la fonction de calcul de l'estimé
+                \item calculate\_parking\_specific\_reg\_subset: fonction qui calcule la capacité de stationnement requise par chaque sous-ensemble au sein d'un règlement.
+            \end{itemize}
+        \subsubsection{ParkingCalculationInput ou intrant au calcul de stationnement}
+            Le \ac{PCI} hérite des DataFrame Pandas \parencite{pandas_contributors_pandas_2025}. La table a les colonnes suivantes:
+            \begin{itemize}
+                \item g\_no\_lot: l'identifiant de lot
+                \item \ac{CUBF}: le code d'utilisation du bien fonds
+                \item unite: l'unité que la ligne représentée
+                \item id\_reg\_stat: l'identifiant du règlement à appliquer
+                \item valeur: la valeur pour le lot et l'utilisation du bien-fonds
+            \end{itemize}
+            Dans le cas où cet objet est implémenté dans TypeScript(notamment pour le calcul semi-automatique), l'objet a les mêmes champs que le DataFrame, mais aucune fonction de calcul n'est implémentée.
+            Les méthodes suivantes sont implémentées pour l'objet:
+            \begin{itemize}
+                \item get\_by\_reg: renvoie les entrées associées à un règlement
+                \item filter\_by\_threshold: renvoie les entrées basées sur un seuil, inférieur et supérieur
+                \item get\_by\_unites: renvoie les données associées à l'identifiant d'unités
+                \item check\_units\_present: vérifie que pour chaque lot, les unités fournies en entrées sont présentes.
+            \end{itemize}
+            Plusieurs fonctions sont aussi fournies dans le même fichier:
+            \begin{itemize}
+                \item generate\_input\_from\_PRS\_TD: convertit les données foncières en données utilisables pour le calcul des capacités min et max en fonction des unités spécifiées dans les règlements
+            \end{itemize}
+    \begin{figure}[h]
             \centering
-            \begin{tikzpicture}
-                \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
-                \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=2.5cm]
-                \tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30,text width=3cm]
-                \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
-                \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
-                \tikzstyle{arrow} = [thick,->,>=stealth]
-                % Nodes de flowchart
-                \node (start) [startstop] {Début};
-                \node (select_tax_data) [process, below of=start,yshift=-0.25cm] {Obtention rôle}; 
-                \node (in1) [io, left of=select_tax_data, xshift=-3cm] {Quartier ou lot à calculer};
-                \node (tax_data) [io, right of=select_tax_data, xshift=3cm] {Rôle foncier et cadastre};
-                \node (select_municipalities) [process, below of=select_tax_data,yshift=-0.75cm] {Obtention secteurs municipaux};
-                \node (municipalities) [io, left of=select_municipalities, xshift=-3cm] {Historique géopolitique};
-                \node (select_reg_sets) [process, below of=select_municipalities,yshift=-0.35cm] {Obtention RST};
-                \node (reg_sets) [io, right of=select_reg_sets, xshift=3cm] {Ensembles Règlements};
-                \node (select_regs) [process, below of=select_reg_sets,yshift=-0.15cm] {Obtention Règlements};
-                \node (regs)[io, left of=select_regs, xshift=-3cm] {Règlements};
-                \node (segment) [process, below of=select_regs,yshift=-0.3cm] {Association TD-RST};
-                \node (select_RST) [process, below of=segment, yshift=-1.25cm] {Sél. prochain RST-TD};
-                \node (select_data) [process, right of=select_RST,xshift=-6cm] {Sél. prochain: PR + TD};
-                \node (calcul_minimum) [process,below of=select_data,yshift=-1cm] {Sél. ss-ensemble};
-                \node (calcul_ss_ensemble) [process,below of=calcul_minimum,yshift=-1cm] {Calcul sous-ensembles};
-                \node (complete_subset) [decision,below of=calcul_ss_ensemble,yshift=-0.5cm] {Complet};
-                \node (resolution_ss_ensemble) [process,below of=complete_subset,yshift=-1.5cm] {Choix estimé sous-ensemble};
-                \node (complete_rule) [decision,below of=resolution_ss_ensemble,yshift=-0.75cm] {Complet};
-                \node (complete_RST) [decision,right of=complete_rule,xshift=4cm] {Complet};
-                \node (agregation) [process,left of=complete_RST,xshift=5cm]{Agrégation estimés par lot};
-                \node (save) [process,above of=agregation,yshift=0.45cm] {Sauvegarde};
-                \node (inventory) [io,right of=save,xshift=1.5cm,yshift=1cm] {BD - inventaire};
-                \node (end) [startstop,above of=save, yshift=1.25cm] {Fin};
-                \draw[red,thick,dotted] ($(select_tax_data.north west) + (-0.2,0.2)$) rectangle($(select_tax_data.south east) + (0.2,-0.2)$);
-                \node[above right, text=red] at ($(select_tax_data.north east) + (0.2,0.2)$) {tax\_database\_for\_analysis\_territory};
-                \draw[blue,thick,dotted] ($(select_municipalities.north west) + (-0.2,0.2)$) rectangle($(segment.south east) + (0.2,-0.2)$);
-                \node[below right, text=blue] at ($(segment.south east) + (0.2,0.2)$) {get\_rst\_by\_tax\_data};
-                \draw[orange,thick,dotted] ($(select_data.north west) + (-2.25,0.75)$) rectangle($(complete_RST.south east) + (1.0,-0.5)$);
-                \node[below left, text=orange] at ($(complete_RST.south east) + (1.0,-0.5)$) {calculate\_parking\_for\_reg\_set\_territories};
-                \draw[green,thick,dotted] ($(select_data.north west) + (-2,0.25)$) rectangle($(complete_rule.south east) + (2.5,-0.4)$);
-                \node[above right, text=green] at ($(select_data.north west) + (-2,0.25)$) {calculate\_parking\_specific\_reg\_set};
-                \draw[cyan,thick,dotted] ($(calcul_minimum.north west) + (-0.5,0.25)$) rectangle($(resolution_ss_ensemble.south east) + (1,-0.4)$);
-                \node[above right, text=cyan] at ($(calcul_minimum.north west) + (-0.5,0.25)$) {calculate\_parking\_specific\_reg};
-                \draw[magenta,thick,dotted] ($(resolution_ss_ensemble.north west) + (-0.25,0.25)$) rectangle($(resolution_ss_ensemble.south east) + (0.25,-0.25)$);
-                \node[above right, text=magenta] at ($(resolution_ss_ensemble.north west) + (-0.25,0.25)$) {subset\_operation};
-                \draw[teal,thick,dotted] ($(calcul_ss_ensemble.north west) + (-0.25,0.25)$) rectangle($(calcul_ss_ensemble.south east) + (0.25,-0.25)$);
-                \node[above right, text=teal] at ($(calcul_ss_ensemble.north west) + (-0.75,0.25)$) {calculate\_parking\_specific\_reg\_subset};
-                \draw[violet,thick,dotted] ($(agregation.north west) + (-0.25,0.25)$) rectangle($(agregation.south east) + (0.25,-0.25)$);
-                \node[below right, text=violet,text width = 5cm] at ($(agregation.south west) + (-0.25,-0.25)$) {dissolve\_list + inventory\_duplicates\_agg\_function};
-                \draw[olive,thick,dotted] ($(save.north west) + (-0.25,0.25)$) rectangle($(save.south east) + (0.25,-0.25)$);
-                \node[above right, text=olive,text width = 5cm] at ($(save.north west) + (-0.25,0.25)$) {to\_sql};
-                \draw [arrow] (start) -- (select_tax_data);
-                \draw [arrow] (in1) -- (select_tax_data);
-                \draw [arrow] (tax_data) -- (select_tax_data);
-                \draw [arrow] (select_tax_data) -- (select_municipalities);
-                \draw [arrow] (municipalities) -- (select_municipalities);
-                \draw [arrow] (select_municipalities) -- (select_reg_sets);
-                \draw [arrow] (reg_sets) -- (select_reg_sets);
-                \draw [arrow] (select_reg_sets) -- (select_regs);
-                \draw [arrow] (regs) -- (select_regs);
-                \draw [arrow] (select_regs) -- (segment);
-                \draw [arrow] (segment) -- (select_RST);
-                \draw [arrow] (select_RST) -- (select_data);
-                \draw [arrow] (select_data) -- (calcul_minimum);
-                \draw [arrow] (calcul_minimum) -- (calcul_ss_ensemble);
-                \draw [arrow] (calcul_ss_ensemble) -- (complete_subset);
-                \draw [arrow] (complete_subset.east) -| ++(0.5,1.5)  node[anchor=west] {Non} |- (calcul_minimum.east);
-                \draw [arrow] (complete_subset.south) -- ++(0,-0.15)  node[anchor=west] {Oui} -- (resolution_ss_ensemble.north);
-                \draw [arrow] (resolution_ss_ensemble) -- (complete_rule);
-                \draw [arrow] (complete_rule.west) -| ++(-1.0,1.5)  node[anchor=east] {Non} |- (select_data.west);
-                \draw [arrow] (complete_rule.east) -- ++(0.5,0)  node[anchor=south] {Oui} -- (complete_RST.west);
-                \draw [arrow] (complete_RST.east) -- ++(0.25,0) node[anchor=north] {Oui} -- (agregation.west);
-                \draw [arrow] (complete_RST.north) |- ++(0,0.75)  node[anchor=east] {Non} -| (select_RST.south);
-                \draw [arrow] (agregation) -- (save);
-                \draw [arrow] (save) -- (end);
-                \draw [arrow] (save.east) -| (inventory.south);
-                % Légende
-                \node (legend) [right of=select_RST,xshift=3.5cm,yshift=0.5cm]{\textbf{Légende}};
-                \node (deb_def) [startstop,below of=legend]{Début / Fin};
-                \node (pro_def) [process, below of=deb_def]{Processus};
-                \node (dec_def) [decision, below of=pro_def,yshift=-0.25cm]{Décision};
-                \node (io_def) [io,below of=dec_def,yshift=-0.25cm]{Données BD};
-                \coordinate (box_top_left) at ($(legend.north -| io_def.west) + (-0.2,0.2)$);
-                \coordinate (box_bot_right) at ($(io_def.east |- io_def.south) + (0.2,-0.2)$);
-                \draw (box_top_left) -| (box_bot_right) -| (box_top_left);
-            \end{tikzpicture}
+           \includegraphics[width=1\linewidth]{figures/logigramme-calcul-minimums.pdf}
             \caption{Logigramme de calcul}
             \label{fig:logigramme_calcul_urbanisme}
         \end{figure}
-        On commence par sélectionner les points du rôle foncier dans une zone prescrite, on trouve les municipalités actuelles et historiques qui interceptent l'ensemble des points, on trouve les ensembles de règlements qui sont associés à chaque territoire, on segmente ensuite les données du rôle foncier en fonction de la municipalité dans laquelle elles s'appliquent, et on applique les règlements. Une fois les calculs complétés, on agrège les calculs par lot pour l'ensemble des périodes avant de les sauvegarder dans la table appropriée.
         \FloatBarrier
-    \subsection{Procédure de sélection des données foncières} 
+    \subsection{Logigramme de la procédure de calcul de l'inventaire}\label{ssec:logigramme-calcul-stationnement}
+        La méthode suivante est proposée pour le calcul de la capacité de stationnement basé sur les règlements de l'urbanisme. Ce calcul est déclenché soit en sélectionnant un quartier à analyser, soit en demandant de calculer pour un lot particulier. Dans les deux cas, la procédure est la même. Le script de calcul a été implémenté en utilisant le langage Python. La figure \ref{fig:logigramme_calcul_urbanisme} montre le logigramme de haut niveau pour l'approche par les minimums. \par
+        
+        On commence par sélectionner les points du rôle foncier dans une zone prescrite, on trouve les municipalités actuelles et historiques qui interceptent l'ensemble des points, on trouve les ensembles de règlements qui sont associés à chaque territoire, on segmente ensuite les données du rôle foncier en fonction de la réglementation qui s'y applique, et on applique les règlements. Une fois les calculs complétés, on agrège les calculs par lot pour l'ensemble des périodes avant de les sauvegarder dans la table appropriée.
+        \FloatBarrier
+    \subsection{Procédure de sélection des données foncières} \label{ssec:selection-donnees-foncieres}
         Le script commence par obtenir les entrées du rôle foncier qui se trouvent à l'intérieur du quartier visé tel que montré à la figure \ref{fig:select-tax-dataset}. La requête SQL associe ensuite les items du rôle foncier au cadastre et requiert l'ensemble des items.
         \begin{figure}[h]
             \centering
@@ -890,7 +888,7 @@
             \label{fig:select-tax-data}
         \end{figure}
         La table \ul{association\_cadastre\_role} est ensuite utilisée pour obtenir les données du cadastre qui ont été associés par jointure spatiale au rôle foncier.
-        Les requêtes SQL pertinentes sont données en annexe \ref{sec:annex-select-tax-data}. Le résultat représente les limites et propriété de lots, l'association entre les lots et les entrées du rôle, et les entrées du rôle. La figure \ref{fig:select-tax-dataset} donne une représentation schématique d'un \ac{TD}
+        Les requêtes SQL pertinentes sont données en annexe \ref{sec:annex-select-tax-data}. Le résultat représente les limites et propriété de lots, l'association entre les lots et les entrées du rôle, et les entrées du rôle. La figure \ref{fig:select-tax-dataset} donne une représentation schématique d'un \ac{TD} qui est une combinaison des données du rôle foncier et du cadastre.
         \begin{figure}[h]
             \centering
             \begin{tikzpicture}[
@@ -922,7 +920,7 @@
             \caption{Résultat d'un \ac{TD}}
             \label{fig:select-tax-dataset}
         \end{figure}
-    \subsection{Procédure de sélection des territoires et règlements} 
+    \subsection{Procédure de sélection des territoires et règlements} \label{ssec:select-reg-set-territories}
         Il faut d'abord trouver les territoires géopolitiques qui touchent aux points du rôle foncier. Les entrées du rôle foncier sont ensuite réparties entre les différents territoires historiques et se voient affecter un ensemble de règlements en fonction de la date de construction. La figure montre de potentielles dates de construction pour l'exemple de la figure \ref{fig:select-tax-dataset}. 
         \begin{figure}[h]
             \centering
@@ -992,7 +990,7 @@
         La figure 
         \begin{figure}
             \centering
-            \begin{tikzpicture}
+            \begin{tikzpicture}[scale=0.9]
                 
                 \node (terr-a)[anchor=west] at (-3,4){Territoire A};
                 \node (terr-b) [anchor=west] at (-3,3){Territoire B};
@@ -1047,7 +1045,8 @@
         \end{figure}
         Les requêtes SQL et quelques morceaux de script Python sont présentés à l'annexe \ref{sec:annex-assign-rule-to-role}
 
-    \subsection{Procédure d'assignation des données foncières aux RST}
+    
+    \subsection{Procédure d'assignation des données foncières aux RST}\label{ssec:meth-assign-td-to-rst}
         Les données foncières obtenues initialement doivent ensuite être assignées à chaque ensemble de règlement en préparation au calcul de l'inventaire. Cette opération est complétée dans une boucle au sein de la fonction get\_rst\_by\_tax\_tax\_data. Les détails de cette boucle sont donnés dans l'extrait de code \ref{lst:assign_tax_data}.
 
         Cette boucle utilise deux fonctions: year\_filter et territory\_filter. Year filter extrait les points du rôle dont les dates de construction sont à l'intérieur de la plage de validité du \ac{RST}. La méthode year\_filter est donnée à l'extrait de code \ref{lst:year_filter}.
@@ -1055,8 +1054,9 @@
         La méthode territory\_filter quant à elle élimine les points en dehors d'un territoire. On utilise alors la fonction python clip \parencite{geopandas_developers_geopandasclip_nodate}. L'extrait de code \ref{lst:territory_filter} montre la fonction territory\_filter.
 
         La résultante de cet ensemble d'opérations est deux listes qui associent un \ac*{RST} avec un \ac*{TD} en fonction des limites géographiques et des dates de construction. Ces deux listes sont ensuite utilisées comme intrants pour le calcul
+        
     \subsection{Procédure de calcul des minimums}
-        Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus sont utilisés comme intrants dans la fonction calculate\_parking\_for\_reg\_set\_territories pour dresser l'inventaire. Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimé à utiliser s'il y a plusieurs méthodes de calcul.
+        Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus sont utilisés comme intrants dans la fonction calculate\_parking\_for\_reg\_set\_territories pour dresser l'inventaire. Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimé à utiliser s'il y a plusieurs méthodes de calcul.\clearpage
         \subsubsection{Calcul des sous-ensembles: calculate\_parking\_specific\_reg}
         Cette fonction calcule le nombre de places de stationnement pour un sous-ensemble de règlements. Le logigramme \ref{fig:logigramme_calcul_reg} détaille la procédure.
         \begin{figure}[!h]
@@ -1159,7 +1159,7 @@
             \caption{Logigramme de calcul d'un règlement}
             \label{fig:logigramme_calcul_reg}
         \end{figure}
-        \FloatBarrier
+        \FloatBarrier \clearpage
         \subsubsection{Choix d'un estimé: subset\_operation}
         Une fois qu'un estimé est dressé pour chaque sous-ensemble d'un règlement, il est nécessaire d'arbitrer sur quel sous-ensemble prend préséance. Cet arbitrage est fait par une succession de décisions logiques. Deux conditions peuvent s'appliquer: un \og{ou simple} \fg{} ou un \og{ou plus contraignant} \fg{}. Le logigramme \ref{fig:logigramme_arbitrage_ss_ensemble} montre la procédure d'arbitrage.
         \begin{figure}[!h]

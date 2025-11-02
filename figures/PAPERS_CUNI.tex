@@ -1,0 +1,96 @@
+
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+
+% -------------------------------------------------
+% Helper that removes the internal \pgfpl@@ wrapper
+% -------------------------------------------------
+
+\begin{document}
+
+    % This file was created with matplot2tikz v0.4.0.
+    \begin{tikzpicture}
+        \begin{axis}[
+        height=10cm,
+        legend cell align={left},
+        legend style={fill opacity=0.8, draw opacity=1, text opacity=1},
+        minor xtick={},
+        minor ytick={},
+        tick align=outside,
+        tick pos=left,
+        title={PAPERS - Cité Universitaire},
+        width=15cm,
+        xlabel={Heure},
+        xmin=3.5, xmax=28.5,
+        xtick style={color=black},
+        xtick={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28},
+        xticklabel style={rotate=90.0},
+        ylabel={Nombre de personnes / stationnements},
+        ymin=0, ymax=60000,
+        ytick style={color=black},
+        ytick={0,10000,20000,30000,40000,50000,60000},
+        yticklabels={
+          \(\displaystyle {0}\),
+          \(\displaystyle {10000}\),
+          \(\displaystyle {20000}\),
+          \(\displaystyle {30000}\),
+          \(\displaystyle {40000}\),
+          \(\displaystyle {50000}\),
+          \(\displaystyle {60000}\)
+        },
+        scaled ticks=false
+        ]
+        
+        \addplot[ybar,draw=blue,fill=blue,legend image post style={/pgfplots/ybar legend}]
+        coordinates{
+            (4,16917)
+            (5,18041)
+            (6,24613)
+            (7,38675)
+            (8,47599)
+            (9,52511)
+            (10,54982)
+            (11,56119)
+            (12,55749)
+            (13,56219)
+            (14,54470)
+            (15,47774)
+            (16,37513)
+            (17,30742)
+            (18,26507)
+            (19,25810)
+            (20,22586)
+            (21,19512)
+            (22,17826)
+            (23,17431)
+            (24,17192)
+            (25,16960)
+            (26,16889)
+            (27,16793)
+            (28,16793)
+        };
+        
+        \addlegendentry{Personnes}
+        \addplot [semithick, red, dashed]
+            table {%
+                3.5 22883
+                28.5 22883
+            };
+        \addlegendentry{Inventaire réglementaire}
+        \addplot [semithick, red, dash pattern=on 1pt off 3pt on 3pt off 3pt]
+        table {%
+        3.5 30976
+        28.5 30976
+        };
+        \addlegendentry{Inventaire corrigé}
+        \end{axis}
+    
+    \end{tikzpicture}
+
+\end{document}

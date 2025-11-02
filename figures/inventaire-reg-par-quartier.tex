@@ -1,0 +1,131 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+% This file was created with matplot2tikz v0.4.0.
+\begin{tikzpicture}
+
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{lightgray204}{RGB}{204,204,204}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+    legend cell align={left},
+    legend style={fill opacity=0.8, draw opacity=1, text opacity=1},
+    minor xtick={},
+    minor ytick={},
+    tick align=outside,
+    tick pos=left,
+    width=15cm,
+    height=10cm,
+    xmin=-0.5, xmax=34.5,
+    xtick style={color=black},
+    xtick={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34},
+    xticklabel style={rotate=90.0},
+    xticklabels={
+      NE-LB,
+      DU-LS,
+      VBEL,
+      CUNI,
+      VQ-CP,
+      SSAU,
+      VANI,
+      5-2,
+      CHAT,
+      LRTV,
+      LAIR,
+      MAIZ,
+      VIMO,
+      STRO,
+      AÉRO,
+      PSFO,
+      VLIM,
+      MCLM,
+      STLO,
+      ORSA,
+      VIBO,
+      CHMO,
+      JESU,
+      PLAT,
+      SJBA,
+      SILR,
+      CARO,
+      4-6,
+      NDL,
+      SSAC,
+      LSC,
+      STLI,
+      4-3,
+      STEM,
+      4-5
+    },
+    ylabel={Nombre de places},
+    ymin=0, ymax=43878.45,
+    ytick style={color=black},
+    ytick={0,10000,20000,30000,40000,50000},
+    yticklabels={
+      \(\displaystyle {0}\),
+      \(\displaystyle {10000}\),
+      \(\displaystyle {20000}\),
+      \(\displaystyle {30000}\),
+      \(\displaystyle {40000}\),
+      \(\displaystyle {50000}\)
+    },
+    scaled ticks=false
+]
+
+    \addplot[ybar,draw=blue,fill=blue,legend image post style={/pgfplots/ybar legend},
+      bar width=8pt]
+      coordinates{
+        (0,41789)
+        (1,33746)
+        (2,24826)
+        (3,22883)
+        (4,18987)
+        (5,18679)
+        (6,17873)
+        (7,15689)
+        (8,14699)
+        (9,14505)
+        (10,14329)
+        (11,14062)
+        (12,14046)
+        (13,13137)
+        (14,12928)
+        (15,12809)
+        (16,12583)
+        (17,12498)
+        (18,12126)
+        (19,12074) 
+        (20,11281) 
+        (21,10922)
+        (22,10746)
+        (23,10645)
+        (24,10575)
+        (25,10551)
+        (26,10474)
+        (27,10463)
+        (28,9321)
+        (29,9067)
+        (30,8845)
+        (31,8766) 
+        (32,7972)
+        (33,7873)
+        (34,7045)
+      };
+    
+    \addlegendentry{Inventaire par quartier}
+    \end{axis}
+
+\end{tikzpicture}
+
+
+\end{document}

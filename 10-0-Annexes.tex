@@ -12,9 +12,409 @@
 %%  Toutes les annexes doivent être inclues dans ce document
 %%  les unes à la suite des autres.
 %%  All annexes must be included in this document one after the other.
-\Annexe{Requêtes SQL pertinentes}
+\Annexe{Détails des différents domaines de données de l'\ac{API}}
+\section{API: routes d'appel} 
+L'appel routes permet d'énumérer une liste des \ac{URI} disponibles, des méthodes possibles pour chaque \ac{URI} et des fonctions TypeScript appelées par chaque \ac{URI}
+\begin{itemize}
+    \item GET /api/routes renvoie l'ensemble des routes implémentées sur le serveur. Les colonnes disponibles pour chaque entrée sont listées ci-dessous: 
+    \begin{itemize}
+        \item path: renvoie l'\ac{URI} pour la route
+        \item methods: renvoie une liste des méthodes (GET, PUT, POST, DELETE) pour l'\ac{URI} en question
+        \item middlewares: le nom de la fonction TypeScript appelée par le serveur pour renvoyer l'information
+    \end{itemize}
+\end{itemize}
+\section{API: Inventaire} 
+Les appels d'API suivants sont proposés pour les objets de type inventaire:
+\begin{itemize}
+    \item GET /api/inventaire/quartier/$<id_{quartier}>$: Renvoie l'inventaire pour un quartier complet
+    \item GET /api/inventaire/calcul/quartier/$<id_{quartier}>$: renvoie le résultat du calcul détaillé dans la section \ref{sec:meth_urb_based_inventory} pour un quartier d'analyse
+    \item GET /api/inventaire/calcul/lot/$<g\_no\_lot>$: renvoie le résultat du calcul détaillé dans la section \ref{sec:meth_urb_based_inventory} pour un lot cadastral. Pour l'ensemble des identifiants de lots cadastraux, les espaces dans le numéro de lot sont remplacés par des tirets bas. Ce remplacement est nécessaire pour éviter de mettre des espaces dans l'\ac{URL}.
+    \item POST /api/inventaire/calcul/reg-val-man permet de faire un calcul pour des valeurs manuellement entrées par l'utilisateur. Les valeurs manuelles sont transmises dans le corps de la requête. Les entrées suivantes doivent être présentes pour chaque entrée:
+    \begin{itemize}
+        \item g\_no\_lot: l'identifiant de lot
+        \item cubf: le code d'utilisation du bien fond applicable
+        \item id\_reg\_stat: l'identifiant de règlement pertinent
+        \item id\_er: l'identifiant d'ensemble de règlement pertinent
+        \item unite: l'identifiant d'unité de la valeur fournie
+        \item valeur: la valeur manuelle entrée par l'utilisateur
+    \end{itemize}
+    \item POST /api/inventaire/nouv-en-gros: Cette adresse permet de créer des entrées d'inventaire en gros. Les colonnes suivantes doivent être dans le corps de la requête \ac{REST}:
+    \begin{itemize}
+        \item g\_no\_lot
+        \item n\_places\_min
+        \item n\_places\_max
+        \item n\_places\_mesure
+        \item n\_places\_estime
+        \item id\_er
+        \item id\_reg\_stat
+        \item commentaire
+        \item methode\_estime
+        \item cubf
+    \end{itemize}
+     \item POST /api/inventaire: nouvelle entrée dans la table \underline{inventaire\_stationnement}. Les informations suivantes sont fournies dans le corps du message:
+    \begin{itemize}
+        \item g\_no\_lot
+        \item n\_places\_min
+        \item n\_places\_max
+        \item n\_places\_mesure
+        \item n\_places\_estime
+        \item id\_er
+        \item id\_reg\_stat
+        \item commentaire
+        \item methode\_estime
+        \item cubf
+    \end{itemize}
+    \item PUT /api/inventaire/$<id_{inv}>$: Modification de l'entrée dans la table \ul{inventaire\_ stationnement} dont l'identifiant est égal à la valeur entre <>. Le contenu de l'entrée est communiqué dans le corps du message avec les variables suivantes:
+    \begin{itemize}
+        \item g\_no\_lot
+        \item n\_places\_min
+        \item n\_places\_max
+        \item n\_places\_mesure
+        \item n\_places\_estime
+        \item id\_er
+        \item id\_reg\_stat
+        \item commentaire
+        \item methode\_estime
+        \item cubf
+    \end{itemize}
+    \item PUT /api/inventaire/maj-en-gros: permet de faire la modification en gros d'inventaire de stationnement. Contrairement à la mise à jour d'un seul élément, l'ensemble des champs de la table \ul{inventaire\_stationnement} doivent être présents dans le corps de la requête.
+   
+    
+    \item DELETE /api/inventaire/$<id_{inv}>$: supprime l'entrée dont l'id\_inv est égal à la valeur entre <>.
+\end{itemize}
+\section{API: Règlements}
+Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement:
+\begin{itemize}
+    \item GET /api/reglements/entete: renvoie toutes les entêtes de règlements (description, information administrative). Les paramètres de filtrage suivants peuvent être fournis dans l'\ac{URI} pour réduire la liste de règlements renvoyés. Les éléments description, ville, texte, article et paragraphe utilisent les fonctions de recherches incluses dans PostgreSQL \parencite{postgresql_global_development_group_811_2025}
+    \begin{itemize}
+        \item annee\_debut\_avant
+        \item annee\_debut\_apres
+        \item annee\_fin\_avant
+        \item annee\_fin\_apres
+        \item description
+        \item ville
+        \item texte
+        \item article
+        \item paragraphe
+    \end{itemize}
+    \item GET /api/reglements/complet/<id\_reg\_stat>: renvoie un règlement complet (l'entête et la définition mathématique). Le format JSON renvoyé est le suivant: 
+    \begin{itemize}
+        \item entete: un vecteur contenant les éléments suivants
+        \begin{itemize}
+            \item id\_reg\_stat: l'identifiant du règlement
+            \item description: description sommaire du règlement
+            \item annee\_debut\_reg: Année d'entrée en vigueur du règlement inclusif
+            \item annee\_fin\_reg: Année d'abrogation du règlement (inclusif)
+            \item texte\_loi: Texte de loi définissant le règlement
+            \item article\_loi: Article de loi où le règlement est défini
+            \item paragraphe\_loi: Paragraphe de la loi où le règlement est défini
+            \item ville: nom commun de la juridiction
+        \end{itemize}
+        \item définition: une table contenant la définition du règlement avec les éléments suivants
+        \begin{itemize}
+            \item id\_reg\_stat\_emp: identifiant unique de la ligne de définition mathématique
+            \item id\_reg\_stat: identifiant du règlement
+            \item ss\_ensemble: sous-ensemble du règlement auquel appartient la ligne
+            \item seuil: seuil au dessus duquel le règlement s'applique quand l'opérateur à l'intérieur du sous-ensemble
+            \item oper: colonne contenant les opérateur. Le premier élément du sous-ensemble contient l'opérateur applicable entre ce sous ensemble et le précédent, les autres sont l'opérateur utilisé entre les lignes 
+            \item cases\_fix\_min: ordonnée à l'origine de la droite représentant le stationnement minimum
+            \item pente\_min: pente de la droite représentant le stationnement minimum
+            \item cases\_fix\_max: ordonnée à l'origine de la droite représentant le stationnement maximum
+            \item pente\_max: pente de la droite représentant le stationnement maximum
+            \item unite: unité de l'axes des x de la droite pour les requis minimum et maximum
+        \end{itemize}
+    \end{itemize}
+    \item GET /api/reglements/operations: renvoie le contenu de la table \ul{liste\_operations} (Tableau \ref{tab:operations_table})
+    \item GET /api/reglements/unites: renvoie les informations contenues dans la table \ul{multiplicateur\_facteurs\_ colonnes} (Tableau \ref{tab:unite_pertinentes_minimum_stat})
+    \item GET /api/reglements/unites/<id>: renvoie la ligne de la table \ul{multiplicateur \_facteurs\_colonnes} dont l'identifiant est entre <>
+    \item POST /api/reglements/entete: permet de créer un nouvel entête de règlement. Les éléments suivants doivent être fournis dans le corps du message (voir Tableau \ref{tab:definition_entete_reg_stationnement})
+    \begin{itemize}
+        \item description
+        \item annee\_debut\_reg
+        \item annee\_fin\_reg
+        \item texte\_loi
+        \item article\_loi
+        \item paragraphe\_loi
+        \item ville
+    \end{itemize}
+    \item PUT /api/reglements/entete/<id>: permet de modifier un entête de règlement. Les mêmes champs doivent être fournis dans le corps que pour la fonction POST tandis que l'identifiant id\_reg\_stat doit être dans l'adresse.
+    \item DELETE /api/reglements/<id>: permet de supprimer le règlement dont l'identifiant id\_reg\_stat est égal à la valeur entre <>
+    \item POST /api/reglements/ligne-def: permet de créer une nouvelle entrée dans la table \ul{reg\_stationnement\_empile} (voir Tableau \ref{tab:definition_reg_stat_emp}). Les valeurs suivantes doivent être fournies dans le corps de la requête:
+    \begin{itemize}
+        \item id\_reg\_stat: identifiant du règlement
+        \item ss\_ensemble
+        \item seuil
+        \item oper
+        \item cases\_fix\_min
+        \item pente\_min
+        \item cases\_fix\_max
+        \item pente\_max
+        \item unite
+    \end{itemize}
+    \item PUT /api/reglements/ligne-def/<id>: permet de modifier la ligne de définition mathématique dont l'identifiant (id\_reg\_stat\_emp) est entre <>. Les même champs que la requête POST doivent être fournis.
+    \item DELETE /api/reglements/ligne-def/<id>: permet la suppression de la ligne de définition mathématique dont l'identifiant est entre <>.
+    \item GET /api/reglements/graphiques: renvoit le nombre de places minimums requises pour le règlement en fonction de l'unité fournie dans les paramètres de requête. Au minimum, les identifiants séparés par des virgules et l'identifiant d'unité doivent être fournis. Les paramètres suivants peuvent être fournis pour raffiner le graphique:
+    \begin{itemize}
+        \item min: valeur minimale de l'axe des x
+        \item max: valeur maximale de l'axe des x
+        \item pas: pas pour les valeurs entre min et max
+    \end{itemize}
+\end{itemize}
+\section{API: Ensembles de règlements}
+Les appels d'\ac{API} suivants sont proposés pour les ensembles de règlements.
+\begin{itemize}
+    \item GET /api/ens-reg/entete: renvoie l'ensemble des entêtes de règlements de stationnement dont les propriétés sont listées dans le Tableau \ref{tab:definition_er}:
+    \begin{itemize}
+        \item id\_er 
+        \item date\_debut\_er
+        \item date\_fin\_er
+        \item description\_er
+    \end{itemize}
+    \item PUT /api/ens-reg/entete/<id\_er>: permet de modifier l'entête d'ensemble de règlements dont l'identifiant est entre <>. Les paramètres suivants doivent être fournis dans le corps de la requête (voir Tableau \ref{tab:definition_er}):
+    \begin{itemize}
+        \item description\_er
+        \item date\_debut\_er
+        \item date\_fin\_er
+    \end{itemize}
+    \item POST /api/ens-reg/entete/: permet de créer un l'entête d'un nouvel ensemble de règlements. Les mêmes champs doivent être fournis que la fonction PUT.
+    \item PUT /api/ens-reg/assoc/<id\_assoc\_er\_reg>: permet de modifier une association spécifique dans un ensemble de règlements. Les champs décrits dans le tableau \ref{tab:definition_association_er_reg_stat}. Les entrées ayant un \ac{CUBF} entre 1 et 9 ne peuvent modifier que le règlement. En effet, au minimum, un ensemble de règlements doit contenir les CUBF 1 à 9. Les variables suivantes doivent être fournies dans le corps de la requête
+    \begin{itemize}
+        \item id\_reg\_stat, l'identifiant du règlement
+        \item cubf, le \ac{CUBF} pour l'utilisation du sol
+        \item id\_er, l'identifiant d'ensemble règlement
+    \end{itemize}
+    \item POST /api/ens-reg/assoc permet de créer une nouvelle association entre un \ac{CUBF} et un règlement. Les variables du tableau \ref{tab:definition_association_er_reg_stat} doivent être fournies:
+    \begin{itemize}
+        \item id\_reg\_stat, l'identifiant du règlement
+        \item cubf, le \ac{CUBF} pour l'utilisation du sol
+        \item id\_er, l'identifiant d'ensemble règlement
+    \end{itemize}
+    \item DELETE /api/ens-reg/assoc/<id\_assoc\_er\_reg> permet de supprimer l'association dont l'identifiant est fourni dans l'\ac{URL}.
+    \item GET /api/ens-reg/complet/<id\_er> renvoie  les données suivantes pour l'ensemble de règlement dont l'identifiant est égal à id\_er:
+        \begin{itemize}
+            \item entete
+                \begin{itemize}
+                    \item id\_er
+                    \item date\_debut\_er
+                    \item date\_fin\_er
+                    \item description\_er
+                \end{itemize}
+            \item assoc\_util\_sol
+                \begin{itemize}
+                    \item id\_assoc\_er\_reg identifiant primaire
+                    \item id\_reg\_stat, l'identifiant du règlement
+                    \item cubf, le \ac{CUBF} pour l'utilisation du sol
+                    \item id\_er, l'identifiant d'ensemble règlement
+                \end{itemize}
+            \item table\_util\_sol
+                \begin{itemize}
+                    \item \ac{CUBF}
+                    \item description
+                \end{itemize}
+        \end{itemize}
+    \item DELETE /api/ens-reg/<id\_er> permet de supprimer un ensemble de règlements. Le serveur s'assure que cet ensemble n'est pas utilisé dans un ensemble de règlements-territoire avant de supprimer.
+
+\end{itemize}
+En plus des adresses basiques fournies ci-dessus, des adresses supplémentaires ont été créées pour certaines pages particulières au sein de l'interface. 
+\begin{itemize}
+    \item GET /api/ens-reg/reg-associes/<id\_er> renvoie les entêtes des règlements qui sont utilisés dans l'ensemble de règlements dont l'identifiant est égal à id\_er.
+    \item GET /api/ens-reg/entete-par-territoire/<id\_periode\_geo> renvoie les entêtes des ensembles de règlements associés au territoire dont l'identifiant est égal à id\_periode\_geo.
+    \item GET /api/ens-reg/par-role/<id\_provinc>: permet d'obtenir les entetes d'ensemble de règlements associées à l'inventaire pour une ou plusieurs entrées du rôle. Plusieurs identifiants séparés par des virgules peuvent être fournis entre <>
+    \item POST /api/ens-reg/informations-pour-graphique: permet d'obtenir les règlements pertinents et les unités formulées pour les ensembles de règlements et le \ac{CUBF} sélectionné. Les identifiants de règlements et le \ac{CUBF} sont envoyés dans le corps de la requête
+\end{itemize}
+
+\section{API: Territoire}
+L'\ac{API} possède les appels suivants pour obtenir les territoires. Pour l'instant, aucune fonction n'a été implémenté pour modifier ou supprimer les territoires pour l'instant.
+\begin{itemize}
+    \item GET /api/territoire/periode/<id\_periode> permet d'obtenir l'ensemble des territoires associés qui sont associés à la période spécifiée dans l'\ac{URL}.
+    \item GET /api/territoire/periode-geo/<id\_periode\_geo> permet d'obtenir un territoire selon son identifiant unique.
+\end{itemize}
+\section{API: Ensembles de règlements territoire}
+Les ensemble de règlements territoire sont l'association entre les ensembles de règlements et les territoires. Il s'agit pour l'essentiel d'un assocation entre le territoire et l'ensemble de règlements. Les dates de validités du \ac{RST} sont inférées à partir des dates de validité de l'ensmble de règlement et du territoire. Cet objet a le complément complet d'options pour modifier les associations (contrairement aux territoires et aux quartiers d'analyse qui doivent être téléversés manuellement). Les adresses d'\ac{API} sont les suivants:
+\begin{itemize}
+    \item GET /api/ens-reg-terr/par-territoire/<id\_periode\_geo>: permet d'obtenir les \ac{RST} associés au territoire dont l'identifiant est spécifié
+    \item GET /api/ens-reg-terr/associations: permet d'obtenir des associations en fonction de la latitude, la longitude ou les dates d'entrée en vigueur et d'abrogation au moyen des paramètres de requêtes suivants:
+    \begin{itemize}
+        \item lat: Latitude en degrés décimal; doit être utilisé avec un longitude
+        \item long: Longitude en degrés décimal; doit être utilisé avec une latitude
+        \item annee\_debut\_avant: année de début de la période ou de l'ensemble de règlements est avant l'année specifiée
+        \item annee\_debut\_apres: année de début de la période ou de l'ensemble de règlements est après l'année spécifiée
+        \item annee\_fin\_avant: année de fin de la période ou de l'ensemble de règlements est avant l'année spécifiée
+        \item annee\_fin\_apres: année de fin de la préiode ou de l'ensemble de règlements est après l'année spécifiée
+        \item ville\_comme: la ville du territoire ressemble à la chaîne de caractères soumise
+        \item secteur\_comme: le secteur du territoire ressemble à la chaîne de caractères soumise
+    \end{itemize}
+    \item POST /api/ens-reg-terr/association: permet de créer une nouvelle association dans la table \underline{association\_er\_territoire} (voir Tableau \ref{tab:definition_association_er_territoire}. Les champs suivants doivent être spécifiés dans le corps de la requête:
+    \begin{itemize}
+        \item id\_er : l'identifiant du \ac{PRS}
+        \item id\_periode\_geo: l'identifiant du territoire
+    \end{itemize}
+    \item PUT /api/ens-reg-terr/association/<id\_asso\_er\_ter>: permet de modifier l'association dont l'identifiant est entre <>. Les mêmes champs doivent être spécifiés que pour la création d'une nouvelle association
+    \item DELETE /api/ens-reg-terr/association/<id\_asso\_er\_ter>: permet de supprimer l'association dont l'identifiant est entre <>.
+\end{itemize}
+\section{API: Historique}
+L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville:
+\begin{itemize}
+    \item GET /api/historique obtient l'ensemble des entrées de la table \ul{historique\_geopol} avec les entrées du Tableau \ref{tab:definition_historique_geopol}. Aucun paramètre de filtrage n'a été mis en place à l'heure actuelle pour l'historique du fait de la simplicité des données en cours. 
+    \item PUT /api/historique/<$id_{periode}$> permet de modifier un item de la table \ul{historique\_ geopol}. Les colonnes suivantes doivent être dans le corps du message selon les types 
+    \begin{itemize}
+        \item nom\_periode 
+        \item date\_debut\_periode
+        \item date\_fin\_periode
+    \end{itemize}
+    \item POST /api/historique permet de créer une nouvelle période dans la base de données. Les colonnes suivantes doivent être dans le corps du message.
+    \begin{itemize}
+        \item nom\_periode 
+        \item date\_debut\_periode
+        \item date\_fin\_periode
+    \end{itemize}
+    \item DELETE /api/historique/<$id_{periode}$> permet de supprimer la période dont l'identifiant est égal à $id_{periode}$
+\end{itemize}
+
+
+\section{API: Lots cadastraux et entrées du rôle foncier}
+Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux et les entrées du rôle. Il est important de noter que des fonctions d'association, de création, de mise à jour et de suppression du rôle seraient pertinents pour une implémentation en production. Dans le cadre de ce mémoire, les information du rôle et du cadastre ont été créés manuellement dans la base de données. Finalement, les espaces dans la chaîne de caractères des identifiants doivent être remplacées par le caractère \_.
+\begin{itemize}
+    \item GET /api/cadastre/lot/quartier-ana/<$id_{quartier}$> permet d'obtenir l'ensemble des lots qui se situent à l'intérieur du quartier d'analyse dont l'identifiant est fourni dans l'\ac{URI}
+    \item GET /api/cadastre/lot/<$g\_no\_lot$> permet d'obtenir le lot dont l'identifiant est égal à la valeur fournie de g\_no\_lot.
+    \item GET /api/cadastre/role-associe/<$g\_no\_lot$> permet d'obtenir les entrées du rôle foncier associées au lot dont l'identifiant est fourni entre <>. L'identifiant spécifié est celui du lot
+\end{itemize}
+Une fonction permettant de faire des requêtes complexes en utilisant des boites englobantes est en cours de développement mais incomplète. Elle est principalement pensée pour permettre de réduire le nombre de données géospatiales à garder en mémoire en parcourant la carte. 
+\section{API: Codes d'utilisation du Bien-Fonds}
+Les appels pour les \ac{CUBF} sont principalement utilisés pour créer les assocations entre les règlements et les utilisations du sol. Pour rendre la recherche plus facile, des paramètres de requête ont été implémentés pour pouvoir obtenir des sous-ensembles pertinents de la liste des \ac{CUBF}. Sans paramètre de requête l'\ac{API} renvoie les 1700 \ac{CUBF}. La création, la modification et la suppression de \ac{CUBF} n'ont pas été implémentés
+\begin{itemize}
+    \item GET /api/cubf: permet de renvoyer les \ac{CUBF} et leur description. Deux paramètres de requête sont mis en place pour permettre d'extraire des sous-ensembles
+    \begin{itemize}
+        \item cubf: un \ac{CUBF} numérique. Il est souvent fourni pour chercher les \ac{CUBF} enfants
+        \item niveau: donne le niveau du \ac{CUBF}. Un niveau 1 implique un \ac{CUBF} entre 1 et 9, un niveau 2 implique un \ac{CUBF} entre 10 et 99, un niveau 3 implique un \ac{CUBF} entre 100 et 999 et un niveau 4 implique un \ac{CUBF} entre 1000 et 9999
+    \end{itemize}
+    \item GET /api/n\_entrees: permet de renvoyer le nombre de \ac{CUBF} pour chaque niveau.
+\end{itemize}
+Quelques exemples seront fournis pour clarifier. L'appel à l'adresse \og{/api/cubf?niveau=1} \fg{} utilisant la méthode GET renvoie les valeurs listées au tableau \ref{tab:get-cubf-niv1}.\par
+\begin{table}[h]
+    \centering
+    \caption{Réponse à l'appel \og{/api/cubf?niveau=1}\fg{}}
+    \label{tab:get-cubf-niv1}
+    \begin{tabular}{ll}
+        \toprule
+         CUBF & Description \\
+         \midrule
+         1 & RÉSIDENTIELLE \\
+         2 & INDUSTRIES MANUFACTURIÈRES\\
+         3 & INDUSTRIES MANUFACTURIÈRES \\
+         4 & TRANSPORTS, COMMUNICATIONS ET SERVICES PUBLICS \\
+         5 & COMMERCIALE \\
+         6 & SERVICES \\
+         7 & CULTURELLE, RÉCRÉATIVE DE LOISIRS \\
+         8 & PRODUCTION ET EXTRACTION DE RICHESSES NATURELLES \\
+         9 & IMMEUBLES NON EXPLOITÉS ET ÉTENDUES D'EAU\\ \bottomrule
+    \end{tabular}
+\end{table}
+L'appel à la méthode GET à l'adresse \og{/api/cubf?niveau=2\&cubf=6}\fg{} renvoie les entrées au tableau \ref{tab:get-cubf-niv2}\par
+\begin{table}[h]
+    \centering
+    \caption{Réponse à l'appel \og{/api/cubf?niveau=2\&cubf=6}\fg{}}
+    \label{tab:get-cubf-niv2}
+    \begin{tabular}{ll}
+        \toprule
+         CUBF & Description \\
+         \midrule
+         60 & IMMEUBLE À BUREAUX \\
+         61 & FINANCE, ASSURANCE ET SERVICE IMMOBILIER\\
+         62 & SERVICE PERSONNEL\\
+         63 & SERVICE D'AFFAIRES \\
+         64 & SERVICE DE RÉPARATION \\
+         65 & SERVICE PROFESSIONEL \\
+         66 & SERVICE DE CONSTRUCTION \\
+         67 & SERVICE GOUVERNEMENTAL\\
+         68 & SERVICE ÉDUCATIONNEL\\ 
+         69 & SERVICE DIVERS \\\bottomrule
+    \end{tabular}
+    
+\end{table}
+L'appel de la méthode GET à l'adresse \og{/api/cubf?niveau=3\&cubf=65}\fg{} renvoie les résultats présentés au tableau \ref{tab:get-cubf-niv3}.\par
+\begin{table}[h]
+    \centering
+    \caption{Réponse à l'appel \og{/api/cubf?niveau=3\&cubf=65}\fg{}}
+    \label{tab:get-cubf-niv3}
+    \begin{tabular}{ll}
+        \toprule
+         CUBF & Description \\
+         \midrule
+         651 & Service médical et de santé \\
+         652 & Service juridique\\
+         653 & Service Social\\
+         654 & Service social hors institution\\
+         655 & Service informatique\\
+         656 & Service de soins paramédicaux \\
+         657 & Service de soins thérapeutiques\\
+         659 & Autres services thérapeutiques\\\bottomrule
+    \end{tabular}
+    
+\end{table}
+Ainsi, l'inclusion d'un \ac{CUBF} inférieur à 1000 et un niveau approprié permet d'explorer de manière hiérarchique les \ac{CUBF}. Si le niveau n'est pas fourni, seule la description du \ac{CUBF} fourni sera renvoyée.
+L'appel à GET \og{/api/cubf/n\_entrees} \fg{} renvoit essentiellement toujours le même résultat donnée au tableau \ref{tab:get-cubf-n-entrees}
+\begin{table}[h]
+    \centering
+    \caption{Réponse de la méthode GET à l'adresse \og{/api/cubf/n\_entrees} \fg{}}
+    \label{tab:get-cubf-n-entrees}
+    \begin{tabular}{clc}
+        \toprule
+        Niveau & Description & n\_entrees\\
+        \midrule
+        1 & CUBF 1 à 9 & 9 \\
+        2 & CUBF 10 à 99 & 77\\
+        3 & CUBF 100 à 999 & 359 \\
+        4 & CUBF 1000 à 9999 & 1255\\
+        \bottomrule
+    \end{tabular}
+    
+\end{table}
+\section{API: Secteurs d'analyse}
+L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse qui sont définis à la section \ref{ssec:struct_donnees_sec_analyse}. Les fonctions d'édition et de suppression des quartiers d'analyse n'existent pas à l'heure actuelle. Elles devraient être mise en place dans une version de production de l'outil.
+\begin{itemize}
+    \item GET /api/quartiers-analyse obtient l'ensemble des quartiers dans la table \ul{sec\_analyse}
+\end{itemize}
+\section{API: Analyse agrégée}
+Plusieurs indicateurs sont agrégés par quartier. Cette section donnera les détails des appels d'\ac{API} permettant de créer les divers graphiques. La ou les variables sélectionnées ainsi que l'ordre de priorité à sélectionner en cas de présence de plusieurs estimés de stationnement sont communiquées au serveur au moyen de paramètre de requête. 3 types d'analyse de quartier sont possibles: cartographique, par diagramme à barre et par diagramme XY. Chaque type d'analyse se voit attribuer un \ac{URI}. Les profils d'accumulation véhicule se voient attribués une \ac{URI} différente de par leur spécificité. D'autre part, les noms de variables doivent être codifiés dans les scripts clients et serveurs tandis que les requêtes SQL ne sont codifiées que dans le script serveur. Une implémentation future devrait permettre de capturer les variables et toutes les informations attenantes dans un seul fichier pour éviter la duplication et de potentielles erreurs. Les codes de variables sont donnés au Tableau \ref{tab:analysis-var-query-vals}.
+
+Les \ac{URI} sont listées ci-dessous:
+\begin{itemize}
+    \item GET /api/ana-par-quartier/carto: permet d'obtenir une variable pour une carte choroplèthe. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \begin{itemize}
+        \item variable: identifiant de variable tel que spécifié au tableau \ref{tab:analysis-var-query-vals}
+        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
+    \end{itemize}
+    \item GET /api/ana-par-quartier/histo: permet d'obtenir les variables pour un diagramme à barre en fonction du quartier. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \begin{itemize}
+        \item variable: identifiant de variable tel que spécifié au tableau \ref{tab:analysis-var-query-vals}
+        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
+    \end{itemize}
+    \item GET /api/ana-par-quartier/XY: permet d'obtenir les quantités pour un diagramme XY. Les quartiers sont spécifiés dans l'entête de la réponse. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \begin{itemize}
+        \item X: variable sur l'axe des x
+        \item Y: variable sur l'axe des y
+        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
+    \end{itemize}
+\end{itemize}
+Ainsi, la requête pour obtenir la carte choroplèthe du stationnement total, avec l'ordre de priorité des inventaires étant fixé à \og{Manuel $\rightarrow$ réglementaire manuel $\rightarrow$ Réglementaire automatique} \fg{}  aurait la requête suivante \og{/api/ana-par-quartier/carto?variable=stat-tot\&ordre=1,3,2}\fg{}. Une requête pour les informations d'un graphique XY avec la population en 2021 sur l'axe des X et le stationnement total en axe des y serait \og{/api/ana-par/quartier/XY?X=popu-2021\&Y=stat-tot\&ordre=1,3,2} \fg{}. Les données sont renvoyées de manière à être directement utilisable dans la librairie de graphes de react-chart-js \parencite{ayerst_react-chartjs-2_2017}. Deux adresses supplémentaires sont créées pour recalculer les statistiques agrégées
+\begin{itemize}
+    \item GET /api/ana-par-quartier/recalcule-stat-agreg: permet de recalculer le nombre de places de stationnement pour chaque quartier
+    \item GET /api/ana-par-quartier/recalcule-val-autres: permet de recalculer les statistiques issues de l'enquête OD, du recensement ou du rôle foncier pour chaque quartier
+\end{itemize}
+\section{API: Profiles d'accumulation véhicule}
+Les appels d'\ac{API} suivants sont mis en place pour gérer les profils d'accumulation véhicule \parencite{diallo_methodology_2015,morency_characterizing_2008} qui permettent de trouver la \og{population}\fg{} de véhicules dans une géographie en fonction de l'heure de la journée.
+\begin{itemize}
+    \item GET /api/PAV?order=<X,Y,Z>\&id\_quartier=<$id_{quartier}$> permet d'accéder au profile d'accumulation véhicule pour le quartier dont l'identifiant est spécifié. L'ordre spécifié donne l'ordre de préséance pour le relevé de l'inventaire du quartier. En effet, l'\ac{API} fournit l'inventaire du quartier en même temps pour visuellement constater l'utilisation de la capacité. Les données sont fournies de manière à être utilisées par react-chart-js \parencite{ayerst_react-chartjs-2_2017}.
+    \item GET /api/PAV/recalcule/<$id_{quartier}$> permet de refaire le calcul du profile d'accumulation véhicule à partir des données de l'enquête OD
+    \item POST /api/PAV/<$id_{quartier}$> permet de mettre à jour le profile d'accumulation dans la base de données une fois que l'utilisateur l'a confirmé
+\end{itemize}
+\section{API: Validation}
+L'\ac{API} de validation a été mis en place pour permettre de rapidement assurer la qualité de l'inventaire créé. Bien que des développements méthodologiques demeurent, l'implémentation actuelle a les fonctionnalités de base pour créer une structure d'échantillonnage stratifiée, de sélectionner un ensemble de lots selon la méthodologie choisie, d'entrer les données de validation et de visualiser les résultats. Cette section documentera les appels d'\ac{API} mise en place pour soutenir cette fonctionnalité  
+\clearpage
+\Annexe{Requêtes et morceaux de codes pertinents}
 Cette section détaillera certaines requêtes qui n'ont pas été listées dans le texte principal du mémoire, mais qui sont pertinentes.
-\section{Sélection d'entrées du rôle foncier lors d'un calcul par quartier d'analyse}\label{sec:annex-select-tax-data}
+\section{Code: Sélection d'entrées du rôle foncier lors d'un calcul par quartier d'analyse}\label{sec:annex-select-tax-data}
 \begin{lstlisting}[language=SQL, caption=Requête 1 dans tax\_database\_for\_analysis\_territory]
 SELECT 
     points.* 
@@ -49,7 +449,7 @@ WHERE
     g_no_lot IN (LISTE DE LOTS)\end{lstlisting}
     Ces trois tables forment l'ensemble de données foncières (TaxDataset) pour le calcul en cours.
 
-\section{Assignation des ensembles de règlements aux entrées du rôle à l'intérieur du quartier}\label{sec:annex-assign-rule-to-role}
+\section{Code: Assignation des ensembles de règlements aux entrées du rôle à l'intérieur du quartier}\label{sec:annex-assign-rule-to-role}
 \begin{lstlisting}[language=SQL, caption=Sélection des territoires touchant au rôle foncier]
 WITH unioned_geometry AS (
     SELECT 
@@ -126,7 +526,7 @@ else:
 RST_to_append = RegSetTerritory(relevant_territory,reg_set,start_year_RST,end_year_RST,association[id_assoc_er_ter])
 RST_list_to_return.append(RST_to_append)   
 \end{lstlisting}
-\section{Assignation des données foncières aux RST}
+\section{Code: Assignation des données foncières aux RST}
 La section suivant donnera un aperçu du code requis pour assigner les données foncières aux différents \ac{RST}.
 \begin{lstlisting}[language=Python, caption=Procédure d'assignation du rôle foncier aux RST,label=lst:assign_tax_data]
 tax_dataset_match = []
@@ -198,7 +598,7 @@ Du fait de problèmes de complétude des données du rôle foncier, il est poten
     WHERE inv.methode_estime = 2
     GROUP BY cad.g_no_lot, inv.n_places_min;
 \end{lstlisting}
-\section{Inventaire compilé par quartier}\label{sec:annexe_inventaire_agrege_par_quartier}
+\section{Code: Inventaire compilé par quartier}\label{sec:annexe_inventaire_agrege_par_quartier}
 L'agrégation du stationnement est faite avec une requête spatiale assez onéreuse. D'autre part, un lot aurait potentiellement plusieurs inventaires avec différentes méthodes. L'application web permet de prioriser différents types d'inventaires en fonction de la préférence de l'analyste. Les colonnes inv\_XYZ représentent chacune une priorité entre les différentes méthodologies d'inventaire.
 \begin{lstlisting}
     DELETE FROM stat_agrege;
@@ -387,7 +787,7 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
         LEFT JOIN inv_321 i321 ON i123.id_quartier = i321.id_quartier;
 \end{lstlisting}
 
-\section{Nombre d'automobiles résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
+\section{Code: Nombre d'automobiles résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
 Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménages pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profiles d'accumulation véhicule \parencite{diallo_methodology_2015}.
 \begin{lstlisting}
     DELETE FROM motorisation_par_quartier;
@@ -425,7 +825,7 @@ Le nombre de véhicules appartenant aux résidents d'un quartier peut être esti
         ad.id_quartier,
         ad.nb_voitures;
 \end{lstlisting}
-\section{Population issue du recensement}\label{sec:annexe_pop_quartiers}
+\section{Code: Population issue du recensement}\label{sec:annexe_pop_quartiers}
 Les données de recensement peuvent être agrégées par quartier en utilisant une approche similaire à au nombre d'automobile. Cependant, puisque les aires de diffusions sont des polygones et qu'il y a le potentiel d'avoir des aires de diffusions qui touchent à plusieurs quartiers, une condition a été ajouté voulant que 90\% de l'aire de diffusion doit être dans le quartier pour être sommée. 
 \begin{lstlisting}
     DELETE FROM population_par_quartier;
@@ -470,7 +870,7 @@ Les données de recensement peuvent être agrégées par quartier en utilisant u
     ON
       c2016.id_quartier=c2021.id_quartier;
 \end{lstlisting}
-\section{Valeurs foncières agrégées}\label{sec:annexe_val_fonc_agreg}
+\section{Code: Valeurs foncières agrégées}\label{sec:annexe_val_fonc_agreg}
 Certaines valeurs foncières sont agrégées pour donner une indication du degré d'intensité d'utilisation du sol dans un quartier. Les valeurs sont agrégées pour le total mais aussi pour les logements seulement. La requête ci-dessous donne la méthode de calcul pour les donnnées foncières agrégées.
 \begin{lstlisting}
     DELETE FROM donnees_foncieres_agregees;
@@ -518,7 +918,7 @@ Certaines valeurs foncières sont agrégées pour donner une indication du degr�
       role_quartier_tout rqt on rqt.id_quartier = sa.id_quartier;
 \end{lstlisting}
 
-\section{Parts modales}\label{sec:annexe_parts_modales}
+\section{Code: Parts modales}\label{sec:annexe_parts_modales}
 Cette section va donner la requête SQL qui compile les différentes parts modales définies dans la section \ref{sec:meth_analyse}. 
 \begin{lstlisting}
     DELETE FROM parts_modales;
@@ -585,4 +985,129 @@ Cette section va donner la requête SQL qui compile les différentes parts modal
         trips.quartier_ori = sa.id_quartier OR 
         trips.quartier_des = sa.id_quartier
     GROUP BY sa.id_quartier, sa.geometry;
+\end{lstlisting}
+
+\section{Requête SQL: Intrants de validation }\label{ann:intants-validation}
+La requête suivante est utilisée pour créer les données entrants pour l'assignation de lots à une strate de validation:
+\begin{lstlisting}
+DROP TABLE inputs_validation;
+
+CREATE TABLE inputs_validation (
+    g_no_lot                VARCHAR(255) PRIMARY KEY,
+    nb_entrees              BIGINT,
+    cubf_presents           INTEGER[],
+    n_cubf                  INTEGER,
+    toutes_surfaces_valides BOOLEAN,
+    toutes_dates_valides    BOOLEAN,
+    tous_logements_valides  BOOLEAN,
+    sup_planch_tot          DOUBLE PRECISION,
+    n_logements_tot         INTEGER,
+    premiere_constr         INTEGER,
+    valeur_totale           BIGINT,
+    cubf_principal          INTEGER,
+    valeur_maximale         INTEGER,
+    random_value            DOUBLE PRECISION
+);
+INSERT INTO inputs_validation (
+    g_no_lot,
+    nb_entrees,
+    cubf_presents,
+    n_cubf,
+    toutes_surfaces_valides,
+    toutes_dates_valides,
+    tous_logements_valides,
+    sup_planch_tot,
+    n_logements_tot,
+    premiere_constr,
+    valeur_totale,
+    cubf_principal,
+    valeur_maximale,
+    random_value
+)
+SELECT
+    g_no_lot,
+    nb_entrees,
+    cubf_presents,
+    n_cubf,
+    toutes_surfaces_valides,
+    toutes_dates_valides,
+    tous_logements_valides,
+    sup_planch_tot,
+    n_logements_tot,
+    premiere_constr,
+    valeur_totale,
+    cubf_principal,
+    valeur_maximale,
+    random_value
+FROM (
+    
+    --enrichissement des roles
+    WITH role_augmente AS (
+        SELECT
+            id_provinc,
+            rl0105a::int                     AS cubf,
+            rl0308a                          AS sup_planch,
+            rl0311a                          AS n_logements,
+            rl0307a                          AS annee_constr,
+            rl0308a IS NOT NULL              AS sup_planch_valid,
+            rl0311a IS NOT NULL              AS n_logements_valid,
+            rl0307a IS NOT NULL              AS annee_const_valid,
+            rl0404a                          AS valeur_au_role
+        FROM role_foncier
+    ),
+
+    /* -------------------------------------------------
+    2 -  Jointure + rang pour choisir le CUBF principal
+    ------------------------------------------------- */
+    joined AS (
+        SELECT
+            acr.g_no_lot,
+            ra.id_provinc,
+            ra.cubf,
+            ra.valeur_au_role,
+            ra.sup_planch_valid,
+            ra.n_logements_valid,
+            ra.annee_const_valid,
+            ra.sup_planch,
+            ra.n_logements,
+            ra.annee_constr::int,
+            ROW_NUMBER() OVER (
+                PARTITION BY acr.g_no_lot
+                ORDER BY ra.valeur_au_role DESC NULLS LAST, ra.cubf
+            ) AS rn
+        FROM public.association_cadastre_role AS acr
+        LEFT JOIN role_augmente AS ra
+            ON ra.id_provinc = acr.id_provinc
+        where acr.g_no_lot is not null
+    ),
+
+    /* -------------------------------------------------
+    3 - Agregation finale par lot
+    ------------------------------------------------- */
+    aggregated AS (
+        SELECT
+            g_no_lot,
+            COUNT(id_provinc)                                   AS nb_entrees,
+            ARRAY_AGG(DISTINCT cubf)                            AS cubf_presents,
+            CARDINALITY(ARRAY_AGG(DISTINCT cubf))               AS n_cubf,
+            BOOL_AND(sup_planch_valid)                         AS toutes_surfaces_valides,
+            BOOL_AND(annee_const_valid)                        AS toutes_dates_valides,
+            BOOL_AND(n_logements_valid)                         AS tous_logements_valides,
+            SUM(sup_planch)                                    AS sup_planch_tot,
+            SUM(n_logements)::int                               AS n_logements_tot,
+            MIN(annee_constr)                                   AS premiere_constr,
+            SUM(valeur_au_role)                                 AS valeur_totale,
+            MAX(CASE WHEN rn = 1 THEN cubf END)                AS cubf_principal,
+            MAX(CASE WHEN rn = 1 THEN valeur_au_role END)      AS valeur_maximale,
+
+            /* -------------------------------------------------
+            Valeur pseudo aleatoire deterministe (hash)
+            ------------------------------------------------- */
+            (('x' || substr(md5(g_no_lot::text),1,8))::bit(32)::bigint )::numeric
+                / (power(2,31) - 1)                             AS random_value
+        FROM joined
+        GROUP BY g_no_lot
+    )
+    SELECT * FROM aggregated
+) AS src;
 \end{lstlisting}

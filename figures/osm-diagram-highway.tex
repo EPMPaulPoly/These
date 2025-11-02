@@ -1,0 +1,203 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[english,french]{babel} 
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber,language=french]{biblatex}
+\usepackage{lmodern}
+\DeclareLanguageMapping{french}{french-apa}
+
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
+\DeclareDelimFormat[bib]{finalnamedelim}{
+    \ifthenelse{\value{listcount}>\maxprtauth}
+    {}
+    {\ifthenelse{\ifcurrentname{groupauthor}\AND%
+            \value{liststop}=2}
+        {\addspace\bibstring{and}\space}
+        {\finalandcomma\addspace\bibstring{and}\space}
+    }
+}
+\addbibresource{Maitrise_Recherche.bib}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\begin{document}
+    \begin{tikzpicture}
+        \tikzstyle {objet} = [rectangle, rounded corners, text width=3.5cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+        \tikzstyle {objet_opt} = [rectangle, rounded corners, text width=3.5cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+        \tikzstyle {propriete} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+        \tikzstyle{propriete_opt} =[rectangle, rounded corners, text width=3.5cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+        \tikzstyle{enumeration} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+        \tikzstyle{example} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+        \node (way) [objet]{way};
+        \node (cote) [right of=way, xshift=4cm, text width=5cm, align=center] {Valeurs possibles <side>: \\ left / right / both};
+
+        % highway
+        \node (highway) [objet, below of=way,xshift=2.25cm]{highway};
+        \node (hway-mway) [enumeration, right of=highway,xshift=3cm]{motorway};
+        \node (hway-trunk) [enumeration, below of=hway-mway,yshift=0.15cm]{trunk};
+        \node (hway-primary) [enumeration, below of=hway-trunk,yshift=0.15cm]{primary};
+        \node (hway-secondary) [enumeration, below of=hway-primary,yshift=0.15cm]{secondary};
+        \node (hway-tertiary) [enumeration, below of=hway-secondary,yshift=0.15cm]{tertiary};
+        \node (hway-residential) [enumeration, below of=hway-tertiary,yshift=0.15cm]{residential};
+        \node (hway-unclassified) [enumeration, below of=hway-residential,yshift=0.15cm]{unclassified};
+        \draw (highway.east) -- (hway-mway.west);
+        \draw (hway-trunk.west) -| ($(hway-mway.west) + (-0.2,0)$);
+        \draw (hway-primary.west) -| ($(hway-trunk.west)  + (-0.2,0)$);
+        \draw (hway-secondary.west) -| ($(hway-primary.west) + (-0.2,0)$);
+        \draw (hway-tertiary.west) -| ($(hway-secondary.west) + (-0.2,0)$);
+        \draw (hway-residential.west) -| ($(hway-tertiary.west) + (-0.2,0)$);
+        \draw (hway-unclassified.west) -| ($(hway-residential.west) + (-0.2,0)$);
+        % 
+        % parking
+        \node (parking-left) [objet_opt, below of=highway,yshift=-1cm]{parking:\\<side>};
+        \node (pking-lane) [enumeration, below of=parking-left,xshift=0.4cm]{lane};
+        \draw (pking-lane.west) -| ($(pking-lane.west |-parking-left.south)+(-0.1,0)$);
+        \node (pking-streetside) [enumeration, below of=pking-lane,yshift=0.15cm]{street\_side};
+        \draw (pking-streetside.west) -| ($(pking-lane.west) + (-0.1,0)$);
+        \node (pking-onkerb) [enumeration, below of=pking-streetside,yshift=0.15cm]{on\_kerb};
+        \draw (pking-onkerb.west) -| ($(pking-streetside.west) + (-0.1,0)$);
+        \node (pking-halfonkerb) [enumeration, below of=pking-onkerb,yshift=0.15cm]{half\_on\_kerb};
+        \draw (pking-halfonkerb.west) -| ($(pking-onkerb.west) + (-0.1,0)$);
+        \node (pking-shoulder) [enumeration, below of=pking-halfonkerb,yshift=0.15cm]{shoulder};
+        \draw (pking-shoulder.west) -| ($(pking-halfonkerb.west) + (-0.1,0)$);
+        \node (pking-no) [enumeration, below of=pking-shoulder,yshift=0.15cm]{no};
+        \draw (pking-no.west) -| ($(pking-shoulder.west) + (-0.1,0) $);
+        \node (pking-separate) [enumeration, below of=pking-no,yshift=0.15cm]{separate};
+        \draw (pking-separate.west) -| ($(pking-no.west) + (-0.1,0)$);
+        \node (pking-yes) [enumeration, below of=pking-separate,yshift=0.15cm]{yes};
+        \draw (pking-yes.west) -| ($(pking-separate.west) + (-0.1,0)$);
+        % access
+        \node (pking-access) [objet_opt, below of=parking-left,yshift=-7cm] {parking:<side>:\\access};
+        \node (acc-permissive) [enumeration,right of=pking-access, xshift=3cm]{permissive};
+        \node (acc-permit) [enumeration, above of=acc-permissive,yshift=-0.15cm]{permit};
+        \node (acc-private) [enumeration, above of=acc-permit,yshift=-0.15cm]{private};
+        \node (acc-no)[enumeration, above of=acc-private,yshift=-0.15cm]{no};
+        \node (acc-yes) [enumeration, above of=acc-no,yshift=-0.15cm]{yes};
+        \draw (pking-access)--(acc-permissive);
+        % Restriction conditionnelle
+        \node (pking-left-restriction-cond) [objet_opt, below of=way,xshift=-2.25cm,yshift=-0.15cm,text width = 3.5cm]{parking:<side>:\\restriction:\\conditional};
+        \coordinate (entre-conditional) at ($(pking-left-restriction-cond)$);
+        \coordinate (noeud-cond) at ($(entre-conditional -|pking-left-restriction-cond.west)+(-0.2,0)$);
+        \node (no-stopping-cond) [enumeration, left of=entre-conditional,xshift=-4cm,text width=5.5cm]{Ex: no\_stopping @ (Mon-Fri 06:00-18:00)};
+        \node (no-standing-cond) [enumeration, above of=no-stopping-cond,text width=5.5cm,yshift=0.25cm]{Ex: no\_standing @ ("First Monday of the month")};
+        \node (no-parking-cond) [enumeration, below of=no-stopping-cond,text width=5.5cm,yshift=-0.25cm]{Ex: no\_parking @ ("First half of each month")};
+        \draw (pking-left-restriction-cond.west) -| (noeud-cond) |- (no-stopping-cond.east);
+        \draw (no-standing-cond.east) -| ++(0.1,-0.1) -- ($(no-stopping-cond.east) +(0.1,0)$);
+        \draw (no-parking-cond.east) -| ++(0.1,0.1) -- ($(no-stopping-cond.east) +(0.1,0)$);
+        % Restriction
+        \node (pking-left-restriction) [objet_opt, below of=pking-left-restriction-cond,yshift=-2.25cm,text width = 3.5cm]{parking:<side>:\\restriction};
+        \coordinate (entre-rest) at ($(pking-left-restriction)$);
+        \node (no-stopping) [enumeration, left of=entre-rest,xshift=-2.75cm]{no\_stopping};
+        \node (no-standing) [enumeration, above of=no-stopping,yshift=-0.15cm]{no\_standing};
+        \node (no-parking) [enumeration, below of=no-stopping,yshift=0.15cm]{no\_parking};
+        \coordinate(noeud-rest) at ($(entre-rest-|pking-left-restriction.west) + (-0.1,0)$);
+        \draw (no-stopping.east) -- (pking-left-restriction.west);
+        \draw (no-standing.east) -| ++(0.1,-0.1) |- ($(no-stopping.east) + (0.1,0)$);
+        \draw (no-parking.east) -| ++(0.1,0.1) |- ($(no-stopping.east) + (0.1,0)$);
+        % orientation
+        \node (pking-left-orientation) [objet_opt,below of=pking-access,yshift=-0.25cm]{parking:<side>:\\orientation};
+        \coordinate(noeud-orientation) at ($(pking-left-orientation.east) + (0.2,0)$);
+        \node (pking-orientation-parallel) at ($(pking-left-orientation.east-| hway-mway)+(4,0)$)[enumeration]{parallel};
+        \node (pking-orientation-diagonal) [enumeration, above of=pking-orientation-parallel,yshift=-0.15cm]{diagonal};
+        \node (pking-orientation-perpendicular) [enumeration, above of=pking-orientation-diagonal,yshift=-0.15cm]{perpendicular};
+        \draw (pking-left-orientation.east) -- (pking-orientation-parallel.west);
+        \draw (pking-orientation-diagonal.west) -| ($(pking-orientation-parallel.west) + (-0.2,0)$);
+        \draw (pking-orientation-perpendicular.west) -| ($(pking-orientation-diagonal.west) + (-0.2,0)$);
+        % markings
+        \node (pking-left-markings) [objet_opt,below of=pking-left-restriction,yshift=-0.75cm]{parking:<side>:\\markings};
+        \coordinate (pking-markings-noeud) at ($(pking-left-markings.west)+ (-0.1,0)$);
+        \node (pking-markings-yes) [enumeration,left of=pking-left-markings,xshift=-2.75cm]{yes};
+        \node (pking-markings-no)  [enumeration,below of=pking-markings-yes,yshift=0.15cm]{no};
+        \draw (pking-markings-yes.east) --(pking-left-markings.west);
+        \draw ($(pking-markings-yes.east|-pking-left-markings) +(0.1,0)$) |- (pking-markings-no.east);
+        % maxstay
+        \node (pking-left-maxstay) [objet_opt, below of=pking-left-markings,yshift=-1cm]{parking:<side>:\\maxstay};
+        \node (maxstay) at ($(pking-left-maxstay.west-|pking-markings-yes)$)[enumeration]{\textcite{osm_contributors_key_2024}};
+        \coordinate (noeud-maxstay) at ($(pking-left-maxstay.west) + (-0.5,0)$);
+        \draw (maxstay.east) -- (pking-left-maxstay.west);
+        % direction
+        \node (pking-left-direction) [objet_opt,below of=pking-left-orientation,yshift=-0.25cm]{parking:<side>:\\direction};
+        \node (pking-head-in) [enumeration,right of=pking-left-direction,xshift=3cm,yshift=0.4cm]{head\_in};
+        \node (pking-back-in) [enumeration,below of=pking-head-in,yshift=0.15cm]{back\_in};
+        \coordinate(noeud-direction) at ($(pking-left-direction.east)+ (0.2,0)$);
+        \coordinate(noeud-back-head) at ($(pking-head-in.west) + (-0.2,0)$);
+        \draw (pking-left-direction.east) -| (noeud-direction) -| (noeud-back-head) |- (pking-back-in.west);
+        \draw (noeud-back-head) |- (pking-head-in.west);
+        % fee
+        \node (pking-left-fee) [objet_opt,below of=pking-left-direction,yshift=-0.25cm]{parking:<side>:\\fee};
+        \node (fee-yes) at ($(pking-left-fee -| pking-back-in)+(4,0)$)[enumeration]{yes};
+        \node (fee-no) [enumeration,above of=fee-yes]{no};
+        \coordinate (noeud-fee) at ($(fee-yes.west) + (-0.2,0) $);
+        \coordinate (noeud-fee-2) at ($(noeud-fee|-pking-left-fee.east)$);
+        \draw (fee-yes.west) -| (noeud-fee-2) -- (pking-left-fee);
+        \draw (fee-no.west) -| (noeud-fee-2);
+        % charge
+        \node (pking-left-charge) [propriete_opt, below of=pking-left-maxstay,yshift=-0.25cm]{parking:<side>:\\charge};
+        \node (pking-charge-example) at($(maxstay|-pking-left-charge)$) [example]{3.50CAD/h;\\16CAD/24h};
+        \draw (pking-charge-example)--(pking-left-charge);
+        % reason
+        \node (pking-left-reason) [objet_opt, below of=pking-left-charge,yshift=-0.5cm]{parking:<side>:\\restriction:\\reason};
+        \node (reason-narrow) [enumeration,left of=pking-left-reason,xshift=-6.5cm,yshift=0.5cm]{narrow};
+        \node (reason-cycleway) [enumeration, above of=reason-narrow,yshift=-0.15cm]{cycleway};
+        \node (reason-turn-lane) [enumeration, above of=reason-cycleway,yshift=-0.15cm]{turn\_lane};
+        \node (reason-bus-lane) [enumeration, above of=reason-turn-lane,yshift=-0.15cm]{bus\_lane};
+        \node (reason-bus-stop) [enumeration, above of=reason-bus-lane,yshift=-0.15cm]{bus\_stop};
+        \node (reason-turnaround) [enumeration, above of=reason-bus-stop,yshift=-0.15cm]{turnaround};
+        \node (reason-priority) [enumeration, above of=reason-turnaround,yshift=-0.15cm]{priority\_road};
+        \node (reason-living) [enumeration, above of=reason-priority, yshift=-0.15cm]{living\_street};
+        \node (reason-dual) [enumeration, above of=reason-living,yshift=-0.15cm]{dual\_carriage};
+        \node (reason-markings) [enumeration, below of=reason-narrow,yshift=0.15cm]{markings};
+        \node (reason-rails) [enumeration, below of=reason-markings,yshift=0.15cm]{rails};
+        \node (reason-structure) [enumeration, below of=reason-rails,yshift=0.15cm]{structure};
+        \node (reason-junction) [enumeration, below of=reason-structure,yshift=0.15cm]{junction};
+        \node (reason-driveway) [enumeration,below of=reason-junction,yshift=0.15cm]{driveway};
+        \node (reason-crossing) [enumeration, right of=reason-markings,xshift=2.5cm,yshift=0.375cm]{crossing};
+        \node (reason-fire) [enumeration,below of=reason-crossing,yshift=0.15cm]{fire\_lane};
+        \node (reason-loading) [enumeration,below of=reason-fire,yshift=0.15cm]{loading\_zone};
+        \node (reason-pass-loading) [enumeration, below of=reason-loading]{passenger\\\_loading\_zone};
+        \node (reason-street-cleaning) [enumeration, below of=reason-pass-loading]{street\_cleaning};
+        \coordinate (noeud-raisons) at ($(reason-narrow)!0.5!(reason-crossing)$);
+        \coordinate (noeud-raisons-actuelles) at ($(reason-narrow-|noeud-raisons)$);
+        \draw (pking-left-reason.west) -| ++(-0.2,0.1)|- (reason-narrow.east);
+        \draw (reason-crossing.west) -| (noeud-raisons-actuelles);
+        \draw (reason-markings.east) -| ($(reason-narrow-|noeud-raisons-actuelles)$);
+        \draw (reason-fire.west) -| ($(reason-markings-|noeud-raisons-actuelles)$);
+        \draw (reason-rails.east) -| ($(reason-fire-|noeud-raisons-actuelles)$);
+        \draw (reason-loading.west) -| ($(reason-rails-|noeud-raisons-actuelles)$);
+        \draw (reason-structure.east) -| ($(reason-loading-|noeud-raisons-actuelles)$);
+        \draw (reason-pass-loading.west) -| ($(reason-structure-|noeud-raisons-actuelles)$);
+        \draw (reason-junction.east) -| ($(reason-pass-loading-|noeud-raisons-actuelles)$);
+        \draw (reason-street-cleaning.west) -| ($(reason-junction-|noeud-raisons-actuelles)$);
+        \draw (reason-driveway.east) -| ($(reason-street-cleaning-|noeud-raisons-actuelles)$);
+        \draw (reason-cycleway.east)-| ($(reason-narrow-|noeud-raisons-actuelles)$);
+        \draw (reason-turn-lane.east)-| ($(reason-cycleway-|noeud-raisons-actuelles)$);
+        \draw (reason-bus-lane.east) -| ($(reason-turn-lane-|noeud-raisons-actuelles)$);
+        \draw (reason-bus-stop.east) -| ($(reason-bus-lane-|noeud-raisons-actuelles)$);
+        \draw (reason-turnaround.east) -| ($(reason-bus-stop-|noeud-raisons-actuelles)$);
+        \draw (reason-priority.east) -| ($(reason-turnaround-|noeud-raisons-actuelles)$);
+        \draw (reason-living.east) -|  ($(reason-priority-|noeud-raisons-actuelles)$);
+        \draw (reason-dual.east) -|  ($(reason-living-|noeud-raisons-actuelles)$);
+        
+        % lines 
+        \draw (highway.west) -| (way.south);
+        \draw (pking-left-restriction-cond.east) -| ($(highway.west-|way.south)$);
+        \draw (parking-left.west) -| ($(pking-left-restriction-cond.east -| way.south)$);
+        \draw (pking-left-restriction.east) -| ($(parking-left.west -| way.south)$);
+        \draw (pking-left-markings) -|($(pking-left-restriction.east-|way.south)$);
+        \draw (pking-left-maxstay.east) -| ($(pking-left-markings.west-| way.south)$);
+        \draw (pking-left-orientation.west) -| ($(pking-left-maxstay.east -| way.south)$);
+        \draw (pking-left-charge.east) -|($(pking-left-orientation.west -| way.south)$);
+        \draw (pking-left-direction.west) -| ($(pking-left-charge.east -| way.south)$);
+        \draw (pking-left-reason.east) -| ($(pking-left-direction.west -| way.south)$);
+        % Légende
+        \node (legend) [text width =3cm,right of=hway-mway,xshift=3cm]{Légende};
+        \node (obj_leg) [objet, below of=legend,yshift=0.2cm,text width =3cm]{Objet};
+        \node (enum_leg) [enumeration , below of=obj_leg,yshift=0.2cm,text width =3cm]{Valeur possible};
+        \node (obj_opt_leg) [objet_opt, below of=enum_leg,yshift=0.2cm,text width =3cm]{Objet optionnel};
+        \node (example_leg) [example,below of=obj_opt_leg,yshift=0.2cm,text width =3cm]{Exemple};
+        \node (propriete_opt_leg) [propriete_opt, below of=example_leg,text width =3cm]{Propriété optionnelle};
+        \coordinate (legend_box_top_left) at ($(legend.north west) + (-0.2,0.2)$);
+        \coordinate (legend_box_bottom_right) at ($(propriete_opt_leg.south east) + (0.2,-0.2)$);
+        \draw[line width=2pt] (legend_box_top_left) -| (legend_box_bottom_right) -| (legend_box_top_left);
+    \end{tikzpicture}
+\end{document}

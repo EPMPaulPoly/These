@@ -1,0 +1,64 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber,language=french]{biblatex}
+\DeclareLanguageMapping{french}{french-apa}
+
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
+\DeclareDelimFormat[bib]{finalnamedelim}{
+    \ifthenelse{\value{listcount}>\maxprtauth}
+    {}
+    {\ifthenelse{\ifcurrentname{groupauthor}\AND%
+            \value{liststop}=2}
+        {\addspace\bibstring{and}\space}
+        {\finalandcomma\addspace\bibstring{and}\space}
+    }
+}
+\addbibresource{Maitrise_Recherche.bib}
+\usepackage{tikz,pgfplots}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
+\pgfplotsset{compat=1.9}
+\usetikzlibrary{fadings}
+\usetikzlibrary{decorations.pathreplacing}
+
+\usetikzlibrary{shapes.geometric}
+\begin{document}
+    \begin{tikzpicture}
+        \tikzstyle{campus} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+        \tikzstyle{place} =  [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+        \tikzstyle{subplace} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+        \tikzstyle{aire} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+        \tikzstyle{places} = [ellipse, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+        % Top level 
+        \node (campus) [campus] {Campus: UdeM};
+        % Place level
+        \node (place1) [place, below of=campus,yshift=-0.5cm,xshift=-3cm] {Lieu: HEC};
+        % Area
+        \node (aire-ident1) [aire,below of=place1,yshift=-0.5cm]{Aire Identifiée: Stat Int.};
+        % Spots
+        \node (spot3) [places,below of=aire-ident1,yshift = -0.5cm,xshift=-2cm] {Place 1};
+        \node (spot4) [places,below of=aire-ident1,yshift = -0.5cm,xshift=2cm] {Place 2};
+        % Place level
+        \node (place2) [place, below of=campus,yshift=-0.5cm,xshift=3cm] {Lieu: Polytechnique};
+        % Sub place
+        \node (sous-place) [subplace, below of=place2, yshift = -0.5cm] {Sous-lieu: Pavillon Lassonde};
+        % Aire identifie
+        \node (aire-ident) [aire, below of=sous-place,yshift = -0.5cm]{Stat. Int.};
+        % Spots
+        \node (spot1) [places,below of=aire-ident,yshift = -0.5cm,xshift=-2cm] {Place 1};
+        \node (spot2) [places,below of=aire-ident,yshift = -0.5cm,xshift=2cm] {Place 2};
+        % Arrows
+        \draw (campus.south)->(place1.north);
+        \draw  (campus.south)->(place2.north);
+        \draw (place1.south)->(aire-ident1.north);
+        \draw (aire-ident1.south)->(spot3.north);
+        \draw (aire-ident1.south)->(spot4.north);
+        \draw (place2.south)->(sous-place.north);
+        \draw (sous-place.south)->(aire-ident.north);
+        \draw (aire-ident.south)->(spot1.north);
+        \draw (aire-ident.south)->(spot2.north);
+    \end{tikzpicture}
+\end{document}

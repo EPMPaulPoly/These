@@ -1,0 +1,192 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber,language=french]{biblatex}
+\DeclareLanguageMapping{french}{french-apa}
+
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
+\DeclareDelimFormat[bib]{finalnamedelim}{
+    \ifthenelse{\value{listcount}>\maxprtauth}
+    {}
+    {\ifthenelse{\ifcurrentname{groupauthor}\AND%
+            \value{liststop}=2}
+        {\addspace\bibstring{and}\space}
+        {\finalandcomma\addspace\bibstring{and}\space}
+    }
+}
+\addbibresource{Maitrise_Recherche.bib}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+    \begin{tikzpicture}
+        \tikzstyle {objet} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+        \tikzstyle {objet_opt} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+        \tikzstyle {propriete} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+        \tikzstyle{propriete_opt} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+        \tikzstyle{enumeration} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+        \tikzstyle{example} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+        \node (way) [objet]{way};
+        \coordinate (start) at ($(way.south) +(0,-0.5cm)$);
+        \node (area) [objet,right of=start,xshift=1cm]{area};
+        \node (yes-area) [enumeration, right of=area,xshift=2.5cm]{yes};
+        \draw (area.east) -- (yes-area.west);
+        \node (amenity) [objet,below of=area]{amenity};
+        \node (parking) [enumeration, right of=amenity,xshift=2.5cm]{parking};
+        \draw (parking.west) -- (amenity.east);
+        % Access
+        \node (access) [objet_opt, below of=amenity]{access};
+        \node (access-yes) [enumeration, right of=access,xshift=6.5cm]{yes};
+        \draw (access-yes.west) -- (access.east);
+        \node (access-customers) [enumeration, above of=access-yes,yshift=-0.15cm]{customers};
+        \draw (access-customers.west) -| ++(-0.1,-0.1) |- (access-yes.west);
+        \node (access-permissive) [enumeration, above of=access-customers,yshift=-0.15cm]{permissive};
+        \draw (access-permissive.west) -| ++(-0.1,-0.1) |- (access-customers.west);
+        \node (access-private) [enumeration, below of=access-yes,yshift=0.15cm]{private};
+        \draw (access-private.west) -| ++(-0.1,0.1) |- (access-permissive.west);
+        \node (access-destination) [enumeration, below of=access-private,yshift=0.15cm]{destination};
+        \draw (access-destination.west) -|++(-0.1,0.1) |-(access-private.west);
+        \node (access-permit) [enumeration, below of=access-destination,yshift=0.15cm]{permit};
+        \draw (access-permit.west) -|++(-0.1,0.1) |- (access-destination.west);
+        % parking type
+        \node (parking-prop) [objet_opt,left of=start,xshift=-1cm]{parking};
+        \node (parking-surface) [enumeration, left of=parking-prop,xshift=-6.5cm]{surface};
+        \draw (parking-surface.east) -- (parking-prop.west);
+        \node (parking-multi) [enumeration, below of=parking-surface,yshift=0.15cm]{multi-storey};
+        \draw (parking-multi.east) -| ++(0.1,0.1) |- (parking-surface.east);
+        \node (parking-underground) [enumeration, below of=parking-multi,yshift=0.15cm]{underground};
+        \draw (parking-underground.east)  -| ++(0.1,0.1) |-(parking-multi.east);
+        \node (parking-rooftop) [enumeration, below of=parking-underground,yshift=0.15cm]{rooftop};
+        \draw (parking-rooftop.east) -| ++(0.1,0.1) |- (parking-underground.east); 
+        \node (parking-sheds) [enumeration,below of=parking-rooftop,yshift=0.15cm]{sheds};
+        \draw (parking-sheds.east) -| ++(0.1,0.1) |- (parking-rooftop.east);
+        \node (parking-carports) [enumeration, below of=parking-sheds,yshift=0.15cm]{carports};
+        \draw (parking-carports.east) -| ++(0.1,0.1) |-(parking-sheds.east);
+        \node (parking-boxes) [enumeration, below of=parking-carports,yshift=0.15cm]{garage\_boxes};
+        \draw (parking-boxes.east) -| ++(0.1,0.1) |- (parking-carports.east);
+        \node (parking-layby) [enumeration, below of=parking-boxes,yshift=0.15cm]{layby};
+        \draw (parking-layby.east) -| ++(0.1,0.1) |- (parking-boxes.east);
+        \node (parking-streetside) [enumeration, below of=parking-layby,yshift=0.15cm]{street\_side};
+        \draw (parking-streetside.east) -| ++(0.1,0.1) |- (parking-layby.east);
+        \node (parking-onkerb) [enumeration, below of=parking-streetside,yshift=0.15cm]{on\_kerb};
+        \draw (parking-onkerb.east) -| ++(0.1,0.1) |- (parking-streetside.east);
+        \node (parking-half-on-kerb) [enumeration, below of=parking-onkerb,yshift=0.15cm]{half\_on\_kerb};
+        \draw (parking-half-on-kerb.east) -|  ++(0.1,0.1) |- (parking-onkerb.east);
+        \node (parking-shoulder) [enumeration, below of=parking-half-on-kerb,yshift=0.15cm]{shoulder};
+        \draw (parking-shoulder.east) -|  ++(0.1,0.1) |- (parking-half-on-kerb.east);
+        % park & ride
+        \node (park-ride) [objet_opt,below of=access]{park\_ride};
+        \node (pr-yes) [enumeration, right of=park-ride,xshift=2.75cm]{yes};
+        \draw (pr-yes.west) -- (park-ride.east);
+        \node (pr-no) [enumeration, below of=pr-yes,yshift=0.15cm]{no};
+        \draw (pr-no.west) -| ++(-0.1,0.1) |- (pr-yes.west);
+        \node (pr-bus) [enumeration,below of=pr-no,yshift=0.15cm]{bus};
+        \draw (pr-bus.west) -|++(-0.1,0.1) |- (pr-no.west);
+        \node (pr-ferry) [enumeration, below of=pr-bus,yshift=0.15cm]{ferry};
+        \draw (pr-ferry.west) -| ++(-0.1,0.1) |- (pr-bus.west);
+        \node (pr-metro) [enumeration, below of=pr-ferry,yshift=0.15cm]{metro};
+        \draw (pr-metro.west) -| ++(-0.1,0.1) |- (pr-ferry.west);
+        \node (pr-train) [enumeration, below of=pr-metro,yshift=0.15cm]{train};
+        \draw (pr-train.west) -| ++(-0.1,0.1) |- (pr-metro.west);
+        \node (pr-tram) [enumeration, below of=pr-train,yshift=0.15cm]{tram};
+        \draw (pr-tram.west) -| ++(-0.1,0.1) |- (pr-train.west);
+        \node (pr-bicycle-rental) [enumeration, below of=pr-tram,yshift=0.15cm]{bicycle\_rental};
+        \draw (pr-bicycle-rental.west) -| ++(-0.1,0.1) |- (pr-tram.west);
+        \node (pr-hov) [enumeration, below of=pr-bicycle-rental,yshift=0.15cm]{hov};
+        \draw (pr-hov.west) -| ++(-0.1,0.1) |- (pr-bicycle-rental.west);
+        % fee
+        \node (fee) [objet_opt, below of=parking-prop]{fee};
+        \node (fee-yes) [enumeration, left of= fee,xshift=-2.75cm]{yes};
+        \draw (fee-yes.east) -- (fee.west);
+        \node (fee-no) [enumeration, below of=fee-yes,yshift=0.15cm]{no};
+        \draw (fee-no.east) -| ++(0.1,0.1) |- (fee-yes.east);
+        % supervised
+        \node (supervised) [objet_opt, below of=fee,yshift=-1cm]{supervised};
+        \node (super-yes) [enumeration, left of=supervised, xshift=-2.75cm]{yes};
+        \draw (super-yes.east) -- (supervised.west);
+        \node (super-no) [enumeration, below of=super-yes,yshift=0.15cm]{no};
+        \draw (super-no.east) -| ++(0.1,0.1) |- (super-yes.east);
+        % capacity
+        \node (capacity) [propriete_opt, below of=supervised]{capacity};
+        % disabled capacity
+        \node (capacity-disabled) [objet_opt, below of=capacity]{capacity:disabled};
+        \node (cap-dis-yes) [enumeration, left of=capacity-disabled,xshift=-2.75cm]{yes};
+        \draw (cap-dis-yes.east) -- (capacity-disabled.west); 
+        \node (cap-dis-no) [enumeration, below of=cap-dis-yes,yshift=0.15cm]{no};
+        \draw (cap-dis-no.east) -| ++(0.1,0.1) |- (cap-dis-yes.east);
+        \node (cap-dis-entier) [propriete_opt, below of=cap-dis-no,yshift=0.15cm]{Entier};
+        \draw (cap-dis-entier.east) -| ++(0.1,0.1)|-(cap-dis-no.east); 
+        % other
+        \node (opening-hours) [propriete_opt, below of=park-ride]{opening\_hours};
+        \node (authentification) [propriete_opt, below of=opening-hours] {authentification};
+        \node (operator) [propriete_opt, below of=authentification]{operator};
+        \node (zone) [propriete_opt, below of=operator]{zone};
+        % parent capacity
+        \node (capacity-parent) [objet_opt, below of=operator,yshift=-3.5cm]{capacity:parent};
+        \node (cap-par-yes) [enumeration, right of=capacity-parent,xshift=6.5cm,]{yes};
+        \draw (cap-par-yes.west) --(capacity-parent.east);
+        \node (cap-par-no) [enumeration, above of=cap-par-yes,yshift=-0.15cm]{no};
+        \draw (cap-par-no.west) -| ++(-0.1,-0.1) |-(cap-par-yes.west);
+        \node (cap-par-ent) [propriete_opt, above of=cap-par-no,yshift=-0.15cm]{Entier};
+        \draw (cap-par-ent.west) -| ++(-0.1,-0.1) |- (cap-par-no.west);
+        % hiking
+        \node (hiking) [objet_opt,below of=capacity-parent]{hiking};
+        \node (hik-yes) [enumeration, below of=cap-par-yes]{yes};
+        \node (hik-no) [enumeration, below of=hik-yes]{no};
+        \draw (hiking.east) -- (hik-yes);
+        \draw (hik-yes.west) -| ++(-0.1,-0.1) |- (hik-no.west);
+        % Capacity parent
+        \node (capacity-charging) [objet_opt, below of=capacity-disabled,yshift=-1.75cm]{capacity:charging};
+        \node (cap-chrg-yes) [enumeration, left of=capacity-charging,xshift=-2.75cm]{yes};
+        \draw (capacity-charging.west) --(cap-chrg-yes);
+        \node (cap-chrg-no) [enumeration, below of=cap-chrg-yes,yshift=0.15cm]{no};
+        \draw (cap-chrg-no.east) -| ++(0.1,0.1) |- (cap-chrg-yes.east);
+        \node (cap-chrg-ent) [propriete_opt, below of=cap-chrg-no,yshift=0.15cm]{Entier};
+        \draw (cap-chrg-ent.east) -| ++(0.1,0.1) |- (cap-chrg-no.east);
+        % surface
+        \node (surface-parking) [objet_opt, below of=capacity-charging,yshift=-2cm]{surface};
+        \node (surfc-prk-link) [enumeration, left of=surface-parking,xshift=-2.75cm,yshift=0.15cm]{\textcite{osm_contributors_key_2025-2}};
+        \draw (surfc-prk-link.east) -| ++(0.1,-0.1) |- (surface-parking.west);
+        % maxstay
+        \node (maxstay-parking) [objet_opt, below of=surface-parking]{maxstay};
+        \node (maxstay-enum) [enumeration, below of=surfc-prk-link,yshift=-0.25cm]{\textcite{osm_contributors_key_2024}};
+        \draw (maxstay-enum.east) -|++(0.1,0.05) |- (maxstay-parking.west);
+        % charge
+        \node (charge-parking) [propriete_opt,below of=hiking]{charge};
+        \node (charge-example-2) at ($(charge-parking -| pr-hov)$) [example]{3.50CAD/h;\\16CAD/24h};
+        \node (charge-example) [example,text width=15cm,below of=charge-parking,yshift=-0.75cm]{0CAD/0-30minutes;6.25CAD/31-60minutes; 9.25CAD/61-90minutes; \\12.25CAD/91-120minutes;13CAD/121-150minutes;14CAD/151-240minutes;\\15CAD/24h;35CAD/week;60CAD/month;360CAD/year};
+        \draw (charge-parking.south) -- (charge-example.north);
+        \draw (charge-parking.east) -- (charge-example-2.west);
+        % lines
+        \draw (area.west) -| (way.south);
+        \draw (parking-prop.east) --(area.west);
+        \draw (parking-prop.east) -| ($(way.south |- parking-prop.east)$) |- (amenity.west);
+        \draw (amenity.west) -- (fee.east);
+        \draw (fee.east) -| ($(way.south |- fee.east)$) |- (access.west);
+        \draw (access.west) -| ($(access.west-|way.south)$)|-(supervised.east);
+        \draw (supervised.east) -- (park-ride.west);
+        \draw (park-ride.west) -| ($(park-ride.west-|way.south)$)|-(capacity.east);
+        \draw (capacity.east) -- (opening-hours.west);
+        \draw (opening-hours.west) -| ($(opening-hours.west-|way.south)$) |- (authentification.west);
+        \draw (authentification.west) -- (capacity-disabled);
+        \draw (capacity-disabled.east) -| ($(capacity-disabled.west -| way.south)$) |- (operator.west);
+        \draw (operator.west) -| ($(operator.west -| way.south)$) |- (zone.west);
+        \draw (zone.west) -| ($(zone.west -| way.south)$) |- (capacity-charging.east);
+        \draw (capacity-charging.east) -| ($(capacity-charging.east -| way.south)$) |- (capacity-parent.west);
+        \draw (capacity-parent.west) -| ($(capacity-parent.west -| way.south)$) |- (surface-parking.east);
+        \draw  (surface-parking.east) -| ($(surface-parking.east-|way.south)$) |- (hiking.west);
+        \draw (hiking.west) -| ($(hiking.west -| way.south)$) |- (maxstay-parking.east);
+        \draw (charge-parking.west) -| ($(maxstay-parking.east -| way.south)$);
+        % Légende
+        \node (legend) [text width =3cm,below of=parking-shoulder]{Légende};
+        \node (obj_leg) [objet, below of=legend,yshift=0.2cm]{Objet};
+        \node (enum_leg) [enumeration , below of=obj_leg,yshift=0.2cm]{Valeur possible};
+        \node (obj_opt_leg) [objet_opt, below of=enum_leg,yshift=0.2cm]{Objet optionnel};
+        \node (example_leg) [example,below of=obj_opt_leg,yshift=0.2cm]{Exemple};
+        \node (propriete_opt_leg) [propriete_opt, below of=example_leg]{Propriété optionnelle};
+        \coordinate (legend_box_top_left) at ($(legend.north west) + (-0.2,0.2)$);
+        \coordinate (legend_box_bottom_right) at ($(propriete_opt_leg.south east) + (0.2,-0.2)$);
+        \draw[line width=2pt] (legend_box_top_left) -| (legend_box_bottom_right) -| (legend_box_top_left);
+    \end{tikzpicture}
+\end{document}

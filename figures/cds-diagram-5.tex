@@ -1,0 +1,77 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\begin{document}
+    \begin{tikzpicture}
+        \tikzstyle {objet} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+        \tikzstyle {objet_opt} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+        \tikzstyle {propriete} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+        \tikzstyle{propriete_opt} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+        \tikzstyle{enumeration} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+        \node (session) [objet]{Session};
+        \node (type_session) [objet,below of=session,xshift=2cm]{Type de Session};
+        \node (session_park) [enumeration, right of=type_session,xshift=3cm]{Stationnement};
+        \node (session_aire) [enumeration,below of=session_park,yshift=0.15cm]{Aire};
+        \node (identifiant_event_start) [propriete,below of=type_session,yshift=-0.35cm]{Identifiant évènement début session};
+        \node (identifiant_event_fin) [propriete, below of=identifiant_event_start,yshift=-0.65cm]{Identifiant évènement fin session};
+        \node (longi_event_start) [propriete,below of=identifiant_event_fin,yshift=-0.5cm]{Longitude évènement début};
+        \node (lati_event_start) [propriete,below of=longi_event_start,yshift=-0.2cm]{Latitude évènement début};
+        \node (longi_event_end) [propriete,below of=lati_event_start,yshift=-0.2cm]{Longitude évènement fin};
+        \node (lati_event_end) [propriete, below of=longi_event_end,yshift=-0.2cm]{Latitude évènement fin};
+        \node (heure_event_start) [propriete, left of=type_session,xshift=-3cm,yshift=-0.25cm]{Heure évènement début};
+        \node (heure_event_end) [propriete, below of=heure_event_start,yshift=-0.2cm]{Heure évènement fin};
+        \node (zone_id) [propriete,below of=heure_event_end]{Identifiant zone};
+        \node (area_id) [propriete, below of=zone_id,yshift=0.2cm]{Identifiant aire};
+        \node (space_id) [propriete, below of=area_id,yshift=0.2cm]{Identifiant place};
+        \node (longueur_vehicule) [propriete, below of=space_id]{Longueur véhicule};
+        \node (type_vehicule) [objet,below of=longueur_vehicule]{Type véhicule};
+        \node (velo) [enumeration,left of=type_vehicule,xshift=-3cm,yshift=0.75cm] {Vélo};
+        \node (velo-cargo) [enumeration, above of=velo,yshift=-0.2cm]{Vélo-cargo};
+        \node (char) [enumeration, above of=velo-cargo,yshift=-0.2cm]{Voiture};
+        \node (scooter) [enumeration, above of=char,yshift=-0.2cm]{Scooter};
+        \node (mobilette) [enumeration, above of=scooter,yshift=-0.2cm]{Mobilette};
+        \node (moto) [enumeration, above of=mobilette,yshift=-0.2cm]{Moto};
+        \node (camion) [enumeration, left of=velo,xshift=-2.5cm]{Camion};
+        \node (camionette) [enumeration, above of=camion,yshift=-0.2cm]{Camionette};
+        \node (fret) [enumeration, above of=camionette,yshift=-0.2cm]{Fret};
+        \node (autre) [enumeration, above of=fret,yshift=-0.2cm]{Autre};
+        \node (non-spec-veh) [enumeration, above of=autre,yshift=-0.2cm]{Non-spécifié};
+        \coordinate (joint) at ($(camion)!0.5!(velo)$);
+        \draw (type_vehicule.west) -| (joint) |- (velo.west);
+        \draw (velo.west) -- (camion.east);
+        \draw (camion.east) -| ($(camion.east -|joint)$)|-(velo-cargo.west);
+        \draw (velo-cargo.west) -- (camionette.east);
+        \draw (camionette.east) -| ($(camionette.east -|joint)$)|-(char.west);
+        \draw (char.west) -- (fret.east);
+        \draw (fret.east) -| ($(fret.east -|joint)$)|-(scooter.west);
+        \draw (scooter.west) -- (autre.east);
+        \draw (autre.east) -| ($(autre.east -|joint)$)|-(mobilette.west);
+        \draw (mobilette.west) -- (non-spec-veh.east);
+        \draw (non-spec-veh.east) -| ($(non-spec-veh.east -|joint)$)|-(moto.west);
+        \draw (session.south) |- (type_session.west);
+        \draw (type_session.west) -| ($(type_session.west -|session.south)$) |- (heure_event_start.east);
+        \draw (heure_event_start.east)-| ($(heure_event_start.east -|session.south)$) |- (identifiant_event_start.west);
+        \draw (identifiant_event_start.west) -| ($(identifiant_event_start.west-|session.south)$) |-(heure_event_end.east);
+        \draw (heure_event_end.east) -| ($(heure_event_end.east-|session.south)$) |- (zone_id.east);
+        \draw (zone_id.east) -| ($(zone_id.east-|session.south)$) |-(identifiant_event_fin.west);
+        \draw (identifiant_event_fin.west) -| ($(identifiant_event_fin.west-|session.south)$) |- (area_id.east);
+        \draw (area_id.east) -| ($(area_id.east-|session.south)$) |- (space_id.east);
+        \draw (space_id.east) -| ($(space_id.east-|session.south)$) |-(longi_event_start.west);
+        \draw (longi_event_start.west) -| ($(longi_event_start.west-|session.south)$) |-(longueur_vehicule.east);
+        \draw (longueur_vehicule.east) -|($(longueur_vehicule.east-|session.south)$)|-(lati_event_start.west);
+        \draw (lati_event_start.west)-|($(lati_event_start.west-|session.south)$)|-(type_vehicule.east);
+        \draw (type_vehicule.east)-|($(type_vehicule.east-|session.south)$)|-(longi_event_end.west);
+        \draw (longi_event_end.west)-|($(longi_event_end.west-|session.south)$)|-(lati_event_end.west);
+        \draw (type_session.east) --(session_park);
+        \draw (session_park.west) -| ++(-0.1,-0.1) |- (session_aire.west);
+        \node (legend) [text width =3cm,right of=session, xshift=9cm]{Légende};
+        \node (obj_leg) [objet, below of=legend,yshift=0.2cm]{Objet};
+        \node (prop_leg) [propriete, below of=obj_leg,yshift=0.2cm]{Propriété};
+        \node (enum_leg) [enumeration , below of=prop_leg,yshift=0.2cm]{Valeur possible};
+        \node (obj_opt_leg) [objet_opt, below of=enum_leg,yshift=0.2cm]{Objet optionnel};
+        \node (propriete_opt_leg) [propriete_opt, below of=obj_opt_leg]{Propriété optionnelle};
+        \coordinate (legend_box_top_left) at ($(legend.north west) + (-0.2,0.2)$);
+        \coordinate (legend_box_bottom_right) at ($(propriete_opt_leg.south east) + (0.2,-0.2)$);
+        \draw[line width=2pt] (legend_box_top_left) -| (legend_box_bottom_right) -| (legend_box_top_left);
+    \end{tikzpicture}
+\end{document}

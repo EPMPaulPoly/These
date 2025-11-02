@@ -1,0 +1,452 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+
+% -------------------------------------------------
+% Helper that removes the internal \pgfpl@@ wrapper
+% -------------------------------------------------
+
+
+
+\begin{document}
+% This file was created with matplot2tikz v0.4.0.
+% This file was created with matplot2tikz v0.4.0.
+\begin{tikzpicture}
+
+\definecolor{crimson2143940}{RGB}{214,39,40}
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{darkorange25512714}{RGB}{255,127,14}
+\definecolor{forestgreen4416044}{RGB}{44,160,44}
+\definecolor{goldenrod18818934}{RGB}{188,189,34}
+\definecolor{gray127}{RGB}{127,127,127}
+\definecolor{lightgray204}{RGB}{204,204,204}
+\definecolor{mediumpurple148103189}{RGB}{148,103,189}
+\definecolor{orchid227119194}{RGB}{227,119,194}
+\definecolor{sienna1408675}{RGB}{140,86,75}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(1,0.5)},
+  anchor=west,
+  draw=lightgray204
+},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=15cm,
+height=10cm,
+x grid style={darkgray176},
+xmin=-0.5, xmax=34.5,
+xtick style={color=black},
+xtick={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34},
+xticklabel style={rotate=90.0},
+xticklabels={
+  LSC,
+  4-3,
+  LRTV,
+  VBEL,
+  STEM,
+  LAIR,
+  STLI,
+  CHMO,
+  VLIM,
+  PLAT,
+  JESU,
+  VIBO,
+  SSAC,
+  VIMO,
+  4-6,
+  MAIZ,
+  MCLM,
+  PSFO,
+  CARO,
+  4-5,
+  CHAT,
+  NDL,
+  STLO,
+  NE-LB,
+  SILR,
+  SSAU,
+  ORSA,
+  CUNI,
+  SJBA,
+  DU-LS,
+  5-2,
+  VANI,
+  AÉRO,
+  STRO,
+  VQ-CP
+},
+y grid style={darkgray176},
+ylabel={Proportion des places [\%]},
+ymin=0, ymax=105.000105,
+ytick style={color=black},
+ytick={0,20,40,60,80,100,120},
+yticklabels={
+  \(\displaystyle {0}\),
+  \(\displaystyle {20}\),
+  \(\displaystyle {40}\),
+  \(\displaystyle {60}\),
+  \(\displaystyle {80}\),
+  \(\displaystyle {100}\),
+  \(\displaystyle {120}\)
+}
+]
+\draw[draw=none,fill=steelblue31119180] (axis cs:-0.25,0) rectangle (axis cs:0.25,88.8211);
+\addlegendimage{ybar,ybar legend,draw=none,fill=steelblue31119180}
+\addlegendentry{Résidentielle}
+
+\draw[draw=none,fill=steelblue31119180] (axis cs:0.75,0) rectangle (axis cs:1.25,88.6589);
+\draw[draw=none,fill=steelblue31119180] (axis cs:1.75,0) rectangle (axis cs:2.25,88.2688);
+\draw[draw=none,fill=steelblue31119180] (axis cs:2.75,0) rectangle (axis cs:3.25,87.5212);
+\draw[draw=none,fill=steelblue31119180] (axis cs:3.75,0) rectangle (axis cs:4.25,86.0114);
+\draw[draw=none,fill=steelblue31119180] (axis cs:4.75,0) rectangle (axis cs:5.25,84.3816);
+\draw[draw=none,fill=steelblue31119180] (axis cs:5.75,0) rectangle (axis cs:6.25,84.0016);
+\draw[draw=none,fill=steelblue31119180] (axis cs:6.75,0) rectangle (axis cs:7.25,83.2583);
+\draw[draw=none,fill=steelblue31119180] (axis cs:7.75,0) rectangle (axis cs:8.25,82.39);
+\draw[draw=none,fill=steelblue31119180] (axis cs:8.75,0) rectangle (axis cs:9.25,80.82);
+\draw[draw=none,fill=steelblue31119180] (axis cs:9.75,0) rectangle (axis cs:10.25,80.138);
+\draw[draw=none,fill=steelblue31119180] (axis cs:10.75,0) rectangle (axis cs:11.25,79.4921);
+\draw[draw=none,fill=steelblue31119180] (axis cs:11.75,0) rectangle (axis cs:12.25,78.3322);
+\draw[draw=none,fill=steelblue31119180] (axis cs:12.75,0) rectangle (axis cs:13.25,77.76);
+\draw[draw=none,fill=steelblue31119180] (axis cs:13.75,0) rectangle (axis cs:14.25,75.28);
+\draw[draw=none,fill=steelblue31119180] (axis cs:14.75,0) rectangle (axis cs:15.25,74.73);
+\draw[draw=none,fill=steelblue31119180] (axis cs:15.75,0) rectangle (axis cs:16.25,74.0174);
+\draw[draw=none,fill=steelblue31119180] (axis cs:16.75,0) rectangle (axis cs:17.25,73.4027);
+\draw[draw=none,fill=steelblue31119180] (axis cs:17.75,0) rectangle (axis cs:18.25,73.3627);
+\draw[draw=none,fill=steelblue31119180] (axis cs:18.75,0) rectangle (axis cs:19.25,68.7469);
+\draw[draw=none,fill=steelblue31119180] (axis cs:19.75,0) rectangle (axis cs:20.25,68.4432);
+\draw[draw=none,fill=steelblue31119180] (axis cs:20.75,0) rectangle (axis cs:21.25,68.28);
+\draw[draw=none,fill=steelblue31119180] (axis cs:21.75,0) rectangle (axis cs:22.25,67.2467);
+\draw[draw=none,fill=steelblue31119180] (axis cs:22.75,0) rectangle (axis cs:23.25,66.9267);
+\draw[draw=none,fill=steelblue31119180] (axis cs:23.75,0) rectangle (axis cs:24.25,66.2334);
+\draw[draw=none,fill=steelblue31119180] (axis cs:24.75,0) rectangle (axis cs:25.25,65.3465);
+\draw[draw=none,fill=steelblue31119180] (axis cs:25.75,0) rectangle (axis cs:26.25,65.28);
+\draw[draw=none,fill=steelblue31119180] (axis cs:26.75,0) rectangle (axis cs:27.25,59.47);
+\draw[draw=none,fill=steelblue31119180] (axis cs:27.75,0) rectangle (axis cs:28.25,58.2642);
+\draw[draw=none,fill=steelblue31119180] (axis cs:28.75,0) rectangle (axis cs:29.25,57.92);
+\draw[draw=none,fill=steelblue31119180] (axis cs:29.75,0) rectangle (axis cs:30.25,50.6);
+\draw[draw=none,fill=steelblue31119180] (axis cs:30.75,0) rectangle (axis cs:31.25,46.4854);
+\draw[draw=none,fill=steelblue31119180] (axis cs:31.75,0) rectangle (axis cs:32.25,45.81);
+\draw[draw=none,fill=steelblue31119180] (axis cs:32.75,0) rectangle (axis cs:33.25,39.0039);
+\draw[draw=none,fill=steelblue31119180] (axis cs:33.75,0) rectangle (axis cs:34.25,23.9176);
+\draw[draw=none,fill=darkorange25512714] (axis cs:-0.25,88.8211) rectangle (axis cs:0.25,94.3905);
+\addlegendimage{ybar,ybar legend,draw=none,fill=darkorange25512714}
+\addlegendentry{Commerciale}
+
+\draw[draw=none,fill=darkorange25512714] (axis cs:0.75,88.6589) rectangle (axis cs:1.25,92.9993);
+\draw[draw=none,fill=darkorange25512714] (axis cs:1.75,88.2688) rectangle (axis cs:2.25,91.8592);
+\draw[draw=none,fill=darkorange25512714] (axis cs:2.75,87.5212) rectangle (axis cs:3.25,93.5806);
+\draw[draw=none,fill=darkorange25512714] (axis cs:3.75,86.0114) rectangle (axis cs:4.25,89.991);
+\draw[draw=none,fill=darkorange25512714] (axis cs:4.75,84.3816) rectangle (axis cs:5.25,93.6907);
+\draw[draw=none,fill=darkorange25512714] (axis cs:5.75,84.0016) rectangle (axis cs:6.25,91.0309);
+\draw[draw=none,fill=darkorange25512714] (axis cs:6.75,83.2583) rectangle (axis cs:7.25,88.6688);
+\draw[draw=none,fill=darkorange25512714] (axis cs:7.75,82.39) rectangle (axis cs:8.25,89.86);
+\draw[draw=none,fill=darkorange25512714] (axis cs:8.75,80.82) rectangle (axis cs:9.25,84.32);
+\draw[draw=none,fill=darkorange25512714] (axis cs:9.75,80.138) rectangle (axis cs:10.25,91.4691);
+\draw[draw=none,fill=darkorange25512714] (axis cs:10.75,79.4921) rectangle (axis cs:11.25,89.8811);
+\draw[draw=none,fill=darkorange25512714] (axis cs:11.75,78.3322) rectangle (axis cs:12.25,80.692);
+\draw[draw=none,fill=darkorange25512714] (axis cs:12.75,77.76) rectangle (axis cs:13.25,85.37);
+\draw[draw=none,fill=darkorange25512714] (axis cs:13.75,75.28) rectangle (axis cs:14.25,85.77);
+\draw[draw=none,fill=darkorange25512714] (axis cs:14.75,74.73) rectangle (axis cs:15.25,84.82);
+\draw[draw=none,fill=darkorange25512714] (axis cs:15.75,74.0174) rectangle (axis cs:16.25,78.3278);
+\draw[draw=none,fill=darkorange25512714] (axis cs:16.75,73.4027) rectangle (axis cs:17.25,76.9024);
+\draw[draw=none,fill=darkorange25512714] (axis cs:17.75,73.3627) rectangle (axis cs:18.25,89.941);
+\draw[draw=none,fill=darkorange25512714] (axis cs:18.75,68.7469) rectangle (axis cs:19.25,76.7677);
+\draw[draw=none,fill=darkorange25512714] (axis cs:19.75,68.4432) rectangle (axis cs:20.25,90.111);
+\draw[draw=none,fill=darkorange25512714] (axis cs:20.75,68.28) rectangle (axis cs:21.25,78.4);
+\draw[draw=none,fill=darkorange25512714] (axis cs:21.75,67.2467) rectangle (axis cs:22.25,74.9675);
+\draw[draw=none,fill=darkorange25512714] (axis cs:22.75,66.9267) rectangle (axis cs:23.25,83.2183);
+\draw[draw=none,fill=darkorange25512714] (axis cs:23.75,66.2334) rectangle (axis cs:24.25,74.8525);
+\draw[draw=none,fill=darkorange25512714] (axis cs:24.75,65.3465) rectangle (axis cs:25.25,83.7283);
+\draw[draw=none,fill=darkorange25512714] (axis cs:25.75,65.28) rectangle (axis cs:26.25,82.96);
+\draw[draw=none,fill=darkorange25512714] (axis cs:26.75,59.47) rectangle (axis cs:27.25,82.06);
+\draw[draw=none,fill=darkorange25512714] (axis cs:27.75,58.2642) rectangle (axis cs:28.25,67.7533);
+\draw[draw=none,fill=darkorange25512714] (axis cs:28.75,57.92) rectangle (axis cs:29.25,77.93);
+\draw[draw=none,fill=darkorange25512714] (axis cs:29.75,50.6) rectangle (axis cs:30.25,64.69);
+\draw[draw=none,fill=darkorange25512714] (axis cs:30.75,46.4854) rectangle (axis cs:31.25,86.5714);
+\draw[draw=none,fill=darkorange25512714] (axis cs:31.75,45.81) rectangle (axis cs:32.25,83.19);
+\draw[draw=none,fill=darkorange25512714] (axis cs:32.75,39.0039) rectangle (axis cs:33.25,54.4654);
+\draw[draw=none,fill=darkorange25512714] (axis cs:33.75,23.9176) rectangle (axis cs:34.25,43.3757);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:-0.25,94.3905) rectangle (axis cs:0.25,97.6602);
+\addlegendimage{ybar,ybar legend,draw=none,fill=forestgreen4416044}
+\addlegendentry{Services}
+
+\draw[draw=none,fill=forestgreen4416044] (axis cs:0.75,92.9993) rectangle (axis cs:1.25,96.0596);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:1.75,91.8592) rectangle (axis cs:2.25,96.8097);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:2.75,93.5806) rectangle (axis cs:3.25,96.3103);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:3.75,89.991) rectangle (axis cs:4.25,97.4603);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:4.75,93.6907) rectangle (axis cs:5.25,97.1004);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:5.75,91.0309) rectangle (axis cs:6.25,97.8302);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:6.75,88.6688) rectangle (axis cs:7.25,95.6495);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:7.75,89.86) rectangle (axis cs:8.25,95.68);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:8.75,84.32) rectangle (axis cs:9.25,97.06);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:9.75,91.4691) rectangle (axis cs:10.25,97.8497);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:10.75,89.8811) rectangle (axis cs:11.25,97.2604);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:11.75,80.692) rectangle (axis cs:12.25,91.4709);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:12.75,85.37) rectangle (axis cs:13.25,96.61);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:13.75,85.77) rectangle (axis cs:14.25,99.8);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:14.75,84.82) rectangle (axis cs:15.25,96.43);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:15.75,78.3278) rectangle (axis cs:16.25,91.3191);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:16.75,76.9024) rectangle (axis cs:17.25,97.4203);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:17.75,89.941) rectangle (axis cs:18.25,98.6901);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:18.75,76.7677) rectangle (axis cs:19.25,95.1095);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:19.75,90.111) rectangle (axis cs:20.25,96.7903);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:20.75,78.4) rectangle (axis cs:21.25,90.83);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:21.75,74.9675) rectangle (axis cs:22.25,92.2092);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:22.75,83.2183) rectangle (axis cs:23.25,96.0796);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:23.75,74.8525) rectangle (axis cs:24.25,95.7804);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:24.75,83.7283) rectangle (axis cs:25.25,92.3092);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:25.75,82.96) rectangle (axis cs:26.25,93.93);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:26.75,82.06) rectangle (axis cs:27.25,93.51);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:27.75,67.7533) rectangle (axis cs:28.25,91.6209);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:28.75,77.93) rectangle (axis cs:29.25,94.32);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:29.75,64.69) rectangle (axis cs:30.25,83.33);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:30.75,86.5714) rectangle (axis cs:31.25,92.6608);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:31.75,83.19) rectangle (axis cs:32.25,91.26);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:32.75,54.4654) rectangle (axis cs:33.25,74.7174);
+\draw[draw=none,fill=forestgreen4416044] (axis cs:33.75,43.3757) rectangle (axis cs:34.25,76.2724);
+\draw[draw=none,fill=crimson2143940] (axis cs:-0.25,97.6602) rectangle (axis cs:0.25,97.8202);
+\addlegendimage{ybar,ybar legend,draw=none,fill=crimson2143940}
+\addlegendentry{Usage Mixte}
+
+\draw[draw=none,fill=crimson2143940] (axis cs:0.75,96.0596) rectangle (axis cs:1.25,99.3799);
+\draw[draw=none,fill=crimson2143940] (axis cs:1.75,96.8097) rectangle (axis cs:2.25,97.6198);
+\draw[draw=none,fill=crimson2143940] (axis cs:2.75,96.3103) rectangle (axis cs:3.25,97.7502);
+\draw[draw=none,fill=crimson2143940] (axis cs:3.75,97.4603) rectangle (axis cs:4.25,99.4301);
+\draw[draw=none,fill=crimson2143940] (axis cs:4.75,97.1004) rectangle (axis cs:5.25,97.7303);
+\draw[draw=none,fill=crimson2143940] (axis cs:5.75,97.8302) rectangle (axis cs:6.25,97.9202);
+\draw[draw=none,fill=crimson2143940] (axis cs:6.75,95.6495) rectangle (axis cs:7.25,96.0495);
+\draw[draw=none,fill=crimson2143940] (axis cs:7.75,95.68) rectangle (axis cs:8.25,97.66);
+\draw[draw=none,fill=crimson2143940] (axis cs:8.75,97.06) rectangle (axis cs:9.25,99.82);
+\draw[draw=none,fill=crimson2143940] (axis cs:9.75,97.8497) rectangle (axis cs:10.25,99.1098);
+\draw[draw=none,fill=crimson2143940] (axis cs:10.75,97.2604) rectangle (axis cs:11.25,97.2904);
+\draw[draw=none,fill=crimson2143940] (axis cs:11.75,91.4709) rectangle (axis cs:12.25,97.2103);
+\draw[draw=none,fill=crimson2143940] (axis cs:12.75,96.61) rectangle (axis cs:13.25,97.99);
+\draw[draw=none,fill=crimson2143940] (axis cs:13.75,99.8) rectangle (axis cs:14.25,99.86);
+\draw[draw=none,fill=crimson2143940] (axis cs:14.75,96.43) rectangle (axis cs:15.25,98.3);
+\draw[draw=none,fill=crimson2143940] (axis cs:15.75,91.3191) rectangle (axis cs:16.25,99.8099);
+\draw[draw=none,fill=crimson2143940] (axis cs:16.75,97.4203) rectangle (axis cs:17.25,99.4701);
+\draw[draw=none,fill=crimson2143940] (axis cs:17.75,98.6901) rectangle (axis cs:18.25,98.7501);
+\draw[draw=none,fill=crimson2143940] (axis cs:18.75,95.1095) rectangle (axis cs:19.25,96.2896);
+\draw[draw=none,fill=crimson2143940] (axis cs:19.75,96.7903) rectangle (axis cs:20.25,99.48);
+\draw[draw=none,fill=crimson2143940] (axis cs:20.75,90.83) rectangle (axis cs:21.25,96.71);
+\draw[draw=none,fill=crimson2143940] (axis cs:21.75,92.2092) rectangle (axis cs:22.25,99.5299);
+\draw[draw=none,fill=crimson2143940] (axis cs:22.75,96.0796) rectangle (axis cs:23.25,97.9298);
+\draw[draw=none,fill=crimson2143940] (axis cs:23.75,95.7804) rectangle (axis cs:24.25,98.8501);
+\draw[draw=none,fill=crimson2143940] (axis cs:24.75,92.3092) rectangle (axis cs:25.25,93.7893);
+\draw[draw=none,fill=crimson2143940] (axis cs:25.75,93.93) rectangle (axis cs:26.25,99.67);
+\draw[draw=none,fill=crimson2143940] (axis cs:26.75,93.51) rectangle (axis cs:27.25,98.68);
+\draw[draw=none,fill=crimson2143940] (axis cs:27.75,91.6209) rectangle (axis cs:28.25,98.7502);
+\draw[draw=none,fill=crimson2143940] (axis cs:28.75,94.32) rectangle (axis cs:29.25,95.4);
+\draw[draw=none,fill=crimson2143940] (axis cs:29.75,83.33) rectangle (axis cs:30.25,83.77);
+\draw[draw=none,fill=crimson2143940] (axis cs:30.75,92.6608) rectangle (axis cs:31.25,95.5005);
+\draw[draw=none,fill=crimson2143940] (axis cs:31.75,91.26) rectangle (axis cs:32.25,98.22);
+\draw[draw=none,fill=crimson2143940] (axis cs:32.75,74.7174) rectangle (axis cs:33.25,92.9992);
+\draw[draw=none,fill=crimson2143940] (axis cs:33.75,76.2724) rectangle (axis cs:34.25,94.7406);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:-0.25,97.8202) rectangle (axis cs:0.25,98.4401);
+\addlegendimage{ybar,ybar legend,draw=none,fill=mediumpurple148103189}
+\addlegendentry{Industrielle}
+
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:0.75,99.3799) rectangle (axis cs:1.25,99.5399);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:1.75,97.6198) rectangle (axis cs:2.25,97.7398);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:2.75,97.7502) rectangle (axis cs:3.25,97.9202);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:3.75,99.4301) rectangle (axis cs:4.25,99.6801);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:4.75,97.7303) rectangle (axis cs:5.25,98.2602);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:5.75,97.9202) rectangle (axis cs:6.25,98.0702);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:6.75,96.0495) rectangle (axis cs:7.25,96.2895);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:7.75,97.66) rectangle (axis cs:8.25,98.2);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:8.75,0) rectangle (axis cs:9.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:9.75,0) rectangle (axis cs:10.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:10.75,97.2904) rectangle (axis cs:11.25,97.3804);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:11.75,0) rectangle (axis cs:12.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:12.75,97.99) rectangle (axis cs:13.25,99.11);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:13.75,99.86) rectangle (axis cs:14.25,99.94);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:14.75,98.3) rectangle (axis cs:15.25,98.73);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:15.75,0) rectangle (axis cs:16.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:16.75,0) rectangle (axis cs:17.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:17.75,0) rectangle (axis cs:18.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:18.75,96.2896) rectangle (axis cs:19.25,96.3996);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:19.75,99.48) rectangle (axis cs:20.25,99.72);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:20.75,96.71) rectangle (axis cs:21.25,99.07);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:21.75,0) rectangle (axis cs:22.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:22.75,97.9298) rectangle (axis cs:23.25,98.8599);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:23.75,0) rectangle (axis cs:24.25,0);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:24.75,93.7893) rectangle (axis cs:25.25,96.2996);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:25.75,99.67) rectangle (axis cs:26.25,99.69);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:26.75,98.68) rectangle (axis cs:27.25,99.6);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:27.75,98.7502) rectangle (axis cs:28.25,99.0102);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:28.75,95.4) rectangle (axis cs:29.25,98.79);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:29.75,83.77) rectangle (axis cs:30.25,97.95);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:30.75,95.5005) rectangle (axis cs:31.25,97.6803);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:31.75,98.22) rectangle (axis cs:32.25,98.65);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:32.75,92.9992) rectangle (axis cs:33.25,93.1192);
+\draw[draw=none,fill=mediumpurple148103189] (axis cs:33.75,0) rectangle (axis cs:34.25,0);
+\draw[draw=none,fill=sienna1408675] (axis cs:-0.25,98.4401) rectangle (axis cs:0.25,98.5801);
+\addlegendimage{ybar,ybar legend,draw=none,fill=sienna1408675}
+\addlegendentry{Récréation}
+
+\draw[draw=none,fill=sienna1408675] (axis cs:0.75,99.5399) rectangle (axis cs:1.25,99.7999);
+\draw[draw=none,fill=sienna1408675] (axis cs:1.75,97.7398) rectangle (axis cs:2.25,99.39);
+\draw[draw=none,fill=sienna1408675] (axis cs:2.75,97.9202) rectangle (axis cs:3.25,98.8401);
+\draw[draw=none,fill=sienna1408675] (axis cs:3.75,0) rectangle (axis cs:4.25,0);
+\draw[draw=none,fill=sienna1408675] (axis cs:4.75,98.2602) rectangle (axis cs:5.25,99.4001);
+\draw[draw=none,fill=sienna1408675] (axis cs:5.75,98.0702) rectangle (axis cs:6.25,98.3702);
+\draw[draw=none,fill=sienna1408675] (axis cs:6.75,96.2895) rectangle (axis cs:7.25,98.6297);
+\draw[draw=none,fill=sienna1408675] (axis cs:7.75,98.2) rectangle (axis cs:8.25,98.55);
+\draw[draw=none,fill=sienna1408675] (axis cs:8.75,99.82) rectangle (axis cs:9.25,99.92);
+\draw[draw=none,fill=sienna1408675] (axis cs:9.75,99.1098) rectangle (axis cs:10.25,99.8799);
+\draw[draw=none,fill=sienna1408675] (axis cs:10.75,97.3804) rectangle (axis cs:11.25,98.1103);
+\draw[draw=none,fill=sienna1408675] (axis cs:11.75,97.2103) rectangle (axis cs:12.25,97.7302);
+\draw[draw=none,fill=sienna1408675] (axis cs:12.75,99.11) rectangle (axis cs:13.25,99.87);
+\draw[draw=none,fill=sienna1408675] (axis cs:13.75,99.94) rectangle (axis cs:14.25,99.96);
+\draw[draw=none,fill=sienna1408675] (axis cs:14.75,98.73) rectangle (axis cs:15.25,99.36);
+\draw[draw=none,fill=sienna1408675] (axis cs:15.75,99.8099) rectangle (axis cs:16.25,99.8799);
+\draw[draw=none,fill=sienna1408675] (axis cs:16.75,99.4701) rectangle (axis cs:17.25,99.5901);
+\draw[draw=none,fill=sienna1408675] (axis cs:17.75,98.7501) rectangle (axis cs:18.25,99.0201);
+\draw[draw=none,fill=sienna1408675] (axis cs:18.75,96.3996) rectangle (axis cs:19.25,99.3199);
+\draw[draw=none,fill=sienna1408675] (axis cs:19.75,99.72) rectangle (axis cs:20.25,99.86);
+\draw[draw=none,fill=sienna1408675] (axis cs:20.75,99.07) rectangle (axis cs:21.25,99.4);
+\draw[draw=none,fill=sienna1408675] (axis cs:21.75,99.5299) rectangle (axis cs:22.25,99.7899);
+\draw[draw=none,fill=sienna1408675] (axis cs:22.75,98.8599) rectangle (axis cs:23.25,99.71);
+\draw[draw=none,fill=sienna1408675] (axis cs:23.75,98.8501) rectangle (axis cs:24.25,99.57);
+\draw[draw=none,fill=sienna1408675] (axis cs:24.75,96.2996) rectangle (axis cs:25.25,97.9198);
+\draw[draw=none,fill=sienna1408675] (axis cs:25.75,99.69) rectangle (axis cs:26.25,99.72);
+\draw[draw=none,fill=sienna1408675] (axis cs:26.75,99.6) rectangle (axis cs:27.25,99.99);
+\draw[draw=none,fill=sienna1408675] (axis cs:27.75,99.0102) rectangle (axis cs:28.25,99.7301);
+\draw[draw=none,fill=sienna1408675] (axis cs:28.75,98.79) rectangle (axis cs:29.25,99.16);
+\draw[draw=none,fill=sienna1408675] (axis cs:29.75,97.95) rectangle (axis cs:30.25,98.31);
+\draw[draw=none,fill=sienna1408675] (axis cs:30.75,97.6803) rectangle (axis cs:31.25,98.7902);
+\draw[draw=none,fill=sienna1408675] (axis cs:31.75,98.65) rectangle (axis cs:32.25,99.57);
+\draw[draw=none,fill=sienna1408675] (axis cs:32.75,93.1192) rectangle (axis cs:33.25,98.4297);
+\draw[draw=none,fill=sienna1408675] (axis cs:33.75,94.7406) rectangle (axis cs:34.25,99.0202);
+\draw[draw=none,fill=orchid227119194] (axis cs:-0.25,98.5801) rectangle (axis cs:0.25,99.42);
+\addlegendimage{ybar,ybar legend,draw=none,fill=orchid227119194}
+\addlegendentry{Infrastructure}
+
+\draw[draw=none,fill=orchid227119194] (axis cs:0.75,0) rectangle (axis cs:1.25,0);
+\draw[draw=none,fill=orchid227119194] (axis cs:1.75,99.39) rectangle (axis cs:2.25,99.54);
+\draw[draw=none,fill=orchid227119194] (axis cs:2.75,98.8401) rectangle (axis cs:3.25,99.2401);
+\draw[draw=none,fill=orchid227119194] (axis cs:3.75,99.6801) rectangle (axis cs:4.25,100.0001);
+\draw[draw=none,fill=orchid227119194] (axis cs:4.75,99.4001) rectangle (axis cs:5.25,99.97);
+\draw[draw=none,fill=orchid227119194] (axis cs:5.75,98.3702) rectangle (axis cs:6.25,99.6901);
+\draw[draw=none,fill=orchid227119194] (axis cs:6.75,98.6297) rectangle (axis cs:7.25,99.6798);
+\draw[draw=none,fill=orchid227119194] (axis cs:7.75,98.55) rectangle (axis cs:8.25,98.85);
+\draw[draw=none,fill=orchid227119194] (axis cs:8.75,99.92) rectangle (axis cs:9.25,100);
+\draw[draw=none,fill=orchid227119194] (axis cs:9.75,0) rectangle (axis cs:10.25,0);
+\draw[draw=none,fill=orchid227119194] (axis cs:10.75,98.1103) rectangle (axis cs:11.25,99.7101);
+\draw[draw=none,fill=orchid227119194] (axis cs:11.75,97.7302) rectangle (axis cs:12.25,97.7602);
+\draw[draw=none,fill=orchid227119194] (axis cs:12.75,99.87) rectangle (axis cs:13.25,99.91);
+\draw[draw=none,fill=orchid227119194] (axis cs:13.75,99.96) rectangle (axis cs:14.25,99.97);
+\draw[draw=none,fill=orchid227119194] (axis cs:14.75,99.36) rectangle (axis cs:15.25,99.67);
+\draw[draw=none,fill=orchid227119194] (axis cs:15.75,0) rectangle (axis cs:16.25,0);
+\draw[draw=none,fill=orchid227119194] (axis cs:16.75,99.5901) rectangle (axis cs:17.25,100.0001);
+\draw[draw=none,fill=orchid227119194] (axis cs:17.75,99.0201) rectangle (axis cs:18.25,99.1201);
+\draw[draw=none,fill=orchid227119194] (axis cs:18.75,99.3199) rectangle (axis cs:19.25,99.6999);
+\draw[draw=none,fill=orchid227119194] (axis cs:19.75,99.86) rectangle (axis cs:20.25,99.87);
+\draw[draw=none,fill=orchid227119194] (axis cs:20.75,99.4) rectangle (axis cs:21.25,99.86);
+\draw[draw=none,fill=orchid227119194] (axis cs:21.75,99.7899) rectangle (axis cs:22.25,99.9999);
+\draw[draw=none,fill=orchid227119194] (axis cs:22.75,99.71) rectangle (axis cs:23.25,99.78);
+\draw[draw=none,fill=orchid227119194] (axis cs:23.75,99.57) rectangle (axis cs:24.25,99.78);
+\draw[draw=none,fill=orchid227119194] (axis cs:24.75,97.9198) rectangle (axis cs:25.25,98.2398);
+\draw[draw=none,fill=orchid227119194] (axis cs:25.75,99.72) rectangle (axis cs:26.25,99.89);
+\draw[draw=none,fill=orchid227119194] (axis cs:26.75,99.99) rectangle (axis cs:27.25,100);
+\draw[draw=none,fill=orchid227119194] (axis cs:27.75,99.7301) rectangle (axis cs:28.25,99.7801);
+\draw[draw=none,fill=orchid227119194] (axis cs:28.75,99.16) rectangle (axis cs:29.25,99.87);
+\draw[draw=none,fill=orchid227119194] (axis cs:29.75,98.31) rectangle (axis cs:30.25,99.94);
+\draw[draw=none,fill=orchid227119194] (axis cs:30.75,98.7902) rectangle (axis cs:31.25,99.0802);
+\draw[draw=none,fill=orchid227119194] (axis cs:31.75,99.57) rectangle (axis cs:32.25,99.77);
+\draw[draw=none,fill=orchid227119194] (axis cs:32.75,98.4297) rectangle (axis cs:33.25,98.4597);
+\draw[draw=none,fill=orchid227119194] (axis cs:33.75,99.0202) rectangle (axis cs:34.25,99.2402);
+\draw[draw=none,fill=gray127] (axis cs:-0.25,0) rectangle (axis cs:0.25,0);
+\addlegendimage{ybar,ybar legend,draw=none,fill=gray127}
+\addlegendentry{Immeubles non-exploités}
+
+\draw[draw=none,fill=gray127] (axis cs:0.75,0) rectangle (axis cs:1.25,0);
+\draw[draw=none,fill=gray127] (axis cs:1.75,99.54) rectangle (axis cs:2.25,99.66);
+\draw[draw=none,fill=gray127] (axis cs:2.75,99.2401) rectangle (axis cs:3.25,99.4601);
+\draw[draw=none,fill=gray127] (axis cs:3.75,0) rectangle (axis cs:4.25,0);
+\draw[draw=none,fill=gray127] (axis cs:4.75,99.97) rectangle (axis cs:5.25,100);
+\draw[draw=none,fill=gray127] (axis cs:5.75,99.6901) rectangle (axis cs:6.25,99.7601);
+\draw[draw=none,fill=gray127] (axis cs:6.75,99.6798) rectangle (axis cs:7.25,99.9898);
+\draw[draw=none,fill=gray127] (axis cs:7.75,98.85) rectangle (axis cs:8.25,100);
+\draw[draw=none,fill=gray127] (axis cs:8.75,0) rectangle (axis cs:9.25,0);
+\draw[draw=none,fill=gray127] (axis cs:9.75,99.8799) rectangle (axis cs:10.25,99.9999);
+\draw[draw=none,fill=gray127] (axis cs:10.75,99.7101) rectangle (axis cs:11.25,100.0001);
+\draw[draw=none,fill=gray127] (axis cs:11.75,97.7602) rectangle (axis cs:12.25,100);
+\draw[draw=none,fill=gray127] (axis cs:12.75,99.91) rectangle (axis cs:13.25,100);
+\draw[draw=none,fill=gray127] (axis cs:13.75,99.97) rectangle (axis cs:14.25,100);
+\draw[draw=none,fill=gray127] (axis cs:14.75,99.67) rectangle (axis cs:15.25,100);
+\draw[draw=none,fill=gray127] (axis cs:15.75,99.8799) rectangle (axis cs:16.25,99.9999);
+\draw[draw=none,fill=gray127] (axis cs:16.75,0) rectangle (axis cs:17.25,0);
+\draw[draw=none,fill=gray127] (axis cs:17.75,99.1201) rectangle (axis cs:18.25,100);
+\draw[draw=none,fill=gray127] (axis cs:18.75,99.6999) rectangle (axis cs:19.25,99.9999);
+\draw[draw=none,fill=gray127] (axis cs:19.75,99.87) rectangle (axis cs:20.25,99.97);
+\draw[draw=none,fill=gray127] (axis cs:20.75,99.86) rectangle (axis cs:21.25,99.99);
+\draw[draw=none,fill=gray127] (axis cs:21.75,0) rectangle (axis cs:22.25,0);
+\draw[draw=none,fill=gray127] (axis cs:22.75,99.78) rectangle (axis cs:23.25,99.97);
+\draw[draw=none,fill=gray127] (axis cs:23.75,99.78) rectangle (axis cs:24.25,100);
+\draw[draw=none,fill=gray127] (axis cs:24.75,98.2398) rectangle (axis cs:25.25,100);
+\draw[draw=none,fill=gray127] (axis cs:25.75,99.89) rectangle (axis cs:26.25,100);
+\draw[draw=none,fill=gray127] (axis cs:26.75,0) rectangle (axis cs:27.25,0);
+\draw[draw=none,fill=gray127] (axis cs:27.75,99.7801) rectangle (axis cs:28.25,100.0001);
+\draw[draw=none,fill=gray127] (axis cs:28.75,99.87) rectangle (axis cs:29.25,100);
+\draw[draw=none,fill=gray127] (axis cs:29.75,99.94) rectangle (axis cs:30.25,100);
+\draw[draw=none,fill=gray127] (axis cs:30.75,99.0802) rectangle (axis cs:31.25,100.0001);
+\draw[draw=none,fill=gray127] (axis cs:31.75,99.77) rectangle (axis cs:32.25,100);
+\draw[draw=none,fill=gray127] (axis cs:32.75,98.4597) rectangle (axis cs:33.25,99.9999);
+\draw[draw=none,fill=gray127] (axis cs:33.75,99.2402) rectangle (axis cs:34.25,100.0001);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:-0.25,99.42) rectangle (axis cs:0.25,99.9999);
+\addlegendimage{ybar,ybar legend,draw=none,fill=goldenrod18818934}
+\addlegendentry{Ressources naturelles}
+
+\draw[draw=none,fill=goldenrod18818934] (axis cs:0.75,99.7999) rectangle (axis cs:1.25,99.9999);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:1.75,99.66) rectangle (axis cs:2.25,100);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:2.75,99.4601) rectangle (axis cs:3.25,100);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:3.75,0) rectangle (axis cs:4.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:4.75,0) rectangle (axis cs:5.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:5.75,99.7601) rectangle (axis cs:6.25,100.0001);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:6.75,99.9898) rectangle (axis cs:7.25,99.9998);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:7.75,0) rectangle (axis cs:8.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:8.75,0) rectangle (axis cs:9.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:9.75,0) rectangle (axis cs:10.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:10.75,0) rectangle (axis cs:11.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:11.75,0) rectangle (axis cs:12.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:12.75,0) rectangle (axis cs:13.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:13.75,0) rectangle (axis cs:14.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:14.75,0) rectangle (axis cs:15.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:15.75,0) rectangle (axis cs:16.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:16.75,0) rectangle (axis cs:17.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:17.75,0) rectangle (axis cs:18.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:18.75,0) rectangle (axis cs:19.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:19.75,99.97) rectangle (axis cs:20.25,100);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:20.75,99.99) rectangle (axis cs:21.25,100);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:21.75,0) rectangle (axis cs:22.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:22.75,99.97) rectangle (axis cs:23.25,100);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:23.75,0) rectangle (axis cs:24.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:24.75,0) rectangle (axis cs:25.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:25.75,0) rectangle (axis cs:26.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:26.75,0) rectangle (axis cs:27.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:27.75,0) rectangle (axis cs:28.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:28.75,0) rectangle (axis cs:29.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:29.75,0) rectangle (axis cs:30.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:30.75,0) rectangle (axis cs:31.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:31.75,0) rectangle (axis cs:32.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:32.75,0) rectangle (axis cs:33.25,0);
+\draw[draw=none,fill=goldenrod18818934] (axis cs:33.75,0) rectangle (axis cs:34.25,0);
+\end{axis}
+
+\end{tikzpicture}
+
+\end{document}

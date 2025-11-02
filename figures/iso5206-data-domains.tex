@@ -1,0 +1,95 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber,language=french]{biblatex}
+\DeclareLanguageMapping{french}{french-apa}
+
+\DefineBibliographyExtras{french}{\restorecommand\mkbibnamefamily}
+
+\DeclareDelimFormat[bib]{finalnamedelim}{
+    \ifthenelse{\value{listcount}>\maxprtauth}
+    {}
+    {\ifthenelse{\ifcurrentname{groupauthor}\AND%
+            \value{liststop}=2}
+        {\addspace\bibstring{and}\space}
+        {\finalandcomma\addspace\bibstring{and}\space}
+    }
+}
+\addbibresource{Maitrise_Recherche.bib}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+    \begin{tikzpicture}
+        \tikzstyle{objet} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+        \tikzstyle{objet_tl} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+        % Nodes de flowchart
+        % Lieu
+        \node (place) [objet_tl] {Lieu};
+            \node (hierarchy) [objet,below right of=place,yshift=-0.2cm] {Hiérarchie};
+            \node (layout) [objet, below of=hierarchy,yshift=-0.4cm]{Structure / Équipements / Données Service};
+            \node (op_char) [objet, below of=layout,yshift=-0.6cm]{Caractéristiques Opérationnelles};
+            \node (op_hours) [objet, below of=op_char,yshift=-0.2cm]{Heures d'opérations};
+            \node (contact) [objet, below of=op_hours,yshift=-0.05cm]{Contact};
+            \node (meth_paie) [objet, below of=contact,yshift=-0.2cm]{Méthodes de paiement};
+            \node (places) [objet,below of=meth_paie,yshift=-0.3cm]{Places de stationnement};
+        %Droits
+        \node (droits) [objet_tl,right of=place,xshift=4cm]{Droits};
+            \node (don_spec_droits) [objet,below right of=droits,yshift=-0.4cm] {Données de spécification des droits};
+            \node (don_elig) [objet,below of=don_spec_droits,yshift=-0.2cm] {Données d'éligibilité};
+            \node (don_ident) [objet,below of=don_elig,yshift=-0.2cm] {Données d'identification};
+            \node (assign_droits) [objet, below of=don_ident,yshift=-0.4cm]{Données droits assignés (clients)};
+            \node (transactions) [objet,below of=assign_droits,yshift=-0.4cm]{Données financières (transactions)};
+        % Rates
+        \node(taux) [objet_tl,right of=droits,xshift=4cm]{Taux / prix};
+            \node (rate_table) [objet, below right of=taux,yshift=-0.4cm]{Table de données de taux};
+            \node (rate_avail_table) [objet,below of=rate_table,yshift=-1cm]{Table de disponibilité de taux};
+        % Soumission
+        \node (quotes) [objet_tl,right of=taux,xshift=4cm]{Soumissions};
+            \node (quote_right_req) [objet,below right of=quotes,yshift=-0.4cm] {Requête droit d'accès (soumission)};
+            \node (quote_right_res) [objet,below of=quote_right_req,yshift=-.4cm] {Réponse droit d'accès (soumission)};
+            \node (quote_sess_ext) [objet,below of=quote_right_res,yshift=-0.6cm] {Requête d'extension de session (soumission)};
+            \node (quote_right_ext) [objet, below of=quote_sess_ext,yshift=-0.8cm]{Réponse extension droit d'accès (soumission)};
+        % Utilisation
+        \node (occupancy) [objet_tl, right of=quotes,xshift=4cm] {Utilisation et occupation};
+            \node (supply) [objet,below right of=occupancy,yshift=-0.4cm] {Offre};
+            \node (demande) [objet,below of =supply,yshift=-0.05cm] {Demande};
+            \node (demand_coll) [objet,below of=demande,yshift=-0.1cm] {Méthode collection demande};
+        \node (pk_common) [objet_tl, below of=taux,yshift=-8cm] {Objets communs};
+        \node (energy) [objet_tl, below of=pk_common,yshift=-1cm] {Infra. Énergétique};
+        \node (session) [objet_tl,right of=pk_common,xshift=4cm] {Session};
+        \node (sess_data) [objet, below right of= session,yshift=-0.2cm] {Début / fin session};
+        \node (observ) [objet_tl,right of=session,xshift=4cm] {Observation};
+        %
+        \node (inter) [right of=don_elig,xshift=1.5cm]{};
+        % lignes lieu
+        \draw (place.west) -| ++(-0.1,-0.1) |- (hierarchy.west);
+        \draw (place.west) -| ++(-0.1,-0.1) |- (layout.west);
+        \draw (place.west) -| ++(-0.1,-0.1) |- (op_char.west);
+        \draw (place.west) -| ++(-0.1,-0.1) |- (op_hours.west);
+        \draw (place.west) -| ++(-0.1,-0.1) |- (contact.west);
+        \draw (place.west) -| ++(-0.1,-0.1) |- (meth_paie.west);
+        \draw (place.west) -| ++(-0.1,-0.1) |- (places.west);
+        %Lignes Droits
+        \draw (droits.west) -| ++(-0.1,-0.1) |- (don_spec_droits.west);
+        \draw (droits.west) -| ++(-0.1,-0.1) |- (don_elig.west);
+        \draw (droits.west) -| ++(-0.1,-0.1) |- (don_ident.west);
+        \draw (droits.west) -| ++(-0.1,-0.1) |- (assign_droits.west);
+        \draw (droits.west) -| ++(-0.1,-0.1) |- (transactions.west);
+        % lignes taux
+        \draw (don_elig.east) -- (inter.center) |- (rate_table.west);
+        \draw (taux.west) -| (inter.center) |- (rate_table.west);
+        \draw (taux.west) -| (inter.center) |- (rate_avail_table.west);
+        % Lignes Soumissions 
+        \draw (quotes.west) -| ++(-0.1,-0.1) |- (quote_right_req.west); 
+        \draw (quotes.west) -| ++(-0.1,-0.1) |- (quote_right_res.west); 
+        \draw (quotes.west) -| ++(-0.1,-0.1) |- (quote_sess_ext.west); 
+        \draw (quotes.west) -| ++(-0.1,-0.1) |- (quote_right_ext.west);
+        % Lignes Utilisation et occupation
+        \draw (occupancy.west) -| ++(-0.1,-0.1) |- (supply.west);
+        \draw(occupancy.west) -| ++(-0.1,-0.1) |- (demande.west);
+        \draw (occupancy.west) -|++(-0.1,-0.1) |- (demand_coll.west);
+        % Session
+        \draw (session.west) -| ++(-0.1,-0.1) |- (sess_data.west);
+    \end{tikzpicture}
+\end{document}
