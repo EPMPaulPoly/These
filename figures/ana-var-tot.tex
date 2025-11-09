@@ -1,0 +1,52 @@
+
+    \documentclass{standalone}
+    \usepackage[english,french]{babel} 
+    \usepackage{tikz}
+    \usetikzlibrary{calc}
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}         
+    \usepackage{pgfplotstable}
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=1.18}
+    \usepackage{siunitx}               
+    \usepackage{booktabs} 
+    \begin{document}
+    \begin{tikzpicture}
+    \begin{axis}[
+                height=10cm,
+                width=15cm,
+                tick align=outside,
+                tick pos=left,
+                ylabel={Fréquence},
+                ymin= 0,
+                ymax= 0.3,
+                ytick={0,0.1,0.2,0.3},
+                yticklabels={0,0.1,0.2,0.3},
+                xtick={1,2,3,4,5,6,7,8,9,10,11,12,13},
+                xticklabels={37990 - 50000,
+                    50000 - 100000,
+                    100000 - 150000,
+                    150000 - 200000,
+                    200000 - 250000,
+                    250000 - 300000,
+                    300000 - 350000,
+                    350000 - 400000,
+                    400000 - 450000,
+                    450000 - 500000,
+                    500000 - 550000,
+                    550000 - 600000,
+                    600000 - 622866},
+                xlabel={Stationnement total prédit},
+                xmin=-0.5,
+                xmax=13.5,
+                x tick label style={rotate=45, anchor=east},
+            ]\addplot[ybar,draw=none,fill=blue,legend image post style={/pgfplots/ybar legend},bar width= 20pt,bar shift=0pt]
+                coordinates{
+                    (1,0.017543859649122806)(2,0.03508771929824561)(3,0.0)(4,0.12280701754385964)(5,0.017543859649122806)(6,0.17543859649122806)(7,0.03508771929824561)(8,0.10526315789473684)(9,0.24561403508771928)(10,0.14035087719298245)(11,0.07017543859649122)(12,0.0)(13,0.03508771929824561)
+                };
+            \addlegendentry{Distribution du stationnement total pour tous les ensembles de règlement};
+            \addplot [red, thick, dashed, mark=none] coordinates {(10,0) (10,0.3)};
+                \addlegendentry{Inventaire Actuel};
+        \end{axis}
+        \end{tikzpicture}
+        \end{document} 

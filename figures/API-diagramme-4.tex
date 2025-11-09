@@ -1,0 +1,114 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview.
+\begin{document}
+    \begin{tikzpicture}
+        \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+        \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+        \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+        \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+        \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+        \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+        \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+        \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+        % Légende
+        \node(leg-oqp) [opt_query_param,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+        \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+        \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+        \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+        \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+        \node(leg-par) [param,below of=leg-ep]{Identifiant};
+        \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+        \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+        \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+        \coordinate (leg-top-left) at ($(legend.west|-leg-objet.north) + (-0.1,0.1)$);
+        \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+        \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+        \node(API) [api,below of=leg-ep,yshift=-1cm]{API};
+        % Cadastre
+        \node(cad) [domaine_data,below of=API,xshift=-2cm]{Cadastre et rôle};
+            \node(get-lot-par-quartier)[endpoint,below of=cad,xshift=-1cm,yshift=-0.4cm]{GET /api/lot/quartier- ana};
+                \node (id_quartier)[param,left of=get-lot-par-quartier,xshift=-3.25cm]{$id_{quartier}$} ;
+            \node (get-lot-query)[endpoint,below of=get-lot-par-quartier,yshift=-0.25cm]{GET /api/lot-query};
+                \node (id-lot)[opt_query_param,left of=get-lot-query,xshift=-3.25cm]{g\_no\_lot};
+                \node (bbox)[opt_query_param,below of=id-lot]{Boite englobante};
+                \node (superf_plus_grand)[opt_query_param,below of=bbox,yshift=-0.25cm]{superf\_plus \_grand};
+                \node (estime)[opt_query_param,below of=superf_plus_grand]{estime};
+                \node (inv_plus_grand) [opt_query_param,below of=estime]{inv\_plus\_ grand};
+                \node (inv_surf_plus_grand)[opt_query_param,below of=inv_plus_grand,yshift=-0.25cm]{inv\_surf\_ plus\_grand};
+                \node (id_strate) [opt_query_param,below of=inv_surf_plus_grand]{$id_{strate}$};
+            \node (get-lot-id) [endpoint,below of=get-lot-query,yshift=0.15cm]{GET /api/lot};
+                \node (lot-id-lot) [param,below of=get-lot-id,yshift=0.15cm]{g\_no\_lot};
+            \node (get-role-assoc) [endpoint, below of=lot-id-lot]{GET /api/role-associe};
+                \node (lot-id-role) [param, below of=get-role-assoc]{g\_no\_lot};
+        % Fleches cadastre
+        \coordinate (flex-cad) at ($(get-lot-par-quartier.east|-cad.south) + (0.2,0)$);
+        \draw (get-lot-par-quartier.east)-|(flex-cad);
+            \draw (id_quartier.east)--(get-lot-par-quartier.west);
+        \draw (get-lot-query.east) -| (flex-cad|-get-lot-par-quartier.east);
+            \draw (id-lot.east) -- (get-lot-query.west);
+            \coordinate (loc-query) at ($(id-lot.east)!0.5!(get-lot-query.west)$);
+            \draw (bbox.east) -| (loc-query);
+            \draw (superf_plus_grand.east) -| ($(loc-query|-bbox.east)$);
+            \draw (estime.east) -| ($(loc-query|-superf_plus_grand.east)$);
+            \draw (inv_plus_grand.east) -| ($(loc-query|-estime.east)$);
+            \draw (inv_surf_plus_grand.east) -| ($(loc-query|-inv_plus_grand.east)$);
+            \draw (id_strate.east) -| ($(loc-query|-inv_surf_plus_grand.east)$);
+        \draw (get-lot-id) -| (flex-cad|-get-lot-query.east);
+            \draw (lot-id-lot.east) -| ($(get-lot-id.south-|lot-id-lot.east)+(0.2,0)$);
+        \draw (get-role-assoc.east) (flex-cad|-get-lot-id);
+            \draw (lot-id-role.east) -| ($(get-role-assoc.south-|lot-id-role.east)+(0.2,0)$);
+        % CUBF
+        \node (cubf-top)[domaine_data,below of=API,xshift=2cm]{CUBF};
+            \node (get-cubf)[endpoint, below of=cubf-top,xshift=1cm]{GET /api/cubf};
+                \node (cubf)[opt_query_param,right of=get-cubf,xshift=3cm]{CUBF};
+                \node (niveau)[opt_query_param,below of=cubf]{niveau};
+           \node(get-n-entree)[endpoint,below of=get-cubf,yshift=-0.25cm]{GET /api/cubf/n\_entrees};
+        % Flèches CUBF
+        \coordinate(flex-cubf) at ($(get-cubf.west|-cubf-top.south)+ (-0.2,0)$);
+        \draw (get-cubf.west) -| (flex-cubf);
+            \draw (get-cubf.east) -- (cubf.west);
+            \draw (niveau.west) -| ($(get-cubf.east)!0.5!(cubf.west)$);
+        \draw (get-n-entree.west) -|($(flex-cubf|-get-cubf.west)$);
+        % analyse Agrégée
+        \node (ana-quartier)[domaine_data,below of=cubf-top,yshift=-2.4cm]{Analyse agrégée};
+            \node (get-carto)[endpoint] at ($(get-cubf|-ana-quartier)+(0,-1.25)$) {GET /api/ana-par-quartier/carto};
+                \node (variable-carto) [mandat_query_param,right of=get-carto,xshift=3.25cm]{variable};
+                \node (ordre-carto) [mandat_query_param,below of=variable-carto,yshift=0.2cm]{ordre};
+            \node (get-histo)[endpoint,below of=get-carto,yshift=-0.7cm]{GET /api/ana-par-quartier/histo};
+                \node (variable-histo) [mandat_query_param,right of=get-histo,xshift=3.25cm]{variable};
+                \node (ordre-histo) [mandat_query_param,below of=variable-histo,yshift=0.2cm]{ordre};
+            \node (get-xy) [endpoint, below of=get-histo,yshift=-0.7cm]{GET /api/ana-par-quartier/XY};
+                \node (variable-X) [mandat_query_param, right of=get-xy,xshift=3.25cm]{X};
+                \node (variable-Y) [mandat_query_param, below of=variable-X,yshift=0.2cm]{Y};
+                \node (ordre-XY) [mandat_query_param, below of=variable-Y,yshift=0.2cm]{ordre};
+            \node (recalcule-inv-agg) [endpoint, left of=get-xy,xshift=-3.75cm]{GET /api/ana-par-quartier/recalcule-stat-agreg};
+            \node (recalcule-val-autres) [endpoint, below of=get-xy,yshift=-0.5cm]{GET /api/ana-par-quartier/recalcule-val-autres};
+        % Flèches analyse-agrégée 
+        \coordinate (flex-ana-quartier) at ($(get-carto.west|-ana-quartier.south)+(-0.2,0)$);
+        \draw (get-carto.west)-|(flex-ana-quartier);
+            \draw (get-carto.east)--(variable-carto.west);
+            \draw (ordre-carto.west) -| ($(get-carto.east)!0.5!(variable-carto.west)$);
+        \draw (get-histo.west) -| (flex-ana-quartier |-get-carto.west);
+            \draw (get-histo.east)--(variable-histo.west);
+            \draw (ordre-histo.west) -| ($(get-histo.east)!0.5!(variable-histo.west)$);
+        \draw (get-xy.west) -- (recalcule-inv-agg.east);
+            \draw (get-xy.east) --(variable-X.west);
+            \coordinate(flex-xy) at ($(get-xy.east)!0.5!(variable-X.west)$);
+            \draw (variable-Y.west) -| (flex-xy) ;
+            \draw (ordre-XY.west) -| (variable-Y.west-|flex-xy);
+        \draw (recalcule-val-autres.west) -| (flex-ana-quartier|-get-histo.west);
+        % flèches top
+        \draw (ana-quartier.west) -| (API.south);
+        \draw (cad.east) -- (cubf-top.west); 
+    \end{tikzpicture}
+\end{document}

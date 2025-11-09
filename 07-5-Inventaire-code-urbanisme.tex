@@ -11,11 +11,11 @@
     %Basé sur ces cas d'usage envisagés, la situation idéale serait d'avoir une base de données complètement désagrégée qui liste chaque place de stationnement. A minima, l'information doit être disponible au niveau du lot cadastral. D'autre part, il doit être possible d'encoder les informations relatives à la tarification de l'espace, le nombre disponible par lot , pour permettre d'appliquer des mesures d'écofiscalité. Il doit être possible d'agréger ces mesures au niveau à des zones d'analyse de déplacement pour faire des analyses sur la capacité de stationnement dans une zone dans un modèle de transport. \par
     %Ultimement, l'ensemble de ces requis soulève la nécessité d'une base de données personnalisée. En effet, dans le cas d'un inventaire basé sur la réglementation, \ac{OSM} est mal adapté puisqu'il requiert la localisation précise des places ce qui n'est pas nécessairement faisable. D'autre part, cela ne lie pas le stationnement à un identifiant qui permet à une entité gouvernementale d'appliquer cette fiscalité. Idéalement, la base de données serait capable d'exporter un format importable dans \ac{OSM} pour mettre à jour les données ouvertes au public.
     \subsection{Structure de la section}
-        Cette section va couvrir la structure de données et la méthodologie pour le calcul de l'inventaire. La section commence par justifier le niveau d'agrégation choisi pour l'inventaire (sec. \ref{ssec:justif-ag-level-inventory}) avant d'introduire le schéma relationnel de données (sec. \ref{ssec:inv-erd-survol}), la structure de l'inventaire est ensuite présentée (sec. \ref{ssec:survol-table-inventaire}) avant d'introduire la représentation de l'historique géopolitique (sec. \ref{ssec:data-geopolitique-territoire}), puis la représentation des règlements (sec. \ref{ssec:survol-repres-reglements}) et comment ils sont associés pour représenter la réglementation en vigueur sur un territoire(sec. \ref{ssec:ensembles_association}). Pour terminer la partie sur les données, le chapitre survole la structure (sec. \ref{ssec:data-cadastre-role}) données cadastrales et du rôle foncier ainsi qu'une analyse descriptive de leur distribution et des données manquantes (sec. \ref{ssec:analyse-descriptive-role-fonc}) et finalement une brève description du découpage de la ville utilisé pour l'analyse agrégée (sec. \ref{ssec:struct_donnees_sec_analyse}). Cette partie du mémoire se tourne ensuite vers les objets informatique implémentés pour représenter les différentes quantités d'intérêt(sec. \ref{ssec:obj-informatique-impl-stat}), l'introduction du logigramme du calcul de l'inventaire (sec. \ref{ssec:logigramme-calcul-stationnement}). Quatre parties du calcul sont ensuite détaillées en profondeur: la procédure de sélection des données foncières (sec. \ref{ssec:selection-donnees-foncieres}), la sélection des données du rôle géopolitiques et de réglementation (sec. \ref{ssec:select-reg-set-territories}), l'assignation des données du rôle foncier à ces dernières (sec. \ref{ssec:meth-assign-td-to-rst}). La section se termine en détaillant la procédure de calcul des minimums de stationnement (sec. \ref{ssec:meth-assign-td-to-rst}).
+        Cette section va couvrir la structure de données et la méthodologie pour le calcul de l'inventaire. La section commence par justifier le niveau d'agrégation choisi pour l'inventaire (sec. \ref{ssec:justif-ag-level-inventory}) avant d'introduire le schéma relationnel de données (sec. \ref{ssec:inv-erd-survol}). Ensuite, le chapitre survole la structure données cadastrales et du rôle foncier (sec. \ref{ssec:data-cadastre-role}) ainsi qu'une analyse descriptive de leur distribution et des données manquantes (sec. \ref{ssec:analyse-descriptive-role-fonc}). La structure de l'inventaire est  présentée (sec. \ref{ssec:survol-table-inventaire}) avant d'introduire la représentation de l'historique géopolitique (sec. \ref{ssec:data-geopolitique-territoire}), puis la représentation des règlements (sec. \ref{ssec:survol-repres-reglements}) et comment ils sont associés pour représenter la réglementation en vigueur sur un territoire(sec. \ref{ssec:ensembles_association}). Pour terminer la partie sur les données, une brève description du découpage de la ville utilisé pour l'analyse agrégée (sec. \ref{ssec:struct_donnees_sec_analyse}). Cette partie du mémoire se tourne ensuite vers les objets informatique implémentés pour représenter les différentes quantités d'intérêt(sec. \ref{ssec:obj-informatique-impl-stat}), l'introduction du logigramme du calcul de l'inventaire (sec. \ref{ssec:logigramme-calcul-stationnement}). Quatre parties du calcul sont ensuite détaillées en profondeur: la procédure de sélection des données foncières (sec. \ref{ssec:selection-donnees-foncieres}), la sélection des données du rôle géopolitiques et de réglementation (sec. \ref{ssec:select-reg-set-territories}), l'assignation des données du rôle foncier à ces dernières (sec. \ref{ssec:meth-assign-td-to-rst}). La section se termine en détaillant la procédure de calcul des minimums de stationnement (sec. \ref{ssec:meth-assign-td-to-rst}).
     \subsection{Choix d'une unité d'inventaire}\label{ssec:justif-ag-level-inventory}
     Dans un monde idéal, il serait possible d'avoir la localisation de chaque place de stationnement sur le territoire pour permettre de calculer un temps d'accès à chaque place de stationnement. Cela permettrait aussi d'affecter ce temps d'accès en fonction de l'achalandage du stationnement et éviterait des problèmes de micro-agrégation menant à des grands changements de stationnement accessible si un lot a un grand nombre de places de stationnement. Malheureusement, en utilisant la méthode à partir du rôle foncier, ce niveau de détail n'est pas possible et l'échelle la plus petite possible est au niveau du lot cadastral. 
     \subsection{Schéma relationnel de données}\label{ssec:inv-erd-survol}
-        La figure \ref{fig:offstreet_db_erd} montre la structure de la base de données utilisée pour l'estimation de l'offre de stationnement. De manière simplifiée, les \underline{règlements} sont réunis en \underline{ensembles de règlements}. Ces ensembles de règlements sont associés à un \underline{territoire}. Chaque territoire est associé à une \underline{période} où les limites géographiques des municipalités sont restées stables.
+        La figure \ref{fig:offstreet_db_erd} montre la structure de la base de données utilisée pour l'estimation de l'offre de stationnement. De manière simplifiée, les \textbf{règlements} sont réunis en \textbf{ensembles de règlements}. Ces ensembles de règlements sont associés à un \textbf{territoire}. Chaque territoire est associé à une \textbf{période} où les limites géographiques des municipalités sont restées stables.
         \begin{landscape}
         \begin{figure}
             \centering
@@ -24,6 +24,125 @@
         \end{figure}
         \end{landscape}
         La base de données est implémentée dans PostgreSQL avec PostGIS pour pouvoir gérer les données spatiales du rôle foncier, du cadastre ainsi que de la division géopolitique du territoire.\par
+    \subsection{Données cadastrales et de taxation foncière} \label{ssec:data-cadastre-role}
+        \subsubsection{Structure des données}
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[trim={110cm 50cm 0cm 49cm},clip,width=15cm]{dia/ERD_stationnement_propre.png}
+            \caption{Schéma relationnel pour le rôle foncier et le cadastre}
+            \label{fig:offstreet_db_erd_input_data}
+        \end{figure}
+        Les données de départ sont le rôle foncier brut ainsi que le cadastre représentés dans les tables \underline{cadastre} et \underline{role\_foncier}. Le tableau \ref{tab:definition_role_foncier} donne une définition des colonnes pertinentes à ce mémoire. Ces tables ont cependant d'autres colonnes qui ne sont pas nécessairement pertinentes aux activités de ce mémoire. Cette section en détaillera seulement une partie. Le tableau \ref{tab:definition_role_foncier} montre les colonnes pertinentes dans le rôle foncier. Les descriptions sont tirées de \textcite{gouvernement_du_quebec_donnees_2022}.\par
+        \begin{table}[h]
+            \caption{Colonnes pour la table \underline{role\_foncier}}
+           \label{tab:definition_role_foncier}
+           \centering
+           \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                \hline
+                Nom champ & Description & Type de données & CP/CS  \\
+                \hline
+                id\_provinc & Clé primaire de la table & Texte & CP \\  
+                rl0105a & Utilisation prédominante de l'unité d'évaluation & Entier & CS  \\
+                rl0302a & Superficie du terrain en mètres carrés & Réel & \\ 
+                rl0306a & Nombre d'étages & Entier & \\
+                rl0307a & Année de construction & Entier & \\
+                rl0308a & Aire d'étages en mètres carrés & Réel & \\
+                rl0311a & Nombre de logements dans l'unité d'évaluation & Entier &  \\
+                rl0312a & Nombre de chambres locatives & Entier & \\
+                rl0313a & Nombre de locaux non-résidentiels & Entier & \\
+                rl0404a & Valeur de l'immeuble(terrain + bâtiment) & Entier & \\
+                geometry & Géométrie (Point) du rôle foncier & Géométrie & \\
+                \hline
+           \end{tabular}
+           
+        \end{table}   
+        La table \underline{association\_cadastre\_role} associe le cadastre avec le rôle foncier. En premier lieu, une jointure géométrique a été complétée et sauvegardée. Cette opération est onéreuse et l'utilisation d'une table plutôt que de refaire la requête est plus efficace. \par
+        Ceci est différent de l'approche utilisée par la chaire, où les points du cadastre sont relocalisés sur l'entrée principale du bâtiment. L'approche proposée ici permet d'utiliser les données brutes issues de \textcite{gouvernement_du_quebec_manuel_2024}, sans avoir à manuellement remettre à jour les points chaque année. La clé primaire pour le cadastre est g\_no\_lot et la clé primaire pour le rôle est l'id\_provinc. Les champs de la table \underline{association\_cadastre\_role} sont données au tableau \ref{tab:definition_assoc_role_cadastre}:
+        \begin{table}[h]
+            \caption{Colonnes pour la table \underline{association\_cadastre\_role}}
+            \label{tab:definition_assoc_role_cadastre}
+            \centering
+            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                \hline
+                Nom champ & Description & Type de données & CP/CS  \\
+                \hline
+                g\_no\_lot & Identifiant du lot cadastral & Texte & \\
+                id\_provinc & Identifiant du rôle & Texte & \\
+                \hline
+           \end{tabular}
+           
+        \end{table}   
+        \par
+        Le tableau \ref{tab:definition_cadastre} donne les détails sur les entrées dans la table \underline{cadastre}. D'autres colonnes existent mais ne sont pas détaillées car elles ne sont pas utilisées au sein de ce mémoire.\par
+        \begin{table}[!h]
+            \caption{Colonnes pour la table \underline{cadastre}}
+            \label{tab:definition_cadastre}
+            \centering
+            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                \hline
+                Nom champ       & Description                   & Type de données   & CP/CS  \\
+                \hline
+                g\_no\_lot      & Identifiant du lot cadastral  & Texte             & CP\\
+                g\_nb\_coord    & Longitude du centre de lot    & Réel              & \\
+                g\_nb\_coo\_1   & Latitude du centre de lot     & Réel              & \\
+                g\_va\_suprf    & Superficie du lot             & Réel              & \\
+                geometry        & Géométrie du lot              & Géométrie         & \\
+                \hline
+           \end{tabular}
+           
+        \end{table}   
+        La figure \ref{fig:offstreet_db_erd_input_data} montre les tables pertinentes en intrant. Il est concevable que ces tables soient entreposées dans un serveur différent si cette méthodologie était implémentée dans un milieu municipal.
+        
+        \FloatBarrier
+    \subsection{Analyse descriptive des données foncières}\label{ssec:analyse-descriptive-role-fonc}
+    Les données foncières sont centrales à la création de l'estimé. Il semble donc important de faire une courte description d'observations émises sur les données au fil de cette étude. Dans un premier temps, il semble important de noter à quel point la classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:lots-per-land-use}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans un même entrée du rôle foncier.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\linewidth]{figures/distro-usage-lots.pdf}
+        \caption{Nombre de lots par utilisation du sol principale}
+        \label{fig:lots-per-land-use}
+    \end{figure}
+    D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal mais est aussi présente dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une inférence de certaines propriétés en fonction de la valeur au rôle au besoin.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\linewidth]{figures/distro-data-role-manquant.pdf}
+        \caption{Pourcentage des lots avec des propriétés manquantes}
+        \label{fig:role-missing-data}
+    \end{figure}
+    On peut aussi regarder le logement de manière plus fine en segmentant le logement en termes de logements par lot. On constate que même si une majorité de lots sont unifamiliaux, la plupart des logements disponibles sont sur des lots multi-logements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lot avec de multiples logements.
+    \begin{figure}
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{figures/distro-typ-log.pdf}
+        \caption{Compte par type}
+        \label{fig:distro-typ-log}
+    \end{subfigure}
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{figures/distro-typ-log-quartier.pdf}
+        \caption{Répartition par type et quartier}
+        \label{fig:distro-typ-log-quartier}
+    \end{subfigure}
+    \caption{Nombre de logements et de lots par compte de logement par lot et quartier}
+    \end{figure}
+    On peut aussi constater que les lots avec des données manquantes n'ont pas nécessairement des propriétés physiques similaires aux autres lots. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
+    Pour conclure, les données du rôle foncier donnent un portrait  désagrégé de l'utilisation des sols partout dans la métropole, permettant lorsque les données sont présentes, d'inférer les différentes variables requises pour estimer une capacité de stationnement. Des acronymes ont été attribués au quartier pour rendre les graphiques plus lisibles. Le tableau \ref{tab:acro-quartiers} énumère les acronymes.
+    \begin{landscape}
+        \begin{figure}
+            \centering  
+            \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
+            \caption{Distribution des valeurs selon d'utilisation et l'absence de données physiques}
+            \label{fig:missing-data-value-distr}
+        \end{figure}  
+        \begin{figure}
+            \centering
+            \includegraphics[width=1\linewidth]{images/valeur_au_role_vs_variable_interet.png}
+            \caption{Relation entre la valeur au rôle et la principale variable d'intérêt}
+            \label{fig:rel-val-role-vs-var-int}
+        \end{figure}
+    \end{landscape}
+    
+    \FloatBarrier
     \subsection{Structure des données de l'inventaire final}\label{ssec:survol-table-inventaire}
     La table \underline{inventaire\_stationnement} contient l'inventaire de stationnement. La table laisse la possibilité d'avoir plusieurs estimations par lot cadastral. Ainsi, l'usager peut utiliser une estimation réglementaire, entrer une valeur manuellement ou utiliser une méthode d'estimation basée sur les orthophotos pour remplir cette table. La table \ref{tab:definition_table_inventaire} résume les champs, le type de données et une brève description pour chaque variable:
     \begin{table}[h]
@@ -54,7 +173,8 @@
    \end{table}\par
 
     
-    \subsection{Structure des données de la géopolitique du territoire à l'étude} \label{ssec:data-geopolitique-territoire}
+    \subsection{Données de la géopolitique du territoire à l'étude} \label{ssec:data-geopolitique-territoire}
+        \subsubsection{Structure de données}
         Les règlements régissant la capacité de stationnement changent dans le temps du fait de changements réglementaires et des variations spatiales des municipalités. Cette section va détailler la structure de données permettant de prendre en compte la variation temporelle de la réglementation. Cet historique est représenté au moyen de deux tables: \underline{historique\_geopol} et \underline{cartographie\_secteurs}. \underline{historique\_geopol} représente les grandes périodes où le territoire a été stable. 
         Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table {historique\_geopol} \par
         \begin{table}[h]
@@ -112,9 +232,11 @@
         \includegraphics[trim={85cm 0 42.5cm 112.5cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
         \caption{Structure de données pour l'historique géopolitique}\label{fig:offstreet_db_erd_history}
     \end{figure}
+    La figure \ref{fig:er-counts-byperiod} montre le nombre de territoires par période.
     \FloatBarrier
     
-    \subsection{Structure de données représentant les règlements} \label{ssec:survol-repres-reglements}
+    \subsection{Données représentant les règlements} \label{ssec:survol-repres-reglements}
+        \subsubsection{Structure des données}
         Puisque la formulation des règlements peut être relativement complexe. Deux tables sont utilisées. La première \underline{entete\_reg\_stationnement} représente les données administratives communes, tandis que \underline{reg\_stationnement\_empile} entrepose la représentation mathématique des règlements. Les champs de la table \underline{entete\_reg\_stationnement} sont énumérés dans le tableau \ref{tab:definition_entete_reg_stationnement}.  \par
         \begin{table}[t]
             \caption{Colonnes pour la table \underline{entete\_reg\_stationnement}}
@@ -132,7 +254,6 @@
                 article\_loi & Article de loi détaillant le règlement & Texte & \\
                 paragraphe\_loi &  Paragraphe de la loi détaillant le règlement & Texte & \\ 
                 ville & Ville où le règlement s'applique & Texte & \\
-                
                 \hline
             \end{tabular}
             
@@ -229,7 +350,7 @@
                 20 & rl0308a & 0.0006 & 0 & plateau sportif \\ \hline
             \end{tabular}
             
-        \end{table}
+        \end{table}\clearpage
         La figure \ref{fig:offstreet_db_erd_rules} montre le schéma relationnel pour les règlements:
         \begin{figure}[!h]
             \centering
@@ -237,16 +358,55 @@
             \caption{Structure de données pour les règlements}\label{fig:offstreet_db_erd_rules}
         \end{figure}
         \FloatBarrier
+         
         \subsubsection{Analyse descriptive des règlements recensés}
-        Les graphiques suivants donnent quelques statistiques descriptives sur les règlements sauvegardés. Il est important de noter que les règlements n'ont été recensés que jusqu'au milieu des années '90. Les plus vieux règlements recensés ont été répliqués pour être utilisées pour les plus vieilles juridictions. Ceci implique que même les propriétés construites avant l'avènement de l'automobile sont modélisées comme ayant du stationnement. Cette approche peut sembler contre-intuitive puisque ces règlements n'existaient pas auparavant mais beaucoup de vieilles propriétés ont vu des stationnement aménagés après construction. Aucune analyse de sensibilité n'a été complétée pour voir quel effet cela aurait sur l'offre de stationnement prédite, particulièrement dans les quartiers centraux.\par
-        La figure \ref{fig:nombre-reg-date} montre la distribution des règlements par ville, texte de loi, année d'entrée en vigueur et d'abrogation et ville. On constate que les règlements post harmonisation dominent les comptes. Ceci est du au fait que ces règlements étaient facilement disponibles et constitue un important biais de l'étude.  
-        \begin{figure}[h]
+        \begin{figure}[H]
             \centering
             \includegraphics[width=1\linewidth]{figures/distr-reg-par-ville.pdf}
             \caption{Nombre de règlements par ville, règlement et date d'entrée en vigueur}
             \label{fig:nombre-reg-date}
         \end{figure}
-        Tel que mentionné plus haut, des réglements qui sont des duplications des règlements les plus vieux sondés ont été créés
+        Les graphiques de cette section donnent une portrait des règlements recensés. Il est important de noter que les règlements n'ont été recensés que jusqu'au milieu des années '90. Les plus vieux règlements recensés ont été répliqués pour être utilisés pour les plus vieilles juridictions. Ceci implique que même les propriétés construites avant l'avènement de l'automobile sont modélisées comme ayant un nombre de places minimum. Cette approche peut sembler contre-intuitive puisque ces règlements n'existaient pas auparavant mais beaucoup de vieilles propriétés ont vu des stationnement aménagés après construction. Aucune analyse de sensibilité n'a été complétée pour voir quel effet cela aurait sur l'offre de stationnement prédite, particulièrement dans les quartiers centraux.\par
+        
+        La figure \ref{fig:nombre-reg-date} montre la distribution des règlements par ville, texte de loi, année d'entrée en vigueur et d'abrogation et ville. On constate que les règlements post harmonisation dominent les comptes. Ceci est du au fait que ces règlements étaient facilement disponibles et constitue un important biais de l'étude. \par 
+       
+        Pour les règlements recensés, la figure \ref{fig:n-lignes-par-reg} montre la distribution du nombre de lignes requises pour définir les règlements, ceci est un proxy pour la complexité du règlement.\par
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=1\linewidth]{figures/lignes-par-reglement.pdf}
+            \caption{Distribution du nombre de lignes pour définir les règlements recensés}
+            \label{fig:n-lignes-par-reg}
+        \end{figure}
+        \clearpage
+        La figure \ref{fig:regs-per-operation} donne le nombre de règlements par combinaison d'opérateurs en présence.\par
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\linewidth]{figures/reglement-par-operation.pdf}
+            \caption{Nombre de règlements par type d'opérations}
+            \label{fig:regs-per-operation}
+        \end{figure}
+        La figure \ref{fig:regs-per-unit} donne le nombre de règlements utilisant les unités mentionnées à la section \ref{sec:politiques_stationnement}. \par
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\linewidth]{figures/reglement-par-unite.pdf}
+            \caption{Nombre d'utilisation de différentes unités dans les règlements recensés}
+            \label{fig:regs-per-unit}
+        \end{figure}
+        Plusieurs règlements ont des seuils qui sont utilisés pour différentier le nombre de places selon la quantité d'intérêt. Ce type de règlement est particulièrement présent pour les logements où les municipalités ont typiquement requis des stationnements supplémentaires pour les lots avec plusieurs logements pour accommoder les visiteurs. La figure \ref{fig:seuil-log-reglement} montre le nombre de fois que différents seuils sont utilisés parmi les 81 règlements de stationnement, dont 27 utilisent des seuils. Certains règlements ont plusieurs seuils dans leur définition.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=1\linewidth]{figures/regl-log-par-seuil.pdf}
+            \caption{Nombre d'observation de seuil dans les règlements de logement}
+            \label{fig:seuil-log-reglement}
+        \end{figure}
+        Tel que mentionné plus haut, des règlements qui sont des duplications des règlements les plus vieux sondés ont été créés. Leur nombre est donnée à la figure \ref{fig:regs-before-1985}:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=1\linewidth]{figures/distr-reg-dupl.pdf}
+            \caption{Règlements dupliqués pour faire prédictions avant recensement}
+            \label{fig:regs-before-1985}
+        \end{figure}
+        Ceci conclut le bref survol des règlements recensés. Quelques exemple de règlements seront maintenant présentés.
         \FloatBarrier
     \subsubsection{Exemple 1: Clinique médicale} 
         Admettons un règlement qui requiert 1 place par salle de consultation  plus une place par employé plus une place par médecin ou une place par 20 mètres carrés, au plus contraignant. Les entrées dans la table reg\_stat\_empile seraient telles que montrées au tableau \ref{tab:ex_reg_stat_clinique}
@@ -264,69 +424,21 @@
             \end{tabular}
             
         \end{table}
-        \begin{figure}[h]
+        \begin{figure}[H]
         \begin{subfigure}[t]{0.5\textwidth}
            \centering
-           \begin{tikzpicture}[scale=0.8]
-            \begin{axis}[
-                xlabel={$N_{employes}$[-]},
-                ylabel={$N_{médecin}$[-]},
-                zlabel={$N_{places}$[-]},
-                legend style={at={(0.5,1.25)},
-    	           anchor=north,legend columns=-1}
-            ]
-            \addplot3[
-                surf,color = blue, faceted color=black,
-            ] 
-            coordinates {
-            (0,0,1) (0,1,2) (0,2,3)
-            
-            (1,0,2) (1,1,3) (1,2,4)
-            
-            (2,0,3) (2,1,4) (2,2,5)
-            };
-            \addplot3[
-                surf,color = orange, faceted color=black,
-            ] 
-            coordinates {
-            (0,0,2) (0,1,3) (0,2,4)
-            
-            (1,0,3) (1,1,4) (1,2,5)
-            
-            (2,0,4) (2,1,5) (2,2,6)
-            };
-            \legend{Stat min. $n_{salles}=1$,Stat min. $n_{salles}=2$ };
-            \end{axis} 
-            \end{tikzpicture}
+           \includegraphics[scale=1]{figures/exemple_clinique_se1.pdf}
             \caption{Sous ensemble 1 du règlement}
         \end{subfigure}
         ~
         \begin{subfigure}[t]{0.5\textwidth}
             \centering
-            \begin{tikzpicture}[scale = 0.9]
-            \begin{axis}[
-                xlabel={Espace de plancher [$m^2$]},
-                ylabel={$N_{places}$[-]},
-                xmin=0, xmax=200,
-                ymin=0, ymax=10,
-                xtick={0,100,200},
-                ytick={0,5,10},
-                    legend pos=north west,
-                ymajorgrids=true,
-                xmajorgrids=true,
-                grid style=dashed,
-                domain=0:1000, 
-            ]
-            \addplot[color=blue]{x/20};
-            \legend{Stationnement min}
-            \end{axis}
-        \end{tikzpicture}
+            \includegraphics[scale=0.9]{figures/exemple_clinique_se_2.pdf}
         \caption{Sous ensemble 2 du règlement}
         \end{subfigure}
         \caption{Exemple de règlement de stationnement pour une clinique médicale}
         \end{figure}
-        \FloatBarrier
-        
+        \clearpage
     \subsubsection{Exemple 2: Logements} 
         Dans le cas d'un logement, les règlements changent souvent en fonction du nombre de logements au sein d'un même bâtiment. Dans ce cas hypothétique, le requis serait d'une case par logement pour des bâtiments de moins de 4 logements, 1.5 cases par logement pour les bâtiments entre 4 et 7 logements et 1.25 case par logement pour tout bâtiment de 8 logements ou plus. Dans ce cas, les entrées à la table seraient telles que montrées au tableau
         \begin{table}[h]
@@ -342,34 +454,13 @@
             \end{tabular}
             
         \end{table}
-         \begin{figure}[h]
+         \begin{figure}[H]
            \centering
-            \begin{tikzpicture}[scale=1.0]
-                \begin{axis}[
-                    xlabel={$N_{logements}$[-]},
-                    ylabel={$N_{places}$[-]},
-                    xmin=0, xmax=20,
-                    ymin=0, ymax=30,
-                    xtick={0,5,10,15,20},
-                    ytick={0,5,10,15,20,30},
-                    legend pos=north west,
-                    ymajorgrids=true,
-                    grid style=dashed,
-                ]
-                \addplot[
-                        color=blue
-                        ]
-                     coordinates {
-                        (0,0)(3,3)(4,6)(5,7.5)(6,9)(7,10.5)(8,10)(10,12.5)(15,18.75)(20,25)
-                    };
-        
-                \legend{Stationnement min}
-                \end{axis}
-            \end{tikzpicture}
+            \includegraphics[scale=1]{figures/exemple_stationnement_logement.pdf}
         \caption{Exemple de règle de stationnement pour logement}
         \end{figure}
         \FloatBarrier
-        
+        \clearpage
     \subsubsection{Exemple 3: Lieux d'assemblée} 
         Dans le cas de lieux d'assemblée, les requis peuvent être exprimés en fonction du nombre de sièges ou en fonction de l'espace au sol. Dans notre cas hypothétique, le requis serait un minimum d'une place par 7 sièges jusqu'à 800 sièges et d'un minimum de 1 place par 9 sièges pour toute place au-delà de 800 sièges. Un maximum  d'une place par 5 sièges est applicable au-delà de 500 sièges. Quand il n'y a pas de sièges, un requis d'une place par 10 mètres carrés est applicable sans maximum.
         \begin{table}[h]
@@ -402,7 +493,8 @@
         \end{figure}
         \FloatBarrier
         
-    \subsection{Structure de données représentant l'ensemble des règlements applicables sur un territoire à une période donnée} \label{ssec:ensembles_association}
+    \subsection{Ensemble des règlements et association à la géopolitique} \label{ssec:ensembles_association}
+        \subsubsection{Structure des données}
         Cette section va introduire le schéma relationnel de données qui permet d'associer un ensemble de règlements à un territoire pour une période donnée. Quatre tables sont utilisées pour représenter la variation spatio-temporelle de la réglementation: \underline{ensembles\_reglements\_stat}, \underline{cubf}, \underline{association\_er\_reg\_stat} et \underline{assoc\_er\_territoire}.\par
         \underline{ensembles\_reglements\_stat} est une entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} montre les colonnes de la table \underline{ensembles\_reglements\_stat}. \par
         \begin{table}[h]
@@ -493,125 +585,101 @@
             \item Les règlements, ensembles de règlements ou territoires n'ayant pas de date de début capturent les entrées du rôle ayant été construits avant la date de fin desdits items.
             \item Les règlements, ensembles de règlements ou territoires n'ayant pas de date de fin capturent les entrées du rôle ayant été construits après la date de début des dits items jusqu'à aujourd'hui
         \end{itemize}
-    \subsection{Structure des données cadastrales et de taxation foncière utilisées pour l'étude} \label{ssec:data-cadastre-role}
-
-        \begin{figure}[ht!]
-            \centering
-            \includegraphics[trim={110cm 50cm 0cm 49cm},clip,width=15cm]{dia/ERD_stationnement_propre.png}
-            \caption{Schéma relationnel pour le rôle foncier et le cadastre}
-            \label{fig:offstreet_db_erd_input_data}
-        \end{figure}
-        Les données de départ sont le rôle foncier brut ainsi que le cadastre représentés dans les tables \underline{cadastre} et \underline{role\_foncier}. Le tableau \ref{tab:definition_role_foncier} donne une définition des colonnes pertinentes à ce mémoire. Ces tables ont cependant d'autres colonnes qui ne sont pas nécessairement pertinentes aux activités de ce mémoire. Cette section en détaillera seulement une partie. Le tableau \ref{tab:definition_role_foncier} montre les colonnes pertinentes dans le rôle foncier. Les descriptions sont tirées de \textcite{gouvernement_du_quebec_donnees_2022}.\par
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{role\_foncier}}
-           \label{tab:definition_role_foncier}
-           \centering
-           \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_provinc & Clé primaire de la table & Texte & CP \\  
-                rl0105a & Utilisation prédominante de l'unité d'évaluation & Entier & CS  \\
-                rl0302a & Superficie du terrain en mètres carrés & Réel & \\ 
-                rl0306a & Nombre d'étages & Entier & \\
-                rl0307a & Année de construction & Entier & \\
-                rl0308a & Aire d'étages en mètres carrés & Réel & \\
-                rl0311a & Nombre de logements dans l'unité d'évaluation & Entier &  \\
-                rl0312a & Nombre de chambres locatives & Entier & \\
-                rl0313a & Nombre de locaux non-résidentiels & Entier & \\
-                rl0404a & Valeur de l'immeuble(terrain + bâtiment) & Entier & \\
-                geometry & Géométrie (Point) du rôle foncier & Géométrie & \\
-                \hline
-           \end{tabular}
-           
-        \end{table}   
-        La table \underline{association\_cadastre\_role} associe le cadastre avec le rôle foncier. En premier lieu, une jointure géométrique a été complétée et sauvegardée. Cette opération est onéreuse et l'utilisation d'une table plutôt que de refaire la requête est plus efficace. \par
-        Ceci est différent de l'approche utilisée par la chaire, où les points du cadastre sont relocalisés sur l'entrée principale du bâtiment. L'approche proposée ici permet d'utiliser les données brutes issues de \textcite{gouvernement_du_quebec_manuel_2024}, sans avoir à manuellement remettre à jour les points chaque année. La clé primaire pour le cadastre est g\_no\_lot et la clé primaire pour le rôle est l'id\_provinc. Les champs de la table \underline{association\_cadastre\_role} sont données au tableau \ref{tab:definition_assoc_role_cadastre}:
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{association\_cadastre\_role}}
-            \label{tab:definition_assoc_role_cadastre}
-            \centering
-            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                g\_no\_lot & Identifiant du lot cadastral & Texte & \\
-                id\_provinc & Identifiant du rôle & Texte & \\
-                \hline
-           \end{tabular}
-           
-        \end{table}   
-        \par
-        Le tableau \ref{tab:definition_cadastre} donne les détails sur les entrées dans la table \underline{cadastre}. D'autres colonnes existent mais ne sont pas détaillées car elles ne sont pas utilisées au sein de ce mémoire.\par
-        \begin{table}[!h]
-            \caption{Colonnes pour la table \underline{cadastre}}
-            \label{tab:definition_cadastre}
-            \centering
-            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ       & Description                   & Type de données   & CP/CS  \\
-                \hline
-                g\_no\_lot      & Identifiant du lot cadastral  & Texte             & CP\\
-                g\_nb\_coord    & Longitude du centre de lot    & Réel              & \\
-                g\_nb\_coo\_1   & Latitude du centre de lot     & Réel              & \\
-                g\_va\_suprf    & Superficie du lot             & Réel              & \\
-                geometry        & Géométrie du lot              & Géométrie         & \\
-                \hline
-           \end{tabular}
-           
-        \end{table}   
-        La figure \ref{fig:offstreet_db_erd_input_data} montre les tables pertinentes en intrant. Il est concevable que ces tables soient entreposées dans un serveur différent si cette méthodologie était implémentée dans un milieu municipal.
-        
-        \FloatBarrier
-    \subsection{Analyse descriptive des données foncières}\label{ssec:analyse-descriptive-role-fonc}
-    Les données foncières sont centrales à la création de l'estimé. Il semble donc important de faire une courte description d'observations émises sur les données au fil de cette étude. Dans un premier temps, il semble important de noter à quel point la classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:lots-per-land-use}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans un même entrée du rôle foncier.
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.8\linewidth]{figures/distro-usage-lots.pdf}
-        \caption{Nombre de lots par utilisation du sol principale}
-        \label{fig:lots-per-land-use}
-    \end{figure}
-    D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal mais est aussi présente dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une inférence de certaines propriétés en fonction de la valeur au rôle au besoin.
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.9\linewidth]{figures/distro-data-role-manquant.pdf}
-        \caption{Pourcentage des lots avec des propriétés manquantes}
-        \label{fig:role-missing-data}
-    \end{figure}
-    On peut aussi regarder le logement de manière plus fine en segmentant le logement en termes de logements par lot. On constate que même si une majorité de lots sont unifamiliaux, la plupart des logements disponibles sont sur des lots multi-logements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lot avec de multiples logements.
-    \begin{figure}
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics[width=0.7\linewidth]{figures/distro-typ-log.pdf}
-        \caption{Compte par type}
-        \label{fig:distro-typ-log}
-    \end{subfigure}
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics[width=0.8\linewidth]{figures/distro-typ-log-quartier.pdf}
-        \caption{Répartition par type et quartier}
-        \label{fig:distro-typ-log-quartier}
-    \end{subfigure}
-    \caption{Nombre de logements et de lots par compte de logement par lot et quartier}
-    \end{figure}
-    On peut aussi constater que les lots avec des données manquantes n'ont pas nécessairement des propriétés physiques similaires aux autres lots. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
-    Pour conclure, les données du rôle foncier donnent un portrait  désagrégé de l'utilisation des sols partout dans la métropole, permettant lorsque les données sont présentes, d'inférer les différentes variables requises pour estimer une capacité de stationnement. Des acronymes ont été attribués au quartier pour rendre les graphiques plus lisibles. Le tableau \ref{tab:acro-quartiers} énumère les acronymes.
-    \begin{landscape}
-        \begin{figure}
-            \centering  
-            \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
-            \caption{Distribution des valeurs selon d'utilisation et l'absence de données physiques}
-            \label{fig:missing-data-value-distr}
-        \end{figure}  
-        \begin{figure}
-            \centering
-            \includegraphics[width=1\linewidth]{images/valeur_au_role_vs_variable_interet.png}
-            \caption{Relation entre la valeur au rôle et la principale variable d'intérêt}
-            \label{fig:rel-val-role-vs-var-int}
-        \end{figure}
-    \end{landscape}
-    
-    \FloatBarrier
+        \subsubsection{Description des ensembles de règlements}
+        Cette section donnera un survol de la structure des ensembles de règlements utilisés dans le cadre de ce mémoire. Ceci est loin d'être la seule structure possible. La version actuelle a été compilée en essayant d'assurer la couverture des catégories les plus communes sans devoir être trop exhaustif. La méthode pourrait fonctionner seulement les \ac{CUBF} 1-9 spécifiés, ou avec tous les \ac{CUBF} individuellement spécifiés. \par
+        Le tableau \ref{tab:n-cubf-rep} donne le nombre d'association entre un ensemble de règlements et un règlement par \ac{CUBF}. De manière générale, les mêmes \ac{CUBF} apparaissent de manière répétée dans les 57 ensembles de règlements constitués.
+        \begin{longtable}{p{13cm}r}
+            \caption{Nombre de définitions par utilisation du sol} \label{tab:n-cubf-rep} \\
+            \toprule
+            Utilisation du sol & N \\
+            \midrule
+            \endfirsthead
+            \multicolumn{2}{c}%
+            {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+            \toprule
+            Utilisation du sol & N \\
+            \midrule
+            \endhead
+            \midrule
+            \multicolumn{2}{r}{Continué à la page suivante} \\
+            \midrule
+            \endfoot
+            \bottomrule
+            \endlastfoot
+            CUBF = 1 - RÉSIDENTIELLE & 58 \\
+            CUBF = 15 - HABITATION EN COMMUN & 57 \\
+            CUBF = 151 - MAISON DE CHAMBRES ET PENSION & 57 \\
+            CUBF = 3 - INDUSTRIES MANUFACTURIÈRES & 58 \\
+            CUBF = 4 - TRANSPORTS, COMMUNICATIONS ET SERVICES PUBLICS & 58 \\
+            CUBF = 5 - COMMERCIALE & 58 \\
+            CUBF = 500 - CENTRE COMMERCIAL & 57 \\
+            CUBF = 54 - VENTE AU DÉTAIL DE PRODUITS DE L'ALIMENTATION & 57 \\
+            CUBF = 55 - VENTE AU DÉTAIL DE VÉHICULES ET DE PRODUITS CONNEXES & 57 \\
+            CUBF = 553 - STATION-SERVICE & 57 \\
+            CUBF = 57 - VENTE AU DÉTAIL DE MOBILIERS DE MAISON ET D'ÉQUIPEMENTS CONNEXES & 57 \\
+            CUBF = 58 - HÉBERGEMENT ET RESTAURATION & 57 \\
+            CUBF = 581 - RESTAURATION AVEC SERVICE COMPLET OU RESTREINT & 57 \\
+            CUBF = 582 - ÉTABLISSEMENT OÙ L'ON SERT À BOIRE (BOISSONS ALCOOLISÉES) ET ACTIVITÉS DIVERSES & 57 \\
+            CUBF = 583 - ÉTABLISSEMENT D'HÉBERGEMENT & 57 \\
+            CUBF = 6 - SERVICES & 58 \\
+            CUBF = 60 - IMMEUBLE À BUREAUX & 57 \\
+            CUBF = 61 - FINANCE, ASSURANCE ET SERVICE IMMOBILIER & 57 \\
+            CUBF = 62 - SERVICE PERSONNEL & 57 \\
+            CUBF = 624 - SERVICE FUNÉRAIRE, CRÉMATOIRE, CIMETIÈRE ET MAUSOLÉE & 57 \\
+            CUBF = 63 - SERVICE D'AFFAIRES & 57 \\
+            CUBF = 637 - ENTREPOSAGE ET SERVICE D'ENTREPOSAGE & 57 \\
+            CUBF = 64 - SERVICE DE RÉPARATION & 57 \\
+            CUBF = 641 - SERVICE DE RÉPARATION D'AUTOMOBILES & 57 \\
+            CUBF = 6412 - SERVICE DE LAVAGE D’AUTOMOBILES & 57 \\
+            CUBF = 65 - SERVICE PROFESSIONNEL & 57 \\
+            CUBF = 651 - SERVICE MÉDICAL ET DE SANTÉ & 57 \\
+            CUBF = 6513 - SERVICE D’HÔPITAL & 57 \\
+            CUBF = 6516 - SANATORIUM, MAISON DE CONVALESCENCE ET MAISON DE REPOS & 57 \\
+            CUBF = 6541 - SERVICE DE GARDERIE (PRÉMATERNELLE, MOINS DE 50 % DE POUPONS) & 57 \\
+            CUBF = 66 - SERVICE DE CONSTRUCTION & 57 \\
+            CUBF = 67 - SERVICE GOUVERNEMENTAL & 57 \\
+            CUBF = 672 - FONCTION PRÉVENTIVE ET ACTIVITÉS CONNEXES & 57 \\
+            CUBF = 674 - ÉTABLISSEMENT DE DÉTENTION ET INSTITUTION CORRECTIONNELLE & 57 \\
+            CUBF = 675 - BASE ET RÉSERVE MILITAIRE & 57 \\
+            CUBF = 68 - SERVICE ÉDUCATIONNEL & 57 \\
+            CUBF = 6811 - ÉCOLE MATERNELLE & 57 \\
+            CUBF = 6812 - ÉCOLE ÉLÉMENTAIRE & 57 \\
+            CUBF = 6813 - ÉCOLE SECONDAIRE & 57 \\
+            CUBF = 6815 - ÉCOLE ÉLÉMENTAIRE ET SECONDAIRE & 57 \\
+            CUBF = 6821 - UNIVERSITÉ & 57 \\
+            CUBF = 6822 - ÉCOLE POLYVALENTE & 57 \\
+            CUBF = 6823 - CEGEP (COLLÈGE D’ENSEIGNEMENT GÉNÉRAL ET PROFESSIONNEL) & 57 \\
+            CUBF = 69 - SERVICES DIVERS & 57 \\
+            CUBF = 6911 - ÉGLISE, SYNAGOGUE, MOSQUÉE ET TEMPLE & 57 \\
+            CUBF = 7 - CULTURELLE, RÉCRÉATIVE ET DE LOISIRS & 58 \\
+            CUBF = 71 - EXPOSITION D'OBJETS CULTURELS & 57 \\
+            CUBF = 721 - ASSEMBLÉE DE LOISIRS & 57 \\
+            CUBF = 722 - INSTALLATION SPORTIVE & 57 \\
+            CUBF = 7392 - GOLF MINIATURE & 55 \\
+            CUBF = 7393 - TERRAIN DE GOLF POUR EXERCICE SEULEMENT & 55 \\
+            CUBF = 7411 - TERRAIN DE GOLF (SANS CHALET ET AUTRES AMÉNAGEMENTS SPORTIFS) & 55 \\
+            CUBF = 7412 - TERRAIN DE GOLF (AVEC CHALET ET AUTRES AMÉNAGEMENTS SPORTIFS) & 55 \\
+            CUBF = 7423 - TERRAIN DE SPORT & 55 \\
+            CUBF = 7451 - ARÉNA ET ACTIVITÉS CONNEXES (PATINAGE SUR GLACE) & 57 \\
+            CUBF = 8 - PRODUCTION ET EXTRACTION DE RICHESSES NATURELLES & 58 \\
+            CUBF = 9 - IMMEUBLES NON EXPLOITÉS ET ÉTENDUES D'EAU & 58 \\
+            CUBF = 9410 - LOGEMENT VACANT DANS UN BÂTIMENT COMPORTANT PLUSIEURS LOGEMENTS OU AUTRES LOCAUX & 57 \\
+            CUBF = 9420 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT INDUSTRIEL & 57 \\
+            CUBF = 9451 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT LA VENTE AU DÉTAIL & 57 \\
+            CUBF = 9452 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DES FINS DE RÉPARATION (ATELIER) & 57 \\
+            CUBF = 9458 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DE LA RESTAURATION & 57 \\
+            CUBF = 9459 - AUTRES ESPACES DE PLANCHER INOCCUPÉS DONT L’USAGE SERAIT COMMERCIAL & 57 \\
+            CUBF = 9460 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DES FINS DE SERVICES PROFESSIONNELS & 57 \\
+            CUBF = 9470 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DES FINS CULTURELLES & 57 \\
+            \end{longtable}
+            Le tableau \ref{tab:liste-er-crees} à l'annexe \ref{sec:annex-prs-created} donne une liste des ensembles de règlements créés. La figure \ref{fig:er-counts-byperiod} montre le nombre d'ensembles de règlements par période. La période post harmonisation (2009-aujourd'hui) comporte le plus d'ensembles de règlements par territoire puisque l'historique détaillé est compilé pour cette période alors que les autres ont une couverture nettement plus faible.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=1\linewidth]{figures/er-counts-by-period.pdf}
+                \caption{Compte d'ensembles de règlements par période géopolitique}
+                \label{fig:er-counts-byperiod}
+            \end{figure}
+            
     \subsection{Structure des données représentant les secteurs d'analyse}\label{ssec:struct_donnees_sec_analyse}
         Les quartiers énumérés par la ville de Québec sont utilisés comme base de comparaison et pour diviser le territoire dans la table sec\_analyse. Les colonnes du tableau sont listées dans le tableau \ref{tab:definition_sec_analyse}.
         \begin{table}[h]
@@ -834,9 +902,9 @@
             \begin{itemize}
                 \item generate\_input\_from\_PRS\_TD: convertit les données foncières en données utilisables pour le calcul des capacités min et max en fonction des unités spécifiées dans les règlements
             \end{itemize}
-    \begin{figure}[h]
+    \begin{figure}[H]
             \centering
-           \includegraphics[width=1\linewidth]{figures/logigramme-calcul-minimums.pdf}
+           \includegraphics[width=0.8\linewidth]{figures/logigramme-calcul-minimums.pdf}
             \caption{Logigramme de calcul}
             \label{fig:logigramme_calcul_urbanisme}
         \end{figure}
@@ -850,40 +918,7 @@
         Le script commence par obtenir les entrées du rôle foncier qui se trouvent à l'intérieur du quartier visé tel que montré à la figure \ref{fig:select-tax-dataset}. La requête SQL associe ensuite les items du rôle foncier au cadastre et requiert l'ensemble des items.
         \begin{figure}[h]
             \centering
-            \begin{tikzpicture}[
-                role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
-                role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
-            ]
-                \filldraw[color=blue, ultra thick,fill=blue!30] (0.5,3.25) -- (3.5,3.1) -- (3.3,0.5) -- (.8,0.8) -- cycle;
-                \node (role-nselect-1) [role-non-select] at (0,0) {A};
-                \node (role-nselect-2) [role-non-select] at (1.5,0) {B};
-                \node (role-nselect-3) [role-non-select] at (3,0) {C};
-                \node (role-nselect-4) [role-non-select] at (0,1.3) {D};
-                \node (role-nselect-5) [role-non-select] at (3.8,1.8) {E};
-                \node (role-nselect-6) [role-non-select] at (4.0,0.25) {F};
-                \node (role-select-1) [role-select] at (1.5,1.2) {1};
-                \node (role-select-2) [role-select] at (3,1.5) {2};
-                \node (role-nselect-7) [role-non-select] at (0.25,2.5){G};
-                \node (role-select-3) [role-select] at (1.6,2.7){3};
-                \node (role-select-4) [role-select] at (2.9,2.9){4};
-                \node (role-select-5) [role-select] at (1.0,1.6) {5};
-                \node (role-nselect-8) [role-non-select] at (3.8,2.8){H};
-                \node (role-nselect-9) [role-non-select] at (0.1,3.7){I};
-                \node (role-nselect-10) [role-non-select] at (1.4,4.0) {J};
-                \node (role-nselect-11) [role-non-select] at (2.8,4.25) {K};
-                \node (role-nselect-12) [role-non-select] at (3.9,3.9) {L};
-                \node (leg-rns-1) [role-non-select, below of=role-nselect-2,xshift=-2cm]{};
-                \node (leg-rns-1-text) [right of=leg-rns-1,anchor=west]{Entrée non-sélectionnée};
-                \node (leg-rs-1) [role-select, below of=leg-rns-1]{};
-                \node (leg-rs-1-text) [right of=leg-rs-1,anchor=west]{Entrée sélectionnée};\node (leg-sec-an) [
-                    below of=leg-rs-1,
-                    rectangle,
-                    draw=blue,
-                    fill=blue!30,
-                    ultra thick
-                ]{};
-                \node (leg-sec-an-text) [right of=leg-sec-an,anchor=west]{Secteur d'analyse choisi};
-            \end{tikzpicture}
+            \includegraphics[]{figures/select-donnees-foncieres.pdf}
             \caption{Sélection des entrées du rôle pertinentes dans tax\_database\_for\_analysis\_territory}
             \label{fig:select-tax-data}
         \end{figure}
@@ -891,59 +926,15 @@
         Les requêtes SQL pertinentes sont données en annexe \ref{sec:annex-select-tax-data}. Le résultat représente les limites et propriété de lots, l'association entre les lots et les entrées du rôle, et les entrées du rôle. La figure \ref{fig:select-tax-dataset} donne une représentation schématique d'un \ac{TD} qui est une combinaison des données du rôle foncier et du cadastre.
         \begin{figure}[h]
             \centering
-            \begin{tikzpicture}[
-                role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
-                role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
-            ]
-                \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.3,1.5) -- (1.8,1.5) -- (1.8,0.8) -- (.8,0.8) -- cycle;
-                \node (role-select-1) [role-select] at (1.5,1.2) {1};
-                \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.8,1.5) -- (1.8,0.8) -- (3.5,0.8) -- (3.5,2.7) -- cycle;
-                \node (role-select-2) [role-select] at (3,1.5) {2};
-                
-                \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.3,1.5) -- (1.8,1.5) -- (2.4,4) -- (0.8,4) -- cycle;
-                \node (role-select-3) [role-select] at (1.6,2.7){3};
-                \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.8,1.5) -- (3.5,2.7) -- (3.6,3.8) -- (2.4,4) -- cycle;
-                \node (role-select-4) [role-select] at (2.9,2.9){4};
-                \filldraw[color=magenta, ultra thick,fill=magenta!30] (0.8,0.8) -- (1.3,1.5) -- (0.8,4) -- (0.75,1.5) -- cycle;
-                \node (role-select-5) [role-select] at (1.0,1.6) {5};
-                \node (leg-rs-1) [role-select, below of=role-select-1,xshift=-2cm]{};
-                \node (leg-rs-1-text) [right of=leg-rs-1,anchor=west]{Entrée du rôle sélectionnée};
-                \node (leg-sec-an) [
-                    below of=leg-rs-1,
-                    rectangle,
-                    draw=magenta,
-                    fill=magenta!30,
-                    ultra thick
-                ]{};
-                \node (leg-sec-an-text) [right of=leg-sec-an,anchor=west]{Lot cadastral};
-            \end{tikzpicture}
-            \caption{Résultat d'un \ac{TD}}
+            \includegraphics[scale=0.9]{figures/representation-TD.pdf}
+            \caption{Représentation schématique d'un \ac{TD}}
             \label{fig:select-tax-dataset}
         \end{figure}
     \subsection{Procédure de sélection des territoires et règlements} \label{ssec:select-reg-set-territories}
         Il faut d'abord trouver les territoires géopolitiques qui touchent aux points du rôle foncier. Les entrées du rôle foncier sont ensuite réparties entre les différents territoires historiques et se voient affecter un ensemble de règlements en fonction de la date de construction. La figure montre de potentielles dates de construction pour l'exemple de la figure \ref{fig:select-tax-dataset}. 
         \begin{figure}[h]
             \centering
-            \begin{tikzpicture}[
-                role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
-                role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
-            ]
-                \node (role-select-1) [role-select] at (1.5,1.2) {1};
-                \node (date-select-1) [left of=role-select-1,anchor=east,yshift=-0.2cm] {Date: 2010};
-                \draw (date-select-1.east)--(role-select-1);
-                \node (role-select-2) [role-select] at (3,1.5) {2};
-                \node (date-select-2) [right of=role-select-2,anchor=west] {Date: 1999};
-                \draw (date-select-2.west) -- (role-select-2);
-                \node (role-select-3) [role-select] at (1.6,2.7){3};
-                \node (date-select-3) [left of=role-select-3,anchor=east] {Date: 1997};
-                \draw (date-select-3.east) -- (role-select-3);
-                \node (role-select-4) [role-select] at (2.9,2.9){4};
-                \node (date-select-4) [right of=role-select-4, anchor=west] {Date: 2011};
-                \draw (date-select-4.west) -- (role-select-4); 
-                \node (role-select-5) [role-select] at (1.0,1.6) {5};
-                \node (date-select-5) [left of=role-select-5,anchor=east]{Date: 2017};
-                \draw (date-select-5.east) -- (role-select-5);
-            \end{tikzpicture}
+            \includegraphics[scale=1]{figures/date-construction-exemple-calcul.pdf}
             \caption{Affectations de dates à l'exemple de données foncières}
             \label{fig:tax-data-const-assign}
         \end{figure}
@@ -952,34 +943,13 @@
             \centering
             \begin{subfigure}{0.45\textwidth}
                 \centering
-                \begin{tikzpicture}[
-                    role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
-                    role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
-                ]
-                    \filldraw[color=orange,fill=orange!30] (0.5,4) -- (1.9,3.8) -- (1.9,0) -- (0.5,0) -- cycle;
-                    \node (label-A) [anchor=east] at (0.5,2) {Terr. A};
-                    \filldraw[color=magenta,fill=magenta!30] (1.9,3.8) -- (1.9,0) -- (3.5,0) -- (3.5,4) -- cycle;
-                    \node (label-B) [anchor=west] at (3.5,2){Terr. B};
-                    \node (role-select-2) [role-select] at (3,1.5) {2};
-                    \node (role-select-3) [role-select] at (1.6,2.7){3};
-                \end{tikzpicture}
+                \includegraphics[scale=0.9]{figures/division-territoire-periode-1-exemple.pdf}
                 \caption{Période 1: 1995-2009}
                 \label{fig:example-period-1}
             \end{subfigure}
             \begin{subfigure}{0.45\textwidth}
                 \centering
-                \begin{tikzpicture}[
-                    role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
-                    role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
-                ]
-                    \filldraw[color=cyan,fill=cyan!30] (0.5,4) -- (3.8,0) -- (0.5,0) -- cycle;
-                    \node (label-C) [anchor=east] at (0.5,2) {Terr. C};
-                    \filldraw[color=black,fill=black!30] (0.5,4) -- (3.8,0) -- (3.5,4) -- cycle;
-                    \node (label-D) [anchor=west] at (3.65,2) {Terr. D};
-                    \node (role-select-1) [role-select] at (1.5,1.2) {1};
-                    \node (role-select-4) [role-select] at (2.9,2.9){4};
-                    \node (role-select-5) [role-select] at (1.0,1.6) {5};
-                \end{tikzpicture}
+                \includegraphics[scale=0.9]{figures/division-territoire-periode-2-exemple.pdf}
                 \caption{Période 2: 2010-2017}
                 \label{fig:example-period-2}
             \end{subfigure}
@@ -990,62 +960,11 @@
         La figure 
         \begin{figure}
             \centering
-            \begin{tikzpicture}[scale=0.9]
-                
-                \node (terr-a)[anchor=west] at (-3,4){Territoire A};
-                \node (terr-b) [anchor=west] at (-3,3){Territoire B};
-                \node (terr-c) [anchor=west] at (-3,1.5){Territoire C};
-                \node (terr-d) [anchor=west] at (-3,0) {Territoire D};
-                \filldraw[color=yellow,fill=yellow!30] (0,4.5) -- (7.5,4.5) -- (7.5,3.5) --(0,3.5) --cycle;
-                \filldraw[color=cyan,fill=cyan!30](0,3.5) -- (7.5,3.5) -- (7.5,2.5) --(0,2.5) --cycle;
-                \filldraw[color=magenta,fill=magenta!30](7.5,2.5) -- (8.5,2.5) -- (8.5,1.5) --(7.5,1.5) --cycle;
-                \filldraw[color=red,fill=red!30](8.5,1.5) -- (11,1.5) -- (11,0.5) --(8.5,0.5) --cycle;
-                \filldraw[color=green,fill=green!30](7.5,0.5) -- (11,0.5) -- (11,-0.5) --(7.5,-0.5) --cycle;
-                \draw (-3,4.5)--(11,4.5);
-                \draw (-3,3.5)--(11,3.5);
-                \draw (0,4.7) --(0,-0.7);
-                \draw (-3,2.5)--(11,2.5);
-                \draw (-3,0.5)--(11,0.5);
-                \draw (-3,-0.5)--(11,-0.5);
-                \node (95) [anchor=north] at (0,-0.7){'95};
-                \draw (1,4.7) --(1,-0.7);
-                \node (97) [anchor=north] at (1,-0.7){'97};
-                \draw (2,4.7) --(2,-0.7);
-                \node (99) [anchor=north] at (2,-0.7){'99};
-                \draw (3,4.7) --(3,-0.7);
-                \node (01) [anchor=north] at (3,-0.7){'01};
-                \draw (4,4.7) --(4,-0.7);
-                \node (03) [anchor=north] at (4,-0.7){'03};
-                \draw (5,4.7) --(5,-0.7);
-                \node (05) [anchor=north] at (5,-0.7){'05};
-                \draw (6,4.7) --(6,-0.7);
-                \node (07) [anchor=north] at (6,-0.7){'07};
-                \draw (7,4.7) --(7,-0.7);
-                \node (09) [anchor=north] at (7,-0.7){'09};
-                \draw (8,4.7) --(8,-0.7);
-                \node (11) [anchor=north] at (8,-0.7){'11};
-                \draw (9,4.7)--(9,-0.7);
-                \node (13) [anchor=north] at (9,-0.7){'13};
-                \draw (10,4.7)--(10,-0.7);
-                \node (15) [anchor=north] at (10,-0.7){'15};
-                \draw (11,4.7)--(11,-0.7);
-                \node (17) [anchor=north] at (11,-0.7){'17};
-                \draw [red, thick](0,4.8) -- (0,5) -- (7.4,5) -- (7.4,4.8);
-                \node (per-1-lab) [color=red,anchor=south] at (3.75,5) {Période 1};
-                \draw [red, thick](7.6,4.8) -- (7.6,5) -- (11,5) -- (11,4.8);
-                \node (per-2-lab) [color=red,anchor=south] at (9.25,5) {Période 2};
-                \node (er-1)[rectangle,fill=yellow] at (3.25,4) {ER:1};
-                \node (er-2)[rectangle,fill=cyan] at (3.25,3) {ER:2};
-                \node (er-3)[rectangle,fill=magenta] at (8,2) {ER:3};
-                \node (er-4)[rectangle,fill=red] at (9.75,1) {ER:4};
-                \node (er-5)[rectangle,fill=green] at (9.25,0) {ER:5};
-            \end{tikzpicture}
+            \includegraphics[scale=0.9]{figures/periode-validite-rst-exemple.pdf}
             \caption{Représentation schématique de la validité des \ac{RST} en fonction de la date et du territoire}
             \label{fig:schema-prs-application}
         \end{figure}
         Les requêtes SQL et quelques morceaux de script Python sont présentés à l'annexe \ref{sec:annex-assign-rule-to-role}
-
-    
     \subsection{Procédure d'assignation des données foncières aux RST}\label{ssec:meth-assign-td-to-rst}
         Les données foncières obtenues initialement doivent ensuite être assignées à chaque ensemble de règlement en préparation au calcul de l'inventaire. Cette opération est complétée dans une boucle au sein de la fonction get\_rst\_by\_tax\_tax\_data. Les détails de cette boucle sont donnés dans l'extrait de code \ref{lst:assign_tax_data}.
 
@@ -1053,192 +972,41 @@
 
         La méthode territory\_filter quant à elle élimine les points en dehors d'un territoire. On utilise alors la fonction python clip \parencite{geopandas_developers_geopandasclip_nodate}. L'extrait de code \ref{lst:territory_filter} montre la fonction territory\_filter.
 
-        La résultante de cet ensemble d'opérations est deux listes qui associent un \ac*{RST} avec un \ac*{TD} en fonction des limites géographiques et des dates de construction. Ces deux listes sont ensuite utilisées comme intrants pour le calcul
+        La résultante de cet ensemble d'opérations est deux listes qui associent un \ac*{RST} avec un \ac*{TD} en fonction des limites géographiques et des dates de construction. Ces deux listes sont ensuite utilisées comme intrants pour le calcul. Le tableau \ref{tab:assignation-exemple-calcul} donne un aperçu de la liste pour le cas hypothétique dressé dans cette section
+        \begin{table}[H]
+            \centering
+            \caption{Assignation des éléments du rôle à un Ensemble de Règlements Territoire}
+            \label{tab:assignation-exemple-calcul}
+            \begin{tabular}{c||cccc}
+                \hline
+                \multirow{2}{*}{Rôle}        & \multicolumn{4}{c}{Ensemble Règlement Territoire}\\
+                \cline{2-5}
+                        & Période & Territoire & ER  & RST\\ \hline
+                1       & 2 &C & 3 & I\\
+                2       & 1 &B & 2 & II\\
+                3       & 1 &A & 1 & III\\
+                4       & 2 &D & 5 & IV \\
+                5       & 2 &C & 4 & V \\ \hline
+            \end{tabular}
+            
+        \end{table}
         
     \subsection{Procédure de calcul des minimums}
         Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus sont utilisés comme intrants dans la fonction calculate\_parking\_for\_reg\_set\_territories pour dresser l'inventaire. Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimé à utiliser s'il y a plusieurs méthodes de calcul.\clearpage
         \subsubsection{Calcul des sous-ensembles: calculate\_parking\_specific\_reg}
         Cette fonction calcule le nombre de places de stationnement pour un sous-ensemble de règlements. Le logigramme \ref{fig:logigramme_calcul_reg} détaille la procédure.
-        \begin{figure}[!h]
+        \begin{figure}[H]
             \centering
-            \scalebox{0.9}{
-            \begin{tikzpicture}
-                \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
-                \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=1.5cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=3cm]
-                \tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30]
-                \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
-                \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
-                \tikzstyle{arrow} = [thick,->,>=stealth]
-                % Nodes de flowchart
-                \node (start) [startstop] {Début};
-                \node (regs) [io, below of=start, yshift=-0.5cm]{RD = PR.reg\_def};
-                \draw [arrow] (regs) -- (start);
-                \node (val_n_regs) [decision,right of=start,xshift=3cm] {$n_{reg} == 1$};
-                \draw [arrow] (start) -- (val_n_regs);
-                \node (error_n_regs) [startstop,below of=val_n_regs,yshift=-0.7cm] {Erreur};
-                \draw [arrow] (val_n_regs.south) -- ++(0,-0.2)  node[anchor=west] {Non} --(error_n_regs) ;
-                \node (n_subsets) [process,right of=val_n_regs,xshift=4cm,text width=4.5cm]{$N_{SE}$ = \\$max(RD[:,ss\_ensemble])$};
-                \draw [arrow] (val_n_regs.east) -- ++(0.2,0)  node[anchor=south] {Oui}  -- (n_subsets);
-                \node (ss_inst) [process, below of=n_subsets,yshift=-0.4cm]{$SE=1$};
-                \draw [arrow] (n_subsets) -- (ss_inst);
-                \node (ss_check) [decision, below of=ss_inst,yshift=-.4cm]{$SE\leq N_{SE}$};
-                \node (fin) [startstop, below of=ss_check,yshift=-.6cm]{Fin};
-                \draw [arrow] (ss_check.south) -- ++(0,-0.1) node[anchor=west]{N} -- (fin);
-                \draw [arrow] (ss_inst) -- (ss_check);
-                \node (choose_subset) [process, left of=ss_check,xshift=-3.9cm,text width = 5.5cm]{$SE_{data}=RD[:,:]$ \\ $\forall RD[:,ss\_ensemble] == SE$};
-                \draw [arrow] (ss_check.west)-- ++(-0.1,0) node[anchor=south]{O} -- (choose_subset);
-                \node (choose_inter_operator) [process,left of=choose_subset,xshift=-4.6cm] {$oper_{inter}=SE_{data}[0,oper]$};
-                \draw [arrow] (choose_subset) -- (choose_inter_operator);
-                \node (choose_intra_operator) [process,below of=choose_inter_operator,yshift=-0.75cm,text width = 5cm]{$oper_{intra}$= \\ $unique(SE_{data}[1:n,oper])$};
-                \draw [arrow] (choose_inter_operator) -- (choose_intra_operator);
-                \node (check_1_operator) [decision,anchor=base] at (val_n_regs |-choose_intra_operator.east){$N_{oper_{intra}}==1$};        
-                \draw [arrow] (choose_intra_operator) -- (check_1_operator.west);
-                \node (error_n_oper) [startstop,below right of=check_1_operator,xshift=3cm,yshift=-0.25cm] {Erreur};
-                \draw [arrow] (check_1_operator) -| (error_n_oper);
-                % operator split
-                \node (check_operator) [decision,below of=val_n_regs,yshift=-5.5cm]{$oper_{intra}?$};
-                \draw [arrow] (check_1_operator.south) -- ++(0,-0.1) node[anchor=west]{O}-- (check_operator);
-                % operator = 4
-                \node (unique_unit) [decision, left of=check_operator,xshift=-3cm]{$N_{unite}==1$};
-                \draw [arrow] (check_operator.west) -- ++(-0.2,0)  node[anchor=south] {4} -- (unique_unit.east);
-                \node (error_n_unit)[startstop, above left of=unique_unit,xshift=-1.5cm,yshift=0.3cm]{Erreur};
-                \draw [arrow] (unique_unit.north) -- ++(0,0.1)  node[anchor=west] {N} |- (error_n_unit.east);
-                \node (convert_units) [process,below of=unique_unit,yshift=-1.15cm,text width=2cm]{Conv. unités eq. \ref{eq:x_entree}};
-                \draw [arrow] (unique_unit.south) -- ++(0,-0.1)  node[anchor=west] {O} -- (convert_units.north);
-                \node (units) [io,anchor=base,text width=1.75cm,yshift=0.4cm] at (check_operator|-convert_units.base){U = TD.units};
-                \node (TD) [io,anchor=base,yshift=-1.0cm] at (check_operator|-convert_units.base){TT= TD.tax\_table};
-                \draw [arrow] (units.west) -| ++ (-1.25cm,0) node(A){} |-(convert_units);
-                \draw [arrow] (TD.west) -| (A) |-(convert_units);
-                \node (agg_valeurs) [process,below of=convert_units,yshift=-.6cm,text width=2cm]{Agg. par lot};
-                \draw [arrow] (convert_units) -- (agg_valeurs);
-                \node (selection_seuil) [process,below of=agg_valeurs,yshift=-.6cm,text width=2cm]{Sel. proch. seuil et TD};
-                \draw [arrow] (agg_valeurs) -- (selection_seuil);
-                \node (calc_min) [process,below  of=selection_seuil,yshift=-.6cm,text width=2.25cm]{Calc. Eqs. \ref{eq:places_min},\ref{eq:places_max}};
-                \draw [arrow] (selection_seuil) -- (calc_min);
-                % operator =1
-                \node (select_next_unit) [process,right of=check_operator,xshift=3.5cm ,text width = 3cm]{Sel. Prochaine ligne SE};
-                \draw [arrow] (check_operator.east) -- ++(0.2,0)  node[anchor=south] {1} -- (select_next_unit.west);
-                \node (convert_units_sum) [process,anchor=base,text width=2.25cm] at ( select_next_unit|-convert_units.base) {Conv. unités eq. \ref{eq:x_entree}};
-                \draw [arrow] (select_next_unit) -- (convert_units_sum);
-                \node (calc_min_sum) [process,anchor=base,text width=2.25cm,yshift=1.75cm] at (select_next_unit |-calc_min.east) {Calc. Eqs. \ref{eq:places_min},\ref{eq:places_max}};
-                \draw [arrow] (convert_units_sum) -- (calc_min_sum);
-                \node (agg_valeurs_2) [process,below of=calc_min_sum,yshift=-.4cm,text width=2cm]{Agg. par lot};
-                \draw [arrow] (calc_min_sum) -- (agg_valeurs_2);
-                \node (lignes_complete) [decision,below of=agg_valeurs_2,yshift=-0.7cm] {Compl.?};
-                \draw [arrow] (agg_valeurs_2) -- (lignes_complete);
-                \draw [arrow] (lignes_complete.east) -| ++(0.5,2)node[anchor=west] {N}  |- (select_next_unit.east);
-                \draw [arrow] (units.east) -| ++ (1.2cm,0) node(B){} |-(convert_units_sum);
-                \draw [arrow] (TD.east) -| (B) |-(convert_units_sum);
-                % operator 4 aligh
-                \node (fin_seuils) [decision,anchor=base,yshift=-0.12cm] at (unique_unit |- lignes_complete.east) {Compl. ?};
-                \draw [arrow] (calc_min) -- (fin_seuils);
-                \draw [arrow] (fin_seuils.west) -| ++(-0.5,2) node[anchor=east] {N} |- (selection_seuil.west);
-                % Merge subsets
-                \node (subset_oper) [process,anchor=base,yshift=-0.12cm] at (check_operator |- lignes_complete.east) {subset\_operation};
-                \draw [arrow] (fin_seuils.east) -- ++(0.2,0) node[anchor=south] {O} -- (subset_oper);
-                \draw [arrow] (lignes_complete.west) -- ++(-0.5,0) node[anchor=south] {O}-- (subset_oper.east);
-                \node (ss_increment) [process, below of=subset_oper,yshift=0.1cm]{$SE = SE+1$};
-                \draw [arrow] (ss_increment) -| ++(8,5) |- (ss_check.east);
-                \draw [arrow] (subset_oper) -- (ss_increment);
-                \node (legend) [below of=ss_increment]{\textbf{Légende}};
-                \node (nse_def)[below of=legend, xshift=-4cm,yshift=0.55cm] {$N_{SE}$: Nombre de sous-ensembles  du règlement};
-                \node (se_def) [below of=nse_def, yshift=0.55cm]{SE: Indice du sous-ensemble sélectionné};
-                \node (rd_def) [right of=nse_def,xshift=8cm]{RD: Tableau de définition de règlement};
-                \node (TD_def) [below of=rd_def,yshift=0.45cm]{TD: Données foncières};
-                
-                \node (oper_intra_def) [below of=se_def,yshift=0.45cm]{$oper_{inter}$: opération entre SE};
-                \node (oper_inter_def) [below of=TD_def,yshift=0.45cm]{$oper_{intra}$: opération intérieure au SE};
-                \node (debut_def) [startstop,below of=oper_intra_def,xshift=-3cm]{Début/Fin};
-                \node (dec_def) [decision, right of=debut_def,xshift=3cm]{Décision};
-                \node (proc_def) [process, right of=dec_def,xshift=3.5cm]{Processus / calcul};
-                \node (io_def) [io,right of=proc_def,xshift=4cm]{Données BD};
-                \coordinate (box_top_left) at ($(legend.north -| nse_def.west) + (-0.2,0.2)$);
-                \coordinate (box_top_right) at ($(io_def.south -| rd_def.east) + (0.2,-0.4)$);
-                \draw (box_top_left) -| (box_top_right) -| (box_top_left);
-            \end{tikzpicture}}
+            \includegraphics[scale=0.9]{figures/logigramme-calcul-reglement.pdf}
             \caption{Logigramme de calcul d'un règlement}
             \label{fig:logigramme_calcul_reg}
         \end{figure}
-        \FloatBarrier \clearpage
+        \clearpage
         \subsubsection{Choix d'un estimé: subset\_operation}
         Une fois qu'un estimé est dressé pour chaque sous-ensemble d'un règlement, il est nécessaire d'arbitrer sur quel sous-ensemble prend préséance. Cet arbitrage est fait par une succession de décisions logiques. Deux conditions peuvent s'appliquer: un \og{ou simple} \fg{} ou un \og{ou plus contraignant} \fg{}. Le logigramme \ref{fig:logigramme_arbitrage_ss_ensemble} montre la procédure d'arbitrage.
-        \begin{figure}[!h]
+        \begin{figure}[H]
             \centering
-            \begin{tikzpicture}
-                \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
-                \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=1.5cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=3cm]
-                \tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30]
-                \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
-                \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
-                \tikzstyle{arrow} = [thick,->,>=stealth]
-                % Nodes de flowchart
-                \node (start) [startstop] {Début};
-                \node (decide_operator) [decision,below of=start,yshift=-0.7cm]{Oper?};
-                \draw [arrow] (start) -- (decide_operator);
-
-                % cas 3 ou plus contraignant
-                \node (min_max_3_1) [decision, below left of=decide_operator,xshift=-1.75cm,yshift=-.5cm,text width=2cm]{$\nexists PI1_{max} \land \nexists PI2_{min}$};
-                \draw[arrow] (decide_operator.west) -- ++(-0.5,0) node[anchor=south east]{3-OU CONTRAIGNANT} -| (min_max_3_1.north);
-                \node (min_max_3_2) [decision, below of=min_max_3_1,yshift=-1.75cm,text width=2cm]{$\nexists PI2_{max} \land \nexists PI1_{min}$};
-                \draw[arrow] (min_max_3_1.south) --++(0,-0.2)node[anchor=west]{Non}-- (min_max_3_2.north);
-                \node (process_both_3) [process, below of= min_max_3_2,yshift=-1.5cm,text width=6.25cm]{
-                \begin{tabular}{c}
-                    $PI_{min} = max(PI1_{min}, PI2_{min})$ \\ 
-                    $PI_{max} = min(PI1_{max}, PI2_{max})$
-                \end{tabular}};
-                \draw[arrow] (min_max_3_2.south) --++(0,-0.2)node[anchor=west]{Non}-- (process_both_3.north);
-                \node (process_right_3) [process, below of= process_both_3,yshift=-0.7cm,text width=6cm]{
-                \begin{tabular}{c}
-                    $PI_{min} = min(PI1_{max}, PI2_{min})$ \\ 
-                    $PI_{max} = PI1_{max}$
-                \end{tabular}};
-                
-                \node (process_left_3) [process, below of= process_right_3,yshift=-0.7cm,text width=6cm]{
-                \begin{tabular}{c}
-                    $PI_{min} = min(PI1_{min}, PI2_{max})$ \\ 
-                    $PI_{max} = PI2_{max}$
-                \end{tabular}};
-                \draw[arrow] (min_max_3_1.west) -| ++(-1.5cm,-3cm) node[anchor=east]{Oui}|- (process_left_3.west);
-                \draw[arrow] (min_max_3_2.west) -| ++(-1.25cm,-1cm) node[anchor=west]{Oui}|- (process_right_3.west);
-                % cas 6
-                \node (decide_min_6) [decision, below right of=decide_operator,xshift=1.75cm,yshift=-.5cm,text width=2cm]{$PI1_{min} < PI2_{min}$};
-                \draw[arrow] (decide_operator.east) -- ++(0.5,0) node[anchor=south west]{6-OU SIMPLE} -|(decide_min_6.north);
-                \node (oper_6_case_1)[process, below right of=decide_min_6,xshift=1.75cm,yshift=-4cm]{
-                    \begin{tabular}{c}
-                        $PI_{min} = PI1_{min}$ \\
-                        $PI_{max} = PI1_{max}$ \\
-                    \end{tabular}
-                };
-                \draw[arrow] (decide_min_6.east)-- ++(0.1,0)node[anchor=south]{Oui}-|(oper_6_case_1.north);
-                \node (oper_6_case_2)[process, below of=decide_min_6,yshift=-1.5cm]{
-                    \begin{tabular}{c}
-                        $PI_{min} = PI2_{min}$ \\
-                        $PI_{max} = PI2_{max}$ \\
-                    \end{tabular}
-                };
-                \draw[arrow] (decide_min_6.south)--++(0,-0.2)node[anchor=west]{Non}--(oper_6_case_2.north);
-
-                % End
-                \node(end)[startstop] at (oper_6_case_1 |-process_right_3.east){Fin}; 
-                % Define the node A at the intersection
-                \coordinate (A) at (process_both_3.east -| oper_6_case_2.south);
-                
-                % Use the node A in your path
-                \draw[arrow] (process_both_3.east) -| (A) |- (end.west);
-                \draw[arrow] (process_left_3.east) -| (A) |- (end.west);
-                \draw[arrow] (process_right_3.east) -- (end.west);
-                \draw[arrow] (oper_6_case_2.south) |- (end.west);
-                \draw[arrow] (oper_6_case_1.south) -- (end.north);
-                % Légnde
-                \node(legend) [below of=process_left_3,xshift=-0.5cm,yshift=-0.25cm]{\textbf{Légende}};
-                \node (def_PI)[below of=legend]{PI : ParkingInventory};
-                \node (def_debfin) [startstop, right of=def_PI,xshift=2.5cm]{Début / Fin};
-                \node (def_process) [process, right of=def_debfin,xshift=1.5cm]{Processus};
-                \node (def_dec) [decision, right of=def_process,xshift=1.75cm]{Décision};
-                \coordinate (box_top_left) at ($(legend.north -| def_PI.west) + (-0.2,0.05)$);
-                \coordinate(box_top_right) at ($(def_dec.south -| def_dec.east) + (0.2,-0.2)$);
-                \draw (box_top_left) -| (box_top_right) -| (box_top_left);
-            \end{tikzpicture}
+            \includegraphics[scale=0.9]{figures/logigramme-arbitrage-2-se.pdf}
             \caption{Arbitrage entre deux inventaires}
             \label{fig:logigramme_arbitrage_ss_ensemble}
         \end{figure}

@@ -1,0 +1,124 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview.
+\begin{document}
+    \begin{tikzpicture}
+        \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+        \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+        \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+        \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+        \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+        \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+        \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+        \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+        % Légende
+        \node(leg-oqp) [opt_query_param,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+        \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+        \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+        \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+        \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+        \node(leg-par) [param,below of=leg-ep]{Identifiant};
+        \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+        \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+        \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+        \coordinate (leg-top-left) at ($(legend.west|-leg-objet.north) + (-0.1,0.1)$);
+        \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+        \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+        \node(API) [api,below of=leg-ep,yshift=-1cm,xshift=-1.5cm]{API};
+        % Validation
+        \node (domaine-valid)[domaine_data, below of=API,yshift=-0.25cm]{Validation inventaire};
+            % obtiens strates
+            \node (get-strata)[endpoint, below of=domaine-valid,xshift=-2.25cm,yshift=-0.25cm]{GET /api/valid/strate};
+                % parametres get strate
+                \node (id-strate-get) [opt_query_param,left of=get-strata,xshift=-3cm]{id\_strate};
+                \node (n-samples-ge)[opt_query_param, above of=id-strate-get,yshift=-0.15cm]{n\_samples\_ge};
+                \node (n-samples-se) [opt_query_param,above of=n-samples-ge,yshift=-0.15cm]{n\_samples\_se};
+                \node (colonne-sample) [opt_query_param, above of=n-samples-se,yshift=-0.15cm]{colonne\_sample};
+                % fleches get-strate
+                \draw (id-strate-get.east) -- (get-strata.west);
+                \coordinate(flex-get-strate) at ($(id-strate-get.east)!0.5!(get-strata.west)$);
+                \draw (n-samples-ge.east) -| (flex-get-strate);
+                \draw (n-samples-se.east) -| (n-samples-ge.east-| flex-get-strate);
+                \draw (colonne-sample.east) -| (n-samples-se.east -| flex-get-strate);
+            % nouvelle strate
+            \node (post-strata) [endpoint, below of=get-strata,yshift=-0.25cm]{POST /api/valid/strate};
+                \node (corps-strate-post) [body, left of=post-strata,xshift=-3cm]{Strate échantillonage sans identifiant};
+                \node (parent-strate-post) [body,below of=corps-strate-post,yshift=-0.25cm]{id\_parent};
+                \draw (corps-strate-post.east) -- (post-strata.west);
+                \draw (parent-strate-post.east) -| ($(corps-strate-post.east)+ (0.1,0)$);
+            
+            
+            \node (create-data) [endpoint, below of=post-strata,yshift=-0.25cm]{GET /api/valid/ donnees\_intrantes};
+            
+            \node (get-valid-columns) [endpoint, below of=create-data,yshift=-0.25cm]{GET /api/valid/ colonnes\_possibles};
+            \node (put-strata) [endpoint, below of=get-valid-columns,yshift=-0.25cm]{PUT /api/valid/strate};
+                \node (id-strate-put) [param]  at ($(corps-strate-post |-put-strata)$){id\_strate};
+                \node (corps-strate-put) [body, above of=id-strate-put,yshift=0.25cm]{Strate échantillonage sans identifiant};
+                \draw (id-strate-put.east) -- (put-strata.west);
+                \draw (corps-strate-put.east) -| ($(id-strate-put.east)+(0.1,0)$);
+            \node (get-resultats)[endpoint, below of=domaine-valid,xshift=2.25cm,yshift=-0.25cm]{GET /api/valid/resultats};
+                \node (id-strate-get-res) [opt_query_param,right of=get-resultats,xshift=3cm]{id\_strate};
+                \node (no-lot-get-res) [opt_query_param, above of=id-strate-get-res,yshift=-0.15cm]{g\_no\_lot};
+                \node (fond-tuile-get-res) [opt_query_param, above of=no-lot-get-res,yshift=-0.15cm]{fond\_tuile};
+                \node (id-val-get-res) [opt_query_param, above of=fond-tuile-get-res,yshift=-0.15cm]{id\_val};
+                \draw (id-strate-get-res.west) -- (get-resultats.east);
+                \coordinate (flex-res-strates) at ($(id-strate-get-res.west)!0.5!(get-resultats.east)$);
+                \draw (no-lot-get-res.west) -| (flex-res-strates);
+                \draw (fond-tuile-get-res.west) -| (flex-res-strates|-no-lot-get-res.west);
+                \draw (id-val-get-res.west) -| (flex-res-strates|-fond-tuile-get-res.west);
+            \node (post-resultats) [endpoint, below of=get-resultats,yshift=-0.25cm]{POST /api/valid/resultats};
+                \node (res-echantillonage) [body, right of=post-resultats,xshift=3cm]{Résultat validation sans identifiant};
+                \draw (res-echantillonage.west) -- (post-resultats.east); 
+            
+            
+            \node (feuilles) [endpoint,below of=post-resultats,yshift=-0.25cm]{GET /api/valid/feuilles};
+            
+            \node (get-graphs) [endpoint, below of=feuilles,yshift=-0.25cm]{GET /api/valid/graphiques};
+                \node (id-strate-graph) [mandat_query_param,right of=get-graphs,xshift=3.5cm,text width=2.5cm]{id\_strate};
+                \node (type-graph) [mandat_query_param, above of=id-strate-graph,text width=2.5cm,yshift=-0.2cm]{type};
+                    \node (type-stat) [enum, right of=type-graph,xshift=3cm]{stationnement};
+                    \node (type-stat-reel) [enum, above of=type-stat,yshift=-0.15cm]{stationnement\_reel};
+                    \node (type-stat-pred) [enum,above of=type-stat-reel,yshift=-0.15cm]{stationnement\_predit};
+                    \node (type-pred-reel) [enum, above of=type-stat-pred,yshift=-0.15cm]{pred\_par\_reel};
+                    \node (type-reel-pred) [enum, above of=type-pred-reel,yshift=-0.15cm]{reel\_par\_pred};
+                    \draw (type-graph.east) -- (type-stat.west);
+                    \coordinate(flex-type-graph) at ($(type-graph.east)!0.5!(type-stat.west)$);
+                    \draw (type-stat-reel.west) -| (flex-type-graph);
+                    \draw (type-stat-pred.west) -| (flex-type-graph|-type-stat-reel.west);
+                    \draw (type-pred-reel.west) -| (flex-type-graph|-type-stat-pred.west);
+                    \draw (type-reel-pred.west) -| (flex-type-graph|-type-pred-reel.west);
+                \node (x-max-graph) [opt_query_param, below of=id-strate-graph, text width= 2.5cm,yshift=0.2cm]{x\_max};
+                \draw (id-strate-graph.west) -- (get-graphs.east);
+                \draw (type-graph.west) -| ($(id-strate-graph.west)+(-0.2,0)$);
+                \draw (x-max-graph.west) -| ($(id-strate-graph.west)+(-0.2,0)$);
+            \node (put-resultats) [endpoint, below of=get-graphs,yshift=-0.25cm]{PUT /api/valid/resultats};
+                \node (id-val-put) [param,right of=put-resultats,xshift=6.75cm]{id\_val};
+                \node (res-echant-put) [body,below of=id-val-put,yshift=-0.25cm]{Résultat validation sans identifiant};
+                \draw (id-val-put.west) -- (put-resultats.east);
+                \draw (res-echant-put.west) -| ($(id-val-put.west) + (-0.2,0)$);
+            \node (delete-strata) [endpoint, below of=put-strata,yshift=-0.25cm]{DELETE /api/valid/strate};
+                \node (id-delete-strate) [param] at ($(id-strate-get|-delete-strata)$){id\_strate};
+                \draw (id-delete-strate.east)-- (delete-strata.west);
+            \node (delete-resultats) [endpoint,below of=put-resultats,yshift=-0.25cm]{DELETE /api/valid/resultats};
+                \node (id-val-delete) [param, right of=delete-resultats,xshift=3cm,text width=2cm]{id\_val};
+                \draw (id-val-delete.west) -- (delete-resultats.east);
+            \draw (get-valid-columns.east)-- (get-graphs.west);
+            \draw (create-data.east) -- (feuilles.west);
+            \draw (delete-strata.east) -- (delete-resultats.west);
+            \draw (put-strata.east) -- (put-resultats.west);
+            \draw (post-strata.east) -- (post-resultats.west);
+            \draw (get-strata.east) -- (get-resultats.west);
+            \draw (domaine-valid.south) -- ($(get-valid-columns.east)!0.5!(get-graphs.west)$);
+            \draw (API.south) -- (domaine-valid.north);
+    \end{tikzpicture}
+
+\end{document}

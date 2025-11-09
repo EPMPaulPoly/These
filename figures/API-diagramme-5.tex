@@ -1,0 +1,97 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview.
+\begin{document}
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-objet.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            \node(API) [api,below of=leg-ep,yshift=-1.25cm,xshift=3cm]{API};
+            % Analyse de variabilite
+            \node(ana-var) [domaine_data,left of=API,xshift=-5.25cm]{Analyse de variabilité};
+                \node (get-boxplot-usage) [endpoint, below of=ana-var,yshift=-0.3cm,xshift=-2.25cm]{GET /api/ana-var/boxplot-par-usage};
+                    \node (id-er-boxplot-noscale) [opt_query_param, below of=get-boxplot-usage,xshift=-2cm,yshift=-.1cm]{id\_er};
+                    \node (cubf-boxplot-noscale)[opt_query_param, below of=id-er-boxplot-noscale,yshift=0.15cm]{cubf\_n1};
+                    \draw (id-er-boxplot-noscale.east)-|(get-boxplot-usage.south);
+                    \draw (cubf-boxplot-noscale.east) -| (id-er-boxplot-noscale.east-|get-boxplot-usage.south);
+                \node (get-boxplot-scales)[endpoint, below of=ana-var,yshift=-0.3cm,xshift=2.25cm]{GET /api/ana-var/boxplot-facteurs};
+                    \node (cubf-boxplot-scales)[opt_query_param,below of=get-boxplot-scales,xshift=2cm,yshift=-.1cm]{cubf\_n1};
+                    \node (id-er-boxplot-scales)[opt_query_param, below of=cubf-boxplot-scales,yshift=0.15cm]{id\_er};
+                    \draw (cubf-boxplot-scales.west)-|(get-boxplot-scales.south);
+                    \draw (id-er-boxplot-scales.west) -| (cubf-boxplot-scales.west-|get-boxplot-scales.south);
+                \draw (get-boxplot-scales.west) -- (get-boxplot-usage.east);
+                \node (get-varia-histo)[endpoint, below of=get-boxplot-usage,yshift=-2.25cm]{GET /api/ana-var/histo-varia};
+                    \node (id-er-histo) [opt_query_param,below of=get-varia-histo,xshift=-2cm,yshift=-0.3cm]{id\_er};
+                    \node (cubf-histo) [opt_query_param,below of=id-er-histo,yshift=0.15cm]{cubf\_n1};
+                    \node (ratio-inv-act) [opt_query_param,below of=cubf-histo,yshift=0.15cm]{ratio\_inv\_act};
+                    \node (echelle-histo) [opt_query_param,below of=ratio-inv-act,yshift=0.1cm]{echelle};
+                    \coordinate(flex-histo-ana-var) at ($(id-er-histo.east|-get-varia-histo.south) +(0.2,0)$);
+                    \draw (id-er-histo.east)-|(flex-histo-ana-var);
+                    \draw (cubf-histo.east) -| (id-er-histo.east-|flex-histo-ana-var);
+                    \draw (ratio-inv-act.east) -| (cubf-histo.east-|flex-histo-ana-var);
+                    \draw (echelle-histo.east) -| (ratio-inv-act.east-|flex-histo-ana-var);
+                \node(get-data-varia) [endpoint] at ($(get-varia-histo-|get-boxplot-scales)$){GET /api/ana-var/obtiens-donnees-varia};
+                    \node(id-er-varia)[opt_query_param,below of=get-data-varia,xshift=2cm,yshift=-0.3cm]{id\_er};
+                    \node (cubf-varia)[opt_query_param,below of=id-er-varia,yshift=0.15cm]{cubf\_n1};
+                    \node (voir-inv-varia) [opt_query_param,below of=cubf-varia,yshift=0.15cm]{voir\_inv};
+                    \node (fac-ech-varia) [opt_query_param,below of=voir-inv-varia,yshift=0.15cm]{echelle};
+                    \coordinate (flex-data-ana-var) at ($(id-er-varia.west|-get-data-varia.south) + (-0.2,0)$);
+                    \draw (id-er-varia.west) -| (flex-data-ana-var);
+                    \draw (cubf-varia.west) -| (flex-data-ana-var|-id-er-varia.west);
+                    \draw (voir-inv-varia.west) -| (flex-data-ana-var |- cubf-varia.west);
+                    \draw (fac-ech-varia.west) -| (flex-data-ana-var |-voir-inv-varia.west);
+                \draw (get-data-varia.west) -- (get-varia-histo.east);
+                \node (recalcule-ana-var) [endpoint, below of=ana-var,yshift=-6cm]{GET /api/ana-var/recalcule-inventaires-tous-ens-regs};
+                \draw (recalcule-ana-var.north) -- (ana-var.south);
+            % validation inventaire
+            \node (domaine-pav)[domaine_data,below of=API,yshift=-0.5cm,xshift=2cm]{Profils d'accumulation véhicules};
+                \node (get-pav-quartier)[endpoint,below of=domaine-pav,xshift=1cm,yshift=-0.5cm]{GET /api/pav};
+                    \node (id-quartier-get) [param,right of=get-pav-quartier,xshift=3cm]{id\_quartier};
+                    \draw (id-quartier-get.west) -- (get-pav-quartier.east);
+                \coordinate (flex-pav) at ($(get-pav-quartier.west |-domaine-pav.south) + (-0.2,0)$);
+                \draw (get-pav-quartier.west) -| (flex-pav);
+                \node (calcul-pav-quartier)[endpoint, below of=get-pav-quartier]{GET /api/pav/recalcule};
+                    \node (id-quartier-calcul) [param, right of=calcul-pav-quartier,xshift=3cm]{id\_quartier};
+                    \draw (id-quartier-calcul.west)-- (calcul-pav-quartier.east);
+                \draw (calcul-pav-quartier.west) -| (flex-pav|-get-pav-quartier.west);
+                \node (maj-pav-quartier) [endpoint, below of=calcul-pav-quartier]{POST /api/pav};
+                    \node (id-quartier-maj)[param, right of=maj-pav-quartier,xshift=3cm]{id\_quartier};
+                    \draw (id-quartier-maj.west) -- (maj-pav-quartier.east);
+                    \node (corps-maj-quartier) [body,below of=id-quartier-maj,yshift=-0.3cm]{Profile d'accumulation vehicule};
+                    \draw (corps-maj-quartier.west) -| ($(id-quartier-maj.west)!0.5!(maj-pav-quartier.east)$);
+                \draw (maj-pav-quartier.west) -| (flex-pav|-calcul-pav-quartier.west);
+            \node(domaine-sec-analyse) [domaine_data,below of=domaine-pav,yshift=-4cm]{Secteurs d'analyse};
+                \node(get-sec-analyse) [endpoint, below of=domaine-sec-analyse,xshift=1cm,yshift=-0.4cm]{GET /api/quartiers-analyse};
+                \draw (get-sec-analyse.west) -| ($(get-sec-analyse.west|-domaine-sec-analyse.south)+(-0.2,0)$);
+            \draw (API.west) -- (ana-var.east);
+            \draw(domaine-pav.west) -| (API.south);
+            \draw (domaine-sec-analyse.west) -| (domaine-pav.west-|API.south);
+        \end{tikzpicture}
+\end{document}

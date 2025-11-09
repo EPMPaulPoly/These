@@ -1,27 +1,39 @@
 \Chapter{REVUE DE LITTÉRATURE}\label{sec:RevLitt}
-Cette section aura pour but de dresser l'état des connaissances sur les politiques de stationnement, l'estimation de la capacité de stationnement, les outils d'analyse d'images satellites utilisés pour la détection automatique d'objets, les coûts associés à la provision du stationnement et les méthodes d'estimation basées sur des données géospatiales.
-
-\section{Synthèse}  
-    Le stationnement constitue une partie essentielle du système de transport et est particulièrement critique pour les automobiles qui passent 95\% du temps arrêtées \parencite{morency_identification_2015}. Ce requis terminal consomme d'importantes quantités d'espace en milieu urbain \parencite{chester_inventorying_2022} et reçoit relativement peu d'attention \parencite{shoup_high_2005,inci_review_2015} à part pour en décrier la rareté ou le prix \parencite{de_borger_political_2017}. Pourtant un corpus de littérature lie le stationnement à une possession et une utilisation accrue  de l'automobile \parencite{christiansen_parking_2017,currans_households_2023}. \par 
-    Outre les effets sur la mobilité, le stationnement contribue aux effets d'îlots de chaleur \parencite{hoehne_urban_2022} et à l'imperméabilisation des sols\parencite{arnold_jr_impervious_1996} avec d'importants effets sur la morphologie des bassins versants\parencite{shaikh_impacts_2023} avec des impacts sur la qualité de l'eau \parencite{muller_pollution_2020}. \par
+Ce chapitre dresse l'état des connaissances sur le stationnement et est divisé en cinq grandes parties. La première fait une synthèse de l'ensemble du chapitre. \par
+La deuxième en profondeur des raisons d'estimer la talle du parc de stationnement: on introduit l'encadrement légal et les requis minimums de stationnement (sec. \ref{sec:intro-requis-minimums}), on élabore ensuite sur les coûts de provision du stationnement et l'effet du stationnement sur la mobilité (sec.\ref{sec:couts-effet-mobilite-stat}) et la première partie clot sur les impacts environnementaux du stationnement (sec. \ref{sec:effets-environnementaux}). \par
+La troisième partie discute des méthodes utilisées pour esitmer la capacité de stationnement dans la littérature. La différence entre approches inductives (ou empiriques) et déductives (théoriques) est d'abord discutée avant d'élaborer sur trois types de méthodes déductives: les méthodes utilisant des données géoréférencées vectorielles (sec. \ref{sec:inv-georeference}), les méthodes inférant la capacité en utilisant l'imagerie aériennes et de méthodes d'apprentissage profond (sec. \ref{ref:sec-meth-orthophoto-ap}) et les méthodes utilisant des comptages manuel sur imagerie aérienne combinés à une régression sur le territoire complet (sec. \ref{ref:sec-meth-inv-orthophoto-reg}). Finalement, cette partie discute de des processus d'évaluation de modèle (sec. \ref{sec:deterministic-model-validation}), des méthodes de sondage (sec. \ref{sec:statistical-inference}) ou de régression (sec. \ref{sec:glm-regression models}) qui ont été appliquées à d'autre problèmatiques de dénombrement et d'outils mathématiques potentiellement utiles dans le processus d'évaluation (sec.\ref{sec:statistical-methods}). \par
+La quatrième partie discute de quatre formats de données utilsés pour représenter le stationnement et ces propriétés: CurbLR (sec. \ref{ssec:data-format-curblr}), Curb Data Standard (sec. \ref{ssec:data-format-cds}), OpenStreetMap \ref{ssec:data-format-osm} et la norme ISO5206-1 (sec. \ref{ssec:data-format-ISO5206}).\par
+La section se termine en identifiant les lacunes de recherche dans la section \ref{sec:lacunes-recherche}
+\section{Synthèse}\label{sec:synthese-rev-litt}  
+    Le stationnement constitue une partie essentielle du système de transport et est particulièrement critique pour les automobiles qui passent 95\% du temps arrêtées \parencite{morency_identification_2015}. Ce requis terminal consomme d'importantes quantités d'espace en milieu urbain \parencite{chester_inventorying_2022,heran_consommation_2008} et reçoit relativement peu d'attention \parencite{shoup_high_2005,inci_review_2015} à part pour en décrier la rareté ou le prix \parencite{de_borger_political_2017}. Pourtant un corpus de littérature lie le stationnement à une possession et une utilisation accrue  de l'automobile \parencite{christiansen_parking_2017,currans_households_2023}. \par 
+    Outre les effets sur la mobilité, le stationnement contribue aux effets d'îlots de chaleur \parencite{hoehne_urban_2022,isola_urban_2024} et à l'imperméabilisation des sols\parencite{arnold_jr_impervious_1996} avec d'importants effets sur la morphologie des bassins versants\parencite{shaikh_impacts_2023} et des impacts sur la qualité de l'eau \parencite{muller_pollution_2020}. \par
     D'autre part, la provision de ces infrastructure est mandatée par la plupart des gouvernements municipaux sans requis de tarification menant les acteurs économiques à transmettre ces coûts aux consommateurs \parencite{shoup_high_2005}. Ce mandat coûte cher et est socialisée au travers des taxes municipales et le prix des biens et services \parencite{shoup_high_2005}. Ceci se reflète par une augmentation des coûts \parencite{gabbe_hidden_2017} et une réduction du stock de logements disponible \parencite{shah_impact_2024,anderson_economics_2004,lehe_how_2018}, contraint le développement commercial favorisant une relocalisation à la périphérie \parencite{cutter_parking_2012}. De plus, en réduisant la densité de construction \parencite{shoup_high_2005,smith_low-rise_1964}, les requis de stationnement participent à détériorer la position financière des municipalités en augmentant leurs coûts \parencite{hortas-rico_does_2010,metro_vancouver_regional_planning_cost_2023} tout en réduisant leurs revenus \parencite{blanc_effects_2014}.\par
     Plusieurs méthodes différentes ont aussi été considérées pour déterminer l'influence de la tarification sur les comportements de mobilité pour différents motifs. À l'exception de certains cas particuliers, la mise en place de tarification incite les gens à utiliser les modes durables ou actifs pour se déplacer (plutôt qu'en automobile solo) et augmente ainsi le bien-être économique\parencite{khordagui_commute_2019,olus_inan_spillover_2019}. 
-    Plusieurs modèles économiques théoriques \parencite{arnott_downtown_2009,arnott_spatial_2006} ont trouvé que le prix des stationnement est trop bas et crée des externalités de congestion qui peuvent être réduites en fixant le prix proche du prix des garages hors-rue avoisinant. Ce constant est supporté par des constats empiriques dans des juridictions où le stationnement sur rue est tarifé de cette manière \parencite{van_ommeren_empirical_2012}. Plusieurs méthodes ont été développées pour inférer les coûts de la congestion créée par le ratissage à l'aide de données de tarification \parencite{inci_external_2017,van_ommeren_novel_2021}. Le constat largement partagé est que pour limiter les coûts du ratissage, le prix du stationnement doit être proche du coût de se stationnement hors-rue.\par 
+    Des modèles économiques théoriques \parencite{arnott_downtown_2009,arnott_spatial_2006} ont trouvé que le prix des stationnement est trop bas et crée des externalités de congestion qui peuvent être réduites en fixant le prix proche du prix des garages hors-rue avoisinant. Ce constant est supporté par des constats empiriques dans des juridictions où le stationnement sur rue est tarifé de cette manière \parencite{van_ommeren_empirical_2012}. Les coûts de la congestion créés par le ratissage peuvent être inférés à l'aide de données de tarification et d'occupation \parencite{inci_external_2017,van_ommeren_novel_2021}. \par 
+    \begin{landscape}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=1]{figures/synthese-graphique.pdf}
+            \caption{Synthèses des interactions du stationnement avec l'environnement, l'économie et la mobilité}
+            \label{fig:synthese-rev-litt}
+        \end{figure}
+    \end{landscape}
+        
     Concernant les méthodes d'inventaire sur-rue, la plupart des méthodes se fient à un identifiant de rue et une coordonnée linéaire de début et de fin de zone ainsi que des conventions sur un ensemble de champs qui définissent les dates, heures et types de véhicules affectés par les restrictions des panneaux \parencite{bourdeau_methodologie_2014,eros_curblr_2025}. Certaines méthodes utilisent simplement un estimé de la longueur moyenne des places de stationnement et des retraits pour certains items (bornes fontaines, arrêts de bus, etc...)\parencite{chester_parking_2015,chester_inventorying_2022,hoehne_valley_2019}. Plus récemment, \textcite{hellekes_parking_2023} a proposé une méthode de classification basé sur une fusion de segmentation d'image par \ac{AP} et d'inférence bayésienne à partir d'ortho-photographies d'une ville. En prenant de multiple images différentes, la méthodologie prédit la classe d'une zone (bâtiment, voie de circulation, stationnement) en prenant le résultat de plusieurs segmentations d'images de sources différentes. Le modèle est aidée en utilisant un masque issue d'\ac{OSM} pour ajouter de l'information à l'entrée du modèle. La segmentation d'image aériennes pour définir l'usage du sol est un domaine émergent avec les développements récents en \ac{AP} \parencite{ronneberger_u-net_2015,vaswani_attention_2017,lv_deep_2023}. \par
-    Trois grandes familles de méthodes ont émergé pour recenser les places de stationnement hors-rue. La première a émergé avec l'amélioration des méthodes d'\ac{AP}. Ces articles donnent des discutent comment identifier les places de stationnement hors-rue sans discuter de la manière de compiler des estimés à des échelles métropolitaines \parencite{hellekes_parking_2023,hurst-tarrab_robust_2020,seo_self-supervised_2009,lichtblau_classification_2019,azimi_skyscapes_2019,qiam_pipeline_2025}. La deuxième catégorie utilise des relevés manuels sur un sous-ensemble du territoire et une régression subséquente pour estimer la quantité de stationnement sur un territoire. Deux exemples principaux de ces méthodes sont \textcite{akbari_analyzing_2003,davis_estimating_2010}. La troisième méthode utilise une combinaison des requis de stationnement issus des codes d'urbanisme simplifiés et une base de données foncières pour estimer le nombre de places requises à la construction \parencite{chester_inventorying_2022,chester_parking_2015,hoehne_valley_2019}.\par
+    Trois grandes familles de méthodes ont émergé pour estimer les places de stationnement hors-rue. La première a émergé avec l'amélioration des méthodes d'\ac{AP}. Ces articles donnent des discutent comment identifier les places de stationnement hors-rue sans discuter de la manière de compiler des estimés à des échelles métropolitaines \parencite{hellekes_parking_2023,hurst-tarrab_robust_2020,seo_self-supervised_2009,lichtblau_classification_2019,azimi_skyscapes_2019,qiam_pipeline_2025}. La deuxième catégorie utilise des relevés manuels sur un sous-ensemble du territoire et une régression subséquente pour estimer la quantité de stationnement sur un territoire. Deux exemples principaux de ces méthodes sont \textcite{akbari_analyzing_2003,davis_estimating_2010}. La troisième méthode utilise une combinaison des requis de stationnement issus des codes d'urbanisme simplifiés et une base de données foncières pour estimer le nombre de places requises à la construction \parencite{chester_inventorying_2022,chester_parking_2015,hoehne_valley_2019}. \par
     Quatre formats de données utilisés pour la représentation cartographique du stationnement ont été recensés. Les deux premiers sont plus focalisés sur le stationnement sur rue\parencite{eros_curblr_2025,open_mobility_foundation_curb_2024-1} tandis que les deux derniers peuvent représenter le stationnement sur rue et hors rue \parencite{organisation_internationale_de_normalisation_intelligent_2023,osm_contributors_key_2025,osm_contributors_amenity_2025}. Le tableau \ref{tab:parking-format-summary} donne un aperçu des caractéristiques des différents formats de données sur 5 dimensions: la représentation de la capacité de stationnement, la capacité de représenter des places individuelles, la représentation des restrictions, la représentation de la tarification, la représentation de la tarification et la capacité de récolter des données sur l'utilisation.\par
     \newcommand{\YCHECK}{\Checkmark}
     \newcommand{\NCHECK}{\cellcolor{red} \XSolid}
     \newcommand{\OCHECK}[1]{\cellcolor{orange} / #1}
     \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
     \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
-    \begin{table}[h]
+    \begin{table}[H]
         \caption{Sommaire des formats de données représentant le stationnement}
         \label{tab:parking-format-summary}
         \centering
         \begin{tabular}{l|ccccc|ccccc|}
             \hline
-            \multirow{2}{*}{\diagbox[width=4.25cm,height=2.8cm]{Format}{Dimension}}
+            \multirow{2}{*}{\diagbox[width=4.25cm,height=2.9cm]{Format}{Dimension}}
                 & \multicolumn{5}{c}{Sur-rue} \vline
                 & \multicolumn{5}{c}{Hors-rue} \vline\\
                  \cline{2-11}
@@ -39,25 +51,159 @@ Cette section aura pour but de dresser l'état des connaissances sur les politiq
             CurbLR              & \YCHECK & \NCHECK & \YCHECK & \YCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK \\
             Curb Data Standard  & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK & \NCHECK \\
             OpenStreetMap       & \OCHECK{} & \OCHECK{} & \YCHECK & \OCHECK{} & \NCHECK & \YCHECK & \YCHECK & \OCHECK{} & \OCHECK{} & \NCHECK\\
-            ISO 5206            & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK &\YCHECK \\
-            % Add more rows as needed
+            ISO 5206            & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK & \YCHECK &\YCHECK \\\hline
+            \multicolumn{11}{c}{\Checkmark = Pleinement supporté, \colorbox{red}{\XSolid} = Non supporté, \colorbox{orange}{/} = Représentation partielle}\\
             \hline
         \end{tabular}
+        \end{table}
+    
         
-    \end{table}
-    D'un point de vue méthodologique, toutes les méthodes recensées pour inventorier le stationnement sont déductives: elles se fient toutes à des hypothèses( la structure visuelle des stationnement, l'homogénéité de génération de stationnement sur un territoire, le respect de la réglementation de stationnement) pour déduire le nombre de places de stationnement sur un territoire. L'auteur n'a pas trouvé d'instance d'utilisation de méthodes (inductives) de sondage pour inférer la quantité totale de stationnement à partir de la collecte du nombre de places sur un échantillon restreint. 
+    
+    D'un point de vue méthodologique, toutes les méthodes recensées pour inventorier le stationnement sont déductives: elles se fient toutes à des hypothèses (la structure visuelle des stationnement, l'homogénéité de génération de stationnement sur un territoire, le respect de la réglementation de stationnement) pour déduire le nombre de places de stationnement sur un territoire. L'auteur n'a pas trouvé d'instance d'utilisation de méthodes de sondage (inductives) pour inférer la quantité totale de stationnement à partir de la collecte du nombre de places sur un échantillon restreint. Des méthodes issues des sondages d'organisations nationales de statistique  \parencite{ardilly_techniques_2006,tille_theorie_2019} pourraient être utilisées pour le dénombrement d'autre quantités pourraient aussi s'appliquer pour le stationnement. Aucune méthode de régression directe à partir des données foncières n'a été recensée. Cette approche requiérerait un type de modèles spécifique pour les données entières. Le tableau \ref{tab:synthese-methodes-recensement}  donne une synthèse des méthodes d'estimation ou d'inventaire.
+    \begin{landscape}
+    {\captionsetup{justification=centering}
+    \setlength{\LTcapwidth}{\linewidth} 
+    \begin{longtable}{p{2.25cm}|p{2cm}|p{5cm}|p{3cm}|p{3.5cm}|p{3.5cm}}
+        \caption{Synthèse des méthodes d'estimation de la capacité de stationnement} \label{tab:synthese-methodes-recensement} \\\hline
+        Méthode &
+        Type &
+        Description &
+        Hypothèses &
+        Avantages & Inconvénients\\ 
+        \hline
+        \endfirsthead
+        
+        \multicolumn{6}{c}{{ Tableau \thetable\ (suite)}} \\\hline
+        Méthode & Type & Description & Hypothèses & Avantages & Inconvénients \\
+        \hline
+        \endhead
+        
+        \hline
+        \endfoot
+        
+        Imagerie aérienne + régression &
+        HR Déductive &
+        Comptage sur un sous-ensemble du territoire puis prédiction sur le reste &
+        Similarité des requis sur le territoire &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+        \item Simple à implémenter
+        \end{itemize} &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Résultat agrégé
+            \item Aucune visibilité sur le stationnement souterrain
+        \end{itemize}\\ \hline
+        
+        Règlements + données foncières &
+        HR Déductive &
+        Représentation des règlements et application à une base de données foncière &
+        Quantité réglementaire construite &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+        \item Inventaire désagrégé
+        \item Couverture stationnement souterrain
+        \item Structure les hypothèses de la littérature
+        \end{itemize} & 
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Besoin en données
+            \item Complexité de l'historique
+            \item Hypothèse que le min est la valeur construite
+        \end{itemize}\\ \hline
+        
+        Panneaux &
+        SR Déductive &
+        Découpage des bords de rue en utilisant des informations géospatiales &
+        Longueur de place et précision des données géospatiales &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+        \item Variabilité temporelle
+        \item Limites d'accès
+        \end{itemize} & 
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Données
+            \item Sensible à l'hypothèse de longueur de places
+        \end{itemize}\\ \hline
+        
+        Segmentation imagerie aérienne &
+        SR  Déductive &
+        Entraînement d'un modèle d'apprentissage profond sur de l'imagerie aérienne annotée &
+        Structure visuelle du stationnement universelle &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Accès aux données
+            \item Désagrégé
+        \end{itemize} & 
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Aucune visibilité sur le stationnement souterrain
+            \item Ressources informatiques
+            \item Prédiction conditionnelle aux données
+            \item Doit convertir la superficie en capacité
+        \end{itemize}\\ \hline
+        Détaection imagerie aérienne &
+        SR  Déductive &
+        Entraînement d'un modèle d'apprentissage profond sur de l'imagerie aérienne annotée &
+        Structure visuelle du stationnement universelle &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Accès aux données
+            \item Complètement désagrégé
+        \end{itemize} & 
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Aucune visibilité sur le stationnement souterrain
+            \item Ressources informatiques
+            \item Prédiction sujette aux données d’entraînement
+        \end{itemize}\\ \hline
+        
+        Régression données foncières&
+        HR/SR Déductive &
+        Recensement manuel sur un ensemble de lots/rues d’entraînements puis prédiction sur l'ensemble du territoire à l'aide d'un modèle de régression&
+        Constance de la relation entre les covariants&
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Désagrégé
+            \item Relativement simple 
+        \end{itemize} & \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Requiert des modèles de régression spécifiques pour les entiers positifs
+            \item Prédiction conditionnelle aux données
+        \end{itemize} \\ \hline
+        
+        Comptage manuel &
+        HR/SR Inductive &
+        Recensement manuel de l'ensemble des places &
+        Dénombrement fixe possible &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+        \item Exhaustivité
+        \item Désagrégé
+        \item Capacité de statuer sur la valeur réelle
+        \end{itemize} & \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+        \item Coût
+        \end{itemize} \\ \hline
+        
+        Sondage &
+        HR/SR Inductive &
+        Comptage manuel sur échantillon aléatoire – Inférence statistique sur le territoire &
+        Base de sondage &
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+            \item Robustesse statistique
+            \item Coût par rapport au recensement complet
+            \item Capacité de statue sur la valeur réelle
+        \end{itemize} & 
+        \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt, partopsep=0pt]
+        \item Approche agrégée
+        \end{itemize} \\ 
+        
+        \end{longtable}}
+    \end{landscape}
+    
 \section{Typologie de stationnement}\label{sec:typologie_stationnement}
   \textcite{morency_stationnement_2017} détaillent des typologies de stationnement hors rue et sur rue pour la région métropolitaine de Montréal. Elles sont montrées aux figures \ref{fig:Typo_Stat_hors_rue} et \ref{fig:Typo_Stat_sur_rue}
-  \begin{figure}[ht]
+  \begin{figure}[H]
+  \begin{subfigure}{1\textwidth}
       \centering
       \includegraphics[width=0.75\textwidth]{dia/Typologie_Stationnement_hors_rue.png}
-      \caption{Typologie de stationnement hors rue. Source: \cite{morency_stationnement_2017}}
+      \caption{Hors rue}
       \label{fig:Typo_Stat_hors_rue}
-  \end{figure}
-  \begin{figure}[ht]
+  \end{subfigure}
+  \begin{subfigure}{1\textwidth}
       \centering
       \includegraphics[width=0.75\textwidth]{dia/Typologie_Stationnement_sur_rue.png}
-      \caption{Typologie de stationnement sur rue. Source: \cite{morency_stationnement_2017}}
+      \caption{Sur rue}
       \label{fig:Typo_Stat_sur_rue}
+    \end{subfigure}
+    \caption{Typologies de stationnement \parencite{morency_stationnement_2017}} \label{fig:typos_stat}
   \end{figure}
-  Il est important de noter qu'il n'existe pas, à la connaissance de l'auteur, un inventaire tel que celui complété par le ministère des Transports pour la ville de Montréal \parencite{consortium_cima_-_daniel_arbour_et_associes_inventaire_1998}. D'autre part, cet inventaire n'est pas mis à jour et n'est pas en accès libre.
+  

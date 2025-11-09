@@ -1,0 +1,34 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+\begin{tikzpicture}[
+                role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
+                role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
+            ]
+                \node (role-select-1) [role-select] at (1.5,1.2) {1};
+                \node (date-select-1) [left of=role-select-1,anchor=east,yshift=-0.2cm] {Date: 2010};
+                \draw (date-select-1.east)--(role-select-1);
+                \node (role-select-2) [role-select] at (3,1.5) {2};
+                \node (date-select-2) [right of=role-select-2,anchor=west] {Date: 1999};
+                \draw (date-select-2.west) -- (role-select-2);
+                \node (role-select-3) [role-select] at (1.6,2.7){3};
+                \node (date-select-3) [left of=role-select-3,anchor=east] {Date: 1997};
+                \draw (date-select-3.east) -- (role-select-3);
+                \node (role-select-4) [role-select] at (2.9,2.9){4};
+                \node (date-select-4) [right of=role-select-4, anchor=west] {Date: 2011};
+                \draw (date-select-4.west) -- (role-select-4); 
+                \node (role-select-5) [role-select] at (1.0,1.6) {5};
+                \node (date-select-5) [left of=role-select-5,anchor=east]{Date: 2017};
+                \draw (date-select-5.east) -- (role-select-5);
+            \end{tikzpicture}
+\end{document}

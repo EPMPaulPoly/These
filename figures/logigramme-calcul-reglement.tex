@@ -1,0 +1,100 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+\begin{tikzpicture}
+                \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
+                \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=1.5cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=3cm]
+                \tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30]
+                \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
+                \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
+                \tikzstyle{arrow} = [thick,->,>=stealth]
+                % Nodes de flowchart
+                \node (start) [startstop] {Début};
+                \node (regs) [io, below of=start, yshift=-0.5cm]{RD = PR.reg\_def};
+                \node (converted_values) [io,above of=start,yshift=0.5cm]{Intrants convertis };
+                \draw [arrow] (regs) -- (start);
+                \draw [arrow] (converted_values) -- (start);
+                \node (val_n_regs) [decision,right of=start,xshift=3cm] {$n_{reg} == 1$};
+                \draw [arrow] (start) -- (val_n_regs);
+                \node (error_n_regs) [startstop,below of=val_n_regs,yshift=-0.7cm] {Erreur};
+                \draw [arrow] (val_n_regs.south) -- ++(0,-0.2)  node[anchor=west] {Non} --(error_n_regs) ;
+                \node (n_subsets) [process,right of=val_n_regs,xshift=4cm,text width=4.5cm]{$N_{SE}$ = \\$max(RD[:,ss\_ensemble])$};
+                \draw [arrow] (val_n_regs.east) -- ++(0.2,0)  node[anchor=south] {Oui}  -- (n_subsets);
+                \node (ss_inst) [process, below of=n_subsets,yshift=-0.4cm]{$SE=1$};
+                \draw [arrow] (n_subsets) -- (ss_inst);
+                \node (ss_check) [decision, below of=ss_inst,yshift=-.4cm]{$SE\leq N_{SE}$};
+                \node (fin) [startstop, below of=ss_check,yshift=-.6cm]{Fin};
+                \draw [arrow] (ss_check.south) -- ++(0,-0.1) node[anchor=west]{N} -- (fin);
+                \draw [arrow] (ss_inst) -- (ss_check);
+                \node (choose_subset) [process, left of=ss_check,xshift=-3.9cm,text width = 5.5cm]{$SE_{data}=RD[:,:]$ \\ $\forall RD[:,ss\_ensemble] == SE$};
+                \draw [arrow] (ss_check.west)-- ++(-0.1,0) node[anchor=south]{O} -- (choose_subset);
+                \node (choose_inter_operator) [process,left of=choose_subset,xshift=-4.6cm] {$oper_{inter}=SE_{data}[0,oper]$};
+                \draw [arrow] (choose_subset) -- (choose_inter_operator);
+                \node (choose_intra_operator) [process,below of=choose_inter_operator,yshift=-0.75cm,text width = 5cm]{$oper_{intra}$= \\ $unique(SE_{data}[1:n,oper])$};
+                \draw [arrow] (choose_inter_operator) -- (choose_intra_operator);
+                \node (check_1_operator) [decision,anchor=base] at (val_n_regs |-choose_intra_operator.east){$N_{oper_{intra}}==1$};        
+                \draw [arrow] (choose_intra_operator) -- (check_1_operator.west);
+                \node (error_n_oper) [startstop,below right of=check_1_operator,xshift=3cm,yshift=-0.25cm] {Erreur};
+                \draw [arrow] (check_1_operator) -| (error_n_oper);
+                % operator split
+                \node (check_operator) [decision,below of=val_n_regs,yshift=-5.5cm]{$oper_{intra}?$};
+                \draw [arrow] (check_1_operator.south) -- ++(0,-0.1) node[anchor=west]{O}-- (check_operator);
+                % operator = 4
+                \node (unique_unit) [decision, left of=check_operator,xshift=-3cm]{$N_{unite}==1$};
+                \draw [arrow] (check_operator.west) -- ++(-0.2,0)  node[anchor=south] {4} -- (unique_unit.east);
+                \node (error_n_unit)[startstop, above left of=unique_unit,xshift=-1.5cm,yshift=0.3cm]{Erreur};
+                \draw [arrow] (unique_unit.north) -- ++(0,0.1)  node[anchor=west] {N} |- (error_n_unit.east);
+
+                \node (selection_seuil) [process,below of=unique_unit,yshift=-.6cm,text width=2cm]{Sel. proch. seuil et TD};
+                \draw [arrow] (unique_unit.south) --++(0,-0.1)  node[anchor=west] {O}-- (selection_seuil);
+                \node (calc_min) [process,below  of=selection_seuil,yshift=-.6cm,text width=2.25cm]{$n_{places} = a \times in +b$};
+                \draw [arrow] (selection_seuil) -- (calc_min);
+                % operator =1
+                \node (select_next_unit) [process,right of=check_operator,xshift=3.5cm ,text width = 3cm]{Sel. Prochaine ligne SE};
+                \draw [arrow] (check_operator.east) -- ++(0.2,0)  node[anchor=south] {1} -- (select_next_unit.west);
+                \node (calc_min_sum) [process,anchor=base,text width=2.25cm,yshift=1.75cm] at (select_next_unit |-calc_min.east) {$n_{places} = a \times in +b$};
+                \draw [arrow] (select_next_unit) -- (calc_min_sum);
+                \node (agg_valeurs_2) [process,below of=calc_min_sum,yshift=-.4cm,text width=2cm]{Agg. par lot};
+                \draw [arrow] (calc_min_sum) -- (agg_valeurs_2);
+                \node (lignes_complete) [decision,below of=agg_valeurs_2,yshift=-0.7cm] {Compl.?};
+                \draw [arrow] (agg_valeurs_2) -- (lignes_complete);
+                \draw [arrow] (lignes_complete.east) -| ++(0.5,2)node[anchor=west] {N}  |- (select_next_unit.east);
+
+                % operator 4 aligh
+                \node (fin_seuils) [decision,anchor=base,yshift=-0.12cm] at (unique_unit |- lignes_complete.east) {Compl. ?};
+                \draw [arrow] (calc_min) -- (fin_seuils);
+                \draw [arrow] (fin_seuils.west) -| ++(-0.5,2) node[anchor=east] {N} |- (selection_seuil.west);
+                % Merge subsets
+                \node (subset_oper) [process,anchor=base,yshift=-0.12cm] at (check_operator |- lignes_complete.east) {subset\_operation};
+                \draw [arrow] (fin_seuils.east) -- ++(0.2,0) node[anchor=south] {O} -- (subset_oper);
+                \draw [arrow] (lignes_complete.west) -- ++(-0.5,0) node[anchor=south] {O}-- (subset_oper.east);
+                \node (ss_increment) [process, below of=subset_oper,yshift=0.1cm]{$SE = SE+1$};
+                \draw [arrow] (ss_increment) -| ++(8,5) |- (ss_check.east);
+                \draw [arrow] (subset_oper) -- (ss_increment);
+                \node (legend) [below of=ss_increment]{\textbf{Légende}};
+                \node (nse_def)[below of=legend, xshift=-4cm,yshift=0.55cm] {$N_{SE}$: Nombre de sous-ensembles  du règlement};
+                \node (se_def) [below of=nse_def, yshift=0.55cm]{SE: Indice du sous-ensemble sélectionné};
+                \node (rd_def) [right of=nse_def,xshift=8cm]{RD: Tableau de définition de règlement};
+                
+                
+                \node (oper_intra_def) [below of=se_def,yshift=0.45cm]{$oper_{inter}$: opération entre sous-ensembles};
+                \node (oper_inter_def) [below of=rd_def,yshift=0.45cm,xshift=-0.5cm]{$oper_{intra}$: opération interne du sous-ensemble};
+                \node (debut_def) [startstop,below of=oper_intra_def,xshift=-2.5cm]{Début/Fin};
+                \node (dec_def) [decision, right of=debut_def,xshift=3cm]{Décision};
+                \node (proc_def) [process, right of=dec_def,xshift=3.5cm]{Processus / calcul};
+                \node (io_def) [io,right of=proc_def,xshift=3cm,text width=2cm]{Données BD};
+                \coordinate (box_top_left) at ($(legend.north -| nse_def.west) + (-0.2,0.2)$);
+                \coordinate (box_top_right) at ($(io_def.south -| rd_def.east) + (0.2,-0.4)$);
+                \draw (box_top_left) -| (box_top_right) -| (box_top_left);
+            \end{tikzpicture}
+            \end{document}

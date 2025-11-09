@@ -1,0 +1,205 @@
+
+
+
+\section{Évaluation du modèle de prédiction}\label{sec:eval-park-pred-perf}
+Cette section fera des constats sur l'échantillonnage effectué pour informer sur la précision des estimés faits dans la section précédente. Chaque strate aura une section où seront discutés les constats sur la strate en particulier et les conséquences des erreurs mesurées sur l'inventaire total. Le tableau \ref{tab:confidence-interval-parking-supply} montre le résultat des métriques de précision du modèle. Des intervalles d'auto-amorçage sont mise à disposition du lecteur pour comprendre le potentielle de variabilité de la métrique à des changements d'échantillon de validation. D'autre part, la colonne filtre indique le filtre appliqué. Les filtres ont seulement été appliqué si un critère a été identifié pour trouver les lots avec un potentiel pour de fortes erreurs.
+\begin{table}[H]
+\centering
+\caption{Sommaire des métriques d'évaluation du modèle ($\alpha=0.05$ pour les intervalles)}
+\label{tab:confidence-interval-parking-supply}
+\begin{tabular}{l|cccccccc}
+\hline
+\adjustbox{angle=90,lap=\width-1em}{Métrique} & \adjustbox{angle=90,lap=\width-1em}{Logement unifamilial} & \adjustbox{angle=90,lap=\width-1em}{Logement Plex} & \adjustbox{angle=90,lap=\width-1em}{Logement Blocs Appart \quad} & \adjustbox{angle=90,lap=\width-1em}{Commercial} & \adjustbox{angle=90,lap=\width-1em}{Services} & \adjustbox{angle=90,lap=\width-1em}{Industriel} & \adjustbox{angle=90,lap=\width-1em}{Assemblée - Récréation} & \adjustbox{angle=90,lap=\width-1em}{Usage multiple} \\ \hline
+$N$ & 97748 & 23621 & 2465 & 1552 & 1623 & 176 & 149 & 156 \\
+$n_{choix}$ & 30 & 30 & 30 & 30 & 30 & 30 & 30 & 30 \\
+$n_{mes}$ & 30 & 30 & 24 & 30 & 28 & 27 & 29 & 23 \\
+$n_{filtre}$ & 30 & 30 & 24 & 29 & 26 & 26 & 24 & 22 \\
+$\sum y_{pred}$ & 130100 & 88139 & 78783 & 67217 & 57803 & 5586 & 4529 & 7301 \\
+$\bar{y}_{obs}$ & 3.4 & 4.3 & 19.7 & 44.0 & 16.5 & 26.7 & 18.3 & 5.9 \\
+$\bar{y}_{pred}$ & 1.2 & 4.1 & 21.0 & 46.3 & 19.0 & 26.6 & 14.5 & 26.0 \\
+ME & {\footnotesize [1.7,2.7]} & {\footnotesize [-1.0,1.5]} & {\footnotesize[-5.6,3.1]} & {\footnotesize[-9.9,4.8]} & {\footnotesize[-8.6,2.7]} & {\footnotesize[-8.6,7.2]} & {\footnotesize[-5.6,12.7]} & {\footnotesize[-28.1,-12.2]} \\
+MAE & {\footnotesize[1.7,2.7]} & {\footnotesize[1.8,3.5]} & {\footnotesize[6.0,11.6]} & {\footnotesize[10.1,19.9]} & {\footnotesize[8.8,16.0]} & {\footnotesize[3.1,17.3]} & {\footnotesize[11.9,25.5]} & {\footnotesize[15.1,29.6]} \\
+RMSE & 2.6 & 3.6 & 11.4 & 19.9 & 15.8 & 20.9 & 26.2 & 28.2 \\
+$e_{max}$ & N/A & N/A & N/A & 75 & 50 & 100 & 100 & 100 \\ \hline
+\end{tabular}
+\end{table}
+En plus des statistiques agrégées, la section suivante montrera deux séries de graphiques. La première se focalise fait un tour d'horizon montrant la distribution des erreurs (a), la valeur de l'erreur en fonction de la valeur prédite(b), les erreurs au carré en fonction de la valeur prédite (c), un diagramme XY montrant la valeur prédite vs la valeur observée(d), un diagramme QQ comparant la distribution d'erreur à une distribution normale (e), une comparaison de la distribution de prédictions de l'échantillon comparée à la distribution des prédictions de la population de la catégorie (f), et deux graphique (g et h) montrant la distribution des métriques d'erreur lorsque l'on applique une méthode de réamorçage pour donner un aperçu de la dispersion des métriques d'erreur si un échantillon légèrement différent était sélectionné. \par
+Le deuxième ensemble de graphique montre les erreurs en fonctions de variables qui sont disponibles sur les lots pour voir quels pourraient être les facteurs explicatifs aux erreurs. Ces graphiques seront potentiellement répliqués si un filtrage doit être appliqué pour éliminer des données qui semblent aberrantes. D'autre part, lorsque le nombre de places de stationnement est bas du bruit aléatoire est parfois ajouté à certains graphiques XY pour mieux communiquer la distribution des points. Les statistiques d'intervalles de prédictions et de valeurs moyennes sont calculés à l'aide de la valeur non-bruitée. D'autre part, la distance au parlement à vol d'oiseau a été calculée pour donner une mesure de dispersion géographique pour l'analyse des résidus. Dix graphiques avec l'erreur en ordonnée sont illustrés avec les variables suivantes en abscisse: l'aire de plancher(a), la date de construction(b), la distance au parlement(c), l'utilisation d'unités converties(d), la prédiction(e), la superficie du lot(f), le nombre de logements(g) et la valeur inscrite au rôle(h). Les deux dernières variables sont des variables liées à la densité foncière (graphique (i), eq. \ref{eq:lot-tax-density}) et son rapport au stationnement prédit (graphique(j), eq. \ref{eq:intensite-stat-pred}).\par
+La section révélera que le modèle a de la difficulté à prédire le nombre de places de stationnement. Dans le résidentiel unifamilial, le modèle sous-estime systématiquement le nombre de places construite. Pour les multiplex, l'erreur varie avec l'excentricité du lot par rapport au centre-ville, l'intensité de développement, la date de construction et la superficie du lot. Le modèle surestime le stationnement dans les quartiers centraux et le sous-estime à mesure que l'on s'éloigne du centre-ville. Les utilisations du sol commerciale et de service se comportent relativement bien mais requièrent l'identification de points potentiellement erronés et illustrent certains enjeux entourant l'affectation assignées par les municipalités au rôle et la sensibilité aux choix du règlement et l'interprétation à l'époque de construction. Les catégories d'assemblée souffre d'une mauvaise calibration du facteur de conversion entre les sièges et la superficie qui devra être corrigée et l'usage mixte est très présent dans les quartiers centraux construits avant l'automobile menant à d'importantes erreurs. En plus de cela, l'échantillon d'usage mixte a une plus grande proportion de règlements qui requièrent des conversions d'unité accentuant les erreurs.\par
+Cette étape n'a pas encore été incluse dans l'outil et le code source est disponible sur un dépôt séparé au besoin \parencite{charbonneau_epmpaulpolyerror_propagation_2025}.
+\subsection{Résidentiel - logement unique}
+Dans le cas du logement, le modèle sous-estime systématiquement le nombre de places de stationnement offertes. En moyenne, les propriétés sondées ont 3.4 places de stationnement en moyenne contre 1.2 places prédites. La superficie du lot semble être la variable la plus prometteuse comme outil de correction ou d'identification de sous-estimation. Une inspection de la figure \ref{fig:ana-residu-log-uni} semble indiquer une relation entre l'erreur et la superficie du lot(i), la valeur construite par mètre carré de terrain(i) et la distance au parlement(c). Du bruit aléatoire a été a ajouté pour éviter du zébrage dans les figures. Ce constat ne devrait pas être surprenant puisque \textcite{li_parking_2014} indique que l'abrogation des minimums a plus d'influence sur les développements au centre-ville qu'en milieu péri-urbain où se trouvent la majorité des maisons individuelles. Selon \citeauthor{li_parking_2014}, l'imposition de maximums est un outil plus efficace pour limiter l'offre de stationnement en milieu péri-urbain que l'abrogation de minimums.
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_36_b_se_2.png}
+        \caption{Distribution et intervalles de prédiction d'erreur pour le logement unifamilial}
+        \label{fig:intervals-dist-val-log-uni}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_36_b_se_2.png}
+        \caption{Analyse des résidus de la prédiction pour le logement unifamilial}
+        \label{fig:ana-residu-log-uni}
+    \end{figure}
+\end{landscape}
+\subsection{Résidentiel - 2 à 8 logements}
+La deuxième catégorie d'évaluation sont les lots avec entre 2 et 8 logements. Encore une fois, les données sont légèrement bruitées pour éviter du zébrage dans les graphiques XY. On constate dans ce cas-ci qu'il y a moins de biais systématique puisque la moyenne des prédictions et des observations sont sensiblement les mêmes ($\bar{y}_{obs} = 4.33$ vs $\bar{y}_{pred} = 4.13$). Cependant, il existe encore une forte dispersion autour de la prédiction.\par
+Une inspection visuelle de la figure \ref{fig:ana-residu-log-plex} indique que l'erreur varie avec la distance au parlement(c), la valeur au rôle par superficie du lot(i) et potentiellement la date de construction(b). Les trois variables sont probablement corrélées entre elles. Généralement, plus l'échantillon est central, plus la valeur construite par mètre carré est élevée, plus le modèle tend à sur-estimer la quantité de stationnement.
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_43_b_se_2.png}
+        \caption{Distribution et intervalles de prédiction d'erreur pour les lots avec 2 à 8 logements}
+        \label{fig:intervals-dist-val-log-plex}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_43_b_se_2.png}
+        \caption{Analyse des résidus de la prédiction pour les lots avec 2 à 8 logements}
+        \label{fig:ana-residu-log-plex}
+    \end{figure}
+\end{landscape}
+\subsection{Résidentiel - Blocs appartement}
+La prochaine catégorie sont les blocs appartement. L'étendue des valeurs prédites est assez élevée que le bruit aléatoire n'est plus requis. Le modèle semble bien représenter la tendance centrale mais il existe encore un forte dispersion autour de cette dernière. L'erreur moyenne est de -1.25 indiquant que le modèle sous-estime la quantité de stationnement construite. Cette moyenne est cependant tirée vers le haut par un échantillon. Si ce dernier est filtré en fixant une erreur maximale à 25 places on constate que le modèle sur-estime encore la quantité de stationnement ($\bar{y}_{obs} = 18.78$ vs $\bar{y}_{pred} = 21.35$). 6 échantillons sélectionnés n'ont pas pu être observés du fait de la présence de stationnement souterrain. Aucune métrique ne semble être utile pour trouver des valeurs aberrantes. Aucune tendance claire n'émerge sur les mesures pouvant corriger l'erreur. 
+
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_44_se_5_pe_20.png}
+        \caption{Distribution et intervalles d'erreurs pour les blocs appartement}
+        \label{fig:intervals-dist-val-log-bloc}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_44_se_5_pe_20.png}
+        \caption{Analyse des résidus la prédictions pour les blocs appartement}
+        \label{fig:ana-residu-log-bloc}
+    \end{figure}
+\end{landscape}
+\subsection{Commercial}
+Une propriété dont l'utilisation est commerciale a une erreur de plus de 300 places. Cette propriété est un immeuble commercial construit dans les années '70 et se trouve dans la zone industrielle de la Cité-Universitaire.  Un filtre a été appliqué pour l'enlever pour le calcul des statistiques. Ce filtrage change la moyenne de la catégorie de $\bar{y}_{pred} = 55.6 $ à $\bar{y}_{pred} = 46.3 $. La figure \ref{fig:ana-residu-comm}j montre le ratio de la prédiction sur la valeur au rôle par mètre carré de lot.\par
+Deux requêtes SQL ont été lancées à des seuils de 0.25 et 0.5 pour la variable d'intensité (eq. \ref{eq:intensite-stat-pred}). 61 et 10 lots respectivement ont été trouvés qui auraient un enjeu potentiel.  Au premier niveau de seuil, 18 des 61 propriétés étaient affectées au même règlement que la valeur aberrante. Il s'agit d'un des 5 règlements reliés au commerce de détails avec des niveaux variants de .025 place par mètre carré à 0.1 place par mètre carré pour la municipalité concernée. Une requête pour extraire la liste de propriétés potentiellement affectées de la base de données est donnée en annexe \ref{ann:requete-intensite-stat}.\par
+
+La figure \ref{fig:comm-err-by-unit} montre l'erreur en fonction de l'unité de formulation du règlement. On constate que les prédictions faites avec une étape de conversion ont un biais moyen introduit. C'est particulièrement le cas pour les commerces liés à l'automobile. L'annexe \ref{ann:recerche-inv-par-unite} donne un exemple de requête pour extraire les propriétés par l'unité de formulation du règlement.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/boxplot_error_by_category_40.png}
+    \caption{Diagramme à boîte de l'erreur en fonction de l'unité de formulation du règlement pour les propriétés commerciales}
+    \label{fig:comm-err-by-unit}
+\end{figure}
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_40_e_75_se_10_pe_20.png}
+        \caption{Distribution et intervalles d'erreurs pour les lots commerciaux avec un filtre pour une erreur de plus de 75 places}
+        \label{fig:intervals-dist-val-comm-e75}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_40_se_10_pe_20.png}
+        \caption{Analyse des résidus des propriétés commerciales sans filtre}
+        \label{fig:ana-residu-comm}
+    \end{figure}
+\end{landscape}
+\subsection{Services}
+Plusieurs propriétés ont été identifiées à l'aide de la métrique d'intensité de prédiction de stationnement. Si ces propriétés ne sont pas filtrées, la procédure d'autoamorçage échoue complètement.\par
+Les propriétés avec des erreurs importantes de la réalité peuvent être identifiées à l'aide de la même métrique d'intensité de prédiction montrée à la figure \ref{fig:ana-residu-serv}j. En fixant la métrique d'intensité à 0.1 et 0.15 respectivement 90 et 48 lots. Les lots tombent dans trois grandes catégories: les immeubles à bureaux multi-étagés, des écoles et des centres de tri postaux. Une fois les grandes erreurs filtrées, la modèle sur-estime encore le stationnement ($\bar{y}_{obs} = 16.5$ vs $\bar{y}_{pred} =19.0$). La figure \ref{fig:ana-residu-serv}e montre que l'erreur croit avec la prédiction. Aucune tendance structurelle n'est identifiée sur les variables physiques des bâtiments outre la métrique d'intensité de prédiction. \par
+Finalement, la figure \ref{fig:serv-err-by-unit} montre que les unités requérant une conversion sont aussi un moyen d'identifier les propriétés avec d'importantes erreurs. La conversions de salles (pour les écoles ou les services de santé) sont particulièrement problématiques. L'annexe \ref{ann:recerche-inv-par-unite} donne un exemple de requête SQL pour trouver de telles propriétés.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/boxplot_error_by_category_41.png}
+    \caption{Diagramme à boîte de l'erreur en fonction de l'unité de formulation du règlement pour les services}
+    \label{fig:serv-err-by-unit}
+\end{figure}
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_41_e_50_se_10_pe_20.png}
+        \caption{Distribution et intervalles d'erreurs pour les lots de services avec un filtre pour une erreur de plus de 50 places}
+        \label{fig:intervals-dis-val-serv-e50}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_41_se_10_pe_20.png}
+        \caption{Analyse des résidus des propriétés de service sans filtre}
+        \label{fig:ana-residu-serv}
+    \end{figure}
+\end{landscape}
+\subsection{Industriel}
+Une démarche similaire a été entreprise pour les propriétés industrielles. Une très grande usine ($a_l = 63000m^2$) avait une prédiction pour plus de 1170 places. Le règlement utilisé ici est formulé comme 1 place par employé ou 1 place par $95m^2$ au plus contraignant en combinaison avec le facteur de conversion fixé à 1 employé par $10m^2$ mène à cette surestimation. En utilisant seulement la formulation en mètres carrés, on obtient une prédiction de 124 places contre les 334 places constatées sur la propriété.\par
+Contrairement aux autres catégories, le diagramme d'analyse des résidus sera présenté sans filtre et avec un filtre d'erreur max égal à 100 pour la rendre plus visible.\par
+Le critère d'intensité de prédiction a de nouveau été utilisé à différents seuils pour trouver les lots qui ont potentiellement de fortes erreurs. À des niveaux de seuil de 0.05, 0.1 et 0.15, on trouve 25, 10 et 7 propriétés avec le potentiel d'avoir de fortes erreurs. Aucune utilisation du sol particulière ne semble sortir du lot dans les propriétés.\par
+Comme pour les autres catégories, l'unité de formulation du règlement a un impact sur la précision des prédiction. La figure \ref{fig:ind-err-by-unit} montre l'erreur selon le type d'unité utilisée dans la formulation du règlement et on constate encore que les conversions d'unité sont une importante source d'erreur.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/boxplot_error_by_category_39.png}
+    \caption{Diagramme à boîte de l'erreur en fonction de l'unité de formulation du règlement pour l'industrie}
+    \label{fig:ind-err-by-unit}
+\end{figure}
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_39_e_75_se_10_pe_20.png}
+        \caption{Distribution et intervalles d'erreurs pour les lots industriels avec une erreur maximale fixée à 75 places}
+        \label{fig:intervals-dis-val-serv-e100}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_39_se_10_pe_20.png}
+        \caption{Analyse des propriétés industrielles sans filtre}
+        \label{fig:ana-residu-ind}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_39_e_75_se_10_pe_20.png}
+        \caption{Analyse des propriétés industrielles avec une erreur maximale fixée à 75 places}
+        \label{fig:ana-residu-ind-e75}
+    \end{figure}
+\end{landscape}
+\subsection{Assemblée et récréation}
+La catégorie d'assemblée a été particulièrement problématique à traiter. L'enjeu principal est que cette catégorie regroupe des types de propriétés hétérogènes qui incluent des musées, mais aussi des terrains de jeu et des parcs qui ne se prêtent pas particulièrement bien à être regroupés. Le principal prédicteur d'erreur dans cette catégorie est l'utilisation d'unité qui nécessitent une conversion. L'erreur en fonction de l'unité de formulation du règlement est montrée à la figure \ref{fig:boxplot-erreur-assemblee-unite}. Un exemple de requête pour trouver les lots requis est donné à l'annexe \ref{ann:recerche-inv-par-unite}. Le nombre de sièges est utilisé pour prédire le nombre de sièges sur 23 lots dans la ville.\par
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/boxplot_error_by_category_42.png}
+    \caption{Erreur de la catégorie assemblée selon l'unité de formulation du règlement}
+    \label{fig:boxplot-erreur-assemblee-unite}
+\end{figure}
+Les lots dont la valeur est inférieur à 100\$  ont été filtrés pour les graphiques i et j de la figure \ref{fig:ana-residu-assem} car un des lots de validation avait une valeur au rôle de 2\$ menant à des enjeux de lisibilité pour le graphique.
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_42_e_100_se_10_pe_20.png}
+        \caption{Distribution et intervalles d'erreurs pour les lots de récréation et d'assemblée avec une erreur maximale fixée à 100 places}
+        \label{fig:intervals-dis-val-assem-e100}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_42_se_10_pe_20.png}
+        \caption{Analyse des propriétés d'assemblée et de récréation sans filtre sur le nombre de places}
+        \label{fig:ana-residu-assem}
+    \end{figure}
+\end{landscape}
+\subsection{Usage mixte}
+L'usage mixte est une autre catégorie de propriétés où le modèle a de la difficulté. Cependant, cet effet est en partie dû au fait que les propriétés à usage mixte sont plus concentrés dans les quartiers centraux. L'apparence de ligne droite du graphique de la figure \ref{fig:ana-residu-mix}e visible aussi avec la rangée de valeur observée à zéro places à la figure \ref{fig:intervals-dis-val-mix-e100}d. Cette tendance fait en sorte que le moyenne du stationnement prédit est très supérieure à la valeur observée.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/boxplot_error_by_category_34.png}
+    \caption{Erreur de la catégorie usage mixte selon l'unité de formulation du règlement}
+    \label{fig:boxplot-erreur-usmixte-unite}
+\end{figure}
+\begin{landscape}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/int_erreur_34_e_100_se_10_pe_20.png}
+        \caption{Distribution et intervalles d'erreurs pour les lots d'usage mixte avec une erreur maximale fixée à 100 places}
+        \label{fig:intervals-dis-val-mix-e100}
+    \end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{images/ana_res_34_se_10_pe_20.png}
+        \caption{Analyse des propriétés d'usage mixte sans filtre sur le nombre de places}
+        \label{fig:ana-residu-mix}
+    \end{figure}
+\end{landscape}

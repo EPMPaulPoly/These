@@ -57,6 +57,17 @@
         \begin{align}
             d_f &= \frac{\sum{\left(f_l\right)} }{a_l}\forall P_{role}\cap G_l
         \end{align}
+
+        \subsubsection{Indicateurs combinés}
+        \paragraph{Densité foncière} La densité foncière reflète la quantité de foncier construite par mètre carré de lot. Cela permet une comparaison de lots de différentes tailles. La formule est donnée par:
+        \begin{equation}
+            d_{s,l} = \frac{s_{pred,l}}{a_l} \label{eq:lot-tax-density}
+        \end{equation}
+        \paragraph{Intensité de stationnement prédit} L'intensité foncière de stationnement est un paramètre qui a été induit pendant le processus d'évaluation du modèle de prédiction du nombre de places de stationnement. Elle est donnée par la formule suivante et sera discutée dans la section d'évaluation du modèle.
+        \begin{align}
+            i_s = \frac{s_{pred,l} \times a_l}{\sum f_l} \forall P_{role} \cap G_l  \label{eq:intensite-stat-pred}
+        \end{align}
+        L'indicateur aurait pu être formulé en termes de mètres carrés d'étages par mètre carré de lot mais l'absence de telles données sur un grande proportion des lots rend l'indicateur potentiellement moins utile si des méthodes d'inférence de l'aire d'étage sont développées dans le futur.
     \subsection{Indicateurs de secteurs municipaux} \label{ssec:indicateurs-secteurs-municipaux}
         \subsubsection{Indicateurs de stationnement}
             \paragraph{Stationnement total} Le stationnement total est la somme des places de stationnement des lots cadastraux à l'intérieur d'un secteur municipal. Si plusieurs estimés existent pour un même lot, l'un des estimés doit être choisi. Ce choix est opéré en sélectionnant la préférence de méthode. Les inventaires par quartiers sont compilés à l'aide de la requête spécifiée à l'annexe \ref{sec:annexe_inventaire_agrege_par_quartier}. Un lot est assigné à un quartier si 90\% ou plus de sa superficie se trouve à l'intérieur du quartier. Cette approche (plutôt que de requérir que l'ensemble du lot soit à l'intérieur du quartier) est mise en place pour que les lots limitrophes soient tout de même pris en compte. On peut ainsi formuler l'indicateur ainsi:
@@ -69,7 +80,7 @@
             \begin{align}
                 A_q &= A(G_q) \label{eq:superf}
             \end{align}
-            \paragraph{Superficie dédiée au stationnement} La superficie des stationnements est calculée en multipliant le nombre de places de stationnement pour chaque quartier par la superficie minimale d'une case. La ville de Québec requiert des dimensions minimales pour les cases de stationnement de 2.6 m x 5.5 m \parencite{ville_de_quebec_normes_2024,ville_de_quebec_normes_2024-1,ville_de_quebec_normes_2024-2,ville_de_quebec_normes_2025,ville_de_quebec_reglement_2009}, soit $14.3m^2$. Il semble important de noter que la ville requiert des voies de circulation de 6.5m de large. La taille attribuée à chaque espace de stationnement pourrait donc croître jusqu'à $22.5m^2$ en incluant une voie de circulation voir plus si l'on considère les travaux de verdissements requis pour les grands stationnements de bâtiments instituionnels \parencite{ville_de_quebec_normes_2024}. On peut formuler l'indicateur de la manière suivante:
+            \paragraph{Superficie dédiée au stationnement} La superficie des stationnements est calculée en multipliant le nombre de places de stationnement pour chaque quartier par la superficie minimale d'une case. La ville de Québec requiert des dimensions minimales pour les cases de stationnement de 2.6 m x 5.5 m \parencite{ville_de_quebec_normes_2024,ville_de_quebec_normes_2024-1,ville_de_quebec_normes_2024-2,ville_de_quebec_normes_2025,ville_de_quebec_rvq_2009}, soit $14.3m^2$. Il semble important de noter que la ville requiert des voies de circulation de 6.5m de large. La taille attribuée à chaque espace de stationnement pourrait donc croître jusqu'à $22.5m^2$ en incluant une voie de circulation voir plus si l'on considère les travaux de verdissements requis pour les grands stationnements de bâtiments institutionnels \parencite{ville_de_quebec_normes_2024}. On peut formuler l'indicateur de la manière suivante:
             \begin{align}
                 AS_q &= 14.3 \times S_q
             \end{align}
@@ -162,7 +173,7 @@
             \begin{align}
                 S_{s,perm} = \frac{S_q}{PT_q}\label{eq:stat-perm}
             \end{align}
-            \paragraph{Pourcentage du quartier recouvert par le stationnement} Cette métrique vise à illustrer le pourcentage du territoire dédié à l'entreposage de véhicules. Cela donne un ordre de grandeur plus compréhensible de la consommation d'espace due au stationnement. Comme pour la métrique issue des lots, la taille de stationnement minimale issue des règlements de la ville est utilisée \parencite{ville_de_quebec_reglement_2009}, soit $14.3m^{2}$.
+            \paragraph{Pourcentage du quartier recouvert par le stationnement} Cette métrique vise à illustrer le pourcentage du territoire dédié à l'entreposage de véhicules. Cela donne un ordre de grandeur plus compréhensible de la consommation d'espace due au stationnement. Comme pour la métrique issue des lots, la taille de stationnement minimale issue des règlements de la ville est utilisée \parencite{ville_de_quebec_rvq_2009}, soit $14.3m^{2}$.
             \begin{align}
                 AS_{q,\%} &= \frac{AS_{q}}{A_q}\label{eq:stat-perc}
             \end{align}
@@ -204,8 +215,11 @@
                 I_q &= S_q - V_{q,max} \label{eq:stat-inu}\\
                 A_{I,q} &= \left(S_q - V_{q,max}\right)\times 14.3\label{eq:stat-inu-sup}
             \end{align}
-
-            
+    \subsection{Analyse de variabilité}
+    L'analyse de variabilité vise a aider à comprendre les différences de production de stationnement pour les différents ensembles de règlements définis par l'utilisateur. Pour ce faire, l'ensemble des lots avec des données valides se voient calculer le stationnement requis pour tous les ensembles de règlements. Les totaux sont ensuite agrégés pour estimer les totaux par utilisation du sol ainsi que les résultats bruts sont entreposés dans la base de données. L'outil web permet ensuite d'accéder aux totaux et de les illustre au moyen de différents graphiques. D'autre part, l'analyse de variabilité met aussi en place des facteurs d'échelle sur les conversions d'unités où le facteur de pente facteur\_correction est différent de 1 (indiquant qu'on ne transcrit pas simplement la valeur du rôle sans mise à l'échelle). \par
+    
+    
+    
     \begin{landscape}
         \begin{figure}
             \centering
@@ -214,9 +228,7 @@
             \label{fig:erd-ancilary-tables}
         \end{figure}
     \end{landscape}
-    \subsection{Analyse de variabilité}
-    L'analyse de variabilité vise a quantifier les différences de production de stationnement pour les différents ensembles de règlements définis par l'utilisateur. Pour ce faire, l'ensemble des lots se voient calculer le stationnement requis pour tous les ensembles de règlements. Les totaux sont ensuite agrégés pour estimer les totaux par utilisation du sol ainsi que les résultats bruts sont entreposés dans la base de données. L'outil web permet ensuite d'accéder aux totaux et de les illustrés au moyen de différents graphique. D'autre part, l'analyse de variabilité met aussi en place des facteurs d'echelle sur les conversions d'unités où le facteur de pente facteur\_correction est différent de 1 (indiquant qu'on ne transcrit pas simplement la valeur du rôle sans mise à l'échelle). 
-
+    
     
     \subsection{Structure de données pour l'analyse} \label{ssec:ana-data-struct}
         En plus des données entreposées pour créer l'inventaire, un ensemble de tables ont été créées pour contenir les données annexes ou précurseurs aux différents indicateurs. Ces données doivent être pré-calculées pour accélérer l'affichage des graphiques. Le diagramme de relation entité pour ces données ancillaires est donné à la figure \ref{fig:erd-ancilary-tables}.
@@ -243,12 +255,12 @@
                      \hline
                 \end{tabular}
             \end{table}
-            Le stationnement calculé pour chaque lot est agrégé par quartier pour permettre de compléter l'analyse agrégée dans l'analyse par quartiers et de comparer les résultats de l'inventaire avec les profils d'accumulation de véhicule. Ces résultats sont pré-compilés dans la table \ul{stat\_agrege}. L'annexe \ref{sec:annexe_inventaire_agrege_par_quartier} donne la requête SQL utilisée. Cette requête est lancée à la demande de l'utilisateur et peut prendre jusqu'à une minute à compléter. Les champs de cette table sont au tableau \ref{tab:stat-agrege-fields}. L'inventaire peut être compilé directement à partir de l'inventaire réglementaire ou en utilisant une préférence entre les différents inventaires s'ils existent pour un même lot. Les chiffres 1,2 et 3 correspondent au type d'inventaire selon la définition du Tableau \ref{tab:definition_table_inventaire}. Ainsi, inv\_132 représente l'inventaire agrégé où si plusieurs méthodes ont évalué le même lot, l'inventaire manuel sera pris comme prioritaire, puis l'inventaire semi automatique (donc avec des intrants fournis manuellement), puis l'inventaire purement à partir du rôle. Puisque l'inventaire réglementaire est le seul avec une couverture quasi complète du territoire, il forme la base de la plupart des lots. Cependant, la formulation prise permet de corriger ponctuellement certains lots en gardant les données de base de l'inventaire réglementaire comme colonne vertébrale.
+            Le stationnement calculé pour chaque lot est agrégé par quartier pour permettre de compléter l'analyse par quartiers et de comparer les résultats de l'inventaire avec les profils d'accumulation de véhicule. Ces résultats sont pré-compilés dans la table \ul{stat\_agrege}. L'annexe \ref{sec:annexe_inventaire_agrege_par_quartier} donne la requête SQL utilisée. Cette requête est lancée à la demande de l'utilisateur et peut prendre jusqu'à une minute à compléter. Les champs de cette table sont au tableau \ref{tab:stat-agrege-fields}. L'inventaire peut être compilé directement à partir de l'inventaire réglementaire ou en utilisant une préférence entre les différents inventaires s'ils existent pour un même lot. Les chiffres 1,2 et 3 correspondent au type d'inventaire selon la définition du Tableau \ref{tab:definition_table_inventaire}. Ainsi, inv\_132 représente l'inventaire agrégé où si plusieurs méthodes ont évalué le même lot, l'inventaire manuel sera pris comme prioritaire, puis l'inventaire semi automatique (donc avec des intrants fournis manuellement), puis l'inventaire purement à partir du rôle. Puisque l'inventaire réglementaire est le seul avec une couverture quasi complète du territoire, il forme la base de la plupart des lots. Cependant, la formulation prise permet de corriger ponctuellement certains lots en gardant les données de base de l'inventaire réglementaire comme colonne vertébrale.
            
             \FloatBarrier
         \subsubsection{Estimés de la population}
             Des estimés de population sont compilés selon la méthode données à l'équation \ref{eq:popu}. Les données de population du recensement 2016 et 2021 sont entreposés dans les tables \ul{census\_population} et \ul{census\_population\_2016}. La population y est agrégée par aire de diffusion qui sont plus petites que les quartiers administratifs. La population est donc sommé selon une jointure spatiale. Les estimés de population par quartier sont entreposés dans la table \ul{population\_par\_quartier}. Des estimés pour 2016 et 2021 sont mis à disposition de l'utilisateur. Les tableaux \ref{tab:table-recens-2021} et \ref{tab:table-recens-2016} donnent quelques détails sur le contenu des tableaux mentionnés ci-haut. 
-            \begin{table}[h]
+            \begin{table}[H]
                 \centering
                 \caption{Champs de la table \ul{population\_par\_quartier}}
                 \label{tab:table-pop-par-quartier}
@@ -261,7 +273,7 @@
                      \hline
                 \end{tabular}
             \end{table}
-            \begin{table}[h]
+            \begin{table}[H]
                 \centering
                 \caption{Champs de la table \ul{census\_population}}
                 \label{tab:table-recens-2021}
@@ -272,11 +284,11 @@
                      pop\_2021 & Population du recensement 2021 & Entier & \\
                      habitats\_2021 & Nombre de logements en 2021 & Entier & \\
                      habitats\_occup\_2021 & Nombre de logements occupés en 2021 & Entier & \\
-                     geometry & Géométrie de l'aire de diffusion & HEX & \\
+                     geometry & Géométrie de l'aire de diffusion & Géométrie & \\
                      \hline
                 \end{tabular}
             \end{table}
-            \begin{table}[h]
+            \begin{table}[H]
                 \centering
                 \caption{Champs de la table \ul{census\_population\_2016}}
                 \label{tab:table-recens-2016}
@@ -287,7 +299,7 @@
                      pop\_2016 & Population du recensement 2016 & Nombre réel & \\
                      habitats\_2016 & Nombre de logements en 2016 & Entier & \\
                      habitats\_occup\_2016 & Nombre de logements occupés en 2016 & Entier & \\
-                     geometry & Géométrie de l'aire de diffusion & HEX & \\
+                     geometry & Géométrie de l'aire de diffusion & Géométrie & \\
                      \hline
                 \end{tabular}
             \end{table}
@@ -296,7 +308,7 @@
         \subsubsection{Données d'enquête OD}
              Les données entrantes de l'enquête OD sont entreposées dans la table \ul{od\_data} dont les champs sont spécifiés au tableau \ref{tab:od-data-spec}.
 
-            \begin{longtable}[c]{{m{0.20\linewidth}m{0.40\linewidth}m{0.4\linewidth}}}
+            \begin{longtable}[c]{{m{0.15\linewidth}m{0.40\linewidth}m{0.4\linewidth}}}
                 \caption{Champs de la table \ul{od\_data}}
                 \label{tab:od-data-spec}\\
                 \hline
@@ -313,22 +325,35 @@
                  nbveh & Nombre de véhicule du ménage & Entier  \\
                  clepersonne & Identifiant unique de personne & Entier  \\
                  tper & Booléen indiquant la première entrée pour une personne & Booléen  \\
-                 percond & Statut du permis de conduire & \makecell[l]{Entier \\
-                                                                        1- Oui\\
-                                                                        2- Non\\
-                                                                        3- NSP/Refus\\
-                                                                        4- N/A (moins de 16 ans)}  \\
+                 percond & Statut du permis de conduire & Entier \begin{compactitem} \item 1- Oui \item 2- Non \item 3- NSP/Refus \item 4- N/A (moins de 16 ans)  \end{compactitem}\\
                 cledeplacement & Identifiant unique de déplacement & Entier  \\
                 heure & Heure de départ pour le déplacement & Entier (4-28)  \\
                 mode1 & Mode du déplacement & \makecell[l]{Entier 1-17 selon le mode \\ 1 - Auto-conducteur}  \\
                 motif & Motif du déplacement & \makecell[l]{Entier 1-14 selon le motif \\ 12 - Retour au domicile}  \\
-                geom\_logis & Localisation du domicile du ménage & HEX  \\
-                geom\_ori & Localisation de l'origine du déplacement & HEX  \\
-                geom\_des & Localisation de la destination du déplacement & HEX  \\
+                geom\_logis & Localisation du domicile du ménage & Géométrie  \\
+                geom\_ori & Localisation de l'origine du déplacement & Géométrie  \\
+                geom\_des & Localisation de la destination du déplacement & Géométrie  \\
                 \hline
             \end{longtable}
+            \clearpage
             \subsubsection{Données de motorisation}
-            Les données de motorisation sont calculées selon les équations données à l'équation \ref{eq:nb-voit}. Le tableau \hl{insert} montre
+            Les données de motorisation sont calculées selon les équations données à l'équation \ref{eq:nb-voit}. Le tableau \ref{tab:motor-par-quartier} montre les colonnes de la 
+           \begin{table}[H]
+                \centering
+                \caption{Champs de la table \ul{motorisation\_par\_quartier}}
+                \label{tab:motor-par-quartier}
+                \begin{tabular}{{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}}
+                    \hline
+                     Nom champ & Description & Type de données & CP/CS  \\ \hline
+                     id\_quartier & Identifiant quartier & Entier & CP \\
+                     nb\_voitures & Nombre de voitures des résidents & Entier & \\
+                     nb\_voitures\_max\_pav & Maximum du profile d'accumulation de véhicules du quartier & Entier & \\
+                     nb\_voitures\_min\_pav & Minimum du profile d'accumulation de véhicule & Entier & \\
+                     diff\_max\_signee & Différence max signée (cf. eq. \ref{eq:nb-voit-delta})& Entier & \\
+                     nb\_permis & Nombre de détenteurs de permis de conduire & Entier & \\
+                     \hline
+                \end{tabular}
+            \end{table}
             \subsubsection{Profils d'accumulation véhicules}
             Les détails de la méthode de calcul des profils d'accumulation de véhicules sont donnés à la section \ref{ssec:pav-calcs}. Les données d'enquête sont ensuite traités tel qu'indiqué dans la section \ref{ssec:pav-calcs} pour obtenir les profils d'accumulation véhicules. Ces profils sont sauvegardées pour analyse dans la table \ul{profile\_accumulation\_vehicule}. Les détails de cette table sont indiqués au tableau \ref{tab:table-pav}.
             \begin{longtable}[c]{m{0.3\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
@@ -388,4 +413,5 @@
                      \hline
                 \end{tabular}
             \end{table}
-        
+        \subsubsection{Analyse de variabilité}
+        Trois tables sont utilisées dans le cadre de l'analyse de variabilité. \ul{inv\_reg\_aggreg\_cubf\_n1} donne l'inventaire agrégé calculé au calcul de l'analyse de variabilité. Seuls les estimés réglementaires sont pris en compte. \ul{donnees\_brutes\_ana\_var} contient l'ensemble des inventaires calculés lorsque le facteur d'échelle est gardé constant. Ceci permettrait dans le futur de donner un aperçu désagrégé de la distribution par type de propriété. Pour l'instant, cette table est seulement utilisée pour diagnostiquer le calcul. La table \ul{variabilite} contient l'inventaire agrégé par utilisation du sol, ensemble de règlement et facteur d'échelle. Cette dernière table est celle qui est le plus communément utilisée pour générer les visualisations pertinentes. Les calculs pour cette analyse sont très similaires à ceux du calcul de l'inventaire. Ils sont lancés dans un script Python dédié qui est lancé depuis l'interface graphique à l'aide d'un appel d'\ac{API} spécifique. Le lecteur peut se référer à la figure \ref{fig:schema-api-5} pour l'appel d'\ac{API}.        

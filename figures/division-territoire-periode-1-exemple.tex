@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+    \begin{tikzpicture}[
+        role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
+        role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
+    ]
+        \filldraw[color=orange,fill=orange!30] (0.5,4) -- (1.9,3.8) -- (1.9,0) -- (0.5,0) -- cycle;
+        \node (label-A) [anchor=east] at (0.5,2) {Terr. A};
+        \filldraw[color=magenta,fill=magenta!30] (1.9,3.8) -- (1.9,0) -- (3.5,0) -- (3.5,4) -- cycle;
+        \node (label-B) [anchor=west] at (3.5,2){Terr. B};
+        \node (role-select-2) [role-select] at (3,1.5) {2};
+        \node (role-select-3) [role-select] at (1.6,2.7){3};
+    \end{tikzpicture}
+\end{document}

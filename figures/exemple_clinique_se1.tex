@@ -1,0 +1,46 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+
+% -------------------------------------------------
+% Helper that removes the internal \pgfpl@@ wrapper
+% -------------------------------------------------
+
+\begin{document}
+\begin{tikzpicture}[scale=0.8]
+            \begin{axis}[
+                xlabel={$N_{employes}$[-]},
+                ylabel={$N_{médecin}$[-]},
+                zlabel={$N_{places}$[-]},
+                legend style={at={(0.5,1.25)},
+    	           anchor=north,legend columns=-1}
+            ]
+            \addplot3[
+                surf,color = blue, faceted color=black,
+            ] 
+            coordinates {
+            (0,0,1) (0,1,2) (0,2,3)
+            
+            (1,0,2) (1,1,3) (1,2,4)
+            
+            (2,0,3) (2,1,4) (2,2,5)
+            };
+            \addplot3[
+                surf,color = orange, faceted color=black,
+            ] 
+            coordinates {
+            (0,0,2) (0,1,3) (0,2,4)
+            
+            (1,0,3) (1,1,4) (1,2,5)
+            
+            (2,0,4) (2,1,5) (2,2,6)
+            };
+            \legend{Stat min. $n_{salles}=1$,Stat min. $n_{salles}=2$ };
+            \end{axis} 
+            \end{tikzpicture}
+        \end{document}

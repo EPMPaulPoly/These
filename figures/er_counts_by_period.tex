@@ -1,0 +1,52 @@
+
+    \documentclass{standalone}
+    \usepackage[english,french]{babel} 
+    \usepackage{tikz}
+    \usetikzlibrary{calc}
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}         
+    \usepackage{pgfplotstable}
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=1.18}
+    \usepackage{siunitx}               
+    \usepackage{booktabs} 
+    \begin{document}
+    \begin{tikzpicture}
+    \begin{axis}[
+                height=8cm,
+                width=15cm,
+                tick align=outside,
+                tick pos=left,
+                legend style={
+                    at={(0.5,1.05)},
+                    anchor=south,
+                    legend columns=2
+                },
+                ymin= -0.5,
+                ymax= 5.5,
+                ytick={0,1,2,3,4,5},
+                yticklabels={FONDATION 1970[Perpétuité-1970],DUBERGER SAULES ET NEUFCHATEL FUSION QUEBEC[1971-1975],FUSIONS CHARLESBOURG[1976-1994],VQZ3[1995-1996],VQZ3 PAR QUARTIERS[1997-2009],HARMONISATION[2010-En vigueur]},
+                xtick={0,5,10,15,20,25,30},
+                xticklabels={0,
+                5,
+                10,
+                15,
+                20,
+                25,
+                30
+                },
+                xlabel={Compte},
+                xmin=0,
+                xmax=30
+            ]\addplot[xbar,draw=none,fill=blue,legend image post style={/pgfplots/ybar legend},bar width= 8pt,bar shift=-4pt]
+                coordinates{
+                    (26,0)(23,1)(12,2)(14,3)(22,4)(4,5)
+                };
+            \addlegendentry{Territoires};\addplot[xbar,draw=none,fill=orange,legend image post style={/pgfplots/ybar legend},bar width= 8pt,bar shift=4pt]
+                coordinates{
+                    (26,0)(23,1)(17,2)(14,3)(22,4)(21,5)
+                };
+            \addlegendentry{Ensembles de Règlements};
+        \end{axis}
+        \end{tikzpicture}
+        \end{document} 

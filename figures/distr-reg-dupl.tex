@@ -22,12 +22,13 @@
         legend style={fill opacity=0.8, draw opacity=1, text opacity=1, draw=lightgray204},
         tick align=outside,
         tick pos=left,
-        x grid style={darkgray176},
-        xmin=-0.5, xmax=13.5,
-        xtick style={color=black},
-        xtick={0,1,2,3,4,5,6,7,8,9,10,11,12,13},
-        xticklabel style={rotate=90.0},
-        xticklabels={
+        y grid style={darkgray176},
+        ymin=-0.5, ymax=13.5,
+        ytick style={color=black},
+        width=15cm,
+        height=8cm,
+        ytick={0,1,2,3,4,5,6,7,8,9,10,11,12,13},
+        yticklabels={
           {Beauport - Remplissage [Perpétuité - 1986]},
           {Lac St-Charles - Remplissage[Perpétuité - 1987]},
           {Québec - Remplissage  [Perpétuité - 1987]},
@@ -43,12 +44,17 @@
           {Ste-Foy - Remplissage  [Perpétuité - 1994]},
             {Charlesbourg - Remplissage [Perpétuité - 1995]}
         },
-        y grid style={darkgray176},
-        ylabel={Nombre de règlements codifiés},
-        ymin=0, ymax=57.75,
-        ytick style={color=black},
-        ytick={0,10,20,30,40,50,60},
-        yticklabels={
+        yticklabel style={
+            align=left,        % left-align the text
+            text width=8cm,    % wrap text at this width
+            anchor=east        % align the label box to the left
+        },
+        x grid style={darkgray176},
+        xlabel={Nombre de règlements codifiés},
+        xmin=0, xmax=57.75,
+        xtick style={color=black},
+        xtick={0,10,20,30,40,50,60},
+        xticklabels={
           \(\displaystyle {0}\),
           \(\displaystyle {10}\),
           \(\displaystyle {20}\),
@@ -59,22 +65,22 @@
         }
     ]
 
-\addplot[ybar,draw=blue,fill=blue,legend image post style={/pgfplots/ybar legend}]
+\addplot[xbar,draw=blue,fill=blue,legend image post style={/pgfplots/ybar legend}]
      coordinates{
-        (0,18)
-        (1,22)
-        (2,1)
-        (3,28)
-        (4,24)
-        (5,1)
-        (6,25)
-        (7,55)
-        (8,20)
-        (9,1)
-        (10,31)
-        (11,23)
-        (12,30)
-        (13,25)
+        (18,0)
+        (22,1)
+        (1,2)
+        (28,3)
+        (24,4)
+        (1,5)
+        (25,6)
+        (55,7)
+        (20,8)
+        (1,9)
+        (31,10)
+        (23,11)
+        (30,12)
+        (25,13)
      };
  
 \addlegendentry{Nombre de règlements}

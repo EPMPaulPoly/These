@@ -1,0 +1,64 @@
+
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+    \begin{tikzpicture}
+        \node (terr-a)[anchor=west] at (-3,4){Territoire A};
+        \node (terr-b) [anchor=west] at (-3,3){Territoire B};
+        \node (terr-c) [anchor=west] at (-3,1.5){Territoire C};
+        \node (terr-d) [anchor=west] at (-3,0) {Territoire D};
+        \filldraw[color=yellow,fill=yellow!30] (0,4.5) -- (7.5,4.5) -- (7.5,3.5) --(0,3.5) --cycle;
+        \filldraw[color=cyan,fill=cyan!30](0,3.5) -- (7.5,3.5) -- (7.5,2.5) --(0,2.5) --cycle;
+        \filldraw[color=magenta,fill=magenta!30](7.5,2.5) -- (9,2.5) -- (9,1.5) --(7.5,1.5) --cycle;
+        \filldraw[color=red,fill=red!30](9,1.5) -- (11,1.5) -- (11,0.5) --(9,0.5) --cycle;
+        \filldraw[color=green,fill=green!30](7.5,0.5) -- (11,0.5) -- (11,-0.5) --(7.5,-0.5) --cycle;
+        \draw (-3,4.5)--(11,4.5);
+        \draw (-3,3.5)--(11,3.5);
+        \draw (0,4.7) --(0,-0.7);
+        \draw (-3,2.5)--(11,2.5);
+        \draw (-3,0.5)--(11,0.5);
+        \draw (-3,-0.5)--(11,-0.5);
+        \node (95) [anchor=north] at (0,-0.7){'95};
+        \draw (1,4.7) --(1,-0.7);
+        \node (97) [anchor=north] at (1,-0.7){'97};
+        \draw (2,4.7) --(2,-0.7);
+        \node (99) [anchor=north] at (2,-0.7){'99};
+        \draw (3,4.7) --(3,-0.7);
+        \node (01) [anchor=north] at (3,-0.7){'01};
+        \draw (4,4.7) --(4,-0.7);
+        \node (03) [anchor=north] at (4,-0.7){'03};
+        \draw (5,4.7) --(5,-0.7);
+        \node (05) [anchor=north] at (5,-0.7){'05};
+        \draw (6,4.7) --(6,-0.7);
+        \node (07) [anchor=north] at (6,-0.7){'07};
+        \draw (7,4.7) --(7,-0.7);
+        \node (09) [anchor=north] at (7,-0.7){'09};
+        \draw (8,4.7) --(8,-0.7);
+        \node (11) [anchor=north] at (8,-0.7){'11};
+        \draw (9,4.7)--(9,-0.7);
+        \node (13) [anchor=north] at (9,-0.7){'13};
+        \draw (10,4.7)--(10,-0.7);
+        \node (15) [anchor=north] at (10,-0.7){'15};
+        \draw (11,4.7)--(11,-0.7);
+        \node (17) [anchor=north] at (11,-0.7){'17};
+        \draw [red, thick](0,4.8) -- (0,5) -- (7.4,5) -- (7.4,4.8);
+        \node (per-1-lab) [color=red,anchor=south] at (3.75,5) {Période 1};
+        \draw [red, thick](7.6,4.8) -- (7.6,5) -- (11,5) -- (11,4.8);
+        \node (per-2-lab) [color=red,anchor=south] at (9.25,5) {Période 2};
+        \node (er-1)[rectangle,fill=yellow] at (3.25,4) {ER:1};
+        \node (er-2)[rectangle,fill=cyan] at (3.25,3) {ER:2};
+        \node (er-3)[rectangle,fill=magenta] at (8,2) {ER:3};
+        \node (er-4)[rectangle,fill=red] at (9.75,1) {ER:4};
+        \node (er-5)[rectangle,fill=green] at (9.25,0) {ER:5};
+    \end{tikzpicture}
+\end{document}

@@ -1,0 +1,83 @@
+
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+% This file was created with matplot2tikz v0.4.0.
+\begin{tikzpicture}
+
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{darkorange25512714}{RGB}{255,127,14}
+\definecolor{lightgray204}{RGB}{204,204,204}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+height=4cm,
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=lightgray204
+},
+tick align=outside,
+tick pos=left,
+width=15cm,
+x grid style={darkgray176},
+xlabel={Nombre d'observations de seuils / Nombre de règlements},
+xmin=0, xmax=85.05,
+xtick style={color=black},
+xtick={0,10,20,30,40,50,60,70,80,90},
+xticklabels={
+  \(\displaystyle {0}\),
+  \(\displaystyle {10}\),
+  \(\displaystyle {20}\),
+  \(\displaystyle {30}\),
+  \(\displaystyle {40}\),
+  \(\displaystyle {50}\),
+  \(\displaystyle {60}\),
+  \(\displaystyle {70}\),
+  \(\displaystyle {80}\),
+  \(\displaystyle {90}\)
+},
+y grid style={darkgray176},
+ylabel={Seuils / $N_{reg}$},
+ymin=-0.5, ymax=5.5,
+ytick style={color=black},
+ytick={0,1,2,3,4,5},
+yticklabels={9,5,4,3,2,$N_{reg}$}
+]
+\draw[draw=none,fill=blue] (axis cs:0,-0.25) rectangle (axis cs:4,0.25);
+\addlegendimage{ybar,ybar legend,draw=none,fill=blue}
+\addlegendentry{$N_{obs}$ seuil}
+
+\draw[draw=none,fill=blue] (axis cs:0,0.75) rectangle (axis cs:6,1.25);
+\draw[draw=none,fill=blue] (axis cs:0,1.75) rectangle (axis cs:19,2.25);
+\draw[draw=none,fill=blue] (axis cs:0,2.75) rectangle (axis cs:4,3.25);
+\draw[draw=none,fill=blue] (axis cs:0,3.75) rectangle (axis cs:2,4.25);
+\draw[draw=none,fill=green] (axis cs:0,4.75) rectangle (axis cs:27,5.25);
+\addlegendimage{ybar,ybar legend,draw=none,fill=green}
+\addlegendentry{$N_{reg}$ avec seuils}
+\draw[draw=none,fill=orange] (axis cs:0,-0.25) rectangle (axis cs:0,0.25);
+\addlegendimage{ybar,ybar legend,draw=none,fill=orange}
+\addlegendentry{$N_{reg}$ valeur unique}
+
+\draw[draw=none,fill=orange] (axis cs:0,0.75) rectangle (axis cs:0,1.25);
+\draw[draw=none,fill=orange] (axis cs:0,1.75) rectangle (axis cs:0,2.25);
+\draw[draw=none,fill=orange] (axis cs:0,2.75) rectangle (axis cs:0,3.25);
+\draw[draw=none,fill=orange] (axis cs:0,3.75) rectangle (axis cs:0,4.25);
+\draw[draw=none,fill=orange] (axis cs:27,4.75) rectangle (axis cs:81,5.25);
+\end{axis}
+
+\end{tikzpicture}
+\end{document}

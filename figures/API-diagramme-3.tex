@@ -1,0 +1,117 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview.
+\begin{document}
+\begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=2cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-objet.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            % Api
+            \node (api) [api, below of=leg-oqp,yshift=-0.75cm,xshift=-7cm]{API}; 
+            % Territoires
+            \node (territoire)[domaine_data,left of=api,xshift=-2cm]{Territoires};
+            \node (get-territoire-periode) [endpoint,below of=territoire,xshift=-0.8cm,yshift=-0.15cm]{GET /api/territoire/periode};
+                \node (get-territoire-periode-id) [param, left of=get-territoire-periode,xshift=-3cm]{$id_{periode}$};
+            \node (get-territoire-periode-geo)[endpoint,below of=get-territoire-periode,yshift=-0.35cm]{GET /api/territoire/ periode-geo};
+                \node (get-territoire-periode-geo-id)[param,left of=get-territoire-periode-geo,xshift=-3cm]{$id_{periode_{geo}}$};
+            % Flèches territoires
+            \coordinate (flex-territoire) at ($(get-territoire-periode.east|-territoire.south) + (+0.2,0)$);
+            \draw (get-territoire-periode.east) -| (flex-territoire);
+            \draw (get-territoire-periode-geo.east) -| ($(get-territoire-periode.east -|flex-territoire)$);
+            \draw (get-territoire-periode-id.east) -- (get-territoire-periode.west);
+            \draw (get-territoire-periode-geo.west) -- (get-territoire-periode-geo-id.east);
+            % Ens Reg Terr
+            \node (ens-reg-terr) [domaine_data,below of=api,xshift=1cm,yshift=-0.25cm]{Ensembles de règlements territoires};
+                \node (get-ens-reg-terr-par-terr) [endpoint, below of=ens-reg-terr,xshift=1cm,yshift=-0.5cm]{GET /api/ens-reg-terr/par-territoire};
+                    \node (id-territoire) [param, right of=get-ens-reg-terr-par-terr,xshift=3.25cm]{id\_periode\_geo};
+                \node (get-ens-reg-terr-assoc) [endpoint,below of=get-ens-reg-terr-par-terr,yshift=-0.25cm]{GET /api/ens-reg-terr/associations};
+                    \node (lat-long)[opt_query_param, right of=get-ens-reg-terr-assoc,xshift=7cm]{Lat/Long};
+                    \node (annee_deb_avant)[opt_query_param, below of=lat-long]{annee\_debut\_ avant};
+                    \node (annee_deb_apres) [opt_query_param, below of=annee_deb_avant,yshift=-0.25cm]{annee\_debut\_ apres};
+                    \node (annee_fin_avant) [opt_query_param, below of=annee_deb_apres,yshift=-0.25cm]{annee\_fin\_ avant};
+                    \node (annee_fin_apres) [opt_query_param,below of=annee_fin_avant,yshift=-0.25cm]{annee\_fin\_ apres};
+                    \node (ville_comme) [opt_query_param,below of=annee_fin_apres,yshift=-0.05cm]{ville\_comme};
+                    \node (secteur_comme) [opt_query_param,below of=ville_comme,yshift=0.15cm]{secteur\_comme};
+                \node (post-ens-reg-terr-assoc) [endpoint,below of=get-ens-reg-terr-assoc,yshift=-0.25cm]{POST /api/ens-reg-terr/association};
+                    \node (corps-post-ens-reg-terr-assoc)[body,right of=post-ens-reg-terr-assoc,xshift=3.25cm]{Association ER territoire sans id};
+                \node (put-ens-reg-terr-assoc) [endpoint, below of=post-ens-reg-terr-assoc,yshift=-0.25cm]{PUT /api/ens-reg-terr/association};
+                    \node (id-put-assoc-ens-reg-terr) [param, right of=put-ens-reg-terr-assoc,xshift=3.25cm]{Identifiant association};
+                    \node (corps-put-ens-reg-terr-assoc)[body,below of=id-put-assoc-ens-reg-terr,yshift=-0.3cm]{Association ER territoire sans id};
+                \node (delete-ens-reg-terr-assoc)[endpoint, below of=put-ens-reg-terr-assoc,yshift=-1.5cm]{DELETE /api/ens-reg-terr/association};
+                    \node (id-delete-ens-reg-terr-assoc)[param,right of=delete-ens-reg-terr-assoc,xshift=3.25cm]{Identifiant association};
+            % Flèches ens reg terr
+            \coordinate(offset-ens-reg-terr) at ($(get-ens-reg-terr-par-terr.west |- ens-reg-terr.south) + (-0.2,0)$);
+            \draw (get-ens-reg-terr-par-terr.west)-|(offset-ens-reg-terr);
+            \draw (get-ens-reg-terr-assoc)-|($(get-ens-reg-terr-par-terr.west -| offset-ens-reg-terr)$);
+            \draw (post-ens-reg-terr-assoc) -|($(get-ens-reg-terr-assoc.west -| offset-ens-reg-terr)$);
+            \draw (put-ens-reg-terr-assoc)-|($(post-ens-reg-terr-assoc.west -| offset-ens-reg-terr)$);
+            \draw (delete-ens-reg-terr-assoc)-|($(put-ens-reg-terr-assoc -| offset-ens-reg-terr)$);
+            \draw (get-ens-reg-terr-par-terr.east) -- (id-territoire.west);
+            \draw (get-ens-reg-terr-assoc.east) --(lat-long.west);
+            \draw (post-ens-reg-terr-assoc.east)--(corps-post-ens-reg-terr-assoc.west);
+            \draw (put-ens-reg-terr-assoc.east) -- (id-put-assoc-ens-reg-terr.west);
+            \draw (corps-put-ens-reg-terr-assoc.west) -| ($(put-ens-reg-terr-assoc.east)!0.5!(id-put-assoc-ens-reg-terr.west)$);
+            \draw (delete-ens-reg-terr-assoc.east) -- (id-delete-ens-reg-terr-assoc.west);
+            \coordinate (flex-query-ens-reg-terr) at ($(lat-long.west) +(-0.2,0)$);
+            \draw (annee_deb_avant.west) -|(flex-query-ens-reg-terr);
+            \draw (annee_deb_apres.west) -|($(annee_deb_avant.west -| flex-query-ens-reg-terr)$);
+            \draw (annee_fin_avant.west) -| ($(annee_deb_apres.west -| flex-query-ens-reg-terr)$);
+            \draw (annee_fin_apres.west) -| ($(annee_fin_avant.west -| flex-query-ens-reg-terr)$);
+            \draw (ville_comme.west) -| ($(annee_fin_apres.west-| flex-query-ens-reg-terr)$);
+            \draw (secteur_comme.west) -| ($(ville_comme.west-| flex-query-ens-reg-terr)$);
+            % historique
+            \node (historique) [domaine_data,below of=territoire,yshift=-2.75cm]{Historique};
+                \node (get-historique) [endpoint,below of=historique,xshift=-1cm]{GET /api/historique};
+                \node (post-historique) [endpoint, below of=get-historique]{POST /api/historique};
+                    \node (corps-post-historique) [body,left of=post-historique,xshift=-3cm]{Données période sans identifiant};
+                \node (put-historique) [endpoint, below of=post-historique]{PUT /api/historique};
+                    \node (put-id-periode) [param,left of=put-historique,xshift=-3cm]{$id_{periode}$};
+                    \node (corps-put-historique) [body,below of=put-id-periode]{Données période sans identifiant};
+                \node (delete-historique) [endpoint, below of=put-historique,yshift=-1cm]{DELETE /api/historique};
+                    \node (delete-id-periode) [param, left of=delete-historique,xshift=-3cm]{$id_{periode}$};
+            % Flèches historique
+            \coordinate(flex-historique) at ($(get-historique.east|-historique.south) + (0.2,0)$);
+            \draw (get-historique.east) -| (flex-historique);
+            \draw (post-historique.east) -| ($(get-historique.east -| flex-historique)$);
+            \draw (corps-post-historique.east) -- (post-historique.west);
+            \draw (put-historique.east) -| ($(post-historique.east -| flex-historique)$);
+            \draw (delete-historique.east) -| ($(put-historique.east -| flex-historique)$);
+            \draw (put-historique.west) -- (put-id-periode.east);
+            \draw (corps-put-historique.east) -| ($(put-historique.west)!0.5!(put-id-periode.east)$);
+            \draw (delete-id-periode.east) -- (delete-historique.west);
+            % flèches top
+            \draw (api.west) -- (territoire.east);
+            \coordinate (flex-top) at ($(api.west)!0.5!(territoire.east)$);
+            \coordinate (flex-api) at ($(ens-reg-terr.west |- api.south) + (-0.2,0)$);
+            \draw (historique.east) -| (flex-top);
+            \draw (ens-reg-terr.west) -| (flex-api);
+            
+        \end{tikzpicture}
+    \end{document}

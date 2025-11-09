@@ -1,0 +1,132 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+\begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            \node (api) [api]{API};
+            % routes
+            \node (routes) [domaine_data,right of=api,xshift=2.5cm]{Routes};
+            \node (get-routes) [endpoint,right of=routes,xshift=3cm] {GET /api/routes};
+            
+            % reglements
+            \node (reglement-objt) [domaine_data,below of=api]{Règlement};
+                % regelement gauche
+                \node (get-rule-headers) [endpoint, below of=reglement-objt,xshift=-2.25cm,yshift=-0.15cm]{GET /api/reglements/entete};
+                    \node (annee-fin-avant-rule-query) [opt_query_param, left of=get-rule-headers,xshift=-6.75cm]{annee\_fin\_ avant};
+                    \node (annee-fin-apres-rule-query) [opt_query_param, below of=annee-fin-avant-rule-query,yshift=-0.25cm]{annee\_fin\_ apres};
+                    \node (description-rule-query) [opt_query_param,below of=annee-fin-apres-rule-query,yshift=-0.05cm]{description};
+                    \node (ville-rule-query) [opt_query_param,below of=description-rule-query,yshift=0.1cm]{ville};
+                    \node (texte-rule-query) [opt_query_param,below of=ville-rule-query,yshift=0.1cm]{texte de loi};
+                    \node (article-rule-query) [opt_query_param,below of=texte-rule-query,yshift=0.1cm]{article de loi};
+                    \node (paragraphe-rule-query) [opt_query_param,below of=article-rule-query,yshift=-0.05cm]{paragraphe de loi};
+                    \node (annee-deb-avant-rule-query) [opt_query_param, below of=paragraphe-rule-query,yshift=-0.25cm]{annee\_debut\_ avant};
+                    \node (annee-deb-apres-rule-query) [opt_query_param,below of=annee-deb-avant-rule-query,yshift=-0.25cm]{annee\_debut\_ apres};
+                \node (get-complete-rule) [endpoint,below of=get-rule-headers,yshift=-0.35cm]{GET /api/reglements/complet};
+                    \node (complete-rule-id) [param,left of=get-complete-rule,xshift=-3cm]{id\_reg\_stat};
+                \node (get-reglements-oper) [endpoint, below of=get-complete-rule,yshift=-0.25cm]{GET /api/reglements/operations};
+                \node (get-unites-lot) [endpoint,below of=get-reglements-oper,yshift=-0.25cm]{GET /api/reglements/unites};
+                    \node (id-unite) [opt_query_param,left of=get-unites-lot, xshift=-3cm]{g\_no\_lot};
+                
+                \node (post-entete) [endpoint, below of=get-unites-lot,yshift=-0.4cm]{POST /api/reglements/entete};
+                    \node (entete-a-post) [body] at ($(post-entete-|id-unite)$){Entête de règlement sans identifiant};
+                \node (put-entete) [endpoint, below of=post-entete,yshift=-0.4cm]{PUT /api/reglements/entete};
+                    \node (identifiant-put-reg) [param, left of = put-entete,xshift=-3cm]{id\_reg\_stat};
+                    \node (valeur-entete-reg) [body, below of=identifiant-put-reg,yshift=-0.4cm]{Entête de règlement sans identifiant};
+                \node (delete-entete-reg) [endpoint, below of=put-entete,yshift=-1.75cm]{DELETE /api/reglements/entete};
+                    \node (id-delete-entete-reg) [param, left of=delete-entete-reg,xshift=-3cm]{id\_reg\_stat};
+                % reglement droite
+                \node (post-ligne-def) [endpoint, below of=reglement-objt,xshift=2.25cm,yshift=-0.15cm]{POST /api/reglements/ ligne-def};
+                    \node (corps-post-ligne-def) [body,right of=post-ligne-def,xshift=3.25cm]{Ligne de définition de règlement};
+                \node (put-ligne-def)[endpoint,below of=post-ligne-def,yshift=-0.55cm]{PUT /api/reglements/ ligne-def};
+                    \node (id-put-ligne-def)[param,right of=put-ligne-def,xshift=3.25cm]{id\_reg\_stat\_ emp};
+                    \node (corps-put-ligne-def)[body,below of=id-put-ligne-def,yshift=-0.5cm]{Ligne de définition de règlement};
+                \node (get-unites-all) [endpoint,below of=put-ligne-def,yshift=-0.25cm]{GET /api/reglements/unites};    
+                \node (delete-ligne-def)[endpoint,below of=put-ligne-def,yshift=-2cm]{DELETE /api/reglements/ ligne-def};
+                    \node (id-delete-ligne-def)[param,right of=delete-ligne-def,xshift=3.25cm]{id\_reg\_stat\_ emp};
+                \node (get-graphs)[endpoint,below of=delete-ligne-def,yshift=-0.35cm]{GET /api/reglements/graphiques};
+                    \node (id-reg-graph) [mandat_query_param,right of=get-graphs,xshift=3.25cm]{id\_reg\_stat ou id\_er};
+                    \node (unite-graph) [mandat_query_param, below of=id-reg-graph]{$id_{unite}$};
+                    \node (min-graph) [opt_query_param,below of=unite-graph]{Valeur minimum graphique};
+                    \node (max-graph) [opt_query_param,below of=min-graph,yshift=-0.25cm]{Valeur maximum graphique};
+                    \node (pas-graph) [opt_query_param,below of=max-graph]{Pas graphique};
+            % arrows top level
+            \coordinate (entree-api) at ($(api.east) + (0.1,0)$);
+            \draw (api.east) -- (routes.west);
+            %\draw (entree-api)|-(inventaire.west);
+            %\draw ($(entree-api|-inventaire.west)$) -- ($(entree-api|-reglement-objt.north)$);
+    
+            \draw (api.south)--(reglement-objt.north);
+            % arrows routes
+            \draw (routes.east)--(get-routes.west);
+            
+            % flèches reglements gauche
+            \coordinate (side-get-reglements) at ($(get-rule-headers.east)!0.5!(post-ligne-def.west)$);
+            \coordinate (endpoint-reglements) at ($ (side-get-reglements |- reglement-objt.south) $);
+            \draw (get-rule-headers.east) -| (endpoint-reglements);
+            \draw (endpoint-reglements|-get-rule-headers.east) |-(get-complete-rule.east);
+            \draw (endpoint-reglements|-get-complete-rule.east) |-(get-reglements-oper.east);
+            \draw (endpoint-reglements|-get-reglements-oper.east) |-(get-unites-lot.east);
+            \draw (endpoint-reglements|-get-unites-all.east) |-(post-entete.east);
+            \draw (endpoint-reglements|-post-entete.east) |-(delete-entete-reg.east);
+            \draw (get-rule-headers.west) -- (annee-fin-avant-rule-query.east);
+            \draw (annee-deb-apres-rule-query.east) -| ($(annee-deb-avant-rule-query.east) + (0.2,0)$);
+            \draw (annee-deb-avant-rule-query.east) -| ($(paragraphe-rule-query.east) + (0.2,0)$);
+            \draw (annee-fin-apres-rule-query.east) -| ($(annee-fin-avant-rule-query.east) + (0.2,0)$);
+            \draw (description-rule-query.east) -| ($(annee-fin-apres-rule-query.east) + (0.2,0)$);
+            \draw (ville-rule-query.east) -| ($(description-rule-query.east) + (0.2,0)$);
+            \draw (texte-rule-query.east) -| ($(ville-rule-query.east) + (0.2,0)$);
+            \draw (article-rule-query.east) -| ($(texte-rule-query.east) + (0.2,0)$);
+            \draw (paragraphe-rule-query.east) -| ($(article-rule-query.east) + (0.2,0)$);
+            \draw (get-complete-rule.west) -- (complete-rule-id.east);
+            \draw (get-unites-lot.west) -- (id-unite.east);
+            \draw (entete-a-post.east) -- (post-entete.west);
+            \draw (identifiant-put-reg.east) -- (put-entete.west);
+            \draw (valeur-entete-reg.east) -| ($(identifiant-put-reg.east) + (0.1,0)$);
+            \draw (id-delete-entete-reg.east) -- (delete-entete-reg);
+            % Flèches règlements droite
+            \draw (post-ligne-def.west) --($(side-get-reglements|-post-ligne-def.west)$);
+            \draw (put-ligne-def.west) --($(side-get-reglements|-put-ligne-def.west)$);
+            \draw (delete-ligne-def.west) -- ($(side-get-reglements |- delete-ligne-def.west)$);
+            \draw (get-graphs.west) -- ($(side-get-reglements |- get-graphs.west)$);
+            \draw (post-ligne-def.east) -- (corps-post-ligne-def.west);
+            \draw (put-ligne-def.east) -- (id-put-ligne-def.west);
+            \draw (corps-put-ligne-def.west) -| ($(put-ligne-def.east)!0.5!(id-put-ligne-def.west)$);
+            \draw (delete-ligne-def.east) -- (id-delete-ligne-def.west);
+            \coordinate (jnc-get-graphs) at ($(get-graphs.east)!0.5!(id-reg-graph.west)$);
+            \draw (get-graphs.east) -- (id-reg-graph.west);
+            \draw (unite-graph.west) -| (jnc-get-graphs);
+            \draw (min-graph.west) -| ($(unite-graph.west -| jnc-get-graphs)$);
+            \draw (max-graph.west) -| ($(min-graph.west -| jnc-get-graphs)$);
+            \draw (pas-graph.west) -| ($(max-graph.west -| jnc-get-graphs)$);
+            % Légende
+            \node(leg-oqp) [opt_query_param,above of=api,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-objet.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+        \end{tikzpicture}
+    \end{document}

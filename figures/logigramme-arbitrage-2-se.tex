@@ -1,0 +1,90 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\usepackage{amsmath,amssymb}
+\begin{document}
+\begin{tikzpicture}
+                \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=red!30]
+                \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=1.5cm, minimum height=0.7cm, text centered, draw=black, fill=blue!30,text width=3cm]
+                \tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=0.7cm, text centered, draw=black, fill=orange!30]
+                \tikzstyle{database} = [cylinder, text centered, draw=black, fill=yellow!30, shape border rotate = 90, aspect=0.1, text width = 3cm]
+                \tikzstyle{decision} = [diamond, minimum width=3cm,  text centered, draw=black, fill=green!30, aspect=2]
+                \tikzstyle{arrow} = [thick,->,>=stealth]
+                % Nodes de flowchart
+                \node (start) [startstop] {Début};
+                \node (decide_operator) [decision,below of=start,yshift=-0.7cm]{Oper?};
+                \draw [arrow] (start) -- (decide_operator);
+
+                % cas 3 ou plus contraignant
+                \node (min_max_3_1) [decision, below left of=decide_operator,xshift=-1.75cm,yshift=-.5cm,text width=2cm]{$\nexists PI1_{max} \land \nexists PI2_{min}$};
+                \draw[arrow] (decide_operator.west) -- ++(-0.5,0) node[anchor=south east]{3-OU CONTRAIGNANT} -| (min_max_3_1.north);
+                \node (min_max_3_2) [decision, below of=min_max_3_1,yshift=-1.75cm,text width=2cm]{$\nexists PI2_{max} \land \nexists PI1_{min}$};
+                \draw[arrow] (min_max_3_1.south) --++(0,-0.2)node[anchor=west]{Non}-- (min_max_3_2.north);
+                \node (process_both_3) [process, below of= min_max_3_2,yshift=-1.5cm,text width=6.25cm]{
+                \begin{tabular}{c}
+                    $PI_{min} = max(PI1_{min}, PI2_{min})$ \\ 
+                    $PI_{max} = min(PI1_{max}, PI2_{max})$
+                \end{tabular}};
+                \draw[arrow] (min_max_3_2.south) --++(0,-0.2)node[anchor=west]{Non}-- (process_both_3.north);
+                \node (process_right_3) [process, below of= process_both_3,yshift=-0.7cm,text width=6cm]{
+                \begin{tabular}{c}
+                    $PI_{min} = min(PI1_{max}, PI2_{min})$ \\ 
+                    $PI_{max} = PI1_{max}$
+                \end{tabular}};
+                
+                \node (process_left_3) [process, below of= process_right_3,yshift=-0.7cm,text width=6cm]{
+                \begin{tabular}{c}
+                    $PI_{min} = min(PI1_{min}, PI2_{max})$ \\ 
+                    $PI_{max} = PI2_{max}$
+                \end{tabular}};
+                \draw[arrow] (min_max_3_1.west) -| ++(-1.5cm,-3cm) node[anchor=east]{Oui}|- (process_left_3.west);
+                \draw[arrow] (min_max_3_2.west) -| ++(-1.25cm,-1cm) node[anchor=west]{Oui}|- (process_right_3.west);
+                % cas 6
+                \node (decide_min_6) [decision, below right of=decide_operator,xshift=1.75cm,yshift=-.5cm,text width=2cm]{$PI1_{min} < PI2_{min}$};
+                \draw[arrow] (decide_operator.east) -- ++(0.5,0) node[anchor=south west]{6-OU SIMPLE} -|(decide_min_6.north);
+                \node (oper_6_case_1)[process, below right of=decide_min_6,xshift=1.75cm,yshift=-4cm]{
+                    \begin{tabular}{c}
+                        $PI_{min} = PI1_{min}$ \\
+                        $PI_{max} = PI1_{max}$ \\
+                    \end{tabular}
+                };
+                \draw[arrow] (decide_min_6.east)-- ++(0.1,0)node[anchor=south]{Oui}-|(oper_6_case_1.north);
+                \node (oper_6_case_2)[process, below of=decide_min_6,yshift=-1.5cm]{
+                    \begin{tabular}{c}
+                        $PI_{min} = PI2_{min}$ \\
+                        $PI_{max} = PI2_{max}$ \\
+                    \end{tabular}
+                };
+                \draw[arrow] (decide_min_6.south)--++(0,-0.2)node[anchor=west]{Non}--(oper_6_case_2.north);
+
+                % End
+                \node(end)[startstop] at (oper_6_case_1 |-process_right_3.east){Fin}; 
+                % Define the node A at the intersection
+                \coordinate (A) at (process_both_3.east -| oper_6_case_2.south);
+                
+                % Use the node A in your path
+                \draw[arrow] (process_both_3.east) -| (A) |- (end.west);
+                \draw[arrow] (process_left_3.east) -| (A) |- (end.west);
+                \draw[arrow] (process_right_3.east) -- (end.west);
+                \draw[arrow] (oper_6_case_2.south) |- (end.west);
+                \draw[arrow] (oper_6_case_1.south) -- (end.north);
+                % Légnde
+                \node(legend) [below of=process_left_3,xshift=-0.5cm,yshift=-0.25cm]{\textbf{Légende}};
+                \node (def_PI)[below of=legend]{PI : ParkingInventory};
+                \node (def_debfin) [startstop, right of=def_PI,xshift=2.5cm]{Début / Fin};
+                \node (def_process) [process, right of=def_debfin,xshift=1.5cm]{Processus};
+                \node (def_dec) [decision, right of=def_process,xshift=1.75cm]{Décision};
+                \coordinate (box_top_left) at ($(legend.north -| def_PI.west) + (-0.2,0.05)$);
+                \coordinate(box_top_right) at ($(def_dec.south -| def_dec.east) + (0.2,-0.2)$);
+                \draw (box_top_left) -| (box_top_right) -| (box_top_left);
+            \end{tikzpicture}
+\end{document}

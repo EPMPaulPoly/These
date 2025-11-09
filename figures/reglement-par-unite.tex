@@ -1,0 +1,84 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+% This file was created with matplot2tikz v0.4.0.
+\begin{tikzpicture}
+
+
+
+\begin{axis}[
+height=10cm,
+legend cell align={left},
+legend style={fill opacity=0.8, draw opacity=1, text opacity=1},
+tick align=outside,
+tick pos=left,
+width=15cm,
+y grid style={darkgray176},
+ylabel={Unité},
+ymin=-0.5, ymax=13.5,
+ytick style={color=black},
+ytick={0,1,2,3,4,5,6,7,8,9,10,11,12,13},
+yticklabels={
+  metre carré d'étage,
+  siège,
+  chambre,
+  logement,
+  salle,
+  employé,
+  plateau sportif,
+  lit,
+  vert,
+  voie de service,
+  allée de pratique,
+  médecin,
+  étudiant,
+  quai
+},
+xlabel={Nombre de règlements utilisant l'unité},
+xmin=0, xmax=637.35,
+xtick style={color=black},
+xtick={0,100,200,300,400,500,600,700},
+xticklabels={
+  \(\displaystyle {0}\),
+  \(\displaystyle {100}\),
+  \(\displaystyle {200}\),
+  \(\displaystyle {300}\),
+  \(\displaystyle {400}\),
+  \(\displaystyle {500}\),
+  \(\displaystyle {600}\),
+  \(\displaystyle {700}\)
+}
+]
+
+\addplot[xbar,draw=blue,fill=blue,legend image post style={/pgfplots/ybar legend},bar width=15pt]
+coordinates{
+    (607,0)
+    (75,1)
+    (64,2)
+    (60,3)
+    (43,4)
+    (30,5)
+    (25,6)
+    (24,7)
+    (9,8)
+    (7,9)
+    (5,10)
+    (3,11)
+    (3,12)
+    (1,13)
+    };
+
+\addlegendentry{Nombre de règlements par unité}
+\end{axis}
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,74 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}         
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}               
+\usepackage{booktabs} 
+\begin{document}
+    \begin{tikzpicture}
+    \begin{axis}[
+        height=10cm,
+        width=15cm,
+        tick align=outside,
+        tick pos=left,
+        ylabel={$\Delta$ Places},
+        ymin= -5000,
+        ymax= 10000,
+        ytick={-5000,-2500,0,2500,5000,7500,10000},
+        yticklabels={-5000,-2500,0,2500,5000,7500,10000},
+        xticklabel style={rotate=90},
+        legend style={at={(0.5,0.05)},anchor=south},
+        xtick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35},
+        xticklabels={SSAC,
+            VQ-CP,
+            VANI,
+            SILR,
+            VLIM,
+            LAIR,
+            AÉRO,
+            VIMO,
+            NDL,
+            DU-LS,
+            CHMO,
+            MAIZ,
+            STLI,
+            ORSA,
+            5-2,
+            SSAU,
+            STRO,
+            JESU,
+            NE-LB,
+            CUNI,
+            STLO,
+            STEM,
+            4-5,
+            4-3,
+            VBEL,
+            MCLM,
+            SJBA,
+            CHAT,
+            PSFO,
+            CARO,
+            PLAT,
+            VIBO,
+            4-6,
+            LRTV,
+            LSC},
+        xlabel={Quartier},
+        xmin=-0.5,
+        xmax=35.5,
+        scaled ticks=false
+    ]
+    \addplot[ybar,draw=none,fill=blue,legend image post style={/pgfplots/ybar legend},bar width= 8pt,bar shift=0pt]
+        coordinates{
+            (1,789)(2,0)(3,-32)(4,0)(5,1439)(6,4472)(7,-215)(8,-231)(9,0)(10,-81)(11,-26)(12,109)(13,-180)(14,-1248)(15,-2165)(16,162)(17,-379)(18,1318)(19,705)(20,8093)(21,0)(22,-219)(23,-87)(24,0)(25,1398)(26,-58)(27,113)(28,0)(29,-810)(30,-11)(31,0)(32,-413)(33,10)(34,46)(35,107)
+        };
+    \addlegendentry{(Manuel-> Semi auto -> Auto)-Auto};
+\end{axis}
+\end{tikzpicture}
+\end{document} 

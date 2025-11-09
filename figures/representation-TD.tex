@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+\begin{tikzpicture}[
+    role-select/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=1mm},
+    role-non-select/.style={circle, draw=red!60, fill=red!5, very thick, minimum size=1mm},
+]
+    \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.3,1.5) -- (1.8,1.5) -- (1.8,0.8) -- (.8,0.8) -- cycle;
+    \node (role-select-1) [role-select] at (1.5,1.2) {1};
+    \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.8,1.5) -- (1.8,0.8) -- (3.5,0.8) -- (3.5,2.7) -- cycle;
+    \node (role-select-2) [role-select] at (3,1.5) {2};
+    
+    \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.3,1.5) -- (1.8,1.5) -- (2.4,4) -- (0.8,4) -- cycle;
+    \node (role-select-3) [role-select] at (1.6,2.7){3};
+    \filldraw[color=magenta, ultra thick,fill=magenta!30] (1.8,1.5) -- (3.5,2.7) -- (3.6,3.8) -- (2.4,4) -- cycle;
+    \node (role-select-4) [role-select] at (2.9,2.9){4};
+    \filldraw[color=magenta, ultra thick,fill=magenta!30] (0.8,0.8) -- (1.3,1.5) -- (0.8,4) -- (0.75,1.5) -- cycle;
+    \node (role-select-5) [role-select] at (1.0,1.6) {5};
+    \node (leg-rs-1) [role-select, below of=role-select-1,xshift=-2cm]{ID};
+    \node (leg-rs-1-text) [right of=leg-rs-1,anchor=west]{Entrée du rôle sélectionnée};
+    \node (leg-sec-an) [
+        below of=leg-rs-1,
+        rectangle,
+        draw=magenta,
+        fill=magenta!30,
+        ultra thick
+    ]{};
+    \node (leg-sec-an-text) [right of=leg-sec-an,anchor=west]{Lot cadastral};
+\end{tikzpicture}
+\end{document}

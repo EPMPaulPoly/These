@@ -14,23 +14,22 @@
 \begin{tikzpicture}
 
 \begin{axis}[
-height=10cm,
+height=5cm,
 legend cell align={left},
 legend style={fill opacity=0.8, draw opacity=1, text opacity=1},
 tick align=outside,
 tick pos=left,
 width=15cm,
-x grid style={darkgray176},
-xlabel={Nombre de lignes par règlements},
-xtick={0,1,2,3},
-xtick style={color=black},
-xticklabel style={rotate=90.0},
 y grid style={darkgray176},
-ylabel={Nombre de règlemnents},
-ymin=0, ymax=728.7,
+ylabel={Nombre de lignes par règlement},
+ytick={0,1,2,3,4},
 ytick style={color=black},
-ytick={0,100,200,300,400,500,600,700,800},
-yticklabels={
+y grid style={darkgray176},
+xlabel={Nombre de règlements},
+xmin=0, xmax=728.7,
+xtick style={color=black},
+xtick={0,100,200,300,400,500,600,700,800},
+xticklabels={
   \(\displaystyle {0}\),
   \(\displaystyle {100}\),
   \(\displaystyle {200}\),
@@ -44,12 +43,12 @@ yticklabels={
 ]
 
 
-\addplot[ybar,draw=blue,fill=blue,legend image post style={/pgfplots/ybar legend}]
+\addplot[xbar,draw=blue,fill=blue,legend image post style={/pgfplots/ybar legend}]
         coordinates{
-            (1,694)
-            (2,177)
-             (3,11)
-             (4,1)
+            (694,1)
+            (177,2)
+             (11,3)
+             (1,4)
         };
     \addlegendentry{Lignes par règlement}
 \end{axis}

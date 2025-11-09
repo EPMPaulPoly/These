@@ -1,0 +1,137 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+        \begin{tikzpicture}
+            \tikzstyle {api} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=green!30]
+            \tikzstyle {domaine_data} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=blue!30]
+            \tikzstyle {param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=teal!30]
+            \tikzstyle {mandat_query_param} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
+            \tikzstyle{opt_query_param} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
+            \tikzstyle{endpoint} =[rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=magenta!30]
+            \tikzstyle{body} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
+            \tikzstyle{enum} = [rectangle, rounded corners, text width=4cm, minimum height=0.7cm,text centered,  draw=black, fill=red!30]
+            % Légende
+            \node(leg-oqp) [opt_query_param,yshift=0.75cm,xshift=5cm]{Paramètre de requête optionnel};
+            \node(leg-mqp) [mandat_query_param,left of=leg-oqp,xshift=-2.5cm]{Paramètre de requête obligatoire};
+            \node(leg-bod) [body,right of=leg-oqp , xshift=2.5cm,yshift=0.25cm]{Corps de requête};
+            \node(leg-enum)[enum,below of=leg-bod,text width=3cm]{Val. possible};
+            \node(leg-ep) [endpoint, left of=leg-mqp,text width=3cm,xshift=-2.5cm,yshift=0.25cm]{Terminaison d'API};
+            \node(leg-par) [param,below of=leg-ep]{Identifiant};
+            \node(leg-objet) [domaine_data,left of=leg-ep,xshift=-2.5cm] {Domaine de données};
+            \node(leg-api) [api,left of=leg-objet,xshift=-1.9cm,text width =1.5cm]{API};
+            \node(legend) [left of=leg-api,text width=2.5cm,xshift=-0.5cm]{Légende};
+            \coordinate (leg-top-left) at ($(legend.west|-leg-objet.north) + (-0.1,0.1)$);
+            \coordinate (leg-bot-right) at ($(leg-bod.east|-leg-enum.south) + (0.1,-0.1)$);
+            \draw (leg-top-left) -| (leg-bot-right) -| (leg-top-left); 
+            % Api
+            \node (api) [api, below of=leg-oqp,yshift=-0.75cm,xshift=-7.5cm,text width=2cm]{API};
+            % inventaire
+            \node (inventaire) [domaine_data, right of=api,xshift=2cm]{Inventaire};
+            \node (get-inv-quartier) [endpoint,below of=inventaire,xshift=2.25cm,yshift=-0.4cm]{GET /api/inventaire/quartier};
+                \node (id-quart-get-inv) [param,right of=get-inv-quartier,xshift=3cm]{$id_{quartier}$};
+            \node (get-inv-calc-quartier) [endpoint, below of=get-inv-quartier,yshift=-0.4cm]{GET /api/inventaire/calcul/quartier};
+                \node (id-quartier-calc) [param]  at($(get-inv-calc-quartier-|id-quart-get-inv)$){$id_{quartier}$};
+            \node (get-inv-calc-lot) [endpoint,below of=get-inv-calc-quartier,yshift=-0.4cm]{GET /api/inventaire/calcul/lot};
+                \node (id-lot-calc) [param] at ($(get-inv-calc-lot -| id-quartier-calc)$){g\_no\_lot};
+            \node (post-inventaire-reg-val-man) [endpoint, below of=get-inv-calc-lot,yshift=-0.6cm]{POST /api/inventaire/calcul /reg-val-man};
+                \node (corps-donnees-calc-inv) [body] at ($(post-inventaire-reg-val-man -|id-lot-calc)$){PCI};
+            \node (creation-gros-inventaire) [endpoint,below of=post-inventaire-reg-val-man,yshift=-0.75cm]{POST /api/inventaire/nouv-en-gros};
+                \node (parking-inv-bulk) [body] at ($(creation-gros-inventaire-|corps-donnees-calc-inv)$){PIs sans identifiant};
+            \node (creation-inv-unique)[endpoint,below of=creation-gros-inventaire,yshift=-0.3cm]{POST /api/inventaire};
+                \node (parking-inv-unique)[body] at ($(creation-inv-unique -|parking-inv-bulk)$){PI sans identifiant};
+            
+            \node (supprime-inv) [endpoint,below of=creation-inv-unique,yshift=-0.1cm]{DELETE /api/inventaire};
+                \node (id-supprime-inv) [param] at ($(supprime-inv-|parking-inv-unique)$){$id_{inv}$};
+            \node (maj-inv-en-gros) [endpoint, below of=supprime-inv,yshift=-0.5cm]{PUT /api/inventaire/maj-en-gros};
+                \node (corps-maj-inv-gros) [body,right of=maj-inv-en-gros,xshift=3cm]{PIs avec identifiant};
+            \node (inv-unique-maj)[endpoint,left of=supprime-inv,xshift=-3.5cm,yshift=0.25cm]{PUT /api/inventaire};
+                \node (id-inv-unique-maj)[param, below of=inv-unique-maj,xshift=-0.4cm]{$id_{inv}$};
+                \node (corps-inv-unique-maj) [body, below of=id-inv-unique-maj]{PI sans identifiant};
+            % Flèches inventaire
+            \coordinate (midpoint-inventaire) at ($(inventaire.south-| get-inv-quartier.west) + (-0.2,0)$);
+            \draw (inventaire.south) |- (get-inv-quartier.west);
+            \draw (get-inv-quartier.east) -- (id-quart-get-inv.west);
+            \draw (inventaire.south) |- (get-inv-calc-quartier.west);
+            \draw (get-inv-calc-quartier.east) -- (id-quartier-calc.west);
+            \draw (inventaire.south|-get-inv-calc-quartier.west) |- (get-inv-calc-lot.west);
+            \draw (get-inv-calc-lot.east) -- (id-lot-calc.west);
+            \draw (inventaire.south|-get-inv-calc-lot.west) |- (post-inventaire-reg-val-man.west);
+            \draw (post-inventaire-reg-val-man.east)-- (corps-donnees-calc-inv.west);
+            \draw (inventaire.south|-post-inventaire-reg-val-man.west) |- (creation-gros-inventaire.west);
+            \draw (creation-gros-inventaire.east) -- (parking-inv-bulk.west);
+            \draw (inventaire.south|-creation-gros-inventaire.west) |- (creation-inv-unique.west);
+            \draw (creation-inv-unique.east)--(parking-inv-unique.west);
+            \draw (inventaire.south|-creation-inv-unique.west) |- (maj-inv-en-gros.west);
+            \draw (maj-inv-en-gros.east) -- (corps-maj-inv-gros.west);
+            \draw (inventaire.south|-maj-inv-en-gros.west) |- (inv-unique-maj.east);
+            \draw (id-inv-unique-maj.east)-| ($(id-inv-unique-maj.east|-inv-unique-maj.south) + (0.2,0)$);
+            \draw (corps-inv-unique-maj.east) -| ($(id-inv-unique-maj.east)+(0.2,0)$); 
+            \draw (inventaire.south|-inv-unique-maj.east) |-(supprime-inv.west);
+            \draw (supprime-inv.east)--(id-supprime-inv.west);
+            % Ensembles règlement
+                \node (get-er-entete) [endpoint,below of=api,xshift=0.25cm,yshift=-0.5cm]{GET /api/ens-reg/entete};
+                \node (get-graph-info) [endpoint, left of=get-er-entete,xshift=-3.5cm,yshift=-0.25cm]{GET /api/ens-reg/informations-pour-graphique};
+            \coordinate (mid-er)  at ($(get-er-entete)!0.5!(get-graph-info)$);
+            \node (er) at ($(mid-er|-api) + (-1,-0.2)$)[domaine_data]{Ensembles de règlements};
+                    \node(id-graph-info) [param,left of=get-graph-info,xshift=-3cm]{$id_{er}$};
+                \node (get-reg-associe) [endpoint, below of=get-graph-info,yshift=-0.5cm]{GET /api/ens-reg/regs-associes};
+                    \node(id-get-reg-ass) [param,left of=get-reg-associe,xshift=-3cm]{$id_{er}$};
+                \node (get-par-role) [endpoint, below of=get-reg-associe,yshift=-0.25cm]{GET /api/ens-reg/par-role};
+                    \node (id-provinc) [param,left of=get-par-role,xshift=-3cm]{id\_provinc};
+                \node (entete-par-territoire) [endpoint,below of=get-par-role,yshift=-0.5cm]{GET /api/ens-reg/entete-par-territoire};
+                    \node (id-territoire) [param,left of= entete-par-territoire,xshift=-3cm]{id\_periode\_geo};
+                \node (post-er-entete)[endpoint, below of=get-er-entete,yshift=-0.25cm]{POST /api/ens-reg/entete};
+                    \node(post-er-entete-body)[body,below of=post-er-entete,xshift=0.4cm,yshift=-0.5cm]{Entête ensemble règlements sans identifiant};
+                \node (put-er-entete)[endpoint,below of=post-er-entete,yshift=-2cm]{PUT /api/ens-reg/entete};
+                    \node (id-put-er-entete)[param,below of=put-er-entete,xshift=0.4cm,yshift=-0.2cm]{$id_{er}$};
+                    \node (corps-put-er-entete)[body,below of=id-put-er-entete,yshift=-0.35cm]{Entête ensemble règlements sans identifiant};
+                \node (post-er-assoc)[endpoint, below of=entete-par-territoire,yshift=-0.5cm]{POST /api/ens-reg/assoc};
+                    \node (corps-post-er-assoc)[body,left of=post-er-assoc,xshift=-3cm]{Association règlement CUBF};
+                \node (put-er-assoc)[endpoint, below of=post-er-assoc,yshift=-0.4cm]{PUT /api/ens-reg/assoc};
+                    \node (id-put-er-assoc)[param,left of=put-er-assoc,xshift=-3cm]{Identifiant assocation};
+                    \node (corps-put-er-assoc) [body,below of=id-put-er-assoc,yshift=-0.25cm]{Association règlement CUBF};
+                \node (delete-er-assoc)[endpoint, below of=put-er-assoc,yshift=-1.5cm]{DELETE /api/ens-reg/assoc};
+                    \node(id-delete-er-assoc) [param,left of=delete-er-assoc,xshift=-3cm]{Identifiant association};
+                \node (delete-er)[endpoint, below of=delete-er-assoc,yshift=-0.25cm ]{DELETE /api/ens-reg};
+                    \node(id-delete-er) [param,left of=delete-er,xshift=-3cm]{$id_{er}$};
+            % Flèches top
+            \coordinate (blend-spot) at ($(api.west)!0.5!(er.east)$);
+            \draw (api.west) -| (blend-spot) |- (er.east);
+            \draw (api.east) -- (inventaire.west);
+            % Flèches Er
+            \draw (get-er-entete.west) -| ($(mid-er|-er.south)$);
+            \draw (get-graph-info.east) -| ($(mid-er|-get-er-entete.west)$);
+            \draw (post-er-entete.west) -| ($(get-graph-info.east -| mid-er)$);
+            \draw (get-reg-associe.east) -| ($(post-er-entete.west-| mid-er)$);
+            \draw (put-er-entete.west) -| ($(get-reg-associe.east-|mid-er)$);
+            \draw (get-par-role.east)-| ($(put-er-entete.west -| mid-er)$);
+            \draw (entete-par-territoire.east) -| ($(get-par-role.east-| mid-er)$);
+            \draw (post-er-assoc.east) -| ($(entete-par-territoire.east -| mid-er)$);
+            \draw (put-er-assoc.east) -| ($(post-er-assoc.east -|mid-er)$);
+            \draw (delete-er-assoc.east) -| ($(put-er-assoc.east -| mid-er)$);
+            \draw (delete-er.east) -| ($(delete-er-assoc.east -| mid-er)$);
+            \draw (get-graph-info.west) -- (id-graph-info.east);
+            \draw (get-reg-associe.west) -- (id-get-reg-ass.east);
+            \draw (get-par-role.west) -- (id-provinc.east);
+            \draw (entete-par-territoire.west) -- (id-territoire.east);
+            \draw (post-er-assoc.west) -- (corps-post-er-assoc.east);
+            \draw (put-er-assoc.west) -- (id-put-er-assoc.east);
+            \draw (corps-put-er-assoc.east) -| ($(id-put-er-assoc.east)!0.5!(put-er-assoc.west)$);
+            \draw (id-delete-er-assoc.east) -- (delete-er-assoc.west);
+            \draw (id-delete-er.east) -- (delete-er.west);
+            \draw (post-er-entete-body.west) -| ($(post-er-entete-body.west |- post-er-entete.south) + (-0.2,0)$);
+            \coordinate (location-put-er-entete) at ($(id-put-er-entete.west|-put-er-entete.south) + (-0.2,0)$);
+            \draw (id-put-er-entete.west) -| (location-put-er-entete);
+            \draw (corps-put-er-entete.west) -| ($(location-put-er-entete |-id-put-er-entete.west)$);
+        \end{tikzpicture}
+    \end{document}

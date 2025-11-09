@@ -1,0 +1,33 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+
+% -------------------------------------------------
+% Helper that removes the internal \pgfpl@@ wrapper
+% -------------------------------------------------
+
+\begin{document}
+\begin{tikzpicture}[scale = 0.9]
+            \begin{axis}[
+                xlabel={Espace de plancher [$m^2$]},
+                ylabel={$N_{places}$[-]},
+                xmin=0, xmax=200,
+                ymin=0, ymax=10,
+                xtick={0,100,200},
+                ytick={0,5,10},
+                    legend pos=north west,
+                ymajorgrids=true,
+                xmajorgrids=true,
+                grid style=dashed,
+                domain=0:1000, 
+            ]
+            \addplot[color=blue]{x/20};
+            \legend{Stationnement min}
+            \end{axis}
+        \end{tikzpicture}
+        \end{document}
