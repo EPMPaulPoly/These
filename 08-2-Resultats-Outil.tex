@@ -8,11 +8,15 @@ Cette section va donner un aperçu des résultats obtenus. La section \ref{sec:o
 \end{figure}
 \section{Outil développé}\label{sec:outil_develope}
 
-\subsection{Procédure suggérée de création d'inventaire}
-Le logigramme \ref{fig:logigramme_procédural} montre la procédure générale de création de l'inventaire que devrait entreprendre un analyste pour obtenir un inventaire. Comme tout processus de génération d'ensembles de données, le processus est itératif et requiert des mises à jour pour améliorer l'estimé ainsi qu'une mise à jour avec de nouvelles constructions.
+\subsection{Procédure suggérée d'estimation de la capacité}
+Le logigramme \ref{fig:logigramme_procédural} montre la procédure générale de création de l'estimation que devrait entreprendre un analyste pour obtenir une estimation de capacité. Comme tout processus de génération d'ensembles de données, le processus est itératif et requiert des mises à jour pour améliorer l'estimation ainsi qu'une mise à jour avec de nouvelles constructions.
 
 \subsection{Fonctions de l'API serveur}
-Il est ensuite possible de formuler l'ensemble des requêtes que l'on veut potentiellement remplir et montrer sur la machine \og{client} \fg{}. L'implémentation proposée reprend librement le standard \ac{REST} \parencite{fielding_architectural_2000} qui transmet les requêtes et les réponses au moyen du protocole \ac{HTTP}. Ce type d'interface a typiquement 4 grandes fonctions: GET, PUT, POST, DELETE. GET sert à obtenir un élément de la base de données. PUT permet de modifier un élément déjà existant. POST permet de créer un nouvel élément dans une table. DELETE sert à supprimer un élément. Le chemin (\ac{URI}) auquel ces instructions sont transmises détermine quelle table dans la base de données est consultée ou modifiée. Dans les prochaines sections, une liste sera dressée des variations de GET/PUT/POST/DELETE et d'\ac{URI} implémentés dans le cadre de ce mémoire.\par D'autre part, de l'information peut être envoyée dans l'\ac{URI} ou dans le corps du message. Dans le cas de l'\ac{URI}, un identifiant peut être communiqué dans l'adresse directement qui peut être ainsi lu. Ceci est souvent le cas quand on connait l'identifiant unique de l'élément à obtenir. L'autre option pour l'URL consiste à communique l'information au moyen de requête de filtrage (\og{query parameters} \fg{} en anglais). Ces derniers sont implémentés en insérant un point d'interrogation dans l'\ac{URI} et en séparant les paramètres de recherche par des \&. Ce type d'implémentation est souvent mis en place pour faire de la recherche. Dans le cadre de ce mémoire, ce type d'implémentation est principalement mis en place pour la recherche de règlement. Ainsi, un appel d'\ac{API} pour des règlements dont la date de début est après 2008 serait un appel GET à l'adresse \og{/api/reglements/entetes?annee\_debut\_après=2008}\fg{}. Dans le cas de figure où l'on connait l'identifiant, par exemple si l'on veut voir les détails d'un règlement à la requête de l'utilisateur, on pourrait faire l'appel GET à l'adresse \og{/api/reglements/complet/<id>} \fg où l'identifiant est directement spécifié dans l'adresse sans chaîne de caractère supplémentaire.\par
+Il est ensuite possible de formuler l'ensemble des requêtes que l'on veut potentiellement remplir et montrer sur la machine \og{client} \fg{}. L'implémentation proposée reprend librement le standard \ac{REST} \parencite{fielding_architectural_2000} qui transmet les requêtes et les réponses au moyen du protocole \ac{HTTP}. Ce type d'interface a typiquement 4 grandes fonctions: GET, PUT, POST, DELETE. GET sert à obtenir un élément de la base de données. PUT permet de modifier un élément déjà existant. POST permet de créer un nouvel élément dans une table. DELETE sert à supprimer un élément. Le chemin (\ac{URI}) auquel ces instructions sont transmises détermine quelle table dans la base de données est consultée ou modifiée. Une liste sera dressée des variations de GET/PUT/POST/DELETE et d'\ac{URI} implémentés dans le cadre de ce mémoire sont données en annexe \ref{ann:api-routes}.\par 
+
+D'autre part, de l'information peut être envoyée dans l'\ac{URI} ou dans le corps du message. Dans le cas de l'\ac{URI}, un identifiant peut être communiqué dans l'adresse directement qui peut être ainsi lu. Ceci est souvent le cas quand on connait l'identifiant unique de l'élément à obtenir. L'autre option pour l'URL consiste à communique l'information au moyen de requête de filtrage (\og{query parameters} \fg{} en anglais). Ces derniers sont implémentés en insérant un point d'interrogation dans l'\ac{URI} et en séparant les paramètres de recherche par des \&. Ce type d'implémentation est souvent mis en place pour faire de la recherche. Dans le cadre de ce mémoire, ce type d'implémentation est principalement mis en place pour la recherche de règlement. Ainsi, un appel d'\ac{API} pour des règlements dont la date de début est après 2008 serait un appel GET à l'adresse \og{/api/reglements/entetes?annee\_debut\_après=2008}\fg{}. Dans le cas de figure où l'on connait l'identifiant, par exemple si l'on veut voir les détails d'un règlement à la requête de l'utilisateur, on pourrait faire l'appel GET à l'adresse \og{/api/reglements/complet/<id>} \fg où l'identifiant est directement spécifié dans l'adresse sans chaîne de caractère supplémentaire. L'information peut aussi être contenue dans le corps du message plutôt que dans l'adresse. Ce type de fonctionnalité est principalement utilisé pour les cas de figure où l'on veut modifier ou créer un élément dans la base de données.\par\par
+
+Les figures \ref{fig:schema-api-parking-dev}, \ref{fig:api-schema-2}, \ref{figures/API-diagramme-3.pdf},\ref{figures/API-diagramme-4.pdf} et \ref{figures/API-diagramme-5.pdf} donnent une représentation des domaines de données et des fonctions implémentées. 
 \begin{landscape}
     \begin{figure}
         \centering
@@ -54,8 +58,8 @@ Il est ensuite possible de formuler l'ensemble des requêtes que l'on veut poten
     \end{figure}
 \end{landscape}
 
-En contraste, de l'information peut aussi être contenue dans le corps du message plutôt que dans l'adresse. Ce type de fonctionnalité est principalement utilisé pour les cas de figure où l'on veut modifier ou créer un élément dans la base de données.\par
-Finalement, bien qu'il soit considéré une bonne pratique de mettre en place des fonctions de validation des intrants reçus particulièrement dans le cas de figure où l'on interagit avec SQL. Ces fonctions de validation n'ont pas été mises en place. Les tests unitaires qui typiquement assurent la qualité et la robustesse du code n'ont pas été implémentées. La figure \ref{fig:schema-api-parking-dev} montre une représentation schématique des fonctionnalités et domaines traités dans l'\ac{API}. Les variables du tableau \ref{tab:analysis-var-query-vals} peuvent être spécifiées dans l'analyse agrégée.
+
+Normalement, les fonctions d'\ac{API} ont des fonctions de validations qui vérifient que les paramètres soient du bon type, dans des limites raisonnables et qu'elles ne présentent pas un risque à l'intégrité de la base de données. Ces fonctions de validation n'ont pas été mises en place. Les tests unitaires qui typiquement assurent la qualité et la robustesse du code n'ont pas été implémentés non plus. Pour les graphiques d'analyse agrégée, les variables que peuvent demander les analystes sont données au tableau \ref{tab:analysis-var-query-vals} ainsi que la référence à l'équation utilisée pour calculer l'indicateur. La colonne ordre dénote si la variable nécessite qu'un ordre de priorité des estimations de capacité soit spécifié.
 
 \begin{center}
     \begin{longtable}{p{8cm}m{1.5cm}ll}
@@ -73,65 +77,66 @@ Finalement, bien qu'il soit considéré une bonne pratique de mettre en place de
         \endfoot
         \bottomrule
         \endlastfoot
-         Stationnement Total & \ref{eq:stat-tot} & stat-tot & Oui\\
-         Densité stationnement& \ref{eq:stat-sup} & stat-sup & Oui\\
-         Stationnement par personne (2021) & \ref{eq:stat-pop} &stat-popu-2021& Oui\\
-         Stationnement par personne (2016) & \ref{eq:stat-pop} & stat-popu-2016& Oui\\
-         Stationnement par permis &\ref{eq:stat-perm} & stat-perm & Oui\\
-         Stationnement par voiture & \ref{eq:stat-voit}& stat-voit & Oui\\
+         Stationnement total & \ref{eq:stat-tot} & stat-tot & Oui\\
+         Densité stationnement & \ref{eq:stat-sup} & stat-sup & Oui\\
+         Stationnement par personne (2021) & \ref{eq:stat-pop} & stat-popu-2021 & Oui\\
+         Stationnement par personne (2016) & \ref{eq:stat-pop} & stat-popu-2016 & Oui\\
+         Stationnement par permis & \ref{eq:stat-perm} & stat-perm & Oui\\
+         Stationnement par voiture &  \ref{eq:stat-voit}& stat-voit & Oui\\
          Pourcentage du territoire dédié au stationnement & \ref{eq:stat-perc} & stat-perc & Oui\\
-         Superficie du Quartier& \ref{eq:superf} & superf& Non\\
-         Nombre de permis & \ref{eq:perm} & perm&Non\\
-         Population (2021) &\ref{eq:popu} & popu-2021& Non\\
-         Population (2016) & \ref{eq:popu} & popu-2016& Non\\
-         Voiture par personne (2021) & \ref{eq:voit-par-pers} & voit-par-pers-2021& Non\\
-         Voiture par personne (2016) &\ref{eq:voit-par-pers} & voit-par-pers-2016&Non\\
-         Voiture par permis & \ref{eq:voit-par-perm} & voit-par-perm&Non\\
-         Densité de population (2021)& \ref{eq:dens} & dens-pop-2021 &Non\\
-         Densité de population (2016)& \ref{eq:dens} & dens-pop-2016 & Non\\
+         Superficie du quartier & \ref{eq:superf} & superf & Non\\
+         Nombre de permis & \ref{eq:perm} & perm & Non\\
+         Population (2021) & \ref{eq:popu} & popu-2021 & Non\\
+         Population (2016) & \ref{eq:popu} & popu-2016 & Non\\
+         Voiture par personne (2021) & \ref{eq:voit-par-pers} & voit-par-pers-2021 & Non\\
+         Voiture par personne (2016) &\ref{eq:voit-par-pers} & voit-par-pers-2016 &Non\\
+         Voiture par permis & \ref{eq:voit-par-perm} & voit-par-perm &Non\\
+         Densité de population (2021) & \ref{eq:dens} & dens-pop-2021 & Non\\
+         Densité de population (2016) & \ref{eq:dens} & dens-pop-2016 & Non\\
          Valeur moyenne de logements & \ref{eq:val-moy-log} & val-log-moy & Non\\
-         Superficie moyenne des logements& \ref{eq:sup-moy-log} & sup-log-moy & Non\\
+         Superficie moyenne des logements & \ref{eq:sup-moy-log} & sup-log-moy & Non\\
          Valeur foncière totale du quartier & \ref{eq:val-tot-quart}& val-tot-quart & Non\\
-         Valeur foncière résidentielle du quartier& \ref{eq:val-log-tot-quart} &  val-tot-log-quart& Non\\
-         Valeur foncière total par superficie brute de quartier & \ref{eq:val-tot-sup} & val-tot-sup & Non\\
-         Valeur foncière résidentielle par superficie brute de quartier & \ref{eq:val-tot-log-sup}& val-tot-log-sup & Non\\
+         Valeur foncière résidentielle du quartier & \ref{eq:val-log-tot-quart} &  val-tot-log-quart& Non\\
+         Valeur foncière totale par superficie brute de quartier & \ref{eq:val-tot-sup} & val-tot-sup & Non\\
+         Valeur foncière résidentielle par superficie brute de quartier & \ref{eq:val-tot-log-sup }& val-tot-log-sup & Non\\
          Nombre de voitures des résidents &\ref{eq:nb-voit} &nb-voit & Non\\
-         Delta Voiture jour nuit&\ref{eq:nb-voit-delta} & nb-voit-delta & Non\\
-         Nombre de voitures max& \ref{eq:nb-voit-max} & nb-voit-max & Non\\
-         Stationnement par voiture max& \ref{eq:stat-voit-max}& stat-voit-max & Oui \\
-         Nombre de places de stationnement inutilisés & \ref{eq:stat-inu} & stat-inu & Oui\\
+         Différence maximale signée &\ref{eq:nb-voit-delta} & nb-voit-delta & Non\\
+         Nombre de voitures max & \ref{eq:nb-voit-max} & nb-voit-max & Non\\
+         Stationnement par voiture max & \ref{eq:stat-voit-max}& stat-voit-max & Oui \\
+         Nombre de places de stationnement inutilisées & \ref{eq:stat-inu} & stat-inu & Oui\\
          Superficie de stationnement inutilisée & \ref{eq:stat-inu-sup} & stat-inu-sup & Oui\\
-         Part modale auto-conducteur des résidents & \ref{eq:pm-res}& pm-ac-res& Non\\
-         Part modale auto-passager des résidents& \ref{eq:pm-res} & pm-ap-res& Non\\
+         Part modale autoconducteur des résidents & \ref{eq:pm-res}& pm-ac-res& Non\\
+         Part modale autopassager des résidents & \ref{eq:pm-res} & pm-ap-res& Non\\
          Part modale \ac{TC} des résidents& \ref{eq:pm-res} & pm-tc-res & Non\\
-         Part modale marche vélo des résidents & \ref{eq:pm-res} & pm-mv-res& Non\\
-         Part modale bus scolaire des résidents& \ref{eq:pm-res}& pm-bs-res& Non\\
-         Part modale auto-conducteur interne& \ref{eq:pm-int}& pm-ac-int  & Non\\
-         Part modale auto-passager interne& \ref{eq:pm-int} & pm-ap-int& Non \\
+         Part modale marche-vélo des résidents & \ref{eq:pm-res} & pm-mv-res& Non\\
+         Part modale bus scolaire des résidents & \ref{eq:pm-res}& pm-bs-res& Non\\
+         Part modale autoconducteur interne& \ref{eq:pm-int}& pm-ac-int  & Non\\
+         Part modale autopassager interne& \ref{eq:pm-int} & pm-ap-int& Non \\
          Part modale \ac{TC} interne& \ref{eq:pm-int} & pm-tc-int& Non\\
-         Part modale marche vélo interne & \ref{eq:pm-int}& pm-mv-int& Non\\
+         Part modale marche-vélo interne & \ref{eq:pm-int}& pm-mv-int& Non\\
          Part modale bus scolaire interne & \ref{eq:pm-int}& pm-bs-int& Non\\
-         Part modale auto-conducteur des déplacements à destination du quartier& \ref{eq:pm-des}& pm-ac-des& Non  \\
-         Part modale auto-passager des déplacements à destination du quartier& \ref{eq:pm-des}& pm-ap-des & Non\\
+         Part modale autoconducteur des déplacements à destination du quartier& \ref{eq:pm-des}& pm-ac-des& Non  \\
+         Part modale autopassager des déplacements à destination du quartier& \ref{eq:pm-des}& pm-ap-des & Non\\
          Part modale \ac{TC} des déplacements à destination du quartier& \ref{eq:pm-des}& pm-tc-des & Non\\
          Part modale marche vélo des déplacements à destination du quartier & \ref{eq:pm-des}& pm-mv-des& Non\\
          Part modale bus scolaire des déplacements à destination du quartier & \ref{eq:pm-des}& pm-bs-des& Non\\
-         Part modale auto-conducteur des déplacements originant du quartier& \ref{eq:pm-ori}& pm-ac-ori& Non  \\
-         Part modale auto-passager des déplacements originant du quartier& \ref{eq:pm-ori}& pm-ap-ori& Non \\
-         Part modale \ac{TC} des déplacements originant du quartier&\ref{eq:pm-ori} & pm-tc-ori & Non\\
-         Part modale marche vélo des déplacements originant du quartier & \ref{eq:pm-ori}& pm-mv-ori& Non\\
-         Part modale bus scolaire des déplacements originant du quartier & \ref{eq:pm-ori}& pm-bs-ori& Non\\
+         Part modale autoconducteur des déplacements provenant du quartier & \ref{eq:pm-ori}& pm-ac-ori& Non  \\
+         Part modale autopassager des déplacements provenant du quartier \& \ref{eq:pm-ori}& pm-ap-ori& Non \\
+         Part modale \ac{TC} des déplacements provenant du quartier &\ref{eq:pm-ori} & pm-tc-ori & Non\\
+         Part modale marche vélo des déplacements provenant du quartier & \ref{eq:pm-ori}& pm-mv-ori& Non\\
+         Part modale bus scolaire des déplacements provenant du quartier & \ref{eq:pm-ori}& pm-bs-ori& Non\\
     \end{longtable}
 \end{center}
+Cela conclut la section sur l'\ac{API}. L'implémentation de page web conçue pour modifier manipuler toutes les données  est détaillée à la section suivante.
 \subsection{Pages de l'interface}
-Plusieurs pages ont été développées pour permettre à un analyste de visualiser, modifier les intrants et analyser les résultats de l'inventaire. Ces pages seront décrites dans cette section
+Plusieurs pages ont été développées pour permettre à un analyste de visualiser, modifier les intrants et analyser les résultats de l'estimation. Ces pages seront décrites dans cette section. Il est important de noter qu'aucune page de modification ou d'association du rôle et du cadastre n'a encore été mise en place. Cette omission sera discutée dans les limites de l'étude.
 
 \subsubsection{Historique}
-Comme pour la page des règlements, le haut de la page d'historique est rempli par le menu permettant de naviguer entre les différentes pages de l'outil.\par
+La page d'historique constitue la page d'accueil du site web. L'utilisateur pourra y modifier les périodes et téléverser les cartes. Dans l'implémentation actuelle, les fonctionnalités de modification ne sont que partiellement implémentées. Le haut de la page est le menu principal qui est commun à l'ensemble des pages.\par
 Le bandeau gauche manipule l'historique tel que défini dans la table \ul{historique\_geopol} défini au tableau \ref{tab:definition_historique_geopol}. On peut y ajouter des périodes, changer les dates des périodes et le nom des grandes périodes de l'historique. Les années sont inclusives (i.e 2023-2027 inclut les années 2023, 2024, 2025, 2026 et 2027).\par
-Le bandeau en bas permet de modifier certaines informations quand au nom de la ville et du secteur. Il est important de noter que les noms des municipalités peuvent être corrigées et des secteurs supprimés mais aucune modification des limites géopolitiques ne peut être complétée. Les limites doivent être ajoutées à partir de fichier GeoJSON.\par
+Le bandeau en bas permet de modifier certaines informations quand au nom de la ville et du secteur. Il est important de noter que les noms des municipalités peuvent être corrigés et des secteurs supprimés, mais aucune modification des limites géopolitiques ne peut être complétée. Les limites doivent être ajoutées à partir de fichiers GeoJSON.\par
 Les secteurs peuvent être supprimés s'ils ne sont pas utilisés dans des \ac{RST}.\par
-La carte montre les secteurs et est mise à jour en fonction de la période sélectionnée en même temps que la table dans le tableau en bas de page pour que seuls les territoires associés à la période sélectionnée ne soient montrés.
+La carte montre les secteurs et est mise à jour en fonction de la période sélectionnée en même temps que le tableau en bas de page. Seuls les territoires associés à la période sélectionnée sont affichés. Une fois que l'utilisateur a rempli l'historique, il peut passer à la définition des règlements.
 \begin{landscape}
     \begin{figure}
         \centering
@@ -143,15 +148,15 @@ La carte montre les secteurs et est mise à jour en fonction de la période sél
 \subsubsection{Règlements}
 La page règlements permet de créer et modifier les différents règlements. La figure \ref{fig:page-reglements} montre l'interface permettant de modifier les règlements. 
 
-En haut se trouve le menu qui permet de naviguer entre les différentes pages. Juste en-dessous se trouvent deux icônes. La première permet de faire une recherche dans les règlements et la deuxième permet d'ajouter un nouveau règlement. La partie centrale est une liste des règlements entreposés dans la base de données, en montrant les information entreposées dans l'entête du règlement incluant:
+Deux icônes se trouvent en dessous du menu. La première permet de faire une recherche dans les règlements et la deuxième permet d'ajouter un nouveau règlement. La partie centrale est une liste des règlements entreposés dans la base de données, en montrant les informations entreposées dans l'entête du règlement incluant:
 \begin{itemize}
     \item une description du règlement, 
     \item les dates d'entrée en vigueur et d'abrogation du règlement
-    \item des information sur le texte de loi, l'article et le paragraphe où sont définis les règlements dans la loi
-    \item le nom de la ville d'où vient le règlement. Il est important de noter que le nom de cette ville n'est pas associé aux informations de la géopolitique de la ville mais est simplement là pour référence
+    \item des informations sur le texte de loi, l'article et le paragraphe où sont définis les règlements dans la loi
+    \item le nom de la ville d'où vient le règlement. Il est important de noter que le nom de cette ville n'est pas associé aux informations d'historique, mais est simplement là pour référence.
 \end{itemize}
-En cliquant sur un élément dans la liste, l'utilisateur peut accéder à la définition mathématique, telle qu'elle est entreposée dans la base de données.\par
-La partie inférieure de l'écran permet de visualiser et modifier la définition du règlement.
+En cliquant sur un élément dans la liste, l'utilisateur peut accéder à la définition complète du règlement dans le panneau du bas.\par
+La partie inférieure de l'écran permet de visualiser et modifier la définition du règlement. Une fois que l'utilisateur a défini les règlements, il passe à l'étape de construction des ensembles de règlements.
 \begin{landscape}
     \begin{figure}
         \centering
@@ -161,12 +166,12 @@ La partie inférieure de l'écran permet de visualiser et modifier la définitio
     \end{figure}
 \end{landscape}
 \subsubsection{Ensembles de règlements}
-La page Ensemble de Règlements permet de modifier les ensembles de règlements et est montrée à la figure \ref{fig:page-ensemble-reglements}. Le bandeau de gauche donne une liste de l'ensemble des ensembles de règlements entreposés dans la table \ul{ensembles\_reglement\_stat}. L'icône en haut de la page permet d'ajouter un nouvel ensemble de règlements. La corbeille à côté de chaque ensemble de règlement permet de le supprimer au besoin. \par 
-On a ensuite le panneau de droite qui permet de voir les association qui sont faites dans la table \ul{association\_er\_reg\_stat} qui fait l'association entre les \ac{CUBF} et les règlements de stationnement. Les icônes de crayons permettent d'initier la modification des différents éléments. La modification des associations est faite dans un modal montrée à la figure \ref{fig:page-creation-ens-reg}. Les associations peuvent aussi être supprimées à l'aide de l'icône de corbeille.\par
+La page ensembles de règlements permet de modifier les ensembles de règlements et est montrée à la figure \ref{fig:page-ensemble-reglements}. Le bandeau de gauche donne une liste de tous les ensembles de règlements entreposés dans la table \ul{ensembles\_reglement\_stat}. L'icône en haut de la page permet d'ajouter un nouvel ensemble de règlements. La corbeille à côté de chaque ensemble de règlements permet de le supprimer au besoin. \par 
+Le panneau de droite qui permet de voir les associations qui sont faites dans la table \ul{association\_er\_reg\_stat}. Ces associations spécifient les règlements à utiliser pour chaque utilisation du sol. Les icônes de crayons permettent de débuter la modification des différents éléments. La modification des associations est faite dans une fenêtre montrée à la figure \ref{fig:page-creation-ens-reg}. Les associations peuvent aussi être supprimées à l'aide de l'icône de corbeille. La fenêtre supplémentaire permet de sélectionner les \ac{CUBF} en commençant par la catégorie la plus générale. S'il désire plus de précision, les bandes déroulantes sous la bande déroulante initiale permettent de spécifier des \ac{CUBF} de plus en plus détaillés. Les ensembles de règlements sont ensuite associés aux territoires en utilisant la page des ensembles de règlements-territoires.\par
 \begin{figure}[!h]
     \centering
     \includegraphics[width=0.45\linewidth]{CreationAssociationEnsReg.png}
-    \caption{Création d'une association d'ensemble de règlements}
+    \caption{Création d'une association entre un \ac{CUBF} et un règlement}
     \label{fig:page-creation-ens-reg}
 \end{figure}
 
@@ -180,8 +185,8 @@ On a ensuite le panneau de droite qui permet de voir les association qui sont fa
 \end{landscape}
 
 \subsubsection{Ensembles de Règlements Territoires}
-La page d'ensembles de règlements territoire permet d'associer les ensembles de règlements aux territoires. Elle permet de modifier la table \ul{association\_er\_territoire}.Cette étape se fait en sélectionnant sélectionnant une période et un territoire qui y est affecté. Un diagramme de Gantt montre l'évolution de la réglementation sur un territoire au fil des années. L'utilisateur peut ensuite ajouter ou modifier l'ensemble de règlement associé avec le territoire ou supprimer une association. À droite du diagramme de Gantt, une carte montre le territoire auquel on associe les ensembles de règlements. .\par
-La figure \ref{fig:page-ens-reg-terr} montre l'interface qui a été complété pour permettre cette édition.
+La page d'ensembles de règlements-territoire permet d'associer les ensembles de règlements aux territoires, modifiant ainsi la table \ul{association\_er\_territoire}. Cette étape se fait en sélectionnant une période et un territoire à l'aide des listes déroulantes en haut de la page. Un diagramme de Gantt montre l'évolution de la réglementation sur un territoire au fil des années. L'utilisateur peut ensuite ajouter,  modifier la liste des ensembles de règlements associés avec le territoire ou supprimer une association. À droite du diagramme de Gantt, une carte montre le territoire auquel on associe les ensembles de règlements.\par
+La figure \ref{fig:page-ens-reg-terr} montre l'interface qui a été complétée pour permettre cette édition. Une fois que l'utilisateur a défini ces associations, il peut passer aller voir comment les différents ensembles de règlements se comparent à la page d'analyse des règlements.\par
 \begin{landscape}
     \begin{figure}
         \centering
@@ -192,7 +197,7 @@ La figure \ref{fig:page-ens-reg-terr} montre l'interface qui a été complété 
 \end{landscape}
 
 \subsubsection{Analyse Règlements}
-La page d'analyse de règlements permet de comparer les ensemble de règlements graphiquement. L'utilisateur peut choisir des ensembles de règlements par localisation, par date de validité ou manuellement pour comparer le nombre minimum de places requises au travers du temps et de l'espace pour la municipalité. Une fois les ensembles de règlements choisis, l'utilisateur doit choisir une utilisation du sol en cliquant sur le crayon en haut à gauche de chaque graphique. La figure \ref{fig:params-analyse-ens-reg} montre le menu d'édition des graphiques. Les limites de l'axe des X peuvent aussi être changés dans le panneau d'édition. Les règlements qui n'ont pas d'unité compatibles peuvent ensuite être éliminés de la sélection. Une fois l'utilisation du sol choisie, les ensembles de règlements qui n'ont pas des unités compatibles sont automatiquement enlevées des graphiques. La figure \ref{fig:page-analyse-reg} montre la page avec les graphiques.
+La page d'analyse de règlements permet de comparer les ensembles de règlements graphiquement. L'utilisateur peut choisir des ensembles de règlements par localisation (pour voir l'évolution dans le temps), par date de validité (pour voir la distribution spatiale) ou manuellement. Une fois les ensembles de règlements choisis, l'utilisateur doit choisir une utilisation du sol en cliquant sur le crayon en haut à gauche de chaque graphique. La figure \ref{fig:params-analyse-ens-reg} montre le menu d'édition des graphiques. Les limites de l'axe des X peuvent aussi être changées dans le panneau d'édition. Les règlements qui n'ont pas d'unités compatibles sont ensuite éliminés de la sélection. Une fois l'utilisation du sol choisie, les ensembles de règlements qui n'ont pas des unités compatibles sont automatiquement enlevés des graphiques. La figure \ref{fig:page-analyse-reg} montre la page avec les graphiques. Si l'utilisateur est satisfait, il peut passer à la phase d'estimation de la capacité de stationnement.
 \begin{figure}[!h]
     \centering
     \includegraphics[width=1\linewidth]{images/AnalyseEnsRegEdition.png}
@@ -209,29 +214,29 @@ La page d'analyse de règlements permet de comparer les ensemble de règlements 
 \end{landscape}
 
 \subsubsection{Modification d'inventaire}
-La page de modification d'inventaire permet de valider et modifier l'inventaire créé. Elle est montrée à la figure \ref{fig:page-vis-inventaire}. L'écran est divisé en 4 sections. La première en haut permet de sélectionner le quartier à modifier, de changer entre représenter seulement les lots avec des données foncières (vs l'ensemble des lots du cadastre) et de changer l'échelle de couleur pour la visualisation. L'écran centrale donne une carte qui permet de voir le cadastre et de cliquer sur les lots à modifier. La section du bas donne une table avec l'ensemble des estimés de stationnement dans le quartier pour toutes les méthodes d'estimé. Le bandeau à droite permet de modifier donne accès aux détails reliés à l'estimé de stationnement. On peut accéder aux données foncières, cadastrales et les entêtes des règlements qui sont listés dans l'estimé.\par
-En cliquant sur le bouton modifier l'inventaire, un pan supplémentaire (Figure \ref{fig:page-inventaire-modif}) s'ouvre qui permet de sélectionner un type d'inventaire à implémenter. Les étapes reliées à chaque méthode sont montrées dans les figures \ref{fig:modif-inventaire-man-nonsub}, \ref{fig:modif-inventaire-semi-nonsub} et \ref{fig:modif-inventaire-auto-nonsub}. Dans tous les cas, une fenêtre est générée qui compare le nouveau calcul à l'ancien estimé. L'analyste peut alors écraser l'ancien estimé ou annuler si l'estimé semble déraisonnable. \par
+La page de modification d'inventaire permet de valider et modifier les estimations créées. Elle est montrée à la figure \ref{fig:page-vis-inventaire}. L'écran est divisé en 4 sections. La première en haut permet controle quatre fonctions. La liste déroulante à gauche sélectionne le quartier à modifier. Juste à sa droite, un bouton permet de recalculer l'ensemble des lots du quartier. La case -à cocher permet d'alterner entre voir tous les lots ou seulement les lots associés à des entrées du rôle. Finalement, la liste déroulante permettra à terme de changer la coloration des lots en fonction de différentes variables. L'implémentation actuelle permet seulement de mettre le nombre de places de stationnement. L'écran central donne une carte qui permet de voir le cadastre et de cliquer sur les lots à modifier. La section du bas donne une table avec l'ensemble des estimations de stationnement dans le quartier pour toutes les méthodes d'estimation. La carte et la table affichent le même lot s'il est sélectionné. Le bandeau à droite donne accès aux détails reliés aux estimations de la capacité de stationnement pour le lot sélectionné. On peut accéder aux données foncières, les champs du cadastre et les entêtes des règlements qui ont été utilisés pour calculer l'estimation. La fonctionnalité permettant de naviguer aux règlements à partir de cette page n'a pas encore été implémentée.\par
+En cliquant sur le bouton \og{modifier l'inventaire}\fg{}, une fenêtre modale  (Figure \ref{fig:page-inventaire-modif}) s'ouvre qui permet de sélectionner la méthode d'estimation à utiliser. Les étapes reliées à chaque méthode sont montrées dans les figures \ref{fig:modif-inventaire-man-nonsub}, \ref{fig:modif-inventaire-semi-nonsub} et \ref{fig:modif-inventaire-auto-nonsub}. Dans tous les cas, un tableau de confirmation est affiché qui compare la nouvelle valeur à l'estimation enregistrée. L'analyste peut alors écraser l'ancienne valeur ou annuler s'il le veut. \par
 \begin{figure}[h]
         \centering
         \begin{subfigure}[c]{0.4\textwidth}
             \includegraphics[width=1\linewidth]{images/ModifInventaireManuelle.png}
-            \caption{Entrée d'un inventaire manuel}
+            \caption{Entrée d'un comptage manuel}
             \label{fig:modif-inventaire-manuel}
         \end{subfigure}
         \begin{subfigure}[c]{0.4\textwidth}
             \centering
             \includegraphics[width=1\linewidth]{images/ResultatModifManuelle.png}
-            \caption{Confirmation d'un inventaire manuel}
+            \caption{Confirmation d'un comptage manuel}
             \label{fig:confirm-inventaire-manuel}
         \end{subfigure}
-        \caption{Processus de calcul d'inventaire semi- automatique}
+        \caption{Processus pour un comptage manuel}
          \label{fig:modif-inventaire-man-nonsub}
 \end{figure}  
 \begin{figure}[h]
     \centering
     \begin{subfigure}[c]{0.4\textwidth}
         \includegraphics[width=1\linewidth,center]{images/ModifEntreeSemiAutomatique.png}
-        \caption{Entrée d'une valeur pour un calcul semi automatique}
+        \caption{Entrée d'une valeur pour un calcul semi-automatique}
         \label{fig:modif-inventaire-semi}
     \end{subfigure}
     \begin{subfigure}[c]{0.4\textwidth}
@@ -239,7 +244,7 @@ En cliquant sur le bouton modifier l'inventaire, un pan supplémentaire (Figure 
         \caption{Confirmation entrée semi-automatique}
         \label{fig:conf-inv-semi}
     \end{subfigure}
-    \caption{Processus de calcul d'inventaire semi- automatique}
+    \caption{Processus de calcul d'une estimation semi-automatique}
     \label{fig:modif-inventaire-semi-nonsub}
 \end{figure}
 \begin{figure}[H]
@@ -252,18 +257,18 @@ En cliquant sur le bouton modifier l'inventaire, un pan supplémentaire (Figure 
     \end{subfigure}
     \begin{subfigure}[c]{0.4\textwidth}
         \includegraphics[width=1\linewidth,center]{images/ResultatModifAutomatique.png}
-        \caption{Confirmation inventaire automatique}
+        \caption{Confirmation d'une prédiction automatique}
         \label{fig:conf-inv-auto}
     \end{subfigure}
-    \caption{Processus de calcul d'inventaire automatique}
+    \caption{Processus de prédiction automatique}
     \label{fig:modif-inventaire-auto-nonsub}
 \end{figure}
-Finalement, l'outil permet aussi de lancer un calcul d'inventaire en lot pour un quartier complet à l'aide du bouton situé à côté de la sélection de quartier. L'outil web lance alors une procédure de calcul globale. Le nouvel inventaire est alors comparé à l'ancien estimé. Les inventaires peuvent alors être approuvés et sauvegardés un à un ou ils peuvent être approuvés en bloc. Cette dernière fonction peut être utile lorsque c'est la première fois qu'on génère l'inventaire. La figure \ref{fig:page-approb-inventaire-quartier} montre la page. la moitié gauche  montre l'ancien inventaire (en jaune), le nouvel inventaire est montré à droite (en bleu). Les items ayant changé sont surlignés en rouge. Un enjeu demeure autour de la précision d'arrondi menant à un nombre important de lots montrant un grand changement entre deux itérations.
+Finalement, l'outil permet aussi de lancer une prédiction pour un quartier complet à l'aide du bouton situé à côté de la sélection du quartier. La nouvelle prédiction est alors comparée à l'ancienne. Elles peuvent alors être approuvées et sauvegardées une à une ou approuvées en bloc. La figure \ref{fig:page-approb-inventaire-quartier} montre la page permettant la comparaison de l'ancienne /estimation à la nouvelle. La moitié gauche  montre l'ancienne estimation (en jaune) tandis que la nouvelle estimation est montrée à droite (en bleu). Les couleurs sont choisies selon le mnémonique \og{Old is gold, new is blue}\fg. {}Les valeurs ayant changé sont surlignées en rouge. Un enjeu demeure autour de la précision d'arrondi menant à un nombre important de lots montrant un grand changement entre deux itérations. 
 \begin{landscape}
   \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{images/PageInventaire.png}
-    \caption{Page de visualisation de l'inventaire}
+    \caption{Page de visualisation des prédictions}
     \label{fig:page-vis-inventaire}
 \end{figure}  
 \end{landscape}
@@ -271,7 +276,7 @@ Finalement, l'outil permet aussi de lancer un calcul d'inventaire en lot pour un
     \begin{figure}
         \centering
         \includegraphics[width=1\linewidth]{images/PageModifInventaire.png}
-        \caption{Panneau de modification de l'inventaire}
+        \caption{Panneau pour lancer les prédictions}
         \label{fig:page-inventaire-modif}
     \end{figure}
 \end{landscape}
@@ -280,19 +285,19 @@ Finalement, l'outil permet aussi de lancer un calcul d'inventaire en lot pour un
     \begin{figure}
         \centering
         \includegraphics[width=1\linewidth]{images/ApprobationInventaireQuartier.png}
-        \caption{Page d'approbation d'inventaire pour un quartier}
+        \caption{Page d'approbation des prédictions pour un quartier}
         \label{fig:page-approb-inventaire-quartier}
     \end{figure}
 \end{landscape}
-\subsubsection{Validation}
-Une page de validation a été mise en place pour mettre en places les catégories pour l'évaluation du modèle de prédiction. La page permet en premier lieu de créer les différentes catégories de manière récursive dans les options puis met une page de récolte et de visualisation des données. En choisissant la page de validation dans la barre de menu, l'utilisateur tombe sur la page montrée à la figure \ref{fig:page-evaluation-inventaire}. On y voit une liste de lots à valider, un tableau donnant les résultats de prédictions, un graphique permettant de comparer les mesures observées avec les prédictions. Les catégories d'évaluation peuvent être modifiées à partir de la page montrée a à la figure \ref{fig:page-modif-categ-evaluation}
+\subsubsection{Collecte des données d'évaluation}
+Une page de collecte de données et de paramétrage a été créée pour faciliter l'évaluation du modèle. En sélectionnant l'option d'évaluation dans le menu principal, l'utilisateur tombe sur la page montrée à la figure \ref{fig:page-evaluation-inventaire}. L'icône d'engrenage en haut à gauche de la page ouvre l'onglet de définition de catégories. L'onglet est montré à la figure \ref{fig:page-modif-categ-evaluation}. Après avoir spécifié les catégories, l'utilisateur clique sur le bouton rouge pour régénérer l'échantillon puis retourne à la page de collecte des donnes.  L'utilisateur peut alors cliquer sur la liste de lots qui constituent l'échantillon pour l'évaluation. En cliquant sur la liste, le tableau donnant les résultats de prédictions se remplit, et le graphique montrant la distribution des prédictions et des valeurs observées sont mis à jour. Les crayons à côté de la valeur estimée permettent de relancer le calcul pour le lot au besoin et l'utilisateur peut aussi entrer le nombre de places comptées. L'adresse du lot est donnée au cas où l'utilisateur veut vérifier de l'imagerie sur un autre site de cartographie. Pour visualiser les résultats de l'évaluation pour toutes les catégories, l'utilisateur peut alors aller à la page de sommaire d'évaluation.
 \begin{landscape}
     \begin{figure}
         \centering
         \includegraphics[width=1\linewidth]{images/PageEvaluation.png}
-        \caption{Page d'évaluation de prédiction d'inventaire automatique}
+        \caption{Page d'évaluation de prédictions automatique}
         \label{fig:page-evaluation-inventaire}
-    \end{figure}
+    s\end{figure}
     \begin{figure}
         \centering
         \includegraphics[width=1\linewidth]{images/PageCreationCategories.png}
@@ -301,7 +306,7 @@ Une page de validation a été mise en place pour mettre en places les catégori
     \end{figure}
 \end{landscape}
 \subsubsection{Sommaire d'évaluation de modèle}
-Une page de sommaire d'évaluation de modèle a aussi été développée pour pourvoir faire graphiquement le sommaire des erreurs sur les différentes catégories de validation définis à l'évaluation. La figure \ref{fig:page-sommaire-evaluation-modèle} montre la page en question. L'utilisateur peut modifier le nombre de graphiques montrés sur la page, limiter l'échelle des x et choisir le type de graphique. Aucune statistique agrégée n'a encore été montrée sur cette page. D'autre part, les échelles des y sont automatiquement mises à jour menant à des graphique parfois trompe l’œil lorsque deux graphiques sont l'un à côté de l'autre mais ont des échelles vastement différentes. 
+Une page de sommaire d'évaluation a aussi été développée pour pouvoir faire graphiquement le sommaire des erreurs sur les différentes catégories de validation définies à l'évaluation. La figure \ref{fig:page-sommaire-evaluation-modèle} montre la page en question. L'utilisateur peut modifier le nombre de graphiques montrés sur la page, limiter l'échelle des x et choisir le type de graphique. Aucune des étapes d'évaluation mathématique discutées dans la section \ref{sec:meth_valid} n'a encore été implémentée dans l'interface web. Si l'utilisateur est satisfait de l'estimation, il peut maintenant procéder à l'analyse.
 \begin{landscape}
     \begin{figure}
         \centering
@@ -311,19 +316,21 @@ Une page de sommaire d'évaluation de modèle a aussi été développée pour po
     \end{figure}
 \end{landscape}
 \subsubsection{Page d'analyse agrégée}
-Une fois l'inventaire complété, l'outil inclut aussi une page qui permet de graphiquement représenter l'inventaire sous différentes formes. La figure \ref{fig:page-ana-quartier} montre le point d’atterrissage. L'utilisateur peut alors sélectionner quatre types de représentation graphiques:
+L'outil inclut aussi une page qui permet de graphiquement représenter l'inventaire sous différentes formes. La figure \ref{fig:page-ana-quartier} montre le point d’atterrissage. L'utilisateur peut alors sélectionner quatre types de représentation graphique:
 \begin{itemize}
     \item une carte choroplèthe
     \item un histogramme
     \item un graphique XY
     \item un profile d'accumulation de véhicules
 \end{itemize}
-Au delà de la représentation graphique, d'autres options s'offrent à l'utilisateur. La première permet de sélectionner l'ordre de préférence des types d'inventaire. Cet ordre est utilisé pour toutes les variables reliées à l'inventaire. Ainsi, si deux estimés de l'inventaire existent pour un même lot. D'autre part, deux boutons sont présents qui permettent de recalculer les valeurs agrégées. Idéalement, ces fonctionnalités seraient gérées de manière périodique par la base de données plutôt que selon une requête manuelle, mais l'approche manuelle a semblé être la plus simple à implémenter dans un premier temps.\par
-Une fois la méthodologie sélectionnée, l'apparence de la page change. Les paragraphes suivants donneront des détails sur chacune des visualisation de l'inventaire disponibles:
-\paragraph{Cartographie} Dans le cas où l'utilisateur visualise les données sous forme de carte, il doit ensuite sélectionner une variable à cartographier. Les variables disponibles sont listées données dans la section \ref{ssec:indicateurs-secteurs-municipaux}. La figure \ref{fig:ana-quartier-carto}. La couche de fond peut être modifiée à partir de la liste déroulante en haut à droite avec \ac{OSM}, Géodésie Québec et une couche fournie par \ac{ESRI} comme options.
-\paragraph{Diagramme à barre} Des diagrammes à barres peuvent aussi être créées en utilisant les variables listées \ref{ssec:indicateurs-secteurs-municipaux}. La figure \ref{fig:ana-quartier-diagramme-barre} montre le résultat.
-\paragraph{Graphique XY} Des graphiques XY peuvent aussi être créées entre les variables listées \ref{ssec:indicateurs-secteurs-municipaux}. La figure \ref{fig:ana-quartier-XY} montre un exemple de graphique dans l'outil.
-\paragraph{Profils d'accumulation de véhicules} Les profils d'accumulation de véhicules sont une méthodologie développée par \parencite{diallo_methodology_2015}. Initialement, la méthode était utilisée pour inférer une capacité théorique de stationnement requise pour accommoder tous les déplacements en automobile recensés. Avec un inventaire, il est possible de comparer la capacité théorique à la capacité avérée. La figure \ref{fig:ana-quartier-PAV} montre l'interface.
+Au-delà de la représentation graphique, d'autres options s'offrent à l'utilisateur. La première permet de sélectionner l'ordre de préférence des méthodes d'estimations enregistrées pour un même lot. Cet ordre est utilisé pour toutes les variables reliées à au stationnement. D'autre part, deux boutons sont mis à disposition de l'utilsateur. Le premier permet met à jour les estimations  de stationnement agrégées par quartier. Le second met à jour les autres indicateurs qui doivent être calculés à partir de données brutes comme la part modale, le nombre de permis et la population.\par
+Une fois la méthodologie sélectionnée, l'apparence de la page change. Les paragraphes suivants donneront des détails sur chacune des visualisations disponibles:
+\paragraph{Cartographie} Dans le cas où l'utilisateur visualise les données sous forme de carte, il doit ensuite sélectionner une variable à cartographier. Les variables disponibles sont listées données dans la section \ref{ssec:indicateurs-secteurs-municipaux}. La figure \ref{fig:ana-quartier-carto} montre un exemple de ce type d'analyse. La couche de fond peut être modifiée à partir de la liste déroulante en haut à droite avec \ac{OSM}, Géodésie Québec et une couche fournie par \ac{ESRI} comme options. Ce choix de fond de carte est persistant entre les différentes pages.
+\paragraph{Diagramme à barres} Les variables listées  à la section \ref{ssec:indicateurs-secteurs-municipaux} peuvent être visualisées sous forme de diagramme à barres. La figure \ref{fig:ana-quartier-diagramme-barre} montre le résultat.
+\paragraph{Graphique XY} Les variables listées \ref{à la section ssec:indicateurs-secteurs-municipaux} peuvent être affichées sous forme de diagramme XY entre deux variables. La figure \ref{fig:ana-quartier-XY} montre un exemple de graphique dans l'outil.
+\paragraph{Profils d'accumulation de véhicules} Les profils d'accumulation de véhicules décrits initialement développés par \textcite{morency_characterizing_2008} et décrits à la section \ref{sec:meth_analyse} peuvent être calculés et visualisés à partir de cette page. Initialement, la méthode était utilisée pour inférer une capacité théorique de stationnement requise pour accommoder tous les déplacements en automobile recensés. Avec un inventaire, il est possible de comparer la capacité théorique à la capacité estimée avec l'outil. La figure \ref{fig:ana-quartier-PAV} montre l'interface.\par
+
+Une autre analyse potentielle est l'analyse de variabilité qui sera discutée à la section suivante.
 \begin{landscape}
     \begin{figure}
         \centering
@@ -357,7 +364,11 @@ Une fois la méthodologie sélectionnée, l'apparence de la page change. Les par
     \end{figure}
 \end{landscape}
 \subsubsection{Page d'analyse de variabilité}
-Une page a été mise en place pour piloter l'analyse de variabilité. L'utilisateur peut demander de recompiler l'inventaire réglementaire ou relancer les calculs pour émettre des prédictions de tous les lots avec tous les ensembles de règlements. Ce processus est assez onéreux en terme de temps et la page est présentement gelée pendant que ces calculs sont complétés. La figure \ref{fig:page-ana-var-barre} montre l'analyse de variabilité sous l'angle de diagramme à barre où chaque barre dénote un ensemble de règlement. Les diagrammes sont montrés pour l'inventaire prédit agrégé par grande utilisation du sol. La deuxième visualisation à la figure \ref{fig:page-ana-var-hist} est un histogramme montrant la fréquence de prédiction d'un inventaire cumulé par utilisation du sol. L'histogramme peut avoir le nombre de places où le ratio à l'inventaire actuel comme axe des x. Finalement, la troisième visualisation est spécifiquement faite pour visualiser l'effet de facteurs d'échelle sur l'inventaire total. Chaque boîte représente un facteur d'échelle avec la position en y des points blancs dénotant une prédiction. Pour tous les graphiques, les ensembles de règlements d'intérêt peuvent être choisis par l'utilisateur. 
+Une page a été mise en place pour piloter l'analyse de variabilité. L'utilisateur peut demander de recompiler l'inventaire réglementaire ou relancer les calculs pour émettre des prédictions de tous les lots avec tous les ensembles de règlements. Ce processus est assez onéreux en termes de temps et la page est gelée pendant que ces calculs sont complétés. La figure \ref{fig:page-ana-var-barre} montre l'analyse de variabilité représentée à l'aide d'un diagramme à barres où chaque barre dénote un ensemble de règlements. Les diagrammes sont montrés pour la capacité de stationnement  prédite agrégée par grande utilisation du sol. Le total de toutes les catégories est montré en bas à droite.\par
+ 
+La deuxième visualisation à la figure \ref{fig:page-ana-var-hist} est un histogramme montrant la fréquence de prédiction d'un inventaire cumulé par utilisation du sol. L'histogramme peut avoir le nombre de places où le ratio à l'inventaire actuel comme axe des x. \par
+
+Finalement, la troisième visualisation est spécifiquement faite pour visualiser l'effet de facteurs de conversion d'unité sur l'inventaire total. L'analyse est répétée en mettant un facteur d'échelle de 0.75, 1 et 1.25 sur le facteur $p_{conv,i}$ s'il est différent de 1. Chaque boîte représente un facteur d'échelle avec la position en y des points blancs dénotant une prédiction. Pour tous les graphiques, les ensembles de règlements d'intérêt peuvent être choisis par l'utilisateur. Cette section conclut la partie sur l'interface de l'outil développé. La section suivante donnera un aperçu des prédictions du modèle. 
 \begin{landscape}
     \begin{figure}
         \centering

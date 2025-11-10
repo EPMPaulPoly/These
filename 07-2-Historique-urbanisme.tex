@@ -2,7 +2,7 @@
 \section{Portée du chapitre}
 Cette section portera sur la solution proposée pour répondre aux objectifs mis de l'avant en \ref{sec:obj_recherche}. Les sections \ref{sec:geopolitique_quebec} et \ref{sec:politiques_stationnement} donneront un aperçu de la géopolitique de la ville de Québec depuis la Deuxième Guerre mondiale et les modalités des codes d'urbanisme depuis 1995. La section \ref{sec:meth_donnees_dispo} présente les données disponibles pour créer l'inventaire. La section \ref{sec:meth_urb_based_inventory} présente la méthodologie utilisée pour calculer l'inventaire basé sur les codes d'urbanisme. La section \ref{sec:meth_valid} discutera de la méthode utilisée pour évaluer la méthode d'inventaire. La section \ref{sec:meth_tool} discutera de l'architecture de l'outil web développé dans le cadre du mémoire et la section \ref{sec:meth_analyse} discutera des indicateurs utilisés pour l'analyse.
 \section{Géopolitique de la ville de Québec}\label{sec:geopolitique_quebec}
-Cette section va faire un historique de la géopolitique de la ville de Québec. Ce travaille dégage des grandes époques où les frontières sont restées stables. On observe trois grandes raflées de fusions \parencite{ville_de_quebec_reperes_nodate}:
+Cette section va faire un historique de la géopolitique de la ville de Québec. Ce travail dégage de grandes époques où les frontières sont restées stables. On observe trois grandes raflées de fusions \parencite{ville_de_quebec_reperes_nodate}:
 \begin{itemize}
   \item '65-'72:
   \SubItem{Duberger('70), Les Saules('70) et Neufchâtel ('71) rejoignent la ville de Québec}
@@ -83,8 +83,8 @@ La figure \ref{fig:municipalites_carto_historique} montre l'évolution des munic
 \FloatBarrier
 \section{Politiques de stationnement de la ville de Québec} \label{sec:politiques_stationnement}
 
-La ville de Québec est en processus d'abroger ces requis pour l'habitation pour les zones en milieu dense ou le long des axes de transport en commun \parencite{ville_de_quebec_rvq_2024}.\par
-  En plus de l'hétérogénéité spatiale qui est décrite à la section \ref{sec:geopolitique_quebec}, on constate aussi une hétérogénéité au niveau des catégories utilisées pour les requis de stationnement. Ceci est d'autant plus ardu que les catégories utilisées dans les minimums de stationnement n'ont pas nécessairement d'équivalent direct dans le \ac{CUBF} utilisé dans le rôle foncier du Québec \parencite[Annexe 2C.1]{gouvernement_du_quebec_manuel_2024}. Le tableau \ref{tab:req_stat_presents} et la figure \ref{fig:n_utilisation_CUBF_minimums} résument la présence d'un requis de stationnement explicité ou inféré pour un code \ac{CUBF} donné \parencite{ville_de_quebec_rvq_2024,ville_de_quebec_reglement_1995}. Les codes d'urbanisme des municipalités pré-fusion sont issus d'un résumé fourni par la ville\parencite{ville_de_quebec_synthese_2008,ville_de_quebec_synthese_2008-1}. Cette synthèse est nécessairement sujette à interprétation: les catégories dans le code d'urbanisme ne sont pas constantes entre les codes avec différents niveaux de superposition ou catégorisation par municipalité, rendant une synthèse difficile. La synthèse est recalée sur les codes \ac{CUBF} pour la simple raison que cette donnée sera exploitée pour choisir la réglementation à appliquer pour inférer une capacité de stationnement requise. Les données post-fusions sont issues l'historique des règlements disponibles en ligne pour la ville de Québec \parencite{ville_de_quebec_reglement_1995,ville_de_quebec_rvq_2009}. Les altérations du code \parencite{ville_de_quebec_rvq_2016,ville_de_quebec_rvq_2017,ville_de_quebec_rvq_2018,ville_de_quebec_rvq_2018-1,ville_de_quebec_rvq_2019,ville_de_quebec_rvq_2022,ville_de_quebec_rvq_2023,ville_de_quebec_rvq_2023-1,ville_de_quebec_rvq_2024} depuis l'harmonisation en 2009 ont été modélisées.
+La ville de Québec vient d'abroger ses requis pour l'habitation pour les zones en milieu dense ou le long des axes de transport en commun \parencite{ville_de_quebec_rvq_2024}.\par
+  En plus de l'hétérogénéité spatiale qui est décrite à la section \ref{sec:geopolitique_quebec}, on constate aussi une hétérogénéité au niveau des catégories utilisées pour les requis de stationnement. Ceci est d'autant plus ardu que les catégories utilisées dans les minimums de stationnement n'ont pas nécessairement d'équivalents direct dans le \ac{CUBF} utilisé dans le rôle foncier du Québec \parencite[Annexe 2C.1]{gouvernement_du_quebec_manuel_2024}. Le tableau \ref{tab:req_stat_presents} et la figure \ref{fig:n_utilisation_CUBF_minimums} résument la présence d'un requis de stationnement explicité ou inféré pour un code \ac{CUBF} donné \parencite{ville_de_quebec_rvq_2024,ville_de_quebec_reglement_1995}. Les codes d'urbanisme des municipalités préfusion sont issus d'un résumé fourni par la ville\parencite{ville_de_quebec_synthese_2008,ville_de_quebec_synthese_2008-1}. Cette synthèse est nécessairement sujette à interprétation: les catégories dans le code d'urbanisme ne sont pas constantes entre les codes avec différents niveaux de superposition ou catégorisation par municipalité, rendant une synthèse difficile. La synthèse est recalée sur les codes \ac{CUBF} pour la simple raison que cette donnée sera exploitée pour choisir la réglementation à appliquer pour inférer une capacité de stationnement requise. Les données post-fusions sont issues l'historique des règlements disponibles en ligne pour la ville de Québec \parencite{ville_de_quebec_reglement_1995,ville_de_quebec_rvq_2009}. Les altérations du code \parencite{ville_de_quebec_rvq_2016,ville_de_quebec_rvq_2017,ville_de_quebec_rvq_2018,ville_de_quebec_rvq_2018-1,ville_de_quebec_rvq_2019,ville_de_quebec_rvq_2022,ville_de_quebec_rvq_2023,ville_de_quebec_rvq_2023-1,ville_de_quebec_rvq_2024} depuis l'harmonisation en 2009 ont été modélisées.
   %\tiny
 
   
@@ -92,7 +92,7 @@ La ville de Québec est en processus d'abroger ces requis pour l'habitation pour
   \begin{landscape}
     \begin{center}
       \begin{longtable}{P{1.0cm} | p{7.5cm} | c || *{12}{P{5mm}}||p{6mm}} 
-        \caption{Présence de règlementation de stationnement selon le code \ac{CUBF}}\label{tab:req_stat_presents}\\
+        \caption{Présence de réglementation de stationnement selon le code \ac{CUBF}}\label{tab:req_stat_presents}\\
         \multirow{2}{*}{\STAB{\rotatebox[origin=c]{90}{Categ}}} & Juridiction & \STAB{\rotatebox[origin=c]{90}{Code \ac {CUBF}}} & \rotatebox[origin=c]{90}{  VDQ (2009-présent)} & \rotatebox[origin=c]{90}{VDQ (1995-2009)} & \rotatebox[origin=c]{90}{Beauport} & \rotatebox[origin=c]{90}{Cap-Rouge} & \rotatebox[origin=c]{90}{Charlesbourg} & \rotatebox[origin=c]{90}{Lac St-Charles} & \rotatebox[origin=c]{90}{Loretteville} & \rotatebox[origin=c]{90}{Sillery} & \rotatebox[origin=c]{90}{Ste-Foy} & \rotatebox[origin=c]{90}{St-Émile} & \rotatebox[origin=c]{90}{Val-Belair} & \rotatebox[origin=c]{90}{Vanier} & \rotatebox[origin=c]{90}{Nombre de requis} \\
         %& No. Règl. & MEFQ & R.V.Q. 1400 & V.Q.Z. 3 & 87-806 & 1151-95 & 96-2921 & 88-257 & 1386 & 950 & 3501 & 310-89 & VB-344-88 & 93-05-1245\\
         \hline  
@@ -192,7 +192,7 @@ La ville de Québec est en processus d'abroger ces requis pour l'habitation pour
   %\normalsize
   \FloatBarrier
   
-  Les objets sur lesquels sont basés les codes d'urbanisme sont aussi hétérogènes. Bien que la plupart des requis soient basé sur une surface de plancher, certains sont exprimés en fonction d'autres objets considérés pertinents. D'autre part, la même utilisation du sol n'est pas nécessairement légiférée en utilisant le même objet entre deux juridictions différentes. Le tableau \ref{tab:objet_pour_inference_capacite} synthétise les objets considérés et les usages pour lesquels ils sont utilisés.
+  Les objets sur lesquels sont basés les codes d'urbanisme sont aussi hétérogènes. Bien que la plupart des requis soient  basés sur une surface de plancher, certains sont exprimés en fonction d'autres objets considérés pertinents. D'autre part, deux municipalités n'utiliseront pas nécessairment la même unité pour formuler leur règlement. Le tableau \ref{tab:objet_pour_inference_capacite} synthétise les objets considérés et les usages pour lesquels ils sont utilisés.
 
 \begin{table}[h]
     
@@ -200,7 +200,7 @@ La ville de Québec est en processus d'abroger ces requis pour l'habitation pour
     \centering
     \begin{tabular}{p{4cm} p{10cm}}
       \hline
-      Objets considéré & Usages pertinents \\
+      Objets considérés & Usages pertinents \\
       \hline
       Superficie de plancher & Majoritaire\\
       Superficie par usage (bureau, plateau TV) & Station télé \\

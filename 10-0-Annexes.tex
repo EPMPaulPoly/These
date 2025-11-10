@@ -12,7 +12,7 @@
 %%  Toutes les annexes doivent être inclues dans ce document
 %%  les unes à la suite des autres.
 %%  All annexes must be included in this document one after the other.
-\Annexe{Détails des différents domaines de données de l'\ac{API}}
+\Annexe{Détails des différents domaines de données de l'\ac{API}}\label{ann:api-routes}
 \section{API: routes d'appel} 
 L'appel routes permet d'énumérer une liste des \ac{URI} disponibles, des méthodes possibles pour chaque \ac{URI} et des fonctions TypeScript appelées par chaque \ac{URI}
 \begin{itemize}
@@ -1299,3 +1299,169 @@ left join cubf on cubf.cubf=iv.cubf_principal
 	where iv.cubf_principal>=7000 and iv.cubf_principal<=7999   and (ir.n_places_min * iv.sup_planch_tot/iv.valeur_totale)>50
 order by n_places_min desc
 \end{lstlisting}
+
+\Annexe{Objets Informatiques et leurs méthodes}
+    \section{Objets informatiques utilisés dans le calcul de l'inventaire} \label{ssec:obj-informatique-impl-stat}
+        Selon l'\ac{OQLF} \parencite{oqlf_langage_2006}, les langages à objets sont définis de la manière suivante: 
+        \begin{definition}
+            Langage de programmation dans lequel les composantes d'un programme sont modulaires et définies comme des objets indépendants.[...] Les concepts d'encapsulation et d'héritage sont à la base des langages orientés objet. Ainsi, l'encapsulation permet la réunion des données et des procédures dans une même entité appelée objet.
+        \end{definition}
+        Ces langages sont associés à un degré d'abstraction où les objets représentent un concept associé au problème résolu. Cela permet une représentation fonctionnelle du problème et met l'emphase sur les structures de données utilisées et tend à être utilisé pour des problèmes plus complexes et pour faciliter la maintenance et la compréhension. On définit des méthodes qui ont pour but de manipuler ou créer ces objets \parencite{lawhead_learning_2023}. Pour ce projet, les objets suivants ont été créés.
+        \begin{itemize}
+            \item \ac{TD}
+            \item \ac{PR}
+            \item \ac{PRS}
+            \item \ac{RST}
+            \item \ac{PI}
+            \item \ac{PCI}
+        \end{itemize}
+        \subsection{TaxDataset ou ensemble de données foncières}
+        L'ensemble de données foncières est constitué de 3 paramètres représentés au moyen des librairies Pandas et GeoPandas. Ils sont énumérés ci-dessous et reprennent les champs utilisés dans la base de données.
+        \begin{itemize}
+            \item tax\_table: Rôle foncier incluant la géométrie (GeoDataFrame) (cf. Tableau \ref{tab:definition_role_foncier})
+            \item association\_table: Association du rôle foncier au cadastre (DataFrame) (cf. Tableau \ref{tab:definition_assoc_role_cadastre})
+            \item lot\_table: Géométrie des lots du cadastre (GeoDataFrame) (cf. Tableau \ref{tab:definition_cadastre})
+        \end{itemize}
+        Cet élément sert de base pour le calcul de la capacité de stationnement en fonction des règlements. Les méthodes suivantes sont créées pour cet objet: 
+        \begin{itemize}
+            \item plot: permet de créer une graphique matplotlib à part des données
+            \item explore: crée une carte interactive html qui est navigable dans un navigateur web
+            \item year\_filter: filtre l'ensemble de données en fonction des années de construction
+            \item territory\_filter: filtre l'ensemble de données en fonction des points du rôle foncier à l'intérieur d'un territoire
+            \item select\_by\_land\_uses: filtre l'ensemble de données en fonction des \ac{CUBF}
+            \item get\_land\_uses\_in\_set: renvoie une liste des \ac{CUBF} présents dans l'ensemble de données
+        \end{itemize}
+        En plus de ces méthodes qui s'appliquent à un objet. Les méthodes suivantes ont aussi été implémentées:
+        \begin{itemize}
+            \item tax\_database\_points\_from\_date\_territory: renvoie un ensemble de données en fonction de l'identifiant territoire, d'une date de début et une date de fin
+            \item tax\_database\_for\_analysis\_territory: renvoie un ensemble de données pour un territoire d'analyse en fournissant l'identifiant du quartier
+        \end{itemize}
+        
+        \subsection{ParkingRegulation ou Règlement de Stationnement} Cet objet représente un ou plusieurs règlements. Il est composé des tables suivantes:
+        \begin{itemize}
+            \item reg\_head: entête de règlement contenant les informations de la table (DataFrame) \underline{entete\_reg\_stationnement} (cf. Tableau \ref{tab:definition_entete_reg_stationnement})
+            \item reg\_def: définition mathématique à appliquer pour le règlement donnée (DataFrame) (cf. Tableau \ref{tab:definition_reg_stat_emp})
+            \item units\_table: table représentant les unités associées aux règlements définis (DataFrame) (cf. Tableau \ref{tab:definition_unite})
+        \end{itemize}
+        Les méthodes suivantes sont actuellement implémentées pour cet objet:
+        \begin{itemize}
+            \item get\_city\_regs: renvoie les règles qui dont l'attribut ville correspond à la chaîne de caractères fournie
+            \item get\_current\_reg: renvoie les règles dont l'année de fin est non existante dans l'entête
+            \item get\_regs\_for\_year: renvoie les règlements en vigueur à l'année fournie
+            \item get\_reg\_by\_id: renvoie les règlements dont le ou les identifiants sont égaux aux entiers fournis en entrée.
+        \end{itemize}
+        En plus de ces opérations qui complètent des opérations sur un objet de règlements déjà existants, une fonction additionnelle est disponible pour obtenir de l'information de la base de données:
+        \begin{itemize}
+            \item from\_postgis: renvoie un ou des règlements dont l'identifiant est égal aux identifiants fournis
+        \end{itemize}
+        
+        \subsection{ParkingRegulationSet ou ensemble de règlement}
+            Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il se distingue du règlement de deux manières. D'une part, il associe les règlements aux \ac{CUBF}. D'autre part, il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les paramètres suivants:
+            \begin{itemize}
+                \item start\_date: date d'entrée en vigueur de l'ensemble de règlements
+                \item end\_data: date d'abrogation de l'ensemble de règlements
+                \item description: chaîne de caractères décrivant textuellement l'ensemble
+                \item association\_table: table contenant les associations entre les \ac{CUBF} et les identifiants de règlements. Ces dernières sont définies par l'utilisateur.
+                \item expanded\_table: table qui représente les associations à l'ensemble des \ac{CUBF} en utilisant la convention décrite en \ref{sec:reg_association}. Cette table est générée automatiquement à partir de association\_table
+                \item ruleset\_id: identifiant de l'ensemble de règlements
+                \item land\_use\_table: table des \ac{CUBF} (cf. Tableau \ref{tab:definition_cubf})
+            \end{itemize}
+            Les méthodes suivantes ont été implémentées pour cet objet:
+            \begin{itemize}
+                \item validate\_dates: vérifie que les règlements qui constituent l'ensemble de règlements sont valides pour l'ensemble de sa validité
+                \item verify\_minimum\_fill: vérifie qu'au minimum, il y a les entrées pour les \ac{CUBF} 1 à 10 pour pouvoir généraliser à l'ensemble des \ac{CUBF}
+                \item expand\_land\_use\_table: génère expanded\_table à partir de association\_table
+                \item get\_unique\_reg\_ids: renvoie une liste des règlements utilisés dans l'ensemble de règlements
+                \item get\_unique\_reg\_ids\_using\_land\_use: renvoie une liste de règlements qui sont utilisés pour la liste de \ac{CUBF} fournie en entrée
+                \item get\_parking\_reg\_by\_id: renvoie un règlement dont l'identifiant est égal à l'entier fourni en entrée
+            \end{itemize}
+            En plus de ces méthodes, les fonctions suivantes sont implémentées dans ce fichier:
+            \begin{itemize}
+                \item from\_sql: renvoie un ensemble de règlements dont l'identifiant est égal à l'entier fourni
+            \end{itemize}
+        
+        \subsection{RegSetTerritory ou ensemble de règlements de territoires}
+            Un \ac{RST} associe un territoire à un ensemble de règlements. Ces paramètres sont listés ci-dessous:
+            \begin{itemize}
+                \item assoc\_id: identifiant d'association
+                \item territory\_info: une entrée dans la table \underline{cartographie\_secteurs}
+                \item parking\_regulation\_set: un \ac{PRS} qui est associé au territoire
+                \item start\_year: année de début de l'association qui est le maximum de l'année de début du \ac{PRS} et de la période à laquelle appartient le territoire
+                \item end\_year: année de fin de l'association qui est le minimum de l'année de fin du \ac{PRS} et de la fin de la période à laquelle appartient le territoire
+            \end{itemize}
+            Aucune méthode n'existe au sein de cet objet, mais certaines fonctions sont implémentées dans le même fichier pour les créer à partir de la base de données. Elles sont listées ci-dessous:
+            \begin{itemize}
+                \item get\_postgis\_rst\_by\_terr\_id: renvoie une liste de \ac{RST} qui sont associés au territoire dont l'identifiant est égal à l'entier fourni en entrée
+                \item get\_rst\_by\_tax\_data: renvoie deux listes. La première contient une liste de \ac{RST} qui ont une intersection spatiale avec les points du rôle foncier dans le \ac{TD}. La deuxième est une liste de \ac{TD}, les points du rôle dans ce \ac{TD} ont été construits pendant la période de validité du \ac{RST} et sont à l'intérieur de territoire
+                \item explore\_RST\_TD: crée une carte dynamique dans un fichier HTML pour pouvoir visualiser les ensembles de données.
+            \end{itemize}
+
+        
+        \subsection{ParkingInventory ou inventaire de stationnement}
+            L'inventaire de stationnement a un seul paramètre: 
+            \begin{itemize}
+                \item parking\_frame: table décrivant l'inventaire (cf. Tableau \ref{tab:definition_table_inventaire})
+            \end{itemize}
+            Les méthodes suivantes sont implémentées:
+            \begin{itemize}
+                \item concat: permet de concaténer deux inventaires
+                \item to\_postgis: sauvegarde l'inventaire dans la base de données
+                \item merge\_lot\_data: vérifie pour de multiples inventaires pour un même lot et additionne les inventaires
+            \end{itemize}
+            Les fonctions suivantes sont implémentées dans le même fichier: 
+            \begin{itemize}
+                \item subset\_operation: arbitre entre deux estimés si le règlement met en place des règlements
+                \item dissolve\_list: permet de dissoudre une liste d'inventaire en un seul objet d'inventaire
+                \item inventory\_duplicates\_agg\_function: Permet d'agréger des estimés de plusieurs périodes pour un même lot en ajoutant les estimés les uns aux autres et en concaténant les références aux règlements, ensembles de règlements et \ac{CUBF}
+                \item calculate\_inventory\_by\_analysis\_sector: fonction d'entrée pour calculer un inventaire pour un secteur d'analyse
+                \item calculate\_inventory\_by\_lot: fonction d'entrée pour calculer la capacité de stationnement pour un lot défini
+                \item to\_sql: fonction de sauvegarde de l'inventaire. Inclut une logique pour regarder si certains lots ont déjà un estimé dans la base de donnée et permet à l'utilisateur 
+                \item calculate\_parking\_for\_reg\_set\_territories: fonction d'aide qui itère sur les \ac{RST} fournis et appelle les fonctions nécessaires pour calculer le stationnement
+                \item calculate\_parking\_specific\_reg\_set: fonction d'aide qui itère sur les \ac{PR} au sein d'un \ac{RST} et appelle les fonctions nécessaires au calcule de l'inventaire.
+                \item calculate\_parking\_specific\_reg: fonction qui itère sur les sous-ensembles de chaque \ac{PR} pour appeller la fonction de calcul de l'estimation
+                \item calculate\_parking\_specific\_reg\_subset: fonction qui calcule la capacité de stationnement requise par chaque sous-ensemble au sein d'un règlement.
+            \end{itemize}
+        \subsection{ParkingCalculationInput ou intrant au calcul de stationnement}
+            Le \ac{PCI} hérite des DataFrame Pandas \parencite{pandas_contributors_pandas_2025}. La table a les colonnes suivantes:
+            \begin{itemize}
+                \item g\_no\_lot: l'identifiant de lot
+                \item \ac{CUBF}: le code d'utilisation du bien fonds
+                \item unite: l'unité que la ligne représentée
+                \item id\_reg\_stat: l'identifiant du règlement à appliquer
+                \item valeur: la valeur pour le lot et l'utilisation du bien-fonds
+            \end{itemize}
+            Dans le cas où cet objet est implémenté dans TypeScript(notamment pour le calcul semi-automatique), l'objet a les mêmes champs que le DataFrame, mais aucune fonction de calcul n'est implémentée.
+            Les méthodes suivantes sont implémentées pour l'objet:
+            \begin{itemize}
+                \item get\_by\_reg: renvoie les entrées associées à un règlement
+                \item filter\_by\_threshold: renvoie les entrées basées sur un seuil, inférieur et supérieur
+                \item get\_by\_unites: renvoie les données associées à l'identifiant d'unités
+                \item check\_units\_present: vérifie que pour chaque lot, les unités fournies en entrées sont présentes.
+            \end{itemize}
+            Plusieurs fonctions sont aussi fournies dans le même fichier:
+            \begin{itemize}
+                \item generate\_input\_from\_PRS\_TD: convertit les données foncières en données utilisables pour le calcul des capacités min et max en fonction des unités spécifiées dans les règlements
+            \end{itemize}
+        \subsection{StrateEchantillon}
+            Un objet est implémenté dans Typescript pour manipuler les catégories de validation. La description de strate est issue de la théorie d'échantillonnage, mais est évitée dans le cadre du mémoire pour éviter la confusion entre les méthodes inductives et la validation de modèle. Contrairement à la structure de données dans la base de données, l'objet utilise une structure de donnée récursive pour pouvoir créer un arbre pour les strates. Chaque entrée crée une seule condition sur une colonne de la table \ul{input\_validation}. Les paramètres de l'objet sont les suivants: 
+            \begin{itemize}
+                \item id\_strate: l'identifiant de la strate
+                \item nom\_strate: une brève description
+                \item nom\_colonne: la colonne de la table \ul{inputs\_validation} à laquelle s'applique la condtion
+                \item ids\_enfants: une liste des id\_strate des strates qui sont sous cette strate dans l'arbre
+                \item est\_racine: booléen indiquant que la strate est en haut de l'arbre (i.e cette strate est la première chargée dans la récursion) 
+                \item index\_ordre: index pour permettre (à terme ) de changer l'ordre des strates dans la visualisation
+                \item logements\_valides: condition supplémentaire pour indiquer que le nombre de logements doit être valide pour les entrées de cette strate
+                \item date\_valide : condition supplémentaire pour indiquer que le nombre de logements doit être valide pour les entrées de cette strate
+                \item superf\_valide : condition supplémentaire pour indiquer que la superficie to doit être valide pour les entrées de cette strate
+                \item n\_sample: spécifie la taille d'échantillon pour la strate
+                \item condition: une structure de donnée pour définir les conditions numérique qui s'appliquent sur la colonne spécifiée dans nom\_colonne 
+                    \begin{itemize}
+                        \item condition\_type: définit le type de condition comme une valeur unique (\og{equals}\fg{}) ou une étendue (\og{range}\fg{})
+                        \item condition\_min: minimum de l'étendue si la condition est de type \og{range}\fg{}
+                        \item condition\_max: maximum de l'étendue si la condition est de type \og{range}\fg{}
+                        \item condition\_valeur: valeur que doit avoir la colonne si la condition est de type \og{equals}\fg{}
+                    \end{itemize}
+                \item substrata: les strates dont les identifiants sont sauvegardés dans ids\_enfants
+            \end{itemize}
+            L'implémentation actuelle est plus procédurale qu'orientée objet et mériterait d'être améliorée dans des versions futures de l'outil. 
