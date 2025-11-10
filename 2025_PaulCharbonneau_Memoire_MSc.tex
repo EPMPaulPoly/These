@@ -68,7 +68,7 @@
 \usepackage[normalem]{ulem}% Pour la commande \ul (souligné)
 %%
 %% Recherche des images dans les répertoires. / Search for images in folders.
-\graphicspath{{./images/}{./dia/}{./gnuplot/}}
+\graphicspath{{./images/}}
 %%
 %% Un float peut apparaître seulement après sa définition, jamais avant. / A float can appear only after its definition, never before.
 \usepackage{flafter,placeins}
@@ -219,8 +219,10 @@
 \usepackage{listings} % Si on veut ajouter des lignes de codes dans le texte / If you want to add lines of code to the text
 \renewcommand{\lstlistingname}{Extrait de code}
 \renewcommand{\lstlistlistingname}{LISTE DES EXTRAITS DE CODE}
-\usepackage{silence}
-\WarningFilter{fancyhdr}{\headheight is too small}
+%\usepackage{silence}
+%\WarningFilter{fancyhdr}{\headheight is too small}
+%\WarningFilter{latex}{Underfull}
+%\WarningFilter{latex}{Overfull}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -398,13 +400,14 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{\listofappendices}{}
 \mainmatter
 \include{05-Introduction}       % Introduction au sujet de recherche.
+
 \include{06-0-Revue_litterature}  % Revue de littérature / Literature review
 \include{06-1-Revue-stat-mobilite}
 \include{06-2-Revue-stat-inventaire}
-
 \include{06-4-Revue-lacunes-recherche}
-%\include{07-1-Methodologie}             %  "Détails de la Solution" (Maîtrise)
-\include{07-2-Historique-urbanisme}
+
+          
+\include{07-2-Historique-urbanisme}%  "Détails de la Solution" (Maîtrise)
 \include{07-3-Donnees_disponibles}
 
 \include{07-5-Inventaire-code-urbanisme}
@@ -430,7 +433,8 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{
 	\appendix%
 	\newcommand{\Annexe}[1]{\annexe{#1}\setcounter{figure}{0}\setcounter{table}{0}\setcounter{footnote}{0}}%
-	\include{10-0-Annexes}}
+	\include{10-0-Annexes}
+}
     
 {}
 \end{document}

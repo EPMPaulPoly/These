@@ -11,7 +11,7 @@
         \begin{landscape}
         \begin{figure}
             \centering
-            \includegraphics[width = 0.9\linewidth]{dia/ERD_stationnement_propre.png}
+            \includegraphics[width = 0.9\linewidth]{images/ERD_stationnement_propre.png}
             \caption{Diagramme entité association de la base de données}\label{fig:offstreet_db_erd}
         \end{figure}
         \end{landscape}
@@ -21,7 +21,7 @@
         \subsubsection{Structure des données}
         \begin{figure}[ht!]
             \centering
-            \includegraphics[trim={110cm 50cm 0cm 49cm},clip,width=15cm]{dia/ERD_stationnement_propre.png}
+            \includegraphics[trim={110cm 50cm 0cm 49cm},clip,width=15cm]{images/ERD_stationnement_propre.png}
             \caption{Schéma relationnel pour le rôle foncier et le cadastre}
             \label{fig:offstreet_db_erd_input_data}
         \end{figure}
@@ -238,11 +238,12 @@
             La figure \ref{fig:offstreet_db_erd_history} montre le détail du diagramme d'entité relation de l'évolution des variations géopolitiques du territoire.
             \begin{figure}[h]
                 \centering
-                \includegraphics[trim={85cm 0 42.5cm 112.5cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
+                \includegraphics[trim={85cm 0 42.5cm 112.5cm}, clip, width=15cm]{images/ERD_stationnement_propre.png}
                 \caption{Structure de données pour l'historique géopolitique}\label{fig:offstreet_db_erd_history}
             \end{figure}
             La figure \ref{fig:er-counts-byperiod} montre le nombre de territoires par période. 
             Maintenant que la strcture est donné le portrait du découpage spatio-temporel sera donné à la section suivante
+        
         \subsubsection{Choix de la séparation géopolitique}
             Dans le cas de la ville de Québec, 6 grandes périodes ont été identifiées \parencite{ville_de_quebec_reperes_nodate,elections_quebec_atlas_2021}. Elles sont listées au tableau \ref{tab:histo_geopol}. L'utilisation d'une valeur nulle (S.V. dans le tableau) dans la colonne d'année de début implique que cette période sera utilisée pour toute construction avant 1970. L'utilisation d'une valeur nulle dans l'année de fin dénote un période encore en vigueur aujourd'hui.\par
             \begin{table}[h]
@@ -259,7 +260,7 @@
                     7 & Harmonisation & 2010 & S.V.\\ \hline
                 \end{tabular}
             \end{table}
-            Le découpage spatial précis est synthétisé à l'annexe \ref{ann:political-split-up}. De manière général, les découpages suivent la géopolitique de la ville des figures \ref{fig:municipalites_1988}, \ref{fig:municipalites_1980}, \ref{fig:municipalites_1972} et \ref{fig:municipalites_1965}. Une exception est faite pour Québec où l'hypothèse que le zonage avant 1995 était toute de même différencié entre le secteur des Rivières et les quartiers centraux. 
+            Le découpage spatial précis est synthétisé à l'annexe \ref{ann:political-split-up}. De manière général, les découpages suivent la géopolitique de la ville des figures \ref{fig:municipalites_1988}, \ref{fig:municipalites_1980}, \ref{fig:municipalites_1972} et \ref{fig:municipalites_1965}. Pour la ville centre, le découpage de la figure \ref{fig:types_unites_voisinage} sont répliqués. Une exception est faite pour Québec où l'hypothèse que le zonage avant 1995 était toute de même différencié entre le secteur des Rivières et les quartiers centraux. 
             
     
     \subsection{Données représentant les règlements} \label{ssec:survol-repres-reglements}
@@ -382,7 +383,7 @@
             La figure \ref{fig:offstreet_db_erd_rules} montre le schéma relationnel pour les règlements:
             \begin{figure}[!h]
                 \centering
-                \includegraphics[trim={85cm 106.25cm 0 0cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
+                \includegraphics[trim={85cm 106.25cm 0 0cm}, clip, width=15cm]{images/ERD_stationnement_propre.png}
                 \caption{Structure de données pour les règlements}\label{fig:offstreet_db_erd_rules}
             \end{figure}
             \FloatBarrier
@@ -595,7 +596,7 @@
             La figure \ref{fig:offstreet_db_erd_rulesets} montre les tables de la base de données qui permettent de définir un ensemble de règlements. Notons que la table cubf est visible à la Figure \ref{fig:offstreet_db_erd_input_data}.
             \begin{figure}[h]
                 \centering
-                \includegraphics[trim={0 0 155cm 105cm},clip,width=13cm]{dia/ERD_stationnement_propre.png}
+                \includegraphics[trim={0 0 155cm 105cm},clip,width=13cm]{images/ERD_stationnement_propre.png}
                 \caption{Schéma relationnel pour la définition d'ensembles de règlements et leur association au territoire}
                 \label{fig:offstreet_db_erd_rulesets}
             \end{figure}
