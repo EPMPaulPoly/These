@@ -1,19 +1,11 @@
-\section{Méthode d'inventaire hors rue basée sur les codes d'urbanisme}\label{sec:meth_urb_based_inventory}
-    %\subsection{Usages envisagés pour l'inventaire de stationnement}
-    %Plusieurs usages sont envisagés pour la base de données de stationnement. Il est important de les expliciter puisque cela sera la base pour l'établissement de requis pour la structure des données. Les usages envisagés sont donc les suivants:
-    %\begin{itemize}
-   %     \item Étude d'accessibilité d'une place de stationnement à un lieu donnée (requiert que les places soient explicitées individuellement)
-   %     \item Estimation du nombre de places de stationnement pour une destination précise
-   %     \item Estimation du nombre de places de stationnement dans une zone d'analyse
-    %    \item Analyse économétrique de l'effet de la tarification ou de la variation de l'offre sur les comportements de mobilité.
-    %    \item Estimation de la surface minéralisée pour l'entreposage des voitures pour l'application d'écofiscalité   
-    %\end{itemize}
-    %Basé sur ces cas d'usage envisagés, la situation idéale serait d'avoir une base de données complètement désagrégée qui liste chaque place de stationnement. A minima, l'information doit être disponible au niveau du lot cadastral. D'autre part, il doit être possible d'encoder les informations relatives à la tarification de l'espace, le nombre disponible par lot , pour permettre d'appliquer des mesures d'écofiscalité. Il doit être possible d'agréger ces mesures au niveau à des zones d'analyse de déplacement pour faire des analyses sur la capacité de stationnement dans une zone dans un modèle de transport. \par
-    %Ultimement, l'ensemble de ces requis soulève la nécessité d'une base de données personnalisée. En effet, dans le cas d'un inventaire basé sur la réglementation, \ac{OSM} est mal adapté puisqu'il requiert la localisation précise des places ce qui n'est pas nécessairement faisable. D'autre part, cela ne lie pas le stationnement à un identifiant qui permet à une entité gouvernementale d'appliquer cette fiscalité. Idéalement, la base de données serait capable d'exporter un format importable dans \ac{OSM} pour mettre à jour les données ouvertes au public.
+\section{Prédiction de la capacité de stationnement à partir des règlements d'urbanisme}\label{sec:meth_urb_based_inventory}
+    
     \subsection{Structure de la section}
         Cette section va couvrir la structure de données et la méthodologie pour le calcul de l'inventaire. La section commence par justifier le niveau d'agrégation choisi pour l'inventaire (sec. \ref{ssec:justif-ag-level-inventory}) avant d'introduire le schéma relationnel de données (sec. \ref{ssec:inv-erd-survol}). Ensuite, le chapitre survole la structure de données cadastrales et du rôle foncier (sec. \ref{ssec:data-cadastre-role}) ainsi qu'une analyse descriptive de leur distribution et des données manquantes (sec. \ref{ssec:analyse-descriptive-role-fonc}). La structure de l'inventaire est  présentée (sec. \ref{ssec:survol-table-inventaire}) avant d'introduire la représentation de l'historique géopolitique (sec. \ref{ssec:data-geopolitique-territoire}), puis la représentation des règlements (sec. \ref{ssec:survol-repres-reglements}) et comment ils sont associés pour représenter la réglementation en vigueur sur un territoire (sec. \ref{ssec:ensembles_association}). Pour terminer la partie sur les données, une brève description du découpage de la ville utilisé pour l'analyse agrégée (sec. \ref{ssec:struct_donnees_sec_analyse}). Cette partie du mémoire se tourne ensuite vers les objets informatiques implémentés pour représenter les différentes quantités d'intérêt (sec. \ref{ssec:obj-informatique-impl-stat}), l'introduction du logigramme du calcul de l'estimation de stationnement (sec. \ref{ssec:logigramme-calcul-stationnement}). Quatre parties du calcul sont ensuite détaillées en profondeur: la procédure de sélection des données foncières (sec. \ref{ssec:selection-donnees-foncieres}), la sélection des données du rôle géopolitiques et de réglementation (sec. \ref{ssec:select-reg-set-territories}), l'affectation des données du rôle foncier à ces dernières (sec. \ref{ssec:meth-assign-td-to-rst}). La section se termine en détaillant la procédure de calcul des minimums de stationnement (sec. \ref{ssec:meth-assign-td-to-rst}).
-    \subsection{Choix d'une unité d'agrégation du dénombrement}\label{ssec:justif-ag-level-inventory}
-    Dans un monde idéal, il serait possible d'avoir la localisation de chaque place de stationnement sur le territoire pour permettre de calculer un temps d'accès à chaque place de stationnement. Cela permettrait aussi d'affecter ce temps d'accès en fonction de l'achalandage du stationnement et éviterait des problèmes de microagrégation menant à de grands changements de stationnement accessible si un lot a un grand nombre de places de stationnement. Malheureusement, en utilisant la méthode à partir du rôle foncier, ce niveau de détail n'est pas possible et l'échelle la plus petite possible est au niveau du lot cadastral. 
+    
+    \subsection{Choix d'une unité spatiale de dénombrement}\label{ssec:justif-ag-level-inventory}
+        Dans un monde idéal, il serait possible d'avoir la localisation de chaque place de stationnement sur le territoire. Cela permettrait de déterminer des temps d'accès pour chaque place et d'affecter ce temps d'accès en fonction de l'achalandage du stationnement. Cette approche éviterait aussi des problèmes de microagrégation menant à de grands changements de stationnement accessible si un lot a un grand nombre de places de stationnement. Malheureusement, en utilisant la méthode à partir du rôle foncier, ce niveau de détail n'est pas possible et l'échelle la plus petite possible est au niveau du lot cadastral. 
+    
     \subsection{Schéma relationnel de données}\label{ssec:inv-erd-survol}
         La figure \ref{fig:offstreet_db_erd} montre la structure de la base de données utilisée pour l'estimation de l'offre de stationnement. De manière simplifiée, les \textbf{règlements} sont réunis en \textbf{ensembles de règlements}. Ces ensembles de règlements sont associés à un \textbf{territoire}. Chaque territoire est associé à une \textbf{période} où les limites géographiques des municipalités sont restées stables.
         \begin{landscape}
@@ -24,6 +16,7 @@
         \end{figure}
         \end{landscape}
         La base de données est implémentée dans PostgreSQL avec PostGIS pour pouvoir gérer les données spatiales du rôle foncier, du cadastre ainsi que de la division géopolitique du territoire.\par
+    
     \subsection{Données cadastrales et de taxation foncière} \label{ssec:data-cadastre-role}
         \subsubsection{Structure des données}
         \begin{figure}[ht!]
@@ -94,583 +87,622 @@
         La figure \ref{fig:offstreet_db_erd_input_data} montre les tables pertinentes en intrant. Il est concevable que ces tables soient entreposées dans un serveur différent si cette méthodologie était implémentée dans un milieu municipal.
         
         \FloatBarrier
+    
     \subsection{Analyse descriptive des données foncières}\label{ssec:analyse-descriptive-role-fonc}
-    Les données foncières sont centrales à la création de l'estimation. Il semble donc important de faire une courte description d'observations émises sur les données au fil de cette étude. Dans un premier temps, il semble important de noter à quel point la classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:lots-per-land-use}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans un même entrée du rôle foncier.
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.8\linewidth]{figures/distro-usage-lots.pdf}
-        \caption{Nombre de lots par utilisation du sol principale}
-        \label{fig:lots-per-land-use}
-    \end{figure}
-    D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal, mais est aussi présent dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une inférence de certaines propriétés en fonction de la valeur au rôle au besoin.
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.8\linewidth]{figures/distro-data-role-manquant.pdf}
-        \caption{Pourcentage des lots avec des propriétés manquantes}
-        \label{fig:role-missing-data}
-    \end{figure}
-    On peut aussi regarder le logement de manière plus fine en segmentant les lots de nature résidentiels en fonction du nombre de logements par lot. On constate que même si une majorité de lots sont unifamiliaux, la plupart des logements disponibles sont sur des lots multilogements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lots avec de multiples logements.
-    \begin{figure}
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics[width=0.7\linewidth]{figures/distro-typ-log.pdf}
-        \caption{Compte par type}
-        \label{fig:distro-typ-log}
-    \end{subfigure}
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics[width=0.8\linewidth]{figures/distro-typ-log-quartier.pdf}
-        \caption{Répartition par type et quartier}
-        \label{fig:distro-typ-log-quartier}
-    \end{subfigure}
-    \caption{Nombre de logements et de lots par compte de logement par lot et quartier}
-    \end{figure}
-    On peut aussi constater que les lots avec des données manquantes n'ont pas nécessairement des propriétés physiques similaires aux autres lots. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme la montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
-    Pour conclure, les données du rôle foncier donnent un portrait  désagrégé de l'utilisation des sols partout dans la métropole, permettant lorsque les données sont présentes, d'inférer les différentes variables requises pour estimer une capacité de stationnement. Des acronymes ont été attribués au quartier pour rendre les graphiques plus lisibles. Le tableau \ref{tab:acro-quartiers} énumère les acronymes.
-    \begin{landscape}
-        \begin{figure}
-            \centering  
-            \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
-            \caption{Distribution des valeurs selon d'utilisation et l'absence de données physiques}
-            \label{fig:missing-data-value-distr}
-        \end{figure}  
-        \begin{figure}
+        Les données foncières sont centrales à la création de l'estimation. Il semble donc important de faire une courte description d'observations émises sur les données au fil de cette étude. Dans un premier temps, il semble important de noter à quel point la classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:lots-per-land-use}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans un même entrée du rôle foncier.
+        \begin{figure}[h]
             \centering
-            \includegraphics[width=1\linewidth]{images/valeur_au_role_vs_variable_interet.png}
-            \caption{Relation entre la valeur au rôle et la principale variable d'intérêt}
-            \label{fig:rel-val-role-vs-var-int}
+            \includegraphics[width=0.8\linewidth]{figures/distro-usage-lots.pdf}
+            \caption{Nombre de lots par utilisation du sol principale}
+            \label{fig:lots-per-land-use}
         \end{figure}
-    \end{landscape}
+        D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal, mais est aussi présent dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une inférence de certaines propriétés en fonction de la valeur au rôle au besoin.
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.8\linewidth]{figures/distro-data-role-manquant.pdf}
+            \caption{Pourcentage des lots avec des propriétés manquantes}
+            \label{fig:role-missing-data}
+        \end{figure}
+        On peut aussi regarder le logement de manière plus fine en segmentant les lots de nature résidentiels en fonction du nombre de logements par lot. On constate que même si une majorité de lots sont unifamiliaux, la plupart des logements disponibles sont sur des lots multilogements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lots avec de multiples logements.
+        \begin{figure}
+        \begin{subfigure}[t]{1\textwidth}
+            \centering
+            \includegraphics[width=0.7\linewidth]{figures/distro-typ-log.pdf}
+            \caption{Compte par type}
+            \label{fig:distro-typ-log}
+        \end{subfigure}
+        \begin{subfigure}[t]{1\textwidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{figures/distro-typ-log-quartier.pdf}
+            \caption{Répartition par type et quartier}
+            \label{fig:distro-typ-log-quartier}
+        \end{subfigure}
+        \caption{Nombre de logements et de lots par compte de logement par lot et quartier}
+        \end{figure}
+        On peut aussi constater que les lots avec des données manquantes n'ont pas nécessairement des propriétés physiques similaires aux autres lots. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme la montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
+        Pour conclure, les données du rôle foncier donnent un portrait  désagrégé de l'utilisation des sols partout dans la métropole, permettant lorsque les données sont présentes, d'inférer les différentes variables requises pour estimer une capacité de stationnement. Des acronymes ont été attribués au quartier pour rendre les graphiques plus lisibles. Le tableau \ref{tab:acro-quartiers} énumère les acronymes.
+        \begin{landscape}
+            \begin{figure}
+                \centering  
+                \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
+                \caption{Distribution des valeurs selon d'utilisation et l'absence de données physiques}
+                \label{fig:missing-data-value-distr}
+            \end{figure}  
+            \begin{figure}
+                \centering
+                \includegraphics[width=1\linewidth]{images/valeur_au_role_vs_variable_interet.png}
+                \caption{Relation entre la valeur au rôle et la principale variable d'intérêt}
+                \label{fig:rel-val-role-vs-var-int}
+            \end{figure}
+        \end{landscape}
+        
+        \FloatBarrier
     
-    \FloatBarrier
     \subsection{Structure des données de l'inventaire final}\label{ssec:survol-table-inventaire}
-    La table \underline{inventaire\_stationnement} contient l'inventaire de stationnement. La table laisse la possibilité d'avoir plusieurs estimations par lot cadastral. Ainsi, l'usager peut utiliser une estimation réglementaire, entrer une valeur manuellement ou utiliser une méthode d'estimation basée sur les orthophotos pour remplir cette table. La table \ref{tab:definition_table_inventaire} résume les champs, le type de données et une brève description pour chaque variable:
-    \begin{table}[h]
-        \caption{Colonnes pour la table \underline{inventaire\_stationnement}}
-       \label{tab:definition_table_inventaire}
-        \centering
-        \begin{tabular}{m{0.2\textwidth}|m{0.4\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
-            \hline
-            Nom champ & Description & Type de données & CP/CS  \\
-            \hline
-            id\_inv & Clé primaire  & Serial & CP \\ 
-            n\_places\_min & Nombres de places minimales requises par la code d'urbanisme & Nombre réel &\\ 
-            n\_places\_max & Nombres de places minimales requises par la code d'urbanisme & Nombre réel & \\ 
-            n\_places\_estime & Nombres de places estimées si une méthode automatique est utilisée & Nombre réel&\\ 
-            n\_places\_mesure & Entrée manuelle du nombre de places de stationnement & Nombre réel&\\
-            methode\_estime & Champ pour indiquer le type d'estimé pour la ligne & \makecell[l]{Entier\\
-                                                                                             1 - Manuel\\
-                                                                                             2 - Régl.\\
-                                                                                             3 - Régl. entrée manuelle
-                                                                                            }  & \\ 
-            id\_reg\_stat & Règlements utilisés pour générer l'estimé. Si plusieurs sont utilisés, il peuvent être séparés par des virgules ou \textbackslash & Texte & \\ 
-            id\_er & Ensembles de règlements utilisés pour générer l'estimé. Si plusieurs sont utilisés, ils peuvent être séparés par des , ou des \textbackslash & Texte & \\ 
-            commentaire & Texte contenant un commentaire au besoin & Texte & \\ 
-            g\_no\_lot & Identifiant du lot pour l'inventaire & Texte & \\
-            \hline
-       \end{tabular}
-       
-   \end{table}\par
+            La table \underline{inventaire\_stationnement} contient l'inventaire de stationnement. La table laisse la possibilité d'avoir plusieurs estimations par lot cadastral. Ainsi, l'usager peut utiliser une estimation réglementaire, entrer une valeur manuellement ou utiliser une méthode d'estimation basée sur les orthophotos pour remplir cette table. La table \ref{tab:definition_table_inventaire} résume les champs, le type de données et une brève description pour chaque variable:
+            \begin{table}[h]
+                \caption{Colonnes pour la table \underline{inventaire\_stationnement}}
+                \label{tab:definition_table_inventaire}
+                \centering
+                \begin{tabular}{m{0.2\textwidth}|m{0.4\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
+                    \hline
+                    Nom champ & Description & Type de données & CP/CS  \\
+                    \hline
+                    id\_inv & Clé primaire  & Serial & CP \\ 
 
-    
+                    n\_places\_min & 
+                    Nombres de places minimales requises par la code d'urbanisme & 
+                    Nombre réel &
+                    \\ 
+
+                    n\_places\_max & 
+                    Nombres de places minimales requises par la code d'urbanisme & 
+                    Nombre réel & 
+                    \\ 
+
+                    n\_places\_estime & 
+                    Nombres de places estimées si une méthode automatique est utilisée & 
+                    Nombre réel &
+                    \\ 
+
+                    n\_places\_mesure & 
+                    Entrée manuelle du nombre de places de stationnement & 
+                    Nombre réel&
+                    \\
+
+                    methode\_estime & 
+                    Champ pour indiquer le type d'estimé pour la ligne & 
+                    \makecell[l]{Entier\\
+                    1 - Manuel\\
+                    2 - Régl.\\
+                    3 - Régl. entrée manuelle}  & \\ 
+                    id\_reg\_stat & 
+                    Règlements utilisés pour générer l'estimé. Si plusieurs sont utilisés, il peuvent être séparés par des virgules ou \textbackslash & 
+                    Texte & 
+                    \\ 
+
+                    id\_er & 
+                    Ensembles de règlements utilisés pour générer l'estimé. Si plusieurs sont utilisés, ils peuvent être séparés par des , ou des \textbackslash & 
+                    Texte & 
+                    \\ 
+
+                    commentaire & 
+                    Texte contenant un commentaire au besoin & 
+                    Texte & 
+                    \\ 
+
+                    g\_no\_lot & 
+                    Identifiant du lot pour l'inventaire & 
+                    Texte & 
+                    \\
+                    \hline
+                \end{tabular}  
+            \end{table}
+
     \subsection{Données de la géopolitique du territoire à l'étude} \label{ssec:data-geopolitique-territoire}
         \subsubsection{Structure de données}
-        Les règlements régissant la capacité de stationnement changent dans le temps du fait de changements réglementaires et des variations spatiales des municipalités. Cette section va détailler la structure de données permettant de prendre en compte la variation temporelle de la réglementation. Cet historique est représenté au moyen de deux tables: \underline{historique\_geopol} et \underline{cartographie\_secteurs}. \underline{historique\_geopol} représente les grandes périodes où le territoire a été stable. 
-        Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table {historique\_geopol} \par
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{historique\_geopol}}
-           \label{tab:definition_historique_geopol}
-           \centering
-           \begin{tabular}{m{0.25\textwidth}|m{0.3\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_periode & Clé primaire  & Serial & CP \\ 
-                nom\_periode & Nom de la période à montrer & Texte & \\ 
-                date\_debut\_periode & Année de début de la période & Entier & \\ 
-                date\_fin\_periode & Année de fin de la période & Entier & \\ 
-                \hline
-           \end{tabular}
-           
-       \end{table}\FloatBarrier
-       Le tableau \ref{tab:definition_cartographie_secteurs} montre les colonnes de la table \underline{cartographie\_secteurs}. Cette table sépare le territoire d'étude en municipalités pour la période définie dans la colonne id\_periode.\par
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{cartographie\_secteurs}}
-           \label{tab:definition_cartographie_secteurs}
-           \centering
-           \begin{tabular}{m{0.2\textwidth}|m{0.4\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_periode\_geo & Clé primaire  & Serial & CP \\ 
-                id\_periode & Colonne d'association à l'historique & Entier & CS\\ 
-                ville & Nom de la ville & Texte & \\ 
-                secteur & Secteur de la ville & Texte & \\ 
-                géométrie & Géométrie du secteur & Géométrie & \\
-                \hline
-           \end{tabular}
-           
-        \end{table}
-    Dans le cas de la ville de Québec, 6 grandes périodes ont été identifiées \parencite{ville_de_quebec_reperes_nodate,elections_quebec_atlas_2021}. Elles sont listées au tableau \ref{tab:histo_geopol}. L'utilisation d'une valeur nulle (S.V. dans le tableau) dans la colonne d'année de début implique que cette période sera utilisée pour toute construction avant 1970. L'utilisation d'une valeur nulle dans l'année de fin dénote un période encore en vigueur aujourd'hui.\par
-    \begin{table}[h]
-        \caption{Valeurs dans l'historique géopolitique utilisé dans le cadre de ce mémoire}\label{tab:histo_geopol}
-        \centering
-        \begin{tabular}{c p{5cm} c c}
-            \hline
-            \makecell{Identifiant\\ id\_periode} & \makecell[l]{Nom \\ nom\_periode} & \makecell{Année début \\ date\_debut\_periode} & \makecell{Année fin \\ date\_fin\_periode}\\ \hline
-            1 & Fondation - 1970 &  S.V. & 1970 \\
-            3 & Duberger, Saules et Neufchâtel fusion Québec & 1971 & 1975 \\
-            4 & Fusions Charlesbourg & 1976 & 1994 \\
-            5 & Inauguration VQZ-3 & 1995 & 1996 \\
-            6 & Abrogation Zone Prioritaire Ville de Québec & 1997 & 2009 \\
-            7 & Harmonisation & 2010 & S.V.\\ \hline
-        \end{tabular}
-    \end{table}
-    La figure \ref{fig:offstreet_db_erd_history} montre le détail du diagramme d'entité relation de l'évolution des variations géopolitiques du territoire.
-    \begin{figure}[h]
-        \centering
-        \includegraphics[trim={85cm 0 42.5cm 112.5cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
-        \caption{Structure de données pour l'historique géopolitique}\label{fig:offstreet_db_erd_history}
-    \end{figure}
-    La figure \ref{fig:er-counts-byperiod} montre le nombre de territoires par période.
-    \FloatBarrier
+            Les règlements régissant la capacité de stationnement changent dans le temps du fait de changements réglementaires et des variations spatiales des municipalités. Cette section va détailler la structure de données permettant de prendre en compte la variation temporelle de la réglementation. Cet historique est représenté au moyen de deux tables: \underline{historique\_geopol} et \underline{cartographie\_secteurs}. \underline{historique\_geopol} représente les grandes périodes où le territoire a été stable. 
+            Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table {historique\_geopol} \par
+            \begin{table}[h]
+                \caption{Colonnes pour la table \underline{historique\_geopol}}
+                \label{tab:definition_historique_geopol}
+                \centering
+                \begin{tabular}{m{0.25\textwidth}|m{0.3\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
+                        \hline
+                        Nom champ & Description & Type de données & CP/CS  \\
+                        \hline
+                        id\_periode & Clé primaire  & Serial & CP \\ 
+                        nom\_periode & Nom de la période à montrer & Texte & \\ 
+                        date\_debut\_periode & Année de début de la période & Entier & \\ 
+                        date\_fin\_periode & Année de fin de la période & Entier & \\ 
+                        \hline
+                \end{tabular}
+            \end{table}\FloatBarrier
+            Le tableau \ref{tab:definition_cartographie_secteurs} montre les colonnes de la table \underline{cartographie\_secteurs}. Cette table sépare le territoire d'étude en municipalités pour la période définie dans la colonne id\_periode.\par
+            \begin{table}[h]
+                \caption{Colonnes pour la table \underline{cartographie\_secteurs}}
+                \label{tab:definition_cartographie_secteurs}
+                \centering
+                \begin{tabular}{m{0.2\textwidth}|m{0.4\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
+                        \hline
+                        Nom champ & Description & Type de données & CP/CS  \\
+                        \hline
+                        id\_periode\_geo & Clé primaire  & Serial & CP \\ 
+                        id\_periode & Colonne d'association à l'historique & Entier & CS\\ 
+                        ville & Nom de la ville & Texte & \\ 
+                        secteur & Secteur de la ville & Texte & \\ 
+                        géométrie & Géométrie du secteur & Géométrie & \\
+                        \hline
+                \end{tabular}
+            \end{table}
+            La figure \ref{fig:offstreet_db_erd_history} montre le détail du diagramme d'entité relation de l'évolution des variations géopolitiques du territoire.
+            \begin{figure}[h]
+                \centering
+                \includegraphics[trim={85cm 0 42.5cm 112.5cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
+                \caption{Structure de données pour l'historique géopolitique}\label{fig:offstreet_db_erd_history}
+            \end{figure}
+            La figure \ref{fig:er-counts-byperiod} montre le nombre de territoires par période. 
+            Maintenant que la strcture est donné le portrait du découpage spatio-temporel sera donné à la section suivante
+        \subsubsection{Choix de la séparation géopolitique}
+            Dans le cas de la ville de Québec, 6 grandes périodes ont été identifiées \parencite{ville_de_quebec_reperes_nodate,elections_quebec_atlas_2021}. Elles sont listées au tableau \ref{tab:histo_geopol}. L'utilisation d'une valeur nulle (S.V. dans le tableau) dans la colonne d'année de début implique que cette période sera utilisée pour toute construction avant 1970. L'utilisation d'une valeur nulle dans l'année de fin dénote un période encore en vigueur aujourd'hui.\par
+            \begin{table}[h]
+                \caption{Valeurs dans l'historique géopolitique utilisé dans le cadre de ce mémoire}\label{tab:histo_geopol}
+                \centering
+                \begin{tabular}{c p{5cm} c c}
+                    \hline
+                    \makecell{Identifiant\\ id\_periode} & \makecell[l]{Nom \\ nom\_periode} & \makecell{Année début \\ date\_debut\_periode} & \makecell{Année fin \\ date\_fin\_periode}\\ \hline
+                    1 & Fondation - 1970 &  S.V. & 1970 \\
+                    3 & Duberger, Saules et Neufchâtel fusion Québec & 1971 & 1975 \\
+                    4 & Fusions Charlesbourg & 1976 & 1994 \\
+                    5 & Inauguration VQZ-3 & 1995 & 1996 \\
+                    6 & Abrogation Zone Prioritaire Ville de Québec & 1997 & 2009 \\
+                    7 & Harmonisation & 2010 & S.V.\\ \hline
+                \end{tabular}
+            \end{table}
+            Le découpage spatial précis est synthétisé à l'annexe \ref{ann:political-split-up}. De manière général, les découpages suivent la géopolitique de la ville des figures \ref{fig:municipalites_1988}, \ref{fig:municipalites_1980}, \ref{fig:municipalites_1972} et \ref{fig:municipalites_1965}. Une exception est faite pour Québec où l'hypothèse que le zonage avant 1995 était toute de même différencié entre le secteur des Rivières et les quartiers centraux. 
+            
     
     \subsection{Données représentant les règlements} \label{ssec:survol-repres-reglements}
         \subsubsection{Structure des données}
-        Puisque la formulation des règlements peut être relativement complexe. Deux tables sont utilisées. La première \underline{entete\_reg\_stationnement} représente les données administratives communes, tandis que \underline{reg\_stationnement\_empile} entrepose la représentation mathématique des règlements. Les champs de la table \underline{entete\_reg\_stationnement} sont énumérés dans le tableau \ref{tab:definition_entete_reg_stationnement}.  \par
-        \begin{table}[t]
-            \caption{Colonnes pour la table \underline{entete\_reg\_stationnement}}
-            \label{tab:definition_entete_reg_stationnement}
+            Puisque la formulation des règlements peut être relativement complexe. Deux tables sont utilisées. La première \underline{entete\_reg\_stationnement} représente les données administratives communes, tandis que \underline{reg\_stationnement\_empile} entrepose la représentation mathématique des règlements. Les champs de la table \underline{entete\_reg\_stationnement} sont énumérés dans le tableau \ref{tab:definition_entete_reg_stationnement}.  \par
+            \begin{table}[t]
+                \caption{Colonnes pour la table \underline{entete\_reg\_stationnement}}
+                \label{tab:definition_entete_reg_stationnement}
+                \centering
+                \begin{tabular}{m{0.2\textwidth}|m{0.4\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
+                    \hline
+                    Nom champ & Description & Type de données & CP/CS  \\
+                    \hline
+                    id\_reg\_stat & Clé primaire  & Serial & CP \\ 
+                    description & Description & Texte & \\ 
+                    annee\_debut\_reg & Année où le règlement est entré en vigueur & Entier & \\ 
+                    annee\_fin\_reg & Année d'abrogation du règlement & Entier & \\ 
+                    texte\_loi & Texte de loi où le règlement est introduit & Texte & \\
+                    article\_loi & Article de loi détaillant le règlement & Texte & \\
+                    paragraphe\_loi &  Paragraphe de la loi détaillant le règlement & Texte & \\ 
+                    ville & Ville où le règlement s'applique & Texte & \\
+                    \hline
+                \end{tabular}
+                
+            \end{table}
+            La formulation mathématique du nombre de places requises est entreposée dans la table \underline{reg\_stat\_empile}. Les étapes mathématiques pour une ligne d'un règlement de stationnement sont données aux équations \ref{eq:x_entree}, \ref{eq:places_max} et \ref{eq:places_min}  .
+            \begin{align}
+                x_{entree} &= R[C_{conv,i}] \times p_{conv,i} + c_{conv,i} \label{eq:x_entree}\\
+                n_{places,min} &= c_{s,min} + p_{s,min} \times x_{entree} \label{eq:places_min}\\
+                n_{places,max} &=  c_{s,max} + p_{s,max} \times x_{entree} \label{eq:places_max}
+            \end{align}
+            où $R$ est la ligne du rôle foncier en train d'être calculée, $C_{conv,i}$ représente la colonne à utiliser pour l'unité $i$, $p_{conv,i}$ représente la pente de conversion pour l'unité i, $c_{conv,i} $ représente l'ordonnée à l'origine pour la conversion de l'unité i. Ces constantes sont stockées dans la table \ul{multiplicateur\_facteur\_colonne}. $p_{s,min}$ et $p_{s,max}$ représentent les pentes des requis minimums tandis que $c_{s,min}$ et $c_{s,max}$ sont les ordonnées à l'origine qui sont stockées dans la table \ul{reg\_stat\_empile} discutée plus loin. L'unité à utiliser $i$ est elle aussi spécifiée dans la même table avec les seuils d'applicabilités $t_{s,reg}$. \par
+            Chaque règlement peut être divisé en sous-ensembles si le règlement propose plusieurs méthodes de calcul. L'hypothèse fondamentale est que les règlements sont essentiellement des combinaisons de formules mathématiques linéaires. La première ligne de chaque sous-ensemble donne l'opérateur à utiliser pour choisir entre l'estimation du sous-ensemble courant et du sous-ensemble précédent tandis que les lignes suivantes du sous-ensemble contiennent toutes le même opérateur qui dicte quel type d'opération à utiliser à l'intérieur du sous-ensemble.\par 
+            Si un opérateur de seuil (cf. tableau \ref{tab:operations_table}) est utilisé dans la formulation du règlement les variables $p_{s,min}$,$p_{s,max}$,$c_{s,min}$ et $c_{s,max}$ sont sélectionnées en fonction de la condition $x_{entree} \geq t_{s,reg}$. Si plusieurs seuils existent, les variables sont sélectionnées par intervalles de $t_{s,reg}$.\par
+            \begin{table}[H]
+                \caption{Colonnes pour la table \underline{reg\_stat\_empile}}
+            \label{tab:definition_reg_stat_emp}
             \centering
             \begin{tabular}{m{0.2\textwidth}|m{0.4\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_reg\_stat & Clé primaire  & Serial & CP \\ 
-                description & Description & Texte & \\ 
-                annee\_debut\_reg & Année où le règlement est entré en vigueur & Entier & \\ 
-                annee\_fin\_reg & Année d'abrogation du règlement & Entier & \\ 
-                texte\_loi & Texte de loi où le règlement est introduit & Texte & \\
-                article\_loi & Article de loi détaillant le règlement & Texte & \\
-                paragraphe\_loi &  Paragraphe de la loi détaillant le règlement & Texte & \\ 
-                ville & Ville où le règlement s'applique & Texte & \\
-                \hline
+                    \hline
+                    Nom champ & Description & Type de données & CP/CS  \\
+                    \hline
+                    id\_reg\_stat\_emp & Clé primaire  & Serial & CP \\ 
+                    id\_reg\_stat & Référence à l'entête du règlement & Entier & CS \\ 
+                    ss\_ensemble & Sous-ensemble pour la ligne & Entier & \\ 
+                    seuil & Seuil inférieur de validité du règlement $t_{s,reg}$& Entier & \\ 
+                    oper  & Opération utilisée  & Entier & \\
+                    cases\_fix\_min & Ordonnée à l'origine pour le minimum $c_{s,min}$ & Réel & \\
+                    cases\_fix\_max & Ordonnée à l'origine pour le maximum $c_{s,max}$ & Réel & \\ 
+                    pente\_min & Pente de la droite pour le minimum $p_{s,min}$ & Réel & \\
+                    pente\_max & Pente de la droite pour le maximum $p_{s,max}$& Réel & \\
+                    unite & Unité à utiliser. Cf tableau \ref{tab:operations_table} & Entier & \\
+                    \hline
             \end{tabular}
             
-        \end{table}
-        La formulation mathématique du nombre de places requises est entreposée dans la table \underline{reg\_stat\_empile}. Les étapes mathématiques pour une ligne d'un règlement de stationnement sont données aux équations \ref{eq:x_entree}, \ref{eq:places_max} et \ref{eq:places_min}  .
-        \begin{align}
-            x_{entree} &= R[C_{conv,i}] \times p_{conv,i} + c_{conv,i} \label{eq:x_entree}\\
-            n_{places,min} &= c_{s,min} + p_{s,min} \times x_{entree} \label{eq:places_min}\\
-            n_{places,max} &=  c_{s,max} + p_{s,max} \times x_{entree} \label{eq:places_max}
-        \end{align}
-        où $R$ est la ligne du rôle foncier en train d'être calculée, $C_{conv,i}$ représente la colonne à utiliser pour l'unité i, $p_{conv,i}$ représente la pente de conversion pour l'unité i, $c_{conv,i} $ représente l'ordonnée à l'origine pour la conversion de l'unité i. Ces constantes sont stockées dans la table \ul{multiplicateur\_facteur\_colonne}. $p_{s,min}$ et $p_{s,max}$ représentent les pentes des requis minimums tandis que $p_{s,min}$ et $p_{s,max}$ sont les ordonnées à l'origine qui sont stockées dans la table \ul{reg\_stat\_empile} discutée plus bas. \par
-        Chaque règlement peut être divisé en sous-ensembles si le règlement propose plusieurs méthodes de calcul. L'hypothèse fondamentale est que les règlements sont essentiellement des combinaisons de formules mathématiques linéaires. La première ligne de chaque sous-ensemble donne l'opérateur à utiliser pour choisir entre l'estimation du sous-ensemble courant et du sous-ensemble précédent tandis que les lignes suivantes du sous-ensemble contiennent toutes le même opérateur qui dicte quel type d'opération à utiliser à l'intérieur du sous-ensemble.\par 
-        Si un opérateur de seuil (cf. tableau \ref{tab:operations_table}) est utilisé dans la formulation du règlement les variables $p_{s,min}$,$p_{s,max}$,$c_{s,min}$ et $c_{s,max}$ sont sélectionnées en fonction de la condition $x_entree \geq t_{s,reg}$. Si plusieurs seuils existent, les variables sont sélectionnées par intervalles de $t_{s,reg}$.
-        \begin{table}[!b]
-            \caption{Colonnes pour la table \underline{reg\_stat\_empile}}
-           \label{tab:definition_reg_stat_emp}
-           \centering
-           \begin{tabular}{m{0.2\textwidth}|m{0.4\textwidth}m{0.15\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_reg\_stat\_emp & Clé primaire  & Serial & CP \\ 
-                id\_reg\_stat & Référence à l'entête du règlement & Entier & CS \\ 
-                ss\_ensemble & Sous-ensemble pour la ligne & Entier & \\ 
-                seuil & Seuil inférieur de validité du règlement $t_{s,reg}$& Entier & \\ 
-                oper  & Opération utilisée  & Entier & \\
-                cases\_fix\_min & Ordonnée à l'origine pour le minimum $c_{s,min}$ & Réel & \\
-                cases\_fix\_max & Ordonnée à l'origine pour le maximum $c_{s,max}$ & Réel & \\ 
-                pente\_min & Pente de la droite pour le minimum $p_{s,min}$ & Réel & \\
-                pente\_max & Pente de la droite pour le maximum $p_{s,max}$& Réel & \\
-                unite & Unité à utiliser. Cf tableau \ref{tab:operations_table} & Entier & \\
-                \hline
-           \end{tabular}
-           
-        \end{table}    
-        Les valeurs possibles des opérateurs sont listées au tableau \ref{tab:operations_table}. Il est important de noter que les opérations 1 et 4 sont implémentées à l'intérieur d'un même sous-ensemble, alors que les opérations 3-6 sont implémentées entre deux sous-ensembles.\par
-        \begin{table}[h]
-            \caption{Entrées dans la table liste\_operations}
-            \label{tab:operations_table}
+            \end{table}    
+            Les valeurs possibles des opérateurs sont listées au tableau \ref{tab:operations_table}. Il est important de noter que les opérations 1 et 4 sont implémentées à l'intérieur d'un même sous-ensemble, alors que les opérations 3-6 sont implémentées entre deux sous-ensembles.\par
+            \begin{table}[H]
+                \caption{Entrées dans la table liste\_operations}
+                \label{tab:operations_table}
+                \centering
+                \begin{tabular}{cl}
+                    \hline
+                    id\_operation & desc\_operation  \\ \hline
+                    1 & + (absolu)\\
+                    3 & ou (plus contraignant) \\
+                    4 & changement critère au-delà seuil (>=)\\
+                    6 & ou simple \\ \hline
+                \end{tabular}
+            \end{table}
+            Le champ unité de la table \underline{reg\_stat\_empile} est la clé primaire pour la table \uline{multiplicateur\_ facteurs\_colonnes}. Le tableau \ref{tab:definition_unite} en décrit les champs. Cette table permet de faire la conversion entre les données du rôle foncier et les unités contenues dans la réglementation en utilisant l'équation \ref{eq:x_entree}.\par
+            \begin{table}[H]
+                \caption{Colonnes pour la table \underline{multiplicateur\_facteur\_colonne}}
+            \label{tab:definition_unite}
             \centering
-            \begin{tabular}{cl}
-                 \hline
-                 id\_operation & desc\_operation  \\ \hline
-                 1 & + (absolu)\\
-                 3 & ou (plus contraignant) \\
-                 4 & changement critère au-delà seuil (>=)\\
-                 6 & ou simple \\ \hline
+            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                    \hline
+                    Nom champ & Description & Type de données & CP/CS  \\
+                    \hline
+                    id\_unite & Clé primaire  & Serial & CP \\  
+                    colonne\_role\_foncier & Colonne du rôle foncier à utiliser pour cette unité $C_{conv,i}$ & Texte & \\
+                    facteur\_correction & Facteur de multiplication pour l'unité $p_{conv,i}$ & Réel & \\
+                    cubf & Optionnel: facteur différent pour un CUBF spécifique & Entier & \\
+                    desc\_unite & Description de l'unité & Texte & \\
+                    abscisse\_correction & Ordonnée à l'origine de la pente de regression $c_{conv,i}$& Réel &  \\
+                    \hline
             \end{tabular}
             
-        \end{table}
-        Le champ unité de la table \underline{reg\_stat\_empile} est la clé primaire pour la table \uline{multiplicateur\_ facteurs\_colonnes}. Le tableau \ref{tab:definition_unite} en décrit les champs. Cette table permet de faire la conversion entre les données du rôle foncier et les unités contenues dans la réglementation en utilisant l'équation \ref{eq:x_entree}.\par
-        \begin{table}[!h]
-            \caption{Colonnes pour la table \underline{multiplicateur\_facteur\_colonne}}
-           \label{tab:definition_unite}
-           \centering
-           \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_unite & Clé primaire  & Serial & CP \\  
-                colonne\_role\_foncier & Colonne du rôle foncier à utiliser pour cette unité $C_{conv,i}$ & Texte & \\
-                facteur\_correction & Facteur de multiplication pour l'unité $p_{conv,i}$ & Réel & \\
-                cubf & Optionnel: facteur différent pour un CUBF spécifique & Entier & \\
-                desc\_unite & Description de l'unité & Texte & \\
-                abscisse\_correction & Ordonnée à l'origine de la pente de regression $c_{conv,i}$& Réel &  \\
-                \hline
-           \end{tabular}
-           
-        \end{table}   
-        \clearpage
-        Le tableau \ref{tab:unite_pertinentes_minimum_stat} donne  le contenu de la table multiplicateur\_facteur\_colonnes. Ce tableau contient les facteurs de conversion d'unités, toutes les conversions sont supposées linéaires.  Ces conversions ont été déterminées par heuristique sans en faire la calibration. D'autre part, malgré l'intention initiale de permettre différents facteurs de conversions en fonction du \ac{CUBF}, cette fonctionnalité n'a pas été mise en place par manque de temps. \par
-        \begin{table}[h]
-            \caption{Contenu type de la table \underline{multiplicateur\_facteur\_colonnes}}\label{tab:unite_pertinentes_minimum_stat}
-            \centering
-            \begin{tabular}{c l c c p{3cm}}
-                \hline
-                id\_unite & colonne\_role\_foncier & facteur\_correction & ordonnée & desc\_unite \\ \hline
-                1 & rl0312a & 1 & 0 & chambre\\
-                2 & rl0311a & 1 & 0 & logement \\
-                4 & rl0308a & 1 & 0 & metre carré d'étage\\
-                5 & rl0308a & 1 & 0 & metre carré bureau\\
-                6 & rl0308a & 1 & 0 & metre carré salle production \\
-                7 & rl0302a & 1 & 0 & metre carré terrain\\
-                8 & rl0308a & 0.5 & 0 & siège \\
-                9 & S.V. & 1 & 0 & poste de travail \\
-                10 & rl0308a & 0.04 & 0 & salle \\
-                11 & rl0308a & 0.04 & 0 & lit \\
-                12 & S.V. & 1 & 0& personne \\
-                13 & rl0308a & 0.1 & 0 & employé \\
-                14 & 0.1 & 1 & 0 & étudiant \\
-                15 & rl0308a & 0.05 & 0 & médecin \\
-                16 & S.V. & 1 & 0 & quai \\
-                17 & rl0308a & 0.05 & 0 & voie de service \\
-                18 & rl0302a & 0.00036 & 0 & vert \\
-                19 & rl0302a & 0.00036 & 0 & allee de pratique \\
-                20 & rl0308a & 0.0006 & 0 & plateau sportif \\ \hline
-            \end{tabular}
-            
-        \end{table}\clearpage
-        La figure \ref{fig:offstreet_db_erd_rules} montre le schéma relationnel pour les règlements:
-        \begin{figure}[!h]
-            \centering
-            \includegraphics[trim={85cm 106.25cm 0 0cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
-            \caption{Structure de données pour les règlements}\label{fig:offstreet_db_erd_rules}
-        \end{figure}
-        \FloatBarrier
+            \end{table}   
+            \clearpage
+            Le tableau \ref{tab:unite_pertinentes_minimum_stat} donne  le contenu de la table multiplicateur\_facteur\_colonnes. Ce tableau contient les facteurs de conversion d'unités, toutes les conversions sont supposées linéaires.  Ces conversions ont été déterminées par heuristique sans en faire la calibration. D'autre part, malgré l'intention initiale de permettre différents facteurs de conversions en fonction du \ac{CUBF}, cette fonctionnalité n'a pas été mise en place par manque de temps. \par
+            \begin{table}[h]
+                \caption{Contenu type de la table \underline{multiplicateur\_facteur\_colonnes}}\label{tab:unite_pertinentes_minimum_stat}
+                \centering
+                \begin{tabular}{c l c c p{3cm}}
+                    \hline
+                    id\_unite & colonne\_role\_foncier & facteur\_correction & ordonnée & desc\_unite \\ \hline
+                    1 & rl0312a & 1 & 0 & chambre\\
+                    2 & rl0311a & 1 & 0 & logement \\
+                    4 & rl0308a & 1 & 0 & metre carré d'étage\\
+                    5 & rl0308a & 1 & 0 & metre carré bureau\\
+                    6 & rl0308a & 1 & 0 & metre carré salle production \\
+                    7 & rl0302a & 1 & 0 & metre carré terrain\\
+                    8 & rl0308a & 0.5 & 0 & siège \\
+                    9 & S.V. & 1 & 0 & poste de travail \\
+                    10 & rl0308a & 0.04 & 0 & salle \\
+                    11 & rl0308a & 0.04 & 0 & lit \\
+                    12 & S.V. & 1 & 0& personne \\
+                    13 & rl0308a & 0.1 & 0 & employé \\
+                    14 & 0.1 & 1 & 0 & étudiant \\
+                    15 & rl0308a & 0.05 & 0 & médecin \\
+                    16 & S.V. & 1 & 0 & quai \\
+                    17 & rl0308a & 0.05 & 0 & voie de service \\
+                    18 & rl0302a & 0.00036 & 0 & vert \\
+                    19 & rl0302a & 0.00036 & 0 & allee de pratique \\
+                    20 & rl0308a & 0.0006 & 0 & plateau sportif \\ \hline
+                \end{tabular}
+                
+            \end{table}\clearpage
+            La figure \ref{fig:offstreet_db_erd_rules} montre le schéma relationnel pour les règlements:
+            \begin{figure}[!h]
+                \centering
+                \includegraphics[trim={85cm 106.25cm 0 0cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
+                \caption{Structure de données pour les règlements}\label{fig:offstreet_db_erd_rules}
+            \end{figure}
+            \FloatBarrier
          
         \subsubsection{Analyse descriptive des règlements recensés}
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=1\linewidth]{figures/distr-reg-par-ville.pdf}
-            \caption{Nombre de règlements par ville, règlement et date d'entrée en vigueur}
-            \label{fig:nombre-reg-date}
-        \end{figure}
-        Les graphiques de cette section donnent un portrait des règlements recensés. Il est important de noter que les règlements n'ont été recensés que jusqu'au milieu des années '90. Les plus vieux règlements recensés ont été répliqués pour être utilisés pour les plus vieilles juridictions. Ceci implique que même les propriétés construites avant l'avènement de l'automobile sont modélisées comme ayant un nombre de places minimum. Cette approche peut sembler contre-intuitive puisque ces règlements n'existaient pas auparavant, mais beaucoup de vieilles propriétés ont vu des stationnements aménagés après construction. Aucune analyse de sensibilité n'a été complétée pour voir quel effet cela aurait sur l'offre de stationnement prédite, particulièrement dans les quartiers centraux.\par
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=1\linewidth]{figures/distr-reg-par-ville.pdf}
+                \caption{Nombre de règlements par ville, règlement et date d'entrée en vigueur}
+                \label{fig:nombre-reg-date}
+            \end{figure}
+            Les graphiques de cette section donnent un portrait des règlements recensés. Il est important de noter que les règlements n'ont été recensés que jusqu'au milieu des années '90. Les plus vieux règlements recensés ont été répliqués pour être utilisés pour les plus vieilles juridictions. Ceci implique que même les propriétés construites avant l'avènement de l'automobile sont modélisées comme ayant un nombre de places minimum. Cette approche peut sembler contre-intuitive puisque ces règlements n'existaient pas auparavant, mais beaucoup de vieilles propriétés ont vu des stationnements aménagés après construction. Aucune analyse de sensibilité n'a été complétée pour voir quel effet cela aurait sur l'offre de stationnement prédite, particulièrement dans les quartiers centraux.\par
+            
+            La figure \ref{fig:nombre-reg-date} montre la distribution des règlements par ville, texte de loi, année d'entrée en vigueur et d'abrogation et ville. On constate que les règlements après l'harmonisation des règlements dominent les comptes. Ceci est dû au fait que ces règlements étaient facilement disponibles et constitue un important biais de l'étude. \par 
         
-        La figure \ref{fig:nombre-reg-date} montre la distribution des règlements par ville, texte de loi, année d'entrée en vigueur et d'abrogation et ville. On constate que les règlements après l'harmonisation des règlements dominent les comptes. Ceci est dû au fait que ces règlements étaient facilement disponibles et constitue un important biais de l'étude. \par 
-       
-        Pour les règlements recensés, la figure \ref{fig:n-lignes-par-reg} montre la distribution du nombre de lignes requises pour définir les règlements, ceci est un proxy pour la complexité du règlement.\par
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=1\linewidth]{figures/lignes-par-reglement.pdf}
-            \caption{Distribution du nombre de lignes pour définir les règlements recensés}
-            \label{fig:n-lignes-par-reg}
+            Pour les règlements recensés, la figure \ref{fig:n-lignes-par-reg} montre la distribution du nombre de lignes requises pour définir les règlements, ceci est un proxy pour la complexité du règlement.\par
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=1\linewidth]{figures/lignes-par-reglement.pdf}
+                \caption{Distribution du nombre de lignes pour définir les règlements recensés}
+                \label{fig:n-lignes-par-reg}
+            \end{figure}
+            \clearpage
+            La figure \ref{fig:regs-per-operation} donne le nombre de règlements par combinaison d'opérateurs en présence.\par
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.9\linewidth]{figures/reglement-par-operation.pdf}
+                \caption{Nombre de règlements par type d'opération}
+                \label{fig:regs-per-operation}
         \end{figure}
-        \clearpage
-        La figure \ref{fig:regs-per-operation} donne le nombre de règlements par combinaison d'opérateurs en présence.\par
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=0.9\linewidth]{figures/reglement-par-operation.pdf}
-            \caption{Nombre de règlements par type d'opération}
-            \label{fig:regs-per-operation}
-       \end{figure}
-        La figure \ref{fig:regs-per-unit} donne le nombre de règlements utilisant les unités mentionnées à la section \ref{sec:politiques_stationnement}. \par
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=0.9\linewidth]{figures/reglement-par-unite.pdf}
-            \caption{Nombre d'utilisation de différentes unités dans les règlements recensés}
-            \label{fig:regs-per-unit}
-        \end{figure}
-        Plusieurs règlements ont des seuils qui sont utilisés pour différentier le nombre de places selon la quantité d'intérêt. Ce type de règlement est particulièrement présent pour les logements où les municipalités ont typiquement requis des stationnements supplémentaires pour les lots avec plusieurs logements pour accommoder les visiteurs. La figure \ref{fig:seuil-log-reglement} montre le nombre de fois que différents seuils sont utilisés parmi les 81 règlements de stationnement, dont 27 utilisent des seuils. Certains règlements ont plusieurs seuils dans leur définition.
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=1\linewidth]{figures/regl-log-par-seuil.pdf}
-            \caption{Nombre d'observation de seuil dans les règlements de logement}
-            \label{fig:seuil-log-reglement}
-        \end{figure}
-        Comme mentionné plus haut, des règlements qui sont des duplications des règlements les plus vieux sondés ont été créés. Leur nombre est donné à la figure \ref{fig:regs-before-1985}:
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=1\linewidth]{figures/distr-reg-dupl.pdf}
-            \caption{Règlements dupliqués pour faire prédictions avant recensement}
-            \label{fig:regs-before-1985}
-        \end{figure}
-        Ceci conclut le bref survol des règlements recensés. Quelques exemples de règlements seront maintenant présentés.
-        \FloatBarrier
-    \subsubsection{Exemple 1: Clinique médicale} 
-        Admettons un règlement qui requiert 1 place par salle de consultation  plus une place par employé plus une place par médecin ou une place par 20 mètres carrés, au plus contraignant. Les entrées dans la table reg\_stat\_empile seraient telles que montrées au tableau \ref{tab:ex_reg_stat_clinique}
-        \begin{table}[h]
-            \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour une clinique médicale}
-            \label{tab:ex_reg_stat_clinique}
-            \centering
-            \begin{tabular}{cccccccccc}
-                \hline
-                \rotatebox{90}{id\_emp} & \rotatebox{90}{id\_reg\_stat} & \rotatebox{90}{ss\_ensemble} & \rotatebox{90}{seuil}  & \rotatebox{90}{oper}  & \rotatebox{90}{cases\_fix\_min}   & \rotatebox{90}{cases\_fix\_max}   & \rotatebox{90}{pente\_min}    & \rotatebox{90}{pente\_max} & \rotatebox{90}{unite}    \\ \hline
-                1                       & 1                             &  1                           & 0                      &  S.V.                 & 0                                 & S.V.                              & 1                             & S.V.                       & 15                       \\
-                2                       & 1                             &  1                           & 0                      &  1                    & 0                                 & S.V.                              & 1                             & S.V.                       & 13                       \\
-                3                       & 1                             &  1                           & 0                      &  1                    & 0                                 & S.V.                              & 1                             & S.V.                       & 10                       \\
-                4                       & 1                             &  2                           & 0                      &  3                    & 0                                 & S.V.                              & 0.05                          & S.V.                       & 4                       \\ \hline
-            \end{tabular}
-            
-        \end{table}
-        \begin{figure}[H]
-        \begin{subfigure}[t]{0.5\textwidth}
-           \centering
-           \includegraphics[scale=1]{figures/exemple_clinique_se1.pdf}
-            \caption{Sous ensemble 1 du règlement}
-        \end{subfigure}
-        ~
-        \begin{subfigure}[t]{0.5\textwidth}
-            \centering
-            \includegraphics[scale=0.9]{figures/exemple_clinique_se_2.pdf}
-        \caption{Sous ensemble 2 du règlement}
-        \end{subfigure}
-        \caption{Exemple de règlement de stationnement pour une clinique médicale}
-        \end{figure}
-        \clearpage
-    \subsubsection{Exemple 2: Logements} 
-        Dans le cas d'un logement, les règlements changent souvent en fonction du nombre de logements au sein d'un même bâtiment. Dans ce cas hypothétique, le requis serait d'une case par logement pour des bâtiments de moins de 4 logements, 1.5 cases par logement pour les bâtiments entre 4 et 7 logements et 1.25 case par logement pour tout bâtiment de 8 logements ou plus. Dans ce cas, les entrées à la table seraient telles que montrées au tableau \ref{tab:ex_reg_logement}.
-        \begin{table}[h]
-            \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour le logement}
-            \label{tab:ex_reg_logement}
-            \centering
-            \begin{tabular}{cccccccccc}
-                \hline
-                \rotatebox{90}{id\_emp} & \rotatebox{90}{id\_reg\_stat} & \rotatebox{90}{ss\_ensemble} & \rotatebox{90}{seuil}  & \rotatebox{90}{oper}  & \rotatebox{90}{cases\_fix\_min}   & \rotatebox{90}{cases\_fix\_max}   & \rotatebox{90}{pente\_min}    & \rotatebox{90}{pente\_max} & \rotatebox{90}{unite}    \\ \hline
-                5                       & 2                             &  1                           & 0                      &  S.V.                 & 0                                 & S.V.                              & 1                             & S.V.                       & 2                       \\
-                6                       & 2                             &  1                           & 4                      &  4                    & 0                                 & S.V.                              & 1.5                           & S.V.                       & 2                       \\
-                7                       & 2                             &  1                           & 8&  4                    & 0                                 & S.V.                              & 1.25                          & S.V.                       & 2                       \\ \hline
-            \end{tabular}
-            
-        \end{table}
-         \begin{figure}[H]
-           \centering
-            \includegraphics[scale=1]{figures/exemple_stationnement_logement.pdf}
-        \caption{Exemple de règle de stationnement pour logement}
-        \end{figure}
-        \FloatBarrier
-        \clearpage
-    \subsubsection{Exemple 3: Lieux d'assemblée} 
-        Dans le cas de lieux d'assemblée, les requis peuvent être exprimés en fonction du nombre de sièges ou en fonction de l'espace au sol. Dans notre cas hypothétique, le requis serait un minimum d'une place par 7 sièges jusqu'à 800 sièges et d'un minimum de 1 place par 9 sièges pour toute place au-delà de 800 sièges. Un maximum  d'une place par 5 sièges est applicable au-delà de 500 sièges. Quand il n'y a pas de sièges, un requis d'une place par 10 mètres carrés est applicable sans maximum.
-        \begin{table}[h]
-            \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour un lieu d'assemblée}
-            \label{tab:ex_reg_lieu_assemblee}
-            \centering
-            \begin{tabular}{cccccccccc}
-                \hline
-                \rotatebox{90}{id\_emp} & \rotatebox{90}{id\_reg\_stat} & \rotatebox{90}{ss\_ensemble} & \rotatebox{90}{seuil}  & \rotatebox{90}{oper}  & \rotatebox{90}{cases\_fix\_min}   & \rotatebox{90}{cases\_fix\_max}   & \rotatebox{90}{pente\_min}    & \rotatebox{90}{pente\_max} & \rotatebox{90}{unite}    \\ \hline
-                8                       & 3                             &  1                           & 0                      &  S.V.                 & 0                                 & S.V.                              & 0.142857                      & S.V.                       & 8                       \\
-                9                       & 3                             &  1                           & 500                    &  4                    & 0                                 & 0                                 & 0.142857                      & 0.2                        & 8                       \\
-                10                      & 3                             &  1                           & 800                    &  4                    & 25.396825                         & 0                                 & 0.111111                      & 0.2                        & 8                       \\
-                11                      & 3                             &  2                           & 0                      &  6                    & 0                                 & S.V.                              & 0.1                           & S.V.                       & 4                       \\\hline
-            \end{tabular}
-            
-        \end{table}
-        \begin{figure}[h]
+            La figure \ref{fig:regs-per-unit} donne le nombre de règlements utilisant les unités mentionnées à la section \ref{sec:politiques_stationnement}. \par
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.9\linewidth]{figures/reglement-par-unite.pdf}
+                \caption{Nombre d'utilisation de différentes unités dans les règlements recensés}
+                \label{fig:regs-per-unit}
+            \end{figure}
+            Plusieurs règlements ont des seuils qui sont utilisés pour différentier le nombre de places selon la quantité d'intérêt. Ce type de règlement est particulièrement présent pour les logements où les municipalités ont typiquement requis des stationnements supplémentaires pour les lots avec plusieurs logements pour accommoder les visiteurs. La figure \ref{fig:seuil-log-reglement} montre le nombre de fois que différents seuils sont utilisés parmi les 81 règlements de stationnement, dont 27 utilisent des seuils. Certains règlements ont plusieurs seuils dans leur définition.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=1\linewidth]{figures/regl-log-par-seuil.pdf}
+                \caption{Nombre d'observation de seuil dans les règlements de logement}
+                \label{fig:seuil-log-reglement}
+            \end{figure}
+            Comme mentionné plus haut, des règlements qui sont des duplications des règlements les plus vieux sondés ont été créés. Leur nombre est donné à la figure \ref{fig:regs-before-1985}:
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=1\linewidth]{figures/distr-reg-dupl.pdf}
+                \caption{Règlements dupliqués pour faire prédictions avant recensement}
+                \label{fig:regs-before-1985}
+            \end{figure}
+            Ceci conclut le bref survol des règlements recensés. Quelques exemples de règlements seront maintenant présentés.
+            \FloatBarrier
+        
+        \subsubsection{Exemple 1: Clinique médicale} 
+            Admettons un règlement qui requiert 1 place par salle de consultation  plus une place par employé plus une place par médecin ou une place par 20 mètres carrés, au plus contraignant. Les entrées dans la table reg\_stat\_empile seraient telles que montrées au tableau \ref{tab:ex_reg_stat_clinique}
+            \begin{table}[H]
+                \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour une clinique médicale}
+                \label{tab:ex_reg_stat_clinique}
+                \centering
+                \begin{tabular}{cccccccccc}
+                    \hline
+                    \rotatebox{90}{id\_emp} & \rotatebox{90}{id\_reg\_stat} & \rotatebox{90}{ss\_ensemble} & \rotatebox{90}{seuil}  & \rotatebox{90}{oper}  & \rotatebox{90}{cases\_fix\_min}   & \rotatebox{90}{cases\_fix\_max}   & \rotatebox{90}{pente\_min}    & \rotatebox{90}{pente\_max} & \rotatebox{90}{unite}    \\ \hline
+                    1                       & 1                             &  1                           & 0                      &  S.V.                 & 0                                 & S.V.                              & 1                             & S.V.                       & 15                       \\
+                    2                       & 1                             &  1                           & 0                      &  1                    & 0                                 & S.V.                              & 1                             & S.V.                       & 13                       \\
+                    3                       & 1                             &  1                           & 0                      &  1                    & 0                                 & S.V.                              & 1                             & S.V.                       & 10                       \\
+                    4                       & 1                             &  2                           & 0                      &  3                    & 0                                 & S.V.                              & 0.05                          & S.V.                       & 4                       \\ \hline
+                \end{tabular}
+                
+            \end{table}
+            \begin{figure}[H]
             \begin{subfigure}[t]{0.5\textwidth}
             \centering
-                \includegraphics[width=1\textwidth]{figures/exemple_stationnement_assemblee_sieges.pdf}
-                \caption{Avec sièges}
+            \includegraphics[scale=1]{figures/exemple_clinique_se1.pdf}
+                \caption{Sous ensemble 1 du règlement}
             \end{subfigure}
+            ~
             \begin{subfigure}[t]{0.5\textwidth}
                 \centering
-                \includegraphics[width=1\textwidth]{figures/exemple_stationnement_assemblee_sans_sieges.pdf}
-                \caption{Sans sièges}
+                \includegraphics[scale=0.9]{figures/exemple_clinique_se_2.pdf}
+            \caption{Sous ensemble 2 du règlement}
             \end{subfigure}
-        \captionsetup{justification=centering}
-        \caption{Exemple de règle de stationnement pour lieux d'assemblée}
-        \end{figure}
-        \FloatBarrier
+            \caption{Exemple de règlement de stationnement pour une clinique médicale}
+            \end{figure}
+            \clearpage
+        
+        \subsubsection{Exemple 2: Logements} 
+            Dans le cas d'un logement, les règlements changent souvent en fonction du nombre de logements au sein d'un même bâtiment. Dans ce cas hypothétique, le requis serait d'une case par logement pour des bâtiments de moins de 4 logements, 1.5 cases par logement pour les bâtiments entre 4 et 7 logements et 1.25 case par logement pour tout bâtiment de 8 logements ou plus. Dans ce cas, les entrées à la table seraient telles que montrées au tableau \ref{tab:ex_reg_logement}.
+            \begin{table}[h]
+                \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour le logement}
+                \label{tab:ex_reg_logement}
+                \centering
+                \begin{tabular}{cccccccccc}
+                    \hline
+                    \rotatebox{90}{id\_emp} & \rotatebox{90}{id\_reg\_stat} & \rotatebox{90}{ss\_ensemble} & \rotatebox{90}{seuil}  & \rotatebox{90}{oper}  & \rotatebox{90}{cases\_fix\_min}   & \rotatebox{90}{cases\_fix\_max}   & \rotatebox{90}{pente\_min}    & \rotatebox{90}{pente\_max} & \rotatebox{90}{unite}    \\ \hline
+                    5                       & 2                             &  1                           & 0                      &  S.V.                 & 0                                 & S.V.                              & 1                             & S.V.                       & 2                       \\
+                    6                       & 2                             &  1                           & 4                      &  4                    & 0                                 & S.V.                              & 1.5                           & S.V.                       & 2                       \\
+                    7                       & 2                             &  1                           & 8&  4                    & 0                                 & S.V.                              & 1.25                          & S.V.                       & 2                       \\ \hline
+                \end{tabular}
+                
+            \end{table}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=1]{figures/exemple_stationnement_logement.pdf}
+                \caption{Exemple de règle de stationnement pour logement}
+            \end{figure}
+            \clearpage
+        
+        \subsubsection{Exemple 3: Lieux d'assemblée} 
+            Dans le cas de lieux d'assemblée, les requis peuvent être exprimés en fonction du nombre de sièges ou en fonction de l'espace au sol. Dans notre cas hypothétique, le requis serait un minimum d'une place par 7 sièges jusqu'à 800 sièges et d'un minimum de 1 place par 9 sièges pour toute place au-delà de 800 sièges. Un maximum  d'une place par 5 sièges est applicable au-delà de 500 sièges. Quand il n'y a pas de sièges, un requis d'une place par 10 mètres carrés est applicable sans maximum.
+            \begin{table}[h]
+                \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour un lieu d'assemblée}
+                \label{tab:ex_reg_lieu_assemblee}
+                \centering
+                \begin{tabular}{cccccccccc}
+                    \hline
+                    \rotatebox{90}{id\_emp} & \rotatebox{90}{id\_reg\_stat} & \rotatebox{90}{ss\_ensemble} & \rotatebox{90}{seuil}  & \rotatebox{90}{oper}  & \rotatebox{90}{cases\_fix\_min}   & \rotatebox{90}{cases\_fix\_max}   & \rotatebox{90}{pente\_min}    & \rotatebox{90}{pente\_max} & \rotatebox{90}{unite}    \\ \hline
+                    8                       & 3                             &  1                           & 0                      &  S.V.                 & 0                                 & S.V.                              & 0.142857                      & S.V.                       & 8                       \\
+                    9                       & 3                             &  1                           & 500                    &  4                    & 0                                 & 0                                 & 0.142857                      & 0.2                        & 8                       \\
+                    10                      & 3                             &  1                           & 800                    &  4                    & 25.396825                         & 0                                 & 0.111111                      & 0.2                        & 8                       \\
+                    11                      & 3                             &  2                           & 0                      &  6                    & 0                                 & S.V.                              & 0.1                           & S.V.                       & 4                       \\\hline
+                \end{tabular}
+                
+            \end{table}
+            \begin{figure}[h]
+                \begin{subfigure}[t]{0.5\textwidth}
+                \centering
+                    \includegraphics[width=1\textwidth]{figures/exemple_stationnement_assemblee_sieges.pdf}
+                    \caption{Avec sièges}
+                \end{subfigure}
+                \begin{subfigure}[t]{0.5\textwidth}
+                    \centering
+                    \includegraphics[width=1\textwidth]{figures/exemple_stationnement_assemblee_sans_sieges.pdf}
+                    \caption{Sans sièges}
+                \end{subfigure}
+            \captionsetup{justification=centering}
+            \caption{Exemple de règle de stationnement pour lieux d'assemblée}
+            \end{figure}
+            \FloatBarrier
         
     \subsection{Ensemble des règlements et association à la géopolitique} \label{ssec:ensembles_association}
         \subsubsection{Structure des données}
-        Cette section va introduire le schéma relationnel de données qui permet d'associer un ensemble de règlements à un territoire pour une période donnée. Quatre tables sont utilisées pour représenter la variation spatio-temporelle de la réglementation: \underline{ensembles\_reglements\_stat}, \underline{cubf}, \underline{association\_er\_reg\_stat} et \underline{assoc\_er\_territoire}.\par
-        \underline{ensembles\_reglements\_stat} est une entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} montre les colonnes de la table \underline{ensembles\_reglements\_stat}. \par
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{ensembles\_reglement\_stat}}
-           \label{tab:definition_er}
-           \centering
-           \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_er & Clé primaire  & Serial & CP \\  
-                date\_debut\_er & Année où l'ensemble de règlements entre en vigueur & Entier & \\
-                date\_fin\_er & Année où l'ensemble de règlements est abrogé& Entier & \\
-                description\_er & Description à la discrétion de l'utilisateur & Texte & \\
-                \hline
-           \end{tabular}
-           
-       \end{table}   
-       La table \ac{CUBF} reproduit les données du gouvernement sur le code d'utilisation du bien-fonds, associant un numéro à une description sommaire. Toutes les entrées dans le rôle foncier se voient attribuer un code à 4 chiffres entre 1000 et 9999 qui définit l'usage prédominant sur la propriété. En plus de ces codes. La table entreposée dans le cadre de ce projet contient les entêtes de chaque section (e.g. 1 - logement, 15 - Habitation en commun, 154 - Maison de retraite ou orphelinat, 1542 - Orphelinat). La description des colonnes de la table \underline{cubf} est donnée au tableau \ref{tab:definition_cubf}. \par
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{cubf}}
-           \label{tab:definition_cubf}
-           \centering
-           \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                cubf & Code d'utilisation du bien-fonds & Entier & CP \\  
-                description & Description de l'utilisation du sol & Texte & \\
-                \hline
-           \end{tabular}
-           
-        \end{table}   
-        \underline{association\_er\_reg\_stat} permet de faire l'association entre les \ac{CUBF}, les ensembles de règlements et les règlements décrits à la section précédente. Le tableau \ref{tab:definition_association_er_reg_stat} montre les colonnes de cette table.\par
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{association\_er\_reg\_stat}}
-           \label{tab:definition_association_er_reg_stat}
-           \centering
-           \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_assoc\_er\_reg & Clé primaire de la table & Entier & CP \\  
-                id\_reg\_stat & Identifiant du règlement à appliquer & Entier & CS \\
-                cubf & \ac{CUBF} au(x)quel(s) on doit appliquer le règlement & Entier & CS\\
-                id\_er & Ensemble de règlements auquel appartient l'association & Entier & CS\\
-                \hline
-           \end{tabular}
-           
-        \end{table}   
-        \FloatBarrier
-       
-        La table \underline{association\_er\_territoire} est nécessaire pour associer les territoires aux ensembles de règlements. Le tableau \ref{tab:definition_association_er_territoire} montre les colonnes de la table.
-        \begin{table}[h]
-            \caption{Colonnes pour la table \underline{association\_er\_territoire}}
-           \label{tab:definition_association_er_territoire}
-           \centering
-           \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
-                \hline
-                Nom champ & Description & Type de données & CP/CS  \\
-                \hline
-                id\_assoc\_er\_ter & Clé primaire de la table & Entier & CP \\  
-                id\_er & Identifiant de l'ensemble de règlements à appliquer & Entier & CS \\
-                id\_periode\_geo & Identifiant du territoire auquel s'applique l'ensemble de règlements & Entier & CS\\
-                \hline
-           \end{tabular}
-           
-        \end{table}   
-        La figure \ref{fig:offstreet_db_erd_rulesets} montre les tables de la base de données qui permettent de définir un ensemble de règlements. Notons que la table cubf est visible à la Figure \ref{fig:offstreet_db_erd_input_data}.
-        \begin{figure}[h]
+            Cette section va introduire le schéma relationnel de données qui permet d'associer un ensemble de règlements à un territoire pour une période donnée. Quatre tables sont utilisées pour représenter la variation spatio-temporelle de la réglementation: \underline{ensembles\_reglements\_stat}, \underline{cubf}, \underline{association\_er\_reg\_stat} et \underline{assoc\_er\_territoire}.\par
+            \underline{ensembles\_reglements\_stat} est une entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} montre les colonnes de la table \underline{ensembles\_reglements\_stat}. \par
+            \begin{table}[h]
+                \caption{Colonnes pour la table \underline{ensembles\_reglement\_stat}}
+                \label{tab:definition_er}
+                \centering
+                \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                        \hline
+                        Nom champ & Description & Type de données & CP/CS  \\
+                        \hline
+                        id\_er & Clé primaire  & Serial & CP \\  
+                        date\_debut\_er & Année où l'ensemble de règlements entre en vigueur & Entier & \\
+                        date\_fin\_er & Année où l'ensemble de règlements est abrogé& Entier & \\
+                        description\_er & Description à la discrétion de l'utilisateur & Texte & \\
+                        \hline
+                \end{tabular}
+            \end{table}   
+            La table \ac{CUBF} reproduit les données du gouvernement sur le code d'utilisation du bien-fonds, associant un numéro à une description sommaire. Toutes les entrées dans le rôle foncier se voient attribuer un code à 4 chiffres entre 1000 et 9999 qui définit l'usage prédominant sur la propriété. En plus de ces codes. La table entreposée dans le cadre de ce projet contient les entêtes de chaque section (e.g. 1 - logement, 15 - Habitation en commun, 154 - Maison de retraite ou orphelinat, 1542 - Orphelinat). La description des colonnes de la table \underline{cubf} est donnée au tableau \ref{tab:definition_cubf}. \par
+            \begin{table}[h]
+                \caption{Colonnes pour la table \underline{cubf}}
+            \label{tab:definition_cubf}
             \centering
-            \includegraphics[trim={0 0 155cm 105cm},clip,width=15cm]{dia/ERD_stationnement_propre.png}
-            \caption{Schéma relationnel pour la définition d'ensembles de règlements et leur association au territoire}
-            \label{fig:offstreet_db_erd_rulesets}
-        \end{figure}
-        \FloatBarrier
+            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                    \hline
+                    Nom champ & Description & Type de données & CP/CS  \\
+                    \hline
+                    cubf & Code d'utilisation du bien-fonds & Entier & CP \\  
+                    description & Description de l'utilisation du sol & Texte & \\
+                    \hline
+            \end{tabular}
+            
+            \end{table}   
+            \underline{association\_er\_reg\_stat} permet de faire l'association entre les \ac{CUBF}, les ensembles de règlements et les règlements décrits à la section précédente. Le tableau \ref{tab:definition_association_er_reg_stat} montre les colonnes de cette table.\par
+            \begin{table}[h]
+                \caption{Colonnes pour la table \underline{association\_er\_reg\_stat}}
+            \label{tab:definition_association_er_reg_stat}
+            \centering
+            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                    \hline
+                    Nom champ & Description & Type de données & CP/CS  \\
+                    \hline
+                    id\_assoc\_er\_reg & Clé primaire de la table & Entier & CP \\  
+                    id\_reg\_stat & Identifiant du règlement à appliquer & Entier & CS \\
+                    cubf & \ac{CUBF} au(x)quel(s) on doit appliquer le règlement & Entier & CS\\
+                    id\_er & Ensemble de règlements auquel appartient l'association & Entier & CS\\
+                    \hline
+            \end{tabular}
+            
+            \end{table}   
+            \FloatBarrier
+       
+            La table \underline{association\_er\_territoire} est nécessaire pour associer les territoires aux ensembles de règlements. Le tableau \ref{tab:definition_association_er_territoire} montre les colonnes de la table.
+            \begin{table}[h]
+                \caption{Colonnes pour la table \underline{association\_er\_territoire}}
+            \label{tab:definition_association_er_territoire}
+            \centering
+            \begin{tabular}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
+                    \hline
+                    Nom champ & Description & Type de données & CP/CS  \\
+                    \hline
+                    id\_assoc\_er\_ter & Clé primaire de la table & Entier & CP \\  
+                    id\_er & Identifiant de l'ensemble de règlements à appliquer & Entier & CS \\
+                    id\_periode\_geo & Identifiant du territoire auquel s'applique l'ensemble de règlements & Entier & CS\\
+                    \hline
+            \end{tabular}
+            
+            \end{table}   
+            La figure \ref{fig:offstreet_db_erd_rulesets} montre les tables de la base de données qui permettent de définir un ensemble de règlements. Notons que la table cubf est visible à la Figure \ref{fig:offstreet_db_erd_input_data}.
+            \begin{figure}[h]
+                \centering
+                \includegraphics[trim={0 0 155cm 105cm},clip,width=13cm]{dia/ERD_stationnement_propre.png}
+                \caption{Schéma relationnel pour la définition d'ensembles de règlements et leur association au territoire}
+                \label{fig:offstreet_db_erd_rulesets}
+            \end{figure}
+            \FloatBarrier
+        
         \subsubsection{Convention pour les règles d'association de règlement}\label{sec:reg_association}
-        Par convention, toute entrée dans la table \underline{association\_er\_reg\_stat} qui s'applique à un nombre de moins de quatre chiffres s'appliquera à un ensemble plus grand. Ainsi:
-        \begin{itemize}
-            \item Associer 1 à un règlement verra l'ensemble des \ac{CUBF} entre 1000 et 1999 associés à cette règle
-            \item Associer 15 à un règlement verra l'ensemble des \ac{CUBF} entre 1500 et 1599 associés à cette règle
-            \item Associer 154 à un règlement verra l'ensemble des \ac{CUBF} entre 1540 et 1549 associés à cette règle
-        \end{itemize}
-        La règle la plus détaillée (avec le plus grand nombre de chiffres) aura donc préséance en cas de conflits. À minima, une entrée sera requise pour les entrées 1 à 9 pour assurer une couverture réglementaire sur l'ensemble des \ac{CUBF}.\par
+            Par convention, toute entrée dans la table \underline{association\_er\_reg\_stat} qui s'applique à un nombre de moins de quatre chiffres s'appliquera à un ensemble plus grand. Ainsi:
+            \begin{itemize}
+                \item Associer 1 à un règlement verra l'ensemble des \ac{CUBF} entre 1000 et 1999 associés à cette règle
+                \item Associer 15 à un règlement verra l'ensemble des \ac{CUBF} entre 1500 et 1599 associés à cette règle
+                \item Associer 154 à un règlement verra l'ensemble des \ac{CUBF} entre 1540 et 1549 associés à cette règle
+            \end{itemize}
+            La règle la plus détaillée (avec le plus grand nombre de chiffres) aura donc préséance en cas de conflits. À minima, une entrée sera requise pour les entrées 1 à 9 pour assurer une couverture réglementaire sur l'ensemble des \ac{CUBF}.\par
+        
         \subsubsection{Convention pour les années}
-        Pour représenter la variabilité des règlements au travers du temps, des dates de validité sont mises en place sur plusieurs objets. Certains règlements ou territoires sont représentés sans date de début pour capturer tous les bâtiments construits avant une certaine date. D'autre part, il est nécessaire de représenter des règlements qui sont encore valides et n'ont donc pas de date d'abrogation. La convention suivante est donc appliquée sur les dates:
-        \begin{itemize}
-            \item Les règlements, ensembles de règlements ou territoires n'ayant pas de date de début sont en vigueur pour toute année avant la date de fin. \item Les règlements, ensembles de règlements ou territoires n'ayant pas de date de fin sont en vigueur après la date de début jusqu'au présent\end{itemize}
+            Pour représenter la variabilité des règlements au travers du temps, des dates de validité sont mises en place sur plusieurs objets. Certains règlements ou territoires sont représentés sans date de début pour capturer tous les bâtiments construits avant une certaine date. D'autre part, il est nécessaire de représenter des règlements qui sont encore valides et n'ont donc pas de date d'abrogation. La convention suivante est donc appliquée sur les dates:
+            \begin{itemize}
+                \item Les règlements, ensembles de règlements ou territoires n'ayant pas de date de début sont en vigueur pour toute année avant la date de fin. 
+                \item Les règlements, ensembles de règlements ou territoires n'ayant pas de date de fin sont en vigueur après la date de début jusqu'au présent
+            \end{itemize}
+        
         \subsubsection{Description des ensembles de règlements}
-        Cette section donnera un survol de la structure des ensembles de règlements utilisés dans le cadre de ce mémoire. Ceci est loin d'être la seule structure possible. La version actuelle a été compilée en essayant d'assurer la couverture des catégories les plus communes sans devoir être  exhaustif. La méthode pourrait fonctionner seulement les \ac{CUBF} 1-9 spécifiés, ou avec tous les \ac{CUBF} individuellement spécifiés. \par
-        Le tableau \ref{tab:n-cubf-rep} donne le nombre d'association entre un ensemble de règlements et un règlement par \ac{CUBF}. De manière générale, les mêmes \ac{CUBF} apparaissent de manière répétée dans les 57 ensembles de règlements constitués.
-        \begin{longtable}{p{13cm}r}
-            \caption{Nombre de définitions par utilisation du sol} \label{tab:n-cubf-rep} \\
-            \toprule
-            Utilisation du sol & N \\
-            \midrule
-            \endfirsthead
-            \multicolumn{2}{c}%
-            {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
-            \toprule
-            Utilisation du sol & N \\
-            \midrule
-            \endhead
-            \midrule
-            \multicolumn{2}{r}{Continué à la page suivante} \\
-            \midrule
-            \endfoot
-            \bottomrule
-            \endlastfoot
-            CUBF = 1 - RÉSIDENTIELLE & 58 \\
-            CUBF = 15 - HABITATION EN COMMUN & 57 \\
-            CUBF = 151 - MAISON DE CHAMBRES ET PENSION & 57 \\
-            CUBF = 3 - INDUSTRIES MANUFACTURIÈRES & 58 \\
-            CUBF = 4 - TRANSPORTS, COMMUNICATIONS ET SERVICES PUBLICS & 58 \\
-            CUBF = 5 - COMMERCIALE & 58 \\
-            CUBF = 500 - CENTRE COMMERCIAL & 57 \\
-            CUBF = 54 - VENTE AU DÉTAIL DE PRODUITS DE L'ALIMENTATION & 57 \\
-            CUBF = 55 - VENTE AU DÉTAIL DE VÉHICULES ET DE PRODUITS CONNEXES & 57 \\
-            CUBF = 553 - STATION-SERVICE & 57 \\
-            CUBF = 57 - VENTE AU DÉTAIL DE MOBILIERS DE MAISON ET D'ÉQUIPEMENTS CONNEXES & 57 \\
-            CUBF = 58 - HÉBERGEMENT ET RESTAURATION & 57 \\
-            CUBF = 581 - RESTAURATION AVEC SERVICE COMPLET OU RESTREINT & 57 \\
-            CUBF = 582 - ÉTABLISSEMENT OÙ L'ON SERT À BOIRE (BOISSONS ALCOOLISÉES) ET ACTIVITÉS DIVERSES & 57 \\
-            CUBF = 583 - ÉTABLISSEMENT D'HÉBERGEMENT & 57 \\
-            CUBF = 6 - SERVICES & 58 \\
-            CUBF = 60 - IMMEUBLE À BUREAUX & 57 \\
-            CUBF = 61 - FINANCE, ASSURANCE ET SERVICE IMMOBILIER & 57 \\
-            CUBF = 62 - SERVICE PERSONNEL & 57 \\
-            CUBF = 624 - SERVICE FUNÉRAIRE, CRÉMATOIRE, CIMETIÈRE ET MAUSOLÉE & 57 \\
-            CUBF = 63 - SERVICE D'AFFAIRES & 57 \\
-            CUBF = 637 - ENTREPOSAGE ET SERVICE D'ENTREPOSAGE & 57 \\
-            CUBF = 64 - SERVICE DE RÉPARATION & 57 \\
-            CUBF = 641 - SERVICE DE RÉPARATION D'AUTOMOBILES & 57 \\
-            CUBF = 6412 - SERVICE DE LAVAGE D'AUTOMOBILES & 57 \\
-            CUBF = 65 - SERVICE PROFESSIONNEL & 57 \\
-            CUBF = 651 - SERVICE MÉDICAL ET DE SANTÉ & 57 \\
-            CUBF = 6513 - SERVICE D'HÔPITAL & 57 \\
-            CUBF = 6516 - SANATORIUM, MAISON DE CONVALESCENCE ET MAISON DE REPOS & 57 \\
-            CUBF = 6541 - SERVICE DE GARDERIE (PRÉMATERNELLE, MOINS DE 50 % DE POUPONS) & 57 \\
-            CUBF = 66 - SERVICE DE CONSTRUCTION & 57 \\
-            CUBF = 67 - SERVICE GOUVERNEMENTAL & 57 \\
-            CUBF = 672 - FONCTION PRÉVENTIVE ET ACTIVITÉS CONNEXES & 57 \\
-            CUBF = 674 - ÉTABLISSEMENT DE DÉTENTION ET INSTITUTION CORRECTIONNELLE & 57 \\
-            CUBF = 675 - BASE ET RÉSERVE MILITAIRE & 57 \\
-            CUBF = 68 - SERVICE ÉDUCATIONNEL & 57 \\
-            CUBF = 6811 - ÉCOLE MATERNELLE & 57 \\
-            CUBF = 6812 - ÉCOLE ÉLÉMENTAIRE & 57 \\
-            CUBF = 6813 - ÉCOLE SECONDAIRE & 57 \\
-            CUBF = 6815 - ÉCOLE ÉLÉMENTAIRE ET SECONDAIRE & 57 \\
-            CUBF = 6821 - UNIVERSITÉ & 57 \\
-            CUBF = 6822 - ÉCOLE POLYVALENTE & 57 \\
-            CUBF = 6823 - CEGEP (COLLÈGE D'ENSEIGNEMENT GÉNÉRAL ET PROFESSIONNEL) & 57 \\
-            CUBF = 69 - SERVICES DIVERS & 57 \\
-            CUBF = 6911 - ÉGLISE, SYNAGOGUE, MOSQUÉE ET TEMPLE & 57 \\
-            CUBF = 7 - CULTURELLE, RÉCRÉATIVE ET DE LOISIRS & 58 \\
-            CUBF = 71 - EXPOSITION D'OBJETS CULTURELS & 57 \\
-            CUBF = 721 - ASSEMBLÉE DE LOISIRS & 57 \\
-            CUBF = 722 - INSTALLATION SPORTIVE & 57 \\
-            CUBF = 7392 - GOLF MINIATURE & 55 \\
-            CUBF = 7393 - TERRAIN DE GOLF POUR EXERCICE SEULEMENT & 55 \\
-            CUBF = 7411 - TERRAIN DE GOLF (SANS CHALET ET AUTRES AMÉNAGEMENTS SPORTIFS) & 55 \\
-            CUBF = 7412 - TERRAIN DE GOLF (AVEC CHALET ET AUTRES AMÉNAGEMENTS SPORTIFS) & 55 \\
-            CUBF = 7423 - TERRAIN DE SPORT & 55 \\
-            CUBF = 7451 - ARÉNA ET ACTIVITÉS CONNEXES (PATINAGE SUR GLACE) & 57 \\
-            CUBF = 8 - PRODUCTION ET EXTRACTION DE RICHESSES NATURELLES & 58 \\
-            CUBF = 9 - IMMEUBLES NON EXPLOITÉS ET ÉTENDUES D'EAU & 58 \\
-            CUBF = 9410 - LOGEMENT VACANT DANS UN BÂTIMENT COMPORTANT PLUSIEURS LOGEMENTS OU AUTRES LOCAUX & 57 \\
-            CUBF = 9420 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT INDUSTRIEL & 57 \\
-            CUBF = 9451 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT LA VENTE AU DÉTAIL & 57 \\
-            CUBF = 9452 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS DE RÉPARATION (ATELIER) & 57 \\
-            CUBF = 9458 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DE LA RESTAURATION & 57 \\
-            CUBF = 9459 - AUTRES ESPACES DE PLANCHER INOCCUPÉS DONT L'USAGE SERAIT COMMERCIAL & 57 \\
-            CUBF = 9460 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS DE SERVICES PROFESSIONNELS & 57 \\
-            CUBF = 9470 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS CULTURELLES & 57 \\
+            Cette section donnera un survol de la structure des ensembles de règlements utilisés dans le cadre de ce mémoire. Ceci est loin d'être la seule structure possible. La version actuelle a été compilée en essayant d'assurer la couverture des catégories les plus communes sans devoir être  exhaustif. La méthode pourrait fonctionner seulement les \ac{CUBF} 1-9 spécifiés, ou avec tous les \ac{CUBF} individuellement spécifiés. \par
+            Le tableau \ref{tab:n-cubf-rep} donne le nombre d'association entre un ensemble de règlements et un règlement par \ac{CUBF}. De manière générale, les mêmes \ac{CUBF} apparaissent de manière répétée dans les 57 ensembles de règlements constitués.
+            \begin{longtable}{p{13cm}r}
+                \caption{Nombre de définitions par utilisation du sol} \label{tab:n-cubf-rep} \\
+                \toprule
+                Utilisation du sol & N \\
+                \midrule
+                \endfirsthead
+                \multicolumn{2}{c}%
+                {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+                \toprule
+                Utilisation du sol & N \\
+                \midrule
+                \endhead
+                \midrule
+                \multicolumn{2}{r}{Continué à la page suivante} \\
+                \midrule
+                \endfoot
+                \bottomrule
+                \endlastfoot
+                CUBF = 1 - RÉSIDENTIELLE & 58 \\
+                CUBF = 15 - HABITATION EN COMMUN & 57 \\
+                CUBF = 151 - MAISON DE CHAMBRES ET PENSION & 57 \\
+                CUBF = 3 - INDUSTRIES MANUFACTURIÈRES & 58 \\
+                CUBF = 4 - TRANSPORTS, COMMUNICATIONS ET SERVICES PUBLICS & 58 \\
+                CUBF = 5 - COMMERCIALE & 58 \\
+                CUBF = 500 - CENTRE COMMERCIAL & 57 \\
+                CUBF = 54 - VENTE AU DÉTAIL DE PRODUITS DE L'ALIMENTATION & 57 \\
+                CUBF = 55 - VENTE AU DÉTAIL DE VÉHICULES ET DE PRODUITS CONNEXES & 57 \\
+                CUBF = 553 - STATION-SERVICE & 57 \\
+                CUBF = 57 - VENTE AU DÉTAIL DE MOBILIERS DE MAISON ET D'ÉQUIPEMENTS CONNEXES & 57 \\
+                CUBF = 58 - HÉBERGEMENT ET RESTAURATION & 57 \\
+                CUBF = 581 - RESTAURATION AVEC SERVICE COMPLET OU RESTREINT & 57 \\
+                CUBF = 582 - ÉTABLISSEMENT OÙ L'ON SERT À BOIRE (BOISSONS ALCOOLISÉES) ET ACTIVITÉS DIVERSES & 57 \\
+                CUBF = 583 - ÉTABLISSEMENT D'HÉBERGEMENT & 57 \\
+                CUBF = 6 - SERVICES & 58 \\
+                CUBF = 60 - IMMEUBLE À BUREAUX & 57 \\
+                CUBF = 61 - FINANCE, ASSURANCE ET SERVICE IMMOBILIER & 57 \\
+                CUBF = 62 - SERVICE PERSONNEL & 57 \\
+                CUBF = 624 - SERVICE FUNÉRAIRE, CRÉMATOIRE, CIMETIÈRE ET MAUSOLÉE & 57 \\
+                CUBF = 63 - SERVICE D'AFFAIRES & 57 \\
+                CUBF = 637 - ENTREPOSAGE ET SERVICE D'ENTREPOSAGE & 57 \\
+                CUBF = 64 - SERVICE DE RÉPARATION & 57 \\
+                CUBF = 641 - SERVICE DE RÉPARATION D'AUTOMOBILES & 57 \\
+                CUBF = 6412 - SERVICE DE LAVAGE D'AUTOMOBILES & 57 \\
+                CUBF = 65 - SERVICE PROFESSIONNEL & 57 \\
+                CUBF = 651 - SERVICE MÉDICAL ET DE SANTÉ & 57 \\
+                CUBF = 6513 - SERVICE D'HÔPITAL & 57 \\
+                CUBF = 6516 - SANATORIUM, MAISON DE CONVALESCENCE ET MAISON DE REPOS & 57 \\
+                CUBF = 6541 - SERVICE DE GARDERIE (PRÉMATERNELLE, MOINS DE 50 % DE POUPONS) & 57 \\
+                CUBF = 66 - SERVICE DE CONSTRUCTION & 57 \\
+                CUBF = 67 - SERVICE GOUVERNEMENTAL & 57 \\
+                CUBF = 672 - FONCTION PRÉVENTIVE ET ACTIVITÉS CONNEXES & 57 \\
+                CUBF = 674 - ÉTABLISSEMENT DE DÉTENTION ET INSTITUTION CORRECTIONNELLE & 57 \\
+                CUBF = 675 - BASE ET RÉSERVE MILITAIRE & 57 \\
+                CUBF = 68 - SERVICE ÉDUCATIONNEL & 57 \\
+                CUBF = 6811 - ÉCOLE MATERNELLE & 57 \\
+                CUBF = 6812 - ÉCOLE ÉLÉMENTAIRE & 57 \\
+                CUBF = 6813 - ÉCOLE SECONDAIRE & 57 \\
+                CUBF = 6815 - ÉCOLE ÉLÉMENTAIRE ET SECONDAIRE & 57 \\
+                CUBF = 6821 - UNIVERSITÉ & 57 \\
+                CUBF = 6822 - ÉCOLE POLYVALENTE & 57 \\
+                CUBF = 6823 - CEGEP (COLLÈGE D'ENSEIGNEMENT GÉNÉRAL ET PROFESSIONNEL) & 57 \\
+                CUBF = 69 - SERVICES DIVERS & 57 \\
+                CUBF = 6911 - ÉGLISE, SYNAGOGUE, MOSQUÉE ET TEMPLE & 57 \\
+                CUBF = 7 - CULTURELLE, RÉCRÉATIVE ET DE LOISIRS & 58 \\
+                CUBF = 71 - EXPOSITION D'OBJETS CULTURELS & 57 \\
+                CUBF = 721 - ASSEMBLÉE DE LOISIRS & 57 \\
+                CUBF = 722 - INSTALLATION SPORTIVE & 57 \\
+                CUBF = 7392 - GOLF MINIATURE & 55 \\
+                CUBF = 7393 - TERRAIN DE GOLF POUR EXERCICE SEULEMENT & 55 \\
+                CUBF = 7411 - TERRAIN DE GOLF (SANS CHALET ET AUTRES AMÉNAGEMENTS SPORTIFS) & 55 \\
+                CUBF = 7412 - TERRAIN DE GOLF (AVEC CHALET ET AUTRES AMÉNAGEMENTS SPORTIFS) & 55 \\
+                CUBF = 7423 - TERRAIN DE SPORT & 55 \\
+                CUBF = 7451 - ARÉNA ET ACTIVITÉS CONNEXES (PATINAGE SUR GLACE) & 57 \\
+                CUBF = 8 - PRODUCTION ET EXTRACTION DE RICHESSES NATURELLES & 58 \\
+                CUBF = 9 - IMMEUBLES NON EXPLOITÉS ET ÉTENDUES D'EAU & 58 \\
+                CUBF = 9410 - LOGEMENT VACANT DANS UN BÂTIMENT COMPORTANT PLUSIEURS LOGEMENTS OU AUTRES LOCAUX & 57 \\
+                CUBF = 9420 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT INDUSTRIEL & 57 \\
+                CUBF = 9451 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT LA VENTE AU DÉTAIL & 57 \\
+                CUBF = 9452 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS DE RÉPARATION (ATELIER) & 57 \\
+                CUBF = 9458 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DE LA RESTAURATION & 57 \\
+                CUBF = 9459 - AUTRES ESPACES DE PLANCHER INOCCUPÉS DONT L'USAGE SERAIT COMMERCIAL & 57 \\
+                CUBF = 9460 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS DE SERVICES PROFESSIONNELS & 57 \\
+                CUBF = 9470 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS CULTURELLES & 57 \\
             \end{longtable}
             Le tableau \ref{tab:liste-er-crees} à l'annexe \ref{sec:annex-prs-created} donne une liste des ensembles de règlements créés. La figure \ref{fig:er-counts-byperiod} montre le nombre d'ensembles de règlements par période. La période après l'harmonisation des règlements d'urbanisme (2009-aujourd'hui) comporte le plus d'ensembles de règlements par territoire puisque l'historique détaillé est compilé pour cette période alors que les autres ont une couverture nettement plus faible.
             \begin{figure}[H]
@@ -679,7 +711,8 @@
                 \caption{Compte d'ensembles de règlements par période géopolitique}
                 \label{fig:er-counts-byperiod}
             \end{figure}
-            
+            Ceci complète le survol des ensembles de règlements. La section suivante détaillera les secteurs d'analyse qui sont utilisés. En plus d'être utilisés pour l'agrégation, ces derniers servent aussi à sélectionner les données du rôle foncier et du cadastre pour enclencher un calcul.
+    
     \subsection{Structure des données représentant les secteurs d'analyse}\label{ssec:struct_donnees_sec_analyse}
         Les quartiers énumérés par la ville de Québec sont utilisés comme base de comparaison et pour diviser le territoire dans la table sec\_analyse. Les colonnes du tableau sont listées dans le tableau \ref{tab:definition_sec_analyse}.
         \begin{table}[h]
@@ -752,62 +785,78 @@
                  34 & Vanier & VANI \\
                  35 & Vieux-Moulin & VIMO\\
         \end{longtable}
-        La figure \ref{fig:sec-analyse} montre les secteurs utilisés qui sont les quartiers listés dans les données ouvertes de la ville. Une autre division géographique (comme les secteurs de l'enquête OD) pourrait être substituée au besoin.\par
-        \begin{figure}[h]
+        La figure \ref{fig:sec-analyse} montre les secteurs utilisés qui sont les quartiers listés dans les données ouvertes de la ville\parencite{ville_de_quebec_quartiers_2024}. Une autre division géographique (comme les secteurs de l'enquête OD) pourrait être substituée au besoin.\par
+        \begin{figure}[H]
             \centering
-            \includegraphics[width=0.7\linewidth]{images/secteurs_analyse.png}
+            \includegraphics[width=0.6\linewidth]{images/secteurs_analyse.png}
             \caption{Secteurs utilisés pour l'analyse}
             \label{fig:sec-analyse}
         \end{figure}
-        Maintenant que l'ensemble de la structure de données nécessaire pour la définition des règlements a été établie la section suivante donnera un aperçu à haut niveau de la méthode de calcul de l'estimation du nombre de places de stationnement pour un quartier. 
-    \section{Objets Informatiques et leurs méthodes}
-        \subsection{Objets informatiques utilisés dans le calcul de l'inventaire} \label{ssec:obj-informatique-impl-stat}
+        Maintenant que l'ensemble de la structure de données nécessaire pour la définition des règlements a été établie la section suivante donnera un aperçu à haut niveau de classes utilisées pour calculer la prédiction de stationnement.
+        \clearpage
+    
+    \subsection{Objets Informatiques: attributs, méthodes et utilitaires}
+        \subsubsection{Objets informatiques utilisés dans le calcul de l'inventaire} \label{ssec:obj-informatique-impl-stat}
             Selon l'\ac{OQLF} \parencite{oqlf_langage_2006}, les langages à objets sont définis de la manière suivante: 
             \begin{definition}
                 Langage de programmation dans lequel les composantes d'un programme sont modulaires et définies comme des objets indépendants.[...] Les concepts d'encapsulation et d'héritage sont à la base des langages orientés objet. Ainsi, l'encapsulation permet la réunion des données et des procédures dans une même entité appelée objet.
             \end{definition}
             Ces langages sont associés à un degré d'abstraction où les objets représentent un concept associé au problème résolu. Les objets sont définis par des classes. Les classes ont des attributs les définissant et des méthodes qui modifient leur attributs. Des fonctions utilitaires additionnelles peuvent être associées à un objet, par exemple pour le créer. Cela permet une représentation fonctionnelle du problème et met l'emphase sur les structures de données utilisées et tend à être utilisé pour des problèmes plus complexes et pour faciliter la maintenance et la compréhension \parencite{lawhead_learning_2023}. Pour ce projet, les classes suivantes suivants ont été définies dans le cadre du mémoire.
             \begin{itemize}
-                \item \ac{TD}
-                \item \ac{PR}
-                \item \ac{PRS}
-                \item \ac{RST}
-                \item \ac{PI}
-                \item \ac{PCI}
+                \item \acf{TD}
+                \item \acf{PR}
+                \item \acf{PRS}
+                \item \acf{RST}
+                \item \acf{PI}
+                \item \acf{PCI}
             \end{itemize}
-        \subsection{Classe TaxDataset ou ensemble de données foncières}
+            \clearpage
+        \subsubsection{Classe TaxDataset ou ensemble de données foncières}
             L'ensemble de données foncières est constitué de 3 attributs représentés au moyen des librairies Pandas et GeoPandas. Quatre méthodes ont été implémentées pour filtrer les données foncières selon des critères liés à leurs attributs.
-            \begin{table}[H]
-                \centering
-                \caption{Structure et méthodes principales de l'objet \texttt{TaxDatabase}}
-                \label{tab:taxdatabase_structure}
-                \begin{tabular}{p{5cm}p{11cm}}
+            \begin{longtable}{p{5cm}p{11cm}}
+                \caption{Attributs, méthodes et utilitaires de la classe \textbf{TaxDataset}}
+                \label{tab:taxdatabase_structure}\\
                 \toprule
                 \textbf{Type} & \textbf{Description} \\
                 \midrule
+                \endfirsthead
+                \multicolumn{2}{c}%
+                {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+                \toprule
+                \textbf{Type} & \textbf{Description} \\
+                \midrule
+                \endhead
+                \midrule
+                \multicolumn{2}{c}{Continué à la page suivante} \\
+                \midrule
+                \endfoot
+                \bottomrule
+                \endlastfoot   
                 \multicolumn{2}{l}{\textbf{Attributs}} \\
                 \midrule
-                \texttt{tax\_table} & Rôle foncier incluant la géométrie (\textit{GeoDataFrame}) (cf. Tableau \ref{tab:definition_role_foncier}). \\
-                \texttt{association\_table} & Association du rôle foncier au cadastre (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_assoc_role_cadastre}). \\
-                \texttt{lot\_table} & Géométrie des lots du cadastre (\textit{GeoDataFrame}) (cf. Tableau \ref{tab:definition_cadastre}). \\
+                tax\_table & 
+                Rôle foncier incluant la géométrie (\textit{GeoDataFrame}) (cf. Tableau \ref{tab:definition_role_foncier}). \\
+                association\_table & 
+                Association du rôle foncier au cadastre (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_assoc_role_cadastre}). \\
+                lot\_table & 
+                Géométrie des lots du cadastre (\textit{GeoDataFrame}) (cf. Tableau \ref{tab:definition_cadastre}). \\
                 \midrule
                 \multicolumn{2}{l}{\textbf{Méthodes}} \\
                 \midrule
-                \texttt{plot} & Crée un graphique \textit{matplotlib} à partir des données. \\
-                \texttt{explore} & Génère une carte interactive HTML navigable dans un navigateur web. \\
-                \texttt{year\_filter} & Filtre l'ensemble de données en fonction des années de construction. \\
-                \texttt{territory\_filter} & Filtre les points du rôle foncier situés à l'intérieur d'un territoire. \\
-                \texttt{select\_by\_land\_uses} & Filtre l'ensemble de données en fonction des \ac{CUBF}. \\
-                \texttt{get\_land\_uses\_in\_set} & Renvoie la liste des \ac{CUBF} présents dans l'ensemble de données. \\
+                plot & Crée un graphique \textit{matplotlib} à partir des données. \\
+                explore & Génère une carte interactive HTML navigable dans un navigateur web. \\
+                year\_filter & Filtre l'ensemble de données en fonction des années de construction. \\
+                territory\_filter& Filtre les points du rôle foncier situés à l'intérieur d'un territoire. \\
+                select\_by\_land\_uses & Filtre l'ensemble de données en fonction des \ac{CUBF}. \\
+                get\_land\_uses\_in\_set & Renvoie la liste des \ac{CUBF} présents dans l'ensemble de données. \\
                 \midrule
                 \multicolumn{2}{l}{\textbf{Fonctions utilitaires}} \\
                 \midrule
-                \texttt{tax\_database\_points\_ from\_date\_territory} & Renvoie un ensemble de données en fonction de l'identifiant du territoire, d'une date de début et d'une date de fin. \\
-                \texttt{tax\_database\_for\_ analysis\_territory} & Renvoie un ensemble de données pour un territoire d'analyse en fournissant l'identifiant du quartier. \\
-                \bottomrule
-                \end{tabular}
-            \end{table}
-        \subsection{Classe ParkingRegulation ou Règlement de Stationnement} 
+                tax\_database\_points\_ from\_date\_territory & Renvoie un ensemble de données en fonction de l'identifiant du territoire, d'une date de début et d'une date de fin. \\
+                tax\_database\_for\_ analysis\_territory & Renvoie un ensemble de données pour un territoire d'analyse en fournissant l'identifiant du quartier \\
+            \end{longtable}
+            \clearpage
+        \subsubsection{Classe ParkingRegulation ou Règlement de Stationnement} 
             Cet objet représente un ou plusieurs règlements. Il est composé des tables suivantes:
             \begin{table}[H]
             \centering
@@ -819,13 +868,13 @@
             \midrule
             \multicolumn{2}{l}{\textbf{Attributs}} \\
             \midrule
-            \texttt{reg\_head} & Entête de règlement contenant les informations de la table \underline{entete\_reg\_stationnement} (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_entete_reg_stationnement}). \\
+            reg\_head & Entête de règlement contenant les informations de la table \underline{entete\_reg\_stationnement} (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_entete_reg_stationnement}). \\
             reg\_def & Définition mathématique à appliquer pour le règlement donné (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_reg_stat_emp}). \\
             units\_table & Table représentant les unités associées aux règlements définis (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_unite}). \\
             \midrule
             \multicolumn{2}{l}{\textbf{Méthodes}} \\
             \midrule
-            get\_city\_regs & Renvoie les règles dont l'attribut \texttt{ville} correspond à la chaîne de caractères fournie. \\
+            get\_city\_regs & Renvoie les règles dont l'attribut ville correspond à la chaîne de caractères fournie. \\
             get\_current\_reg & Renvoie les règlements dont l'année de fin est absente de l'entête. \\
             get\_regs\_for\_year & Renvoie les règlements en vigueur à l'année fournie. \\
             get\_reg\_by\_id & Renvoie les règlements dont les identifiants correspondent aux entiers fournis en entrée. \\
@@ -837,16 +886,27 @@
             \end{tabular}
             \end{table}
         
-        \subsection{Classe ParkingRegulationSet ou ensemble de règlement}
+        \subsubsection{Classe ParkingRegulationSet ou ensemble de règlement}
             Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il se distingue du règlement de deux manières. D'une part, il associe les règlements aux \ac{CUBF}. D'autre part, il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les paramètres suivants:
-            \begin{table}[H]
-            \centering
+            \begin{longtable}{p{5cm}p{11cm}}
             \caption{Structure et méthodes principales de l'objet \textbf{ParkingRegulationSet}}
-            \label{tab:parkingregulationset_structure}
-            \begin{tabular}{p{5cm}p{11cm}}
-                \toprule
-                \textbf{Type} & \textbf{Description} \\
-                \midrule
+            \label{tab:parkingregulationset_structure}\\
+            \toprule
+            \textbf{Type} & \textbf{Description} \\
+            \midrule
+            \endfirsthead
+            \multicolumn{2}{c}%
+            {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+            \toprule
+            \textbf{Type} & \textbf{Description} \\
+            \midrule
+            \endhead
+            \midrule
+            \multicolumn{2}{r}{Continué à la page suivante} \\
+            \midrule
+            \endfoot
+            \bottomrule
+            \endlastfoot   
                 \multicolumn{2}{l}{\textbf{Attributs}} \\
                 \midrule
                 start\_date & Date d'entrée en vigueur de l'ensemble de règlements. \\
@@ -869,11 +929,10 @@
                 \multicolumn{2}{l}{\textbf{Fonctions utilitaires}} \\
                 \midrule
                 from\_sql & Renvoie un ensemble de règlements dont l'identifiant correspond à celui fourni, à partir d'une requête SQL. \\
-                \bottomrule
-                \end{tabular}
-            \end{table}
+                
+            \end{longtable}
         
-        \subsection{Classe RegSetTerritory ou ensemble de règlements de territoires}
+        \subsubsection{Classe RegSetTerritory ou ensemble de règlements de territoires}
             Un \ac{RST} associe un territoire à un ensemble de règlements. Ces paramètres sont listés ci-dessous:
             \begin{table}[H]
                 \centering
@@ -899,7 +958,9 @@
                 \bottomrule
                 \end{tabular}
             \end{table}
-        \subsection{Classe ParkingCalculationInput ou intrant au calcul de stationnement}
+            \clearpage
+        
+        \subsubsection{Classe ParkingCalculationInput ou intrant au calcul de stationnement}
             Le \ac{PCI} hérite des DataFrame Pandas \parencite{pandas_contributors_pandas_2025}. La table a les colonnes suivantes:
             \begin{table}[H]
             \centering
@@ -930,56 +991,63 @@
             \bottomrule
             \end{tabular}
             \end{table}
+        \clearpage
         
-        
-        \subsection{Classe ParkingInventory ou inventaire de stationnement}
-            L'inventaire de stationnement a un seul attribut qui est un DataFrame: 
-            \begin{table}[H]
-                \centering
-                \caption{Structure et méthodes principales de l'objet \texttt{ParkingInventory}}
-                \label{tab:obj_parking_inventory}
-                \begin{tabular}{p{3cm} p{10cm} p{3cm}}
-                \toprule
-                \textbf{Attribut / Fonction} & \textbf{Description} & \textbf{Type / Portée} \\
-                \midrule
-                parking\_frame & Table décrivant l'inventaire (cf. Tableau~\ref{tab:definition_table_inventaire}). & Table principale \\
-                \midrule
-                \multicolumn{3}{l}{\textbf{Méthodes de l'objet}} \\
-                \midrule
-                concat & Concatène deux inventaires pour former un seul ensemble cohérent. & Méthode d'instance \\
-                to\_postgis & Sauvegarde l'inventaire dans la base de données PostgreSQL/PostGIS. & Méthode d'instance \\
-                merge\_lot\_data & Vérifie la présence de multiples inventaires pour un même lot et agrège les données correspondantes. & Méthode d'instance \\
-                \midrule
-                \multicolumn{3}{l}{\textbf{Fonctions associées (dans le même module)}} \\
-                \midrule
-                subset\_operation & Arbitre entre deux estimations lorsque le règlement impose des sous-ensembles distincts. & Fonction utilitaire \\
-                dissolve\_list & Dissout une liste d'inventaires en un seul objet d'inventaire. & Fonction utilitaire \\
-                inventory\_duplicates\_agg\_function & Agrège les estimations de plusieurs périodes pour un même lot en additionnant les valeurs et en concaténant les références aux règlements, ensembles de règlements et \ac{CUBF}. & Fonction utilitaire \\
-                calculate\_inventory\_by\_analysis\_sector & Fonction d'entrée pour calculer un inventaire pour un secteur d'analyse donné. & Fonction principale \\
-                calculate\_inventory\_by\_lot & Fonction d'entrée pour calculer la capacité de stationnement pour un lot spécifique. & Fonction principale \\
-                to\_sql & Sauvegarde l'inventaire avec vérification des doublons. Permet à l'utilisateur de confirmer le remplacement d'un estimé existant. & Fonction principale \\
-                calculate\_parking\_for\_ reg\_set\_territories & Itère sur les \ac{RST} fournis et appelle les fonctions nécessaires pour le calcul du stationnement. & Fonction d'aide \\
-                calculate\_parking\_ specific\_reg\_set & Itère sur les \ac{PR} au sein d'un \ac{RST} et appelle les fonctions nécessaires au calcul de l'inventaire. & Fonction d'aide \\
-                calculate\_parking\_ specific\_reg & Itère sur les sous-ensembles de chaque \ac{PR} pour appeler la fonction de calcul de l'estimation. & Fonction d'aide \\
-                calculate\_parking\_ specific\_reg\_subset & Calcule la capacité de stationnement requise pour chaque sous-ensemble d'un règlement donné. & Fonction d'aide \\
-                \bottomrule
-                \end{tabular}
-            \end{table}
+        \subsubsection{Classe ParkingInventory ou inventaire de stationnement}
+        L'inventaire de stationnement a un seul attribut qui est un DataFrame: 
+        \begin{longtable}{p{5cm} p{11cm} }
+            \caption{Structure et méthodes principales de l'objet \texttt{ParkingInventory}}\label{tab:obj_parking_inventory}\\
+            \toprule
+            \textbf{Type} & \textbf{Description} \\
+            \midrule
+            \endfirsthead
+            \multicolumn{2}{c}%
+            {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+            \toprule
+            \textbf{Type} & \textbf{Description} \\
+            \midrule
+            \endhead
+            \midrule
+            \multicolumn{2}{r}{Continué à la page suivante} \\
+            \midrule
+            \endfoot
+            \bottomrule
+            \endlastfoot
+            parking\_frame & Table décrivant l'inventaire (cf. Tableau~\ref{tab:definition_table_inventaire})\\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Méthodes}} \\
+            \midrule
+            concat & Concatène deux inventaires pour former un seul ensemble cohérent.  \\
+            to\_postgis & Sauvegarde l'inventaire dans la base de données PostgreSQL/PostGIS.  \\
+            merge\_lot\_data & Vérifie la présence de multiples inventaires pour un même lot et agrège les données correspondantes \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Fonctions utilitaires}} \\
+            \midrule
+            subset\_operation & Arbitre entre deux estimations lorsque le règlement impose des sous-ensembles distincts.  \\
+            dissolve\_list & Dissout une liste d'inventaires en un seul objet d'inventaire \\
+            inventory\_duplicates\_ agg\_function & Agrège les estimations de plusieurs périodes pour un même lot en additionnant les valeurs et en concaténant les références aux règlements, ensembles de règlements et \ac{CUBF}\\
+            calculate\_inventory\_ by\_analysis\_sector & Fonction d'entrée pour calculer un inventaire pour un secteur d'analyse donné \\
+            calculate\_inventory\_ by\_lot & Fonction d'entrée pour calculer la capacité de stationnement pour un lot spécifique.  \\
+            to\_sql & Sauvegarde l'inventaire avec vérification des doublons. Permet à l'utilisateur de confirmer le remplacement d'un estimé existant. \\
+            calculate\_parking\_for\_ reg\_set\_territories & Itère sur les \ac{RST} fournis et appelle les fonctions nécessaires pour le calcul du stationnement \\
+            calculate\_parking\_ specific\_reg\_set & Itère sur les \ac{PR} au sein d'un \ac{RST} et appelle les fonctions nécessaires au calcul de l'inventaire.\\
+            calculate\_parking\_ specific\_reg & Itère sur les sous-ensembles de chaque \ac{PR} pour appeler la fonction de calcul de l'estimation\\
+            calculate\_parking\_ specific\_reg\_subset & Calcule la capacité de stationnement requise pour chaque sous-ensemble d'un règlement donné \\
+        \end{longtable}
 
-        
+    Cette section a donné un aperçu de l'organisation des classes créées pour faire le calcul de l'inventaire à partir des données entreposées dans la base de données détaillée auparavant. La section suivante montrera schématiquement comment les différentes fonctions et méthodes sont utilisées pour sélectionner, assembler, et faire le traitement des données avant de les retourner à l'utilisateur.
 
-    \begin{figure}[H]
-            \centering
-           \includegraphics[width=0.8\linewidth]{figures/logigramme-calcul-minimums.pdf}
-            \caption{Logigramme de calcul}
-            \label{fig:logigramme_calcul_urbanisme}
-        \end{figure}
-        \FloatBarrier
     \subsection{Logigramme de la procédure de calcul de l'inventaire}\label{ssec:logigramme-calcul-stationnement}
         La méthode suivante est proposée pour le calcul de la capacité de stationnement basé sur les règlements de l'urbanisme. Ce calcul est déclenché soit en sélectionnant un quartier à analyser, soit en demandant de calculer pour un lot particulier. Dans les deux cas, la procédure est la même. Le script de calcul a été implémenté en utilisant le langage Python. La figure \ref{fig:logigramme_calcul_urbanisme} montre le logigramme de haut niveau pour l'approche par les minimums. \par
         
         On commence par sélectionner les points du rôle foncier dans une zone prescrite, on trouve les municipalités actuelles et historiques qui interceptent l'ensemble des points, on trouve les ensembles de règlements qui sont associés à chaque territoire, on segmente ensuite les données du rôle foncier en fonction de la réglementation qui s'y applique, et on applique les règlements. Une fois les calculs complétés, on agrège les calculs par lot pour l'ensemble des périodes avant de les sauvegarder dans la table appropriée.
-        \FloatBarrier
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\linewidth]{figures/logigramme-calcul-minimums.pdf}
+            \caption{Logigramme de calcul}
+            \label{fig:logigramme_calcul_urbanisme}
+        \end{figure}
+    
     \subsection{Procédure de sélection des données foncières} \label{ssec:selection-donnees-foncieres}
         Le script commence par obtenir les entrées du rôle foncier qui se trouvent à l'intérieur du quartier visé comme montré à la figure \ref{fig:select-tax-dataset}. La requête SQL associe ensuite les items du rôle foncier au cadastre et requiert l'ensemble des items.
         \begin{figure}[h]
@@ -990,22 +1058,23 @@
         \end{figure}
         La table \ul{association\_cadastre\_role} est ensuite utilisée pour obtenir les données du cadastre qui ont été associées par jointure spatiale au rôle foncier.
         Les requêtes SQL pertinentes sont données en annexe \ref{sec:annex-select-tax-data}. Le résultat représente les limites et propriétés de lots, l'association entre les lots et les entrées du rôle, et les entrées du rôle. La figure \ref{fig:select-tax-dataset} donne une représentation schématique d'un \ac{TD} qui est une combinaison des données du rôle foncier et du cadastre.
-        \begin{figure}[h]
+        \begin{figure}[H]
             \centering
             \includegraphics[scale=0.9]{figures/representation-TD.pdf}
             \caption{Représentation schématique d'un \ac{TD}}
             \label{fig:select-tax-dataset}
         \end{figure}
+    
     \subsection{Procédure de sélection des territoires et règlements} \label{ssec:select-reg-set-territories}
-        Il faut d'abord trouver les territoires géopolitiques qui touchent aux points du rôle foncier. Les entrées du rôle foncier sont ensuite réparties entre les différents territoires historiques et se voient affecter un ensemble de règlements en fonction de la date de construction. La figure montre de potentielles dates de construction pour l'exemple de la figure \ref{fig:select-tax-dataset}. 
-        \begin{figure}[h]
+        Il faut d'abord trouver les territoires géopolitiques qui touchent aux points du rôle foncier. Les entrées du rôle foncier sont ensuite réparties entre les différents territoires historiques et se voient affecter un ensemble de règlements en fonction de la date de construction. La figure \ref{fig:tax-data-const-assign} montre de potentielles dates de construction pour l'exemple de la figure \ref{fig:select-tax-dataset}. 
+        \begin{figure}[H]
             \centering
             \includegraphics[scale=1]{figures/date-construction-exemple-calcul.pdf}
             \caption{Affectations de dates à l'exemple de données foncières}
             \label{fig:tax-data-const-assign}
         \end{figure}
         Postulons un cas hypothétique où deux périodes couvrent ces 5 propriétés. La figure \ref{fig:example-period-multiple} montre comment les données foncières se répartissent sur les territoires en fonction de la date de construction. 
-        \begin{figure}[h]
+        \begin{figure}[H]
             \centering
             \begin{subfigure}{0.45\textwidth}
                 \centering
@@ -1031,6 +1100,7 @@
             \label{fig:schema-prs-application}
         \end{figure}
         Les requêtes SQL et quelques morceaux de script Python sont présentés à l'annexe \ref{sec:annex-assign-rule-to-role}
+    
     \subsection{Procédure d'assignation des données foncières aux RST}\label{ssec:meth-assign-td-to-rst}
         Les données foncières obtenues initialement doivent ensuite être assignées à chaque ensemble de règlements en préparation au calcul de l'inventaire. Cette opération est complétée dans une boucle au sein de la fonction get\_rst\_by\_tax\_tax\_data. Les détails de cette boucle sont donnés dans l'extrait de code \ref{lst:assign_tax_data}.
 
@@ -1057,6 +1127,8 @@
             
         \end{table}
         
+    \subsection{Conversions d'unités}
+        À ce state-ci, le logiciel aura nettoyé les données d'entrées de manière à avoir un \ac{TD} et un \ac{RST} prêts pour le calcul. Il faut maintenant convetir les unités du rôle foncier vers les unités dans lesquelles sont formulées la règlementation. Ce processus est relativement simple et formalise simplement les assocations décrites aux sections
     \subsection{Procédure de calcul des minimums}
         Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus sont utilisés comme intrants dans la fonction calculate\_parking\_for\_reg\_set\_territories pour dresser l'inventaire. Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimation à utiliser s'il y a plusieurs méthodes de calcul.\clearpage
         \subsubsection{Calcul des sous-ensembles: calculate\_parking\_specific\_reg}
@@ -1076,4 +1148,4 @@
             \caption{Arbitrage entre deux estimations}
             \label{fig:logigramme_arbitrage_ss_ensemble}
         \end{figure}
-        Maintenant que la procédure de calcul est définie, la section suivante discutera des 
+    Maintenant que la procédure de calcul est définie, la section suivante discutera des 

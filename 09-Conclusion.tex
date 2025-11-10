@@ -15,7 +15,6 @@ Cette section donnera un survol des constats dressés au fil du mémoire. La sec
     \subsection{Nature déductive de l'étude}
         Comme la plupart des autres études visant à estimer le stationnement, toutes les études recensées \parencite{chester_inventorying_2022,chester_parking_2015,hoehne_valley_2019,davis_estimating_2010,qiam_pipeline_2025}, elles fonctionnent toutes selon un ensemble d'hypothèses soit sur la quantité construite par rapport au règlement ou sur la structure visuelle des stationnements, ou l'absence de stationnement souterrain qui impliquent nécessairement que les modèles prédiront toujours une valeur par rapport à une réalité conditionnelle (données d'entraînement, ensemble de validation) qui limite la capacité des chercheurs à statuer sur la quantité réelle de stationnement sur un territoire donnée. Sachant qu'un dénombrement complet est peu probable du fait des coùts associés\parencite{heran_consommation_2008}, une approche utilisant les méthodes de sondage pourrait un bon second choix pour inférer la quantité de stationnement à partir de méthodes d'inférence statistique avec le cadastre et le rôle foncier comme base de sondage. C'est le seul moyen statistiquement robuste de confirmer ou infirmer les hypothèses que posent les différentes méthodes déductives présentement établies.
         
-    
     \subsection{Limitations de la méthodologie de prédiction choisie}
     
         \subsubsection{Différences entre les places minimums et les places prédites}
@@ -28,6 +27,7 @@ Cette section donnera un survol des constats dressés au fil du mémoire. La sec
         \subsubsection{Besoin en données foncières}
             Contrairement au méthodes basées sur l'orthophotographie\parencite{hellekes_parking_2023,qiam_pipeline_2025}, la méthode proposée nécessite d'avoir des données spécialisées exhaustives. L'absence de données pour entre 30 et 80 \% des propriétés dans des catégories qui contribuent fortement au nombre total de places est donc une importante limite de la méthode. Selon les distributions montrée dans la section sur les données foncières, les propriétés avec des données manquantes tendent à avoir une valeur au rôle plus élevée et il y a donc un potentiel pour un nombre élevé de places non-comptabilisées (cf. Figure \ref{fig:missing-data-value-distr}).\par
             Ce constat est particulièrement marquant sur certaines propriétés où toutes les entrées du rôle foncier sont concentrées sur un lot cadastral alors que ces entrées concernent un ensemble de lots avoisinants. L'outil tel qu'actuellement implémenté ne permet pas de rapidement visualiser les données du rôle foncier (si tant est qu'il soit possible de rapidement diagnostiquer un tel ensemble de données). 
+    
     \subsection{Limitations de l'implémentation}
     
         \subsubsection{Conversions d'unités}
@@ -47,6 +47,7 @@ Cette section donnera un survol des constats dressés au fil du mémoire. La sec
             La formulation actuelle des règlements avec les opérateurs, les seuils et la formule mathématique du règlement dans la même table est extrêmement sensible à l'ordre dans lequel les données sont rentrées et l'auteur n'a pas eu le temps de rendre la procédure de calcul plus robuste. D'autre part, il serait pertinent de permettre de désactiver l'utilisation d'unités converties si une formulation alternative existe. Par exemple, si le règlement spécifie une formulation par sièges et une formulation par mètre carré, la formulation par sièges pourrait potentiellement être ignorée.
         \subsubsection{Estimation de la consommation d'espace}
             La formulation actuelle de l'indicateur de consommation d'espace sous-estime cette dernière. En réalité les plus grands stationnement requièrent des voies d'accès et l'aménagement d'espaces verts qui consomment encore plus d'espace. D'autre part, les requis municipaux requièrent aussi des voies de déchargement de camion sur certaines propriétés commerciales qui vont modeler le transport de marchandise. Ces espaces peuvent d'autre part être utilisés comme stationnement pour voiture dépendant de l'occupant compliquant encore l'évaluation.
+    
     \subsection{Limitations de l'outil développé}
         \subsubsection{Inclusion d'outils d'analyse désagrégée et de diagnostic}
             Un des leçons apprises lors de la validation est que la visualisation désagrégée des prédiction et la possibilité de faire des graphiques de la capacité de stationnement en fonction de diverses variables d'intérêt. Idéalement, il serait possible d'identifier des points aberrants dans l'outil immédiatement. L'outil cartographique implémenté est intéressant mais n'est pas très efficace pour chercher des problèmes et une approche hybride entre la cartographie et les graphiques aurait été préférable. D'autre part, la navigation à un lieu dans la ville demeure ardue. Il est à l'heure actuelle de sélectionner un quartier pour voir l'inventaire ce qui mène à beaucoup de cas où l'on doit alterner entre une recherche visuelle dans l'analyse cartographique agrégée et la section d'inventaire. Un échelle d'agrégation intermédiaire serait aussi bénéfique pour identifier des lieux où l'on prédit
@@ -68,18 +69,34 @@ Cette section donnera un survol des constats dressés au fil du mémoire. La sec
 %%  AMELIORATIONS FUTURES / FUTURE RESEARCH
 %%
 \section{Améliorations futures}
-    \subsection{Amélioration à la méthodologie par les règlements d'urbanisme}
+    \subsection{Amélioration aux structures de données}
+        
         \subsubsection{Calibration des facteurs de conversion}
-            La priorité pour améliorer les prédictions devrait être de rendre les conversions d'unités plus représentatives. La table \ul{multiplication\_facteurs\_colonnes} devrait être scindée en deux. Une partie contiendrait les informations.
+            La priorité pour améliorer les prédictions devrait être de rendre les conversions d'unités plus représentatives. La table \ul{multiplication\_facteurs\_colonnes} devrait être scindée en trois tables. La première contiendrait l'identifiant d'unité et la description. La deuxième serait une table de formulations décrivant la colonne du rôle à utiliser et la formulation mathématique à utiliser. La troisième mettrait en place une association entre les \ac{CUBF} et les formulations de conversion. Comme pour les ensembles de règlements, la formulation en arbre des \ac{CUBF} pourrait être exploitée pour ne pas avoir à énumérer l'ensemble des \ac{CUBF} pertinents.\par
+            Cette formulation devrait être associée avec un module qui permet de formuler des régressions à partir des données en cherchant les lots par \ac{CUBF}, puis en formulant un modèle de régression adéquat par catégorie d'usages. À terme, les régressions pourraient être pré-définies mais un utilitaire pour les modifier demeurera utile.
+        
         \subsubsection{Amélioration du modèle de représentation des règlements}
-
+            Le modèle actuel de règlement est très fragile et mal normalisé. La compilation des sous-ensembles, des seuils et des formulations en une seule table rend l'extraction de données peu robuste. La solution ici devrait être encore une fois de scinder la table \ul{reg\_stationnement\_empile} en deux et de remettre une partie des données dans la table d'entête. \par
+            Tout d'abord, on ajouterait deux colonnes à l'entête: la première serait une liste de longueur $N_{se}$ d'identifiants de sous-ensembles. La deuxième serait une liste de longueur $N_{se}-1$ contenant les opérateurs à utiliser entre les sous-ensembles.\par
+            La première table 
+            La deuxième table serait une table de formules mathématiques avec une pente, une constante et une unité de formulation. La deuxième table contiendrait serait une table de sous-ensemble. Ici, un opérateur de sous ensemble, des plages d'applicabiité
+        
         \subsubsection{Intégration de facteurs de correction}
+            Une fois la validation completée, un modèle de correction devrait être implémenté en utilisant des méthodes bayésiennes avec la catégorie de validation et la prédiction réglementaire comme antécédents pour définir une distribution de probabilité pour les valeurs plausibles de stationnement sur un lot. Il s'agirait ici encore d'une prédiction et pas nécessairement
     \subsection{Évaluation de la performance du modèle}
+        
         \subsubsection{Changement de la structure de données pour les catégories}
-        \subsubsection{Création automatique de classes pour les lots non assignés à une catégorie}
+        
+        \subsubsection{Création automatique de catégories pour les lots non assignés}
+    
     \subsection{Améliorations à apporter à l'outil}
-        \subsubsection{Inclusion du stationnement sur rue et de méthodes d'inférence et de prédictions alternatives dans l'outil}
+        
+        \subsubsection{Inclusion du stationnement sur rue}
+        
+        \subsubsection{Inclusion de méthodes alternatives}
             Cet auteur est relativement convaincu qu'une méthode par sondage est requise de caler les prédictions sur des fondations statistiques fiables. L'inclusion de méthodes d'estimations pour les petites aires \parencite{ghosh_small_1994} pourrait être un beau complément aux méthodes prédictives. L'expertise de la chaire en enquête de transports\parencite{morency_measuring_2023}  et en développement de logiciels pourrait être mise à profit pour créer les plans de sondage et mettre en place un dispositif de récolte des données. Même si les méthodes de segementation d'image aérienne deviennent de plus en plus précises, il demeure que les méthodes d'enquête demeure l'étalon pour ce type de dénombrement. Si un modèle de segmentation d'imagerie est implémenté, l'intégration dans le modèle de segmentation de classes liées au partage de la voirie seraient un beau complément aux études passées dans la chaire. 
+        
         \subsubsection{Améliorations d'interface utilisateur}
+
 
         \subsubsection{Élagage de fonctions et de tables}

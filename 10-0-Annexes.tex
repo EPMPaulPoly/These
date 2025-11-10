@@ -1300,27 +1300,36 @@ left join cubf on cubf.cubf=iv.cubf_principal
 order by n_places_min desc
 \end{lstlisting}
 
+\Annexe{Découpage géopolitique utilisé}\label{ann:political-split-up}
+Tel que mentionné à la section \ref{ssec:data-geopolitique-territoire}, une légère modification du découpage municipal brut d'Élections Québec \parencite{elections_quebec_atlas_2021} a été fait pour maintenir une différentiation entre le zonage de la vieille partie de Québec et le secteur des Rivières.
 
-        \subsection{StrateEchantillon}
-            Un objet est implémenté dans Typescript pour manipuler les catégories de validation. La description de strate est issue de la théorie d'échantillonnage, mais est évitée dans le cadre du mémoire pour éviter la confusion entre les méthodes inductives et la validation de modèle. Contrairement à la structure de données dans la base de données, l'objet utilise une structure de donnée récursive pour pouvoir créer un arbre pour les strates. Chaque entrée crée une seule condition sur une colonne de la table \ul{input\_validation}. Les paramètres de l'objet sont les suivants: 
-            \begin{itemize}
-                \item id\_strate: l'identifiant de la strate
-                \item nom\_strate: une brève description
-                \item nom\_colonne: la colonne de la table \ul{inputs\_validation} à laquelle s'applique la condtion
-                \item ids\_enfants: une liste des id\_strate des strates qui sont sous cette strate dans l'arbre
-                \item est\_racine: booléen indiquant que la strate est en haut de l'arbre (i.e cette strate est la première chargée dans la récursion) 
-                \item index\_ordre: index pour permettre (à terme ) de changer l'ordre des strates dans la visualisation
-                \item logements\_valides: condition supplémentaire pour indiquer que le nombre de logements doit être valide pour les entrées de cette strate
-                \item date\_valide : condition supplémentaire pour indiquer que le nombre de logements doit être valide pour les entrées de cette strate
-                \item superf\_valide : condition supplémentaire pour indiquer que la superficie to doit être valide pour les entrées de cette strate
-                \item n\_sample: spécifie la taille d'échantillon pour la strate
-                \item condition: une structure de donnée pour définir les conditions numérique qui s'appliquent sur la colonne spécifiée dans nom\_colonne 
-                    \begin{itemize}
-                        \item condition\_type: définit le type de condition comme une valeur unique (\og{equals}\fg{}) ou une étendue (\og{range}\fg{})
-                        \item condition\_min: minimum de l'étendue si la condition est de type \og{range}\fg{}
-                        \item condition\_max: maximum de l'étendue si la condition est de type \og{range}\fg{}
-                        \item condition\_valeur: valeur que doit avoir la colonne si la condition est de type \og{equals}\fg{}
-                    \end{itemize}
-                \item substrata: les strates dont les identifiants sont sauvegardés dans ids\_enfants
-            \end{itemize}
-            L'implémentation actuelle est plus procédurale qu'orientée objet et mériterait d'être améliorée dans des versions futures de l'outil. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{images/geopol-per-1}
+    \caption{Découpage pour la période 1}\label{fig:ann-dec-per-1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{images/geopol-per-3}
+    \caption{Découpage pour la période 3}\label{fig:ann-dec-per-3}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{images/geopol-per-3}
+    \caption{Découpage pour la période 4}\label{fig:ann-dec-per-4}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{images/geopol-per-5}
+    \caption{Découpage pour la période 5}\label{fig:ann-dec-per-5}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{images/geopol-per-6}
+    \caption{Découpage pour la période 6}\label{fig:ann-dec-per-6}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{images/geopol-per-7}
+    \caption{Découpage pour la période 7}\label{fig:ann-dec-per-7}
+\end{figure}
