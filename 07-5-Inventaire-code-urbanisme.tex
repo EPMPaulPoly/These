@@ -226,7 +226,7 @@
             7 & Harmonisation & 2010 & S.V.\\ \hline
         \end{tabular}
     \end{table}
-    La figure \ref{fig:offstreet_db_erd_history} montre le détail du diagramme d’entité relation de l'évolution des variations géopolitiques du territoire.
+    La figure \ref{fig:offstreet_db_erd_history} montre le détail du diagramme d'entité relation de l'évolution des variations géopolitiques du territoire.
     \begin{figure}[h]
         \centering
         \includegraphics[trim={85cm 0 42.5cm 112.5cm}, clip, width=15cm]{dia/ERD_stationnement_propre.png}
@@ -630,10 +630,10 @@
             CUBF = 637 - ENTREPOSAGE ET SERVICE D'ENTREPOSAGE & 57 \\
             CUBF = 64 - SERVICE DE RÉPARATION & 57 \\
             CUBF = 641 - SERVICE DE RÉPARATION D'AUTOMOBILES & 57 \\
-            CUBF = 6412 - SERVICE DE LAVAGE D’AUTOMOBILES & 57 \\
+            CUBF = 6412 - SERVICE DE LAVAGE D'AUTOMOBILES & 57 \\
             CUBF = 65 - SERVICE PROFESSIONNEL & 57 \\
             CUBF = 651 - SERVICE MÉDICAL ET DE SANTÉ & 57 \\
-            CUBF = 6513 - SERVICE D’HÔPITAL & 57 \\
+            CUBF = 6513 - SERVICE D'HÔPITAL & 57 \\
             CUBF = 6516 - SANATORIUM, MAISON DE CONVALESCENCE ET MAISON DE REPOS & 57 \\
             CUBF = 6541 - SERVICE DE GARDERIE (PRÉMATERNELLE, MOINS DE 50 % DE POUPONS) & 57 \\
             CUBF = 66 - SERVICE DE CONSTRUCTION & 57 \\
@@ -648,7 +648,7 @@
             CUBF = 6815 - ÉCOLE ÉLÉMENTAIRE ET SECONDAIRE & 57 \\
             CUBF = 6821 - UNIVERSITÉ & 57 \\
             CUBF = 6822 - ÉCOLE POLYVALENTE & 57 \\
-            CUBF = 6823 - CEGEP (COLLÈGE D’ENSEIGNEMENT GÉNÉRAL ET PROFESSIONNEL) & 57 \\
+            CUBF = 6823 - CEGEP (COLLÈGE D'ENSEIGNEMENT GÉNÉRAL ET PROFESSIONNEL) & 57 \\
             CUBF = 69 - SERVICES DIVERS & 57 \\
             CUBF = 6911 - ÉGLISE, SYNAGOGUE, MOSQUÉE ET TEMPLE & 57 \\
             CUBF = 7 - CULTURELLE, RÉCRÉATIVE ET DE LOISIRS & 58 \\
@@ -664,13 +664,13 @@
             CUBF = 8 - PRODUCTION ET EXTRACTION DE RICHESSES NATURELLES & 58 \\
             CUBF = 9 - IMMEUBLES NON EXPLOITÉS ET ÉTENDUES D'EAU & 58 \\
             CUBF = 9410 - LOGEMENT VACANT DANS UN BÂTIMENT COMPORTANT PLUSIEURS LOGEMENTS OU AUTRES LOCAUX & 57 \\
-            CUBF = 9420 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT INDUSTRIEL & 57 \\
-            CUBF = 9451 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT LA VENTE AU DÉTAIL & 57 \\
-            CUBF = 9452 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DES FINS DE RÉPARATION (ATELIER) & 57 \\
-            CUBF = 9458 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DE LA RESTAURATION & 57 \\
-            CUBF = 9459 - AUTRES ESPACES DE PLANCHER INOCCUPÉS DONT L’USAGE SERAIT COMMERCIAL & 57 \\
-            CUBF = 9460 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DES FINS DE SERVICES PROFESSIONNELS & 57 \\
-            CUBF = 9470 - ESPACE DE PLANCHER INOCCUPÉ DONT L’USAGE SERAIT POUR DES FINS CULTURELLES & 57 \\
+            CUBF = 9420 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT INDUSTRIEL & 57 \\
+            CUBF = 9451 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT LA VENTE AU DÉTAIL & 57 \\
+            CUBF = 9452 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS DE RÉPARATION (ATELIER) & 57 \\
+            CUBF = 9458 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DE LA RESTAURATION & 57 \\
+            CUBF = 9459 - AUTRES ESPACES DE PLANCHER INOCCUPÉS DONT L'USAGE SERAIT COMMERCIAL & 57 \\
+            CUBF = 9460 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS DE SERVICES PROFESSIONNELS & 57 \\
+            CUBF = 9470 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS CULTURELLES & 57 \\
             \end{longtable}
             Le tableau \ref{tab:liste-er-crees} à l'annexe \ref{sec:annex-prs-created} donne une liste des ensembles de règlements créés. La figure \ref{fig:er-counts-byperiod} montre le nombre d'ensembles de règlements par période. La période après l'harmonisation des règlements d'urbanisme (2009-aujourd'hui) comporte le plus d'ensembles de règlements par territoire puisque l'historique détaillé est compilé pour cette période alors que les autres ont une couverture nettement plus faible.
             \begin{figure}[H]
@@ -760,7 +760,212 @@
             \label{fig:sec-analyse}
         \end{figure}
         Maintenant que l'ensemble de la structure de données nécessaire pour la définition des règlements a été établie la section suivante donnera un aperçu à haut niveau de la méthode de calcul de l'estimation du nombre de places de stationnement pour un quartier. 
+    \section{Objets Informatiques et leurs méthodes}
+        \subsection{Objets informatiques utilisés dans le calcul de l'inventaire} \label{ssec:obj-informatique-impl-stat}
+            Selon l'\ac{OQLF} \parencite{oqlf_langage_2006}, les langages à objets sont définis de la manière suivante: 
+            \begin{definition}
+                Langage de programmation dans lequel les composantes d'un programme sont modulaires et définies comme des objets indépendants.[...] Les concepts d'encapsulation et d'héritage sont à la base des langages orientés objet. Ainsi, l'encapsulation permet la réunion des données et des procédures dans une même entité appelée objet.
+            \end{definition}
+            Ces langages sont associés à un degré d'abstraction où les objets représentent un concept associé au problème résolu. Les objets sont définis par des classes. Les classes ont des attributs les définissant et des méthodes qui modifient leur attributs. Des fonctions utilitaires additionnelles peuvent être associées à un objet, par exemple pour le créer. Cela permet une représentation fonctionnelle du problème et met l'emphase sur les structures de données utilisées et tend à être utilisé pour des problèmes plus complexes et pour faciliter la maintenance et la compréhension \parencite{lawhead_learning_2023}. Pour ce projet, les classes suivantes suivants ont été définies dans le cadre du mémoire.
+            \begin{itemize}
+                \item \ac{TD}
+                \item \ac{PR}
+                \item \ac{PRS}
+                \item \ac{RST}
+                \item \ac{PI}
+                \item \ac{PCI}
+            \end{itemize}
+        \subsection{Classe TaxDataset ou ensemble de données foncières}
+            L'ensemble de données foncières est constitué de 3 attributs représentés au moyen des librairies Pandas et GeoPandas. Quatre méthodes ont été implémentées pour filtrer les données foncières selon des critères liés à leurs attributs.
+            \begin{table}[H]
+                \centering
+                \caption{Structure et méthodes principales de l'objet \texttt{TaxDatabase}}
+                \label{tab:taxdatabase_structure}
+                \begin{tabular}{p{5cm}p{11cm}}
+                \toprule
+                \textbf{Type} & \textbf{Description} \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Attributs}} \\
+                \midrule
+                \texttt{tax\_table} & Rôle foncier incluant la géométrie (\textit{GeoDataFrame}) (cf. Tableau \ref{tab:definition_role_foncier}). \\
+                \texttt{association\_table} & Association du rôle foncier au cadastre (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_assoc_role_cadastre}). \\
+                \texttt{lot\_table} & Géométrie des lots du cadastre (\textit{GeoDataFrame}) (cf. Tableau \ref{tab:definition_cadastre}). \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Méthodes}} \\
+                \midrule
+                \texttt{plot} & Crée un graphique \textit{matplotlib} à partir des données. \\
+                \texttt{explore} & Génère une carte interactive HTML navigable dans un navigateur web. \\
+                \texttt{year\_filter} & Filtre l'ensemble de données en fonction des années de construction. \\
+                \texttt{territory\_filter} & Filtre les points du rôle foncier situés à l'intérieur d'un territoire. \\
+                \texttt{select\_by\_land\_uses} & Filtre l'ensemble de données en fonction des \ac{CUBF}. \\
+                \texttt{get\_land\_uses\_in\_set} & Renvoie la liste des \ac{CUBF} présents dans l'ensemble de données. \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Fonctions utilitaires}} \\
+                \midrule
+                \texttt{tax\_database\_points\_ from\_date\_territory} & Renvoie un ensemble de données en fonction de l'identifiant du territoire, d'une date de début et d'une date de fin. \\
+                \texttt{tax\_database\_for\_ analysis\_territory} & Renvoie un ensemble de données pour un territoire d'analyse en fournissant l'identifiant du quartier. \\
+                \bottomrule
+                \end{tabular}
+            \end{table}
+        \subsection{Classe ParkingRegulation ou Règlement de Stationnement} 
+            Cet objet représente un ou plusieurs règlements. Il est composé des tables suivantes:
+            \begin{table}[H]
+            \centering
+            \caption{Structure et méthodes principales de l'objet \textbf{ParkingRegulation}}
+            \label{tab:parkingregulation_structure}
+            \begin{tabular}{p{5cm}p{11cm}}
+            \toprule
+            \textbf{Type} & \textbf{Description} \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Attributs}} \\
+            \midrule
+            \texttt{reg\_head} & Entête de règlement contenant les informations de la table \underline{entete\_reg\_stationnement} (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_entete_reg_stationnement}). \\
+            reg\_def & Définition mathématique à appliquer pour le règlement donné (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_reg_stat_emp}). \\
+            units\_table & Table représentant les unités associées aux règlements définis (\textit{DataFrame}) (cf. Tableau \ref{tab:definition_unite}). \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Méthodes}} \\
+            \midrule
+            get\_city\_regs & Renvoie les règles dont l'attribut \texttt{ville} correspond à la chaîne de caractères fournie. \\
+            get\_current\_reg & Renvoie les règlements dont l'année de fin est absente de l'entête. \\
+            get\_regs\_for\_year & Renvoie les règlements en vigueur à l'année fournie. \\
+            get\_reg\_by\_id & Renvoie les règlements dont les identifiants correspondent aux entiers fournis en entrée. \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Fonctions utilitaires}} \\
+            \midrule
+            from\_postgis & Renvoie un ou plusieurs règlements dont l'identifiant correspond à ceux fournis, en interrogeant la base de données \textit{PostGIS}. \\
+            \bottomrule
+            \end{tabular}
+            \end{table}
         
+        \subsection{Classe ParkingRegulationSet ou ensemble de règlement}
+            Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il se distingue du règlement de deux manières. D'une part, il associe les règlements aux \ac{CUBF}. D'autre part, il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les paramètres suivants:
+            \begin{table}[H]
+            \centering
+            \caption{Structure et méthodes principales de l'objet \textbf{ParkingRegulationSet}}
+            \label{tab:parkingregulationset_structure}
+            \begin{tabular}{p{5cm}p{11cm}}
+                \toprule
+                \textbf{Type} & \textbf{Description} \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Attributs}} \\
+                \midrule
+                start\_date & Date d'entrée en vigueur de l'ensemble de règlements. \\
+                end\_date & Date d'abrogation de l'ensemble de règlements. \\
+                description & Chaîne de caractères décrivant textuellement l'ensemble. \\
+                association\_table & Table contenant les associations entre les \ac{CUBF} et les identifiants de règlements. Ces associations sont définies par l'utilisateur. \\
+                expanded\_table & Table représentant les associations à l'ensemble des \ac{CUBF} selon la convention décrite en \ref{sec:reg_association}. Générée automatiquement à partir de association\_table \\
+                ruleset\_id & Identifiant unique de l'ensemble de règlements. \\
+                land\_use\_table & Table des \ac{CUBF} (cf. Tableau \ref{tab:definition_cubf}). \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Méthodes}} \\
+                \midrule
+                validate\_dates & Vérifie que les règlements qui composent l'ensemble sont valides pour la période de validité de l'ensemble. \\
+                verify\_minimum\_fill & Vérifie qu'au minimum, les entrées pour les \ac{CUBF} 1 à 10 sont présentes afin de permettre la généralisation. \\
+                expand\_land\_ use\_table & Génère la table \texttt{expanded\_table} à partir de \texttt{association\_table}. \\
+                get\_unique\_ reg\_ids & Renvoie la liste des règlements utilisés dans l'ensemble de règlements. \\
+                get\_unique\_ reg\_ids\_using\_land\_use & Renvoie la liste des règlements utilisés pour les \ac{CUBF} fournis en entrée. \\
+                get\_parking\_ reg\_by\_id & Renvoie un règlement dont l'identifiant correspond à celui fourni en entrée. \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Fonctions utilitaires}} \\
+                \midrule
+                from\_sql & Renvoie un ensemble de règlements dont l'identifiant correspond à celui fourni, à partir d'une requête SQL. \\
+                \bottomrule
+                \end{tabular}
+            \end{table}
+        
+        \subsection{Classe RegSetTerritory ou ensemble de règlements de territoires}
+            Un \ac{RST} associe un territoire à un ensemble de règlements. Ces paramètres sont listés ci-dessous:
+            \begin{table}[H]
+                \centering
+                \caption{Structure et fonctions principales de l'objet \textbf{RegSetTerritory} (RST)}
+                \label{tab:regsetterritory_structure}
+                \begin{tabular}{p{5cm}p{11cm}}
+                \toprule
+                \textbf{Type} & \textbf{Description} \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Attributs}} \\
+                \midrule
+                assoc\_id & Identifiant unique de l'association. \\
+                territory\_info & Référence à une entrée dans la table \underline{cartographie\_secteurs}. \\
+                parking\_regulation\_set & Un \ac{PRS} associé au territoire. \\
+                start\_year & Année de début de l'association, correspondant au maximum entre l'année de début du \ac{PRS} et la période à laquelle appartient le territoire. \\
+                end\_year & Année de fin de l'association, correspondant au minimum entre l'année de fin du \ac{PRS} et la fin de la période à laquelle appartient le territoire. \\
+                \midrule
+                \multicolumn{2}{l}{\textbf{Fonctions associées}} \\
+                \midrule
+                get\_postgis\_ rst\_by\_terr\_id & Renvoie une liste de \ac{RST} associés au territoire dont l'identifiant est égal à l'entier fourni en entrée. \\
+                get\_rst\_by\_tax\_data & Renvoie deux listes : (1) une liste de \ac{RST} qui ont une intersection spatiale avec les points du rôle foncier dans le \ac{TD}; (2) une liste de \ac{TD} dont les points ont été construits pendant la période de validité du \ac{RST} et se trouvent à l'intérieur du territoire. \\
+                explore\_RST\_TD & Crée une carte dynamique dans un fichier HTML permettant de visualiser les ensembles de données. \\
+                \bottomrule
+                \end{tabular}
+            \end{table}
+        \subsection{Classe ParkingCalculationInput ou intrant au calcul de stationnement}
+            Le \ac{PCI} hérite des DataFrame Pandas \parencite{pandas_contributors_pandas_2025}. La table a les colonnes suivantes:
+            \begin{table}[H]
+            \centering
+            \caption{Structure et méthodes principales de l'objet \textbf{ParkingCalculationInput}}
+            \label{tab:regulationinput_structure}
+            \begin{tabular}{p{5cm}p{11cm}}
+            \toprule
+            \textbf{Type} & \textbf{Description} \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Colonnes dynamiques héritées du DataFrame}} \\
+            \midrule
+            g\_no\_lot & Identifiant du lot. \\
+            \ac{CUBF} & Code d'utilisation du bien-fonds. \\
+            unite & Unité représentée par la ligne. \\
+            id\_reg\_stat & Identifiant du règlement à appliquer. \\
+            valeur & Valeur associée au lot et à l'utilisation du bien-fonds. \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Méthodes}} \\
+            \midrule
+            get\_by\_reg & Renvoie les entrées associées à un règlement. \\
+            filter\_by\_threshold & Renvoie les entrées dont les valeurs se situent entre un seuil inférieur et un seuil supérieur. \\
+            get\_by\_unites & Renvoie les données associées à l'identifiant d'unités. \\
+            check\_units\_present & Vérifie que, pour chaque lot, les unités fournies en entrée sont présentes. \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{Fonction additionnelle}} \\
+            \midrule
+            generate\_input\_ from\_PRS\_TD & Convertit les données foncières en données utilisables pour le calcul des capacités minimale et maximale selon les unités définies dans les règlements. \\
+            \bottomrule
+            \end{tabular}
+            \end{table}
+        
+        
+        \subsection{Classe ParkingInventory ou inventaire de stationnement}
+            L'inventaire de stationnement a un seul attribut qui est un DataFrame: 
+            \begin{table}[H]
+                \centering
+                \caption{Structure et méthodes principales de l'objet \texttt{ParkingInventory}}
+                \label{tab:obj_parking_inventory}
+                \begin{tabular}{p{3cm} p{10cm} p{3cm}}
+                \toprule
+                \textbf{Attribut / Fonction} & \textbf{Description} & \textbf{Type / Portée} \\
+                \midrule
+                parking\_frame & Table décrivant l'inventaire (cf. Tableau~\ref{tab:definition_table_inventaire}). & Table principale \\
+                \midrule
+                \multicolumn{3}{l}{\textbf{Méthodes de l'objet}} \\
+                \midrule
+                concat & Concatène deux inventaires pour former un seul ensemble cohérent. & Méthode d'instance \\
+                to\_postgis & Sauvegarde l'inventaire dans la base de données PostgreSQL/PostGIS. & Méthode d'instance \\
+                merge\_lot\_data & Vérifie la présence de multiples inventaires pour un même lot et agrège les données correspondantes. & Méthode d'instance \\
+                \midrule
+                \multicolumn{3}{l}{\textbf{Fonctions associées (dans le même module)}} \\
+                \midrule
+                subset\_operation & Arbitre entre deux estimations lorsque le règlement impose des sous-ensembles distincts. & Fonction utilitaire \\
+                dissolve\_list & Dissout une liste d'inventaires en un seul objet d'inventaire. & Fonction utilitaire \\
+                inventory\_duplicates\_agg\_function & Agrège les estimations de plusieurs périodes pour un même lot en additionnant les valeurs et en concaténant les références aux règlements, ensembles de règlements et \ac{CUBF}. & Fonction utilitaire \\
+                calculate\_inventory\_by\_analysis\_sector & Fonction d'entrée pour calculer un inventaire pour un secteur d'analyse donné. & Fonction principale \\
+                calculate\_inventory\_by\_lot & Fonction d'entrée pour calculer la capacité de stationnement pour un lot spécifique. & Fonction principale \\
+                to\_sql & Sauvegarde l'inventaire avec vérification des doublons. Permet à l'utilisateur de confirmer le remplacement d'un estimé existant. & Fonction principale \\
+                calculate\_parking\_for\_ reg\_set\_territories & Itère sur les \ac{RST} fournis et appelle les fonctions nécessaires pour le calcul du stationnement. & Fonction d'aide \\
+                calculate\_parking\_ specific\_reg\_set & Itère sur les \ac{PR} au sein d'un \ac{RST} et appelle les fonctions nécessaires au calcul de l'inventaire. & Fonction d'aide \\
+                calculate\_parking\_ specific\_reg & Itère sur les sous-ensembles de chaque \ac{PR} pour appeler la fonction de calcul de l'estimation. & Fonction d'aide \\
+                calculate\_parking\_ specific\_reg\_subset & Calcule la capacité de stationnement requise pour chaque sous-ensemble d'un règlement donné. & Fonction d'aide \\
+                \bottomrule
+                \end{tabular}
+            \end{table}
+
         
 
     \begin{figure}[H]
