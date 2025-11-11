@@ -997,7 +997,7 @@
         \subsubsection{Classe ParkingInventory ou inventaire de stationnement}
         L'inventaire de stationnement a un seul attribut qui est un DataFrame: 
         \begin{longtable}{p{5cm} p{11cm} }
-            \caption{Structure et méthodes principales de l'objet \texttt{ParkingInventory}}\label{tab:obj_parking_inventory}\\
+            \caption{Structure et méthodes principales de l'objet \textbf{ParkingInventory}}\label{tab:obj_parking_inventory}\\
             \toprule
             \textbf{Type} & \textbf{Description} \\
             \midrule
@@ -1129,7 +1129,13 @@
         \end{table}
         
     \subsection{Conversions d'unités}
-        À ce state-ci, le logiciel aura nettoyé les données d'entrées de manière à avoir un \ac{TD} et un \ac{RST} prêts pour le calcul. Il faut maintenant convetir les unités du rôle foncier vers les unités dans lesquelles sont formulées la règlementation. Ce processus est relativement simple et formalise simplement les assocations décrites aux sections
+        À ce state-ci, le logiciel aura nettoyé les données d'entrées de manière à avoir un \ac{TD} et un \ac{RST} prêts pour le calcul. Il faut maintenant convetir les unités du rôle foncier vers les unités dans lesquelles sont formulées la règlementation. Ce processus est relativement simple et formalise simplement les assocations décrites aux sections précédentes la figure \ref{fig:logigramme-unites} montre le processus avec des données simples fixées comme exemple.
+        \begin{landscape}
+            \begin{figure}
+                \includegraphics[scale=0.6]{figures/logigramme-conversion-unites.pdf}
+                \caption{Logigramme et exemple de conversion d'unités}\label{fig:logigramme-unites}
+            \end{figure}
+        \end{landscape}
     \subsection{Procédure de calcul des minimums}
         Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus sont utilisés comme intrants dans la fonction calculate\_parking\_for\_reg\_set\_territories pour dresser l'inventaire. Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimation à utiliser s'il y a plusieurs méthodes de calcul.\clearpage
         \subsubsection{Calcul des sous-ensembles: calculate\_parking\_specific\_reg}

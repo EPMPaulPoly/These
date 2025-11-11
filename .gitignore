@@ -21,12 +21,7 @@
 2025_PaulCharbonneau_Memoire_MSc.blg
 2025_PaulCharbonneau_Memoire_MSc.bbl
 2025_PaulCharbonneau_Memoire_MSc.toc
-name.tex
-Archive/Mvst_compile.synctex.gz
-Archive/Mvst_compile.pdf
-Archive/Mvst_compile.log
-__latexindent_temp_6-Revue_litterature.tex
-.gitignore
+
 2025_PaulCharbonneau_Memoire_MSc-2024-07-09.pdf
 6-0-Revue-typologie.aux
 6-1-Revue-stat-mobilite.aux
@@ -37,5 +32,11 @@ __latexindent_temp_6-Revue_litterature.tex
 data/data_n_requis_CUBF.csv
 *.aux
 *.app
-*.pdf
 *.lol
+*.lot
+*.bbl
+*.synctex.gz
+*.log
+*.synctex(busy)
+*.blg
+2025_PaulCharbonneau_Memoire_MSc.pdf
