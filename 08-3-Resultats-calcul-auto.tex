@@ -1,5 +1,5 @@
 \section{Résultats du calcul automatique}\label{sec:pred_stationnement}
-Une estimation réglementaire de stationnement a été calculée pour l'ensemble des propriétés dans les limites de la ville de Québec. Les graphiques présentés dans cette section ont été générés avec des scripts python dédiés pour améliorer la lecture. La source est disponible dans un dépôt Github \parencite{charbonneau_epmpaulpolygraphiques_memoire_2025}.  Dans cette section, l'inventaire sera dressé en utilisant les minimums calculés sauf indication contraire. Au total, la méthode réglementaire donne un estimé de 498 800 places de stationnement. La figure \ref{fig:result-dist-places-par-usage} montre la distribution des places de stationnement entre les différents usages du sol.\par
+Une estimation réglementaire de stationnement a été calculée pour l'ensemble des propriétés dans les limites de la ville de Québec. Les graphiques présentés dans cette section ont été générés avec des scripts python dédiés pour améliorer la lecture. La source est disponible dans un dépôt Github \parencite{charbonneau_epmpaulpolygraphiques_memoire_2025}.  Dans cette section, l'inventaire sera dressé en utilisant les minimums calculés sauf indication contraire. Au total, la méthode réglementaire donne une estimation de 498 800 places de stationnement. La figure \ref{fig:result-dist-places-par-usage} montre la distribution des places de stationnement entre les différents usages du sol.\par
 \begin{figure}[!h]
     \centering
     \includegraphics[width=1\textwidth]{figures/inventaire-reg-par-cubf.pdf}
@@ -27,7 +27,7 @@ Ce parc de stationnement n'est pas uniformément réparti sur le territoire. Les
 \end{figure}
 \FloatBarrier
 La densité de stationnement suit essentiellement le même schéma que la densité de population comme le montrent les figures \ref{fig:dens-pop} et \ref{fig:dens-stat}.
-\begin{figure}[!h]
+L'exception est la colline Parlementaire qui a un excédent de stationnements par rapport à sa population. \begin{figure}[!h]
     \centering
     \begin{subfigure}[b]{0.725\textwidth}
         \includegraphics[width=1\textwidth]{images/densite-pop.png}
@@ -51,4 +51,4 @@ La distribution de la capacité de stationnement entre les différentes utilisat
     \caption{Distribution du nombre de places par quartier et usage du sol}
     \label{fig:dist-stat-quart-util}
 \end{figure}
-Maintenant qu'un bref portrait de la prédiction du parc de stationnement pour 
+Maintenant qu'un bref portrait de la prédiction du parc de stationnement a été dressé. La section suivante fera l'évaluation de la performance du modèle de prédiction.

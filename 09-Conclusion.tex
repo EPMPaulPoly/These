@@ -15,7 +15,7 @@ Cette section donnera un survol des constats dressés au fil du mémoire. La sec
     \subsection{Nature déductive de l'étude}
         Comme la plupart des autres études visant à estimer le stationnement, toutes les études recensées \parencite{chester_inventorying_2022,chester_parking_2015,hoehne_valley_2019,davis_estimating_2010,qiam_pipeline_2025}, elles fonctionnent toutes selon un ensemble d'hypothèses soit sur la quantité construite par rapport au règlement ou sur la structure visuelle des stationnements, ou l'absence de stationnement souterrain qui impliquent nécessairement que les modèles prédiront toujours une valeur par rapport à une réalité conditionnelle (données d'entraînement, ensemble de validation) qui limite la capacité des chercheurs à statuer sur la quantité réelle de stationnement sur un territoire donnée. Sachant qu'un dénombrement complet est peu probable du fait des coùts associés\parencite{heran_consommation_2008}, une approche utilisant les méthodes de sondage pourrait un bon second choix pour inférer la quantité de stationnement à partir de méthodes d'inférence statistique avec le cadastre et le rôle foncier comme base de sondage. C'est le seul moyen statistiquement robuste de confirmer ou infirmer les hypothèses que posent les différentes méthodes déductives présentement établies.
         
-    \subsection{Limitations de la méthodologie de prédiction choisie}
+    \subsection{Limitations de la méthodologie}
     
         \subsubsection{Différences entre les places minimums et les places prédites}
             La faiblesse centrale du modèle provient de sa nature dépendance sur l'hypothèse que le stationnement minimum requis par la réglementation est un bon prédicteur de la quantité de stationnement construite. Il est difficile à l'heure actuel de statuer sur le potentiel futur de cette méthode mais l'évaluation faite dans le cadre de ce mémoire laisse croire qu'il sera difficile de s'y fier sans investir beaucoup plus de temps pour assurer que les quantités sont sensées particulièrement dans les secteurs où la compétition pour le stationnement est forte.\par
@@ -27,7 +27,8 @@ Cette section donnera un survol des constats dressés au fil du mémoire. La sec
         \subsubsection{Besoin en données foncières}
             Contrairement au méthodes basées sur l'orthophotographie\parencite{hellekes_parking_2023,qiam_pipeline_2025}, la méthode proposée nécessite d'avoir des données spécialisées exhaustives. L'absence de données pour entre 30 et 80 \% des propriétés dans des catégories qui contribuent fortement au nombre total de places est donc une importante limite de la méthode. Selon les distributions montrée dans la section sur les données foncières, les propriétés avec des données manquantes tendent à avoir une valeur au rôle plus élevée et il y a donc un potentiel pour un nombre élevé de places non-comptabilisées (cf. Figure \ref{fig:missing-data-value-distr}).\par
             Ce constat est particulièrement marquant sur certaines propriétés où toutes les entrées du rôle foncier sont concentrées sur un lot cadastral alors que ces entrées concernent un ensemble de lots avoisinants. L'outil tel qu'actuellement implémenté ne permet pas de rapidement visualiser les données du rôle foncier (si tant est qu'il soit possible de rapidement diagnostiquer un tel ensemble de données). 
-    
+
+        \subsubsection{}
     \subsection{Limitations de l'implémentation}
     
         \subsubsection{Conversions d'unités}
@@ -73,20 +74,21 @@ Cette section donnera un survol des constats dressés au fil du mémoire. La sec
         
         \subsubsection{Calibration des facteurs de conversion}
             La priorité pour améliorer les prédictions devrait être de rendre les conversions d'unités plus représentatives. La table \ul{multiplication\_facteurs\_colonnes} devrait être scindée en trois tables. La première contiendrait l'identifiant d'unité et la description. La deuxième serait une table de formulations décrivant la colonne du rôle à utiliser et la formulation mathématique à utiliser. La troisième mettrait en place une association entre les \ac{CUBF} et les formulations de conversion. Comme pour les ensembles de règlements, la formulation en arbre des \ac{CUBF} pourrait être exploitée pour ne pas avoir à énumérer l'ensemble des \ac{CUBF} pertinents.\par
-            Cette formulation devrait être associée avec un module qui permet de formuler des régressions à partir des données en cherchant les lots par \ac{CUBF}, puis en formulant un modèle de régression adéquat par catégorie d'usages. À terme, les régressions pourraient être pré-définies mais un utilitaire pour les modifier demeurera utile.
+            Cette formulation devrait être associée avec un module qui permet de chercher les lots par \ac{CUBF}, puis de formuler un modèle de régression adéquat par catégorie d'usages. À terme, les régressions pourraient être pré-définies, mais un utilitaire pour les modifier demeurera utile pour un nouvelle application ou un nouveau contexte (imaginons par un stade sportif pour un sport qui n'a pas encore été observé dans un autre pays).
         
         \subsubsection{Amélioration du modèle de représentation des règlements}
-            Le modèle actuel de règlement est très fragile et mal normalisé. La compilation des sous-ensembles, des seuils et des formulations en une seule table rend l'extraction de données peu robuste. La solution ici devrait être encore une fois de scinder la table \ul{reg\_stationnement\_empile} en deux et de remettre une partie des données dans la table d'entête. \par
-            Tout d'abord, on ajouterait deux colonnes à l'entête: la première serait une liste de longueur $N_{se}$ d'identifiants de sous-ensembles. La deuxième serait une liste de longueur $N_{se}-1$ contenant les opérateurs à utiliser entre les sous-ensembles.\par
-            La première table 
-            La deuxième table serait une table de formules mathématiques avec une pente, une constante et une unité de formulation. La deuxième table contiendrait serait une table de sous-ensemble. Ici, un opérateur de sous ensemble, des plages d'applicabiité
+            Le modèle actuel de règlement est très fragile et mal normalisé. La compilation des sous-ensembles, des seuils et des formulations en une seule table rend l'extraction de données peu robuste. La solution ici devrait être encore une fois de scinder la table \underline{reg\_stationnement\_empile} en plusieurs parties. Cette approche rend la base de données plus complexe mais plus robuste. La figure \ref{fig:alternate-rules-formulation-prop} donne une proposition alternative qui devrait
+            \begin{figure}
+                \includegraphics[scale=0.6]{images/alternate_rules_2025-11-12.png}
+                \caption{Proposition de diagramme entité association alternatif pour les règlements}
+                \label{fig:alternate-rules-formulation-prop}
+            \end{figure}
         
         \subsubsection{Intégration de facteurs de correction}
             Une fois la validation completée, un modèle de correction devrait être implémenté en utilisant des méthodes bayésiennes avec la catégorie de validation et la prédiction réglementaire comme antécédents pour définir une distribution de probabilité pour les valeurs plausibles de stationnement sur un lot. Il s'agirait ici encore d'une prédiction et pas nécessairement
     \subsection{Évaluation de la performance du modèle}
-        
         \subsubsection{Changement de la structure de données pour les catégories}
-        
+            La structure de données récursive apparait en premier lieu élégante mais est potentiellement plus complexe à gérer. Encore un fois 
         \subsubsection{Création automatique de catégories pour les lots non assignés}
     
     \subsection{Améliorations à apporter à l'outil}
