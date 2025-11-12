@@ -1,7 +1,7 @@
 \section{Évaluation quantitative du modèle de dénombrement}\label{sec:meth_valid}
-Comme il est mentionné dans la revue de littérature, la validation de modèles est une étape indispensable pour donner assez de confiance aux décideurs dans l'établissement de politiques publiques. Cette section va donner un aperçu de la méthodologie utilisée en première approche et détailler une recommandation pour une validation plus complète. 
+Comme il est mentionné dans la revue de littérature, la validation de modèles est une étape indispensable pour donner assez de confiance aux décideurs dans l'établissement de politiques publiques. Cette section va donner un aperçu de la méthodologie utilisée en première approche. Des recommandations pour une validation plus systématique seront données en conclusion du mémoire.
 
-    \subsection{Sélection de lots pour la validation}
+    \subsection{Sélection de lots pour l'évaluation}
         Un échantillon de lots a été tiré au hasard pour faire la validation du dénombrement. Puisqu'on essaie de qualifier le modèle par rapport à la réalité, les lots avec des données partielles ont été ignorés puisqu'on sait que les prédictions seront erronées pour ces lots. \par
         Une interface graphique a donc été créée pour permettre à l'utilisateur de créer l'ensemble de lots de validation et d'agréger des statistiques par catégorie. Ces catégories ont une définition récursive permettant à chaque strate d'avoir un ensemble de sous-catégories. Cette fonctionnalité peut être utile par exemple pour valider un segment de la population de lots cadastraux de manière plus fine. L'interface permet de modifier les strates laissant de la flexibilité à l'utilisateur final. 
         \begin{table}[H]
@@ -36,28 +36,25 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
     
     \subsection{Méthode de quantification de l'erreur du modèle}
         Initialement, l'illustration d'une méthode d'équivalence paraissait souhaitable au début du processus d'évaluation de l'outil. Cependant, la compilation d'un effet minimum d'intérêt est ardue du fait d'un manque de cadre conceptuel d'utilisation. L'effet du stationnement sur les variables d'intérêt à différentes parties prenantes est à l'heure difficilement quantifiable du fait d'un manque de données de stationnement. \par
-        Concernant la métrique d'intérêt, ce mémoire se concentrera sur l'erreur de prédiction par lot, mais compilera aussi les métriques traditionnelles comme l'erreur.\par
-        De manière pratique, une approche par auto-amorçage a été choisie avec extraction des centiles avec 2000 répétitions a été implémentée pour l'erreur par lot. Pour le lot sélectionné, l'erreur entre la prédiction et l'observation est donnée par:
+        Concernant la métrique d'intérêt, ce mémoire se concentrera sur l'erreur moyenne absolue. L'erreur moyenne (indiquant un biais) est aussi com. \par
+        De manière pratique, une approche par autoamorçage a été choisie avec extraction des centiles avec 2000 répétitions a été implémentée pour l'erreur par lot. Une analyse de sensibilité a montré que l'estimation de l'erreur se stabilisait au-delà de 500 répétitions. Le coût informatique n'est pas assez élevé pour justifier  de jouer à la marge. Pour le lot sélectionné, l'erreur entre la prédiction et l'observation est donnée par:
         \begin{equation}
             e_{h,i} = y_{h,i,o} - y_{h,i,p}
         \end{equation}
-        où $e_{h,i}$ est l'erreur pour le lot $i$ de la catégorie $h$, $y_{h,i,o}$ est le nombre observé de places de stationnement,  $y_{h,i,p}$ est le nombre prédit de places soit $\lceil y_{h,i,min} \rceil$ le nombre de places minimums requis arrondis à l'entier supérieur. Les erreurs sont ensuite recentrées avant la procédure d'autoamorçage:
-        \begin{equation}
-            e_{h,c,i} = e_{h,i} - \frac{1}{n_h} \sum_{j=1}^{n_h} e_{h,j}
-        \end{equation}
+        où $e_{h,i}$ est l'erreur pour le lot $i$ de la catégorie $h$, $y_{h,i,o}$ est le nombre observé de places de stationnement,  $y_{h,i,p}$ est le nombre prédit de places soit $\lceil y_{h,i,min} \rceil$ le nombre de places minimums requises arrondis à l'entier supérieur. 
        
-        La procédure d'autoamorçage est ensuite initiée l'erreur moyenne et l'erreur moyenne absolue pour la catégorie. Les centiles sont extraits de la distribution sans modèle de correction du biais ou de la variance. On estime ainsi un intervalle d'erreur de prédictions pour l'échantillon. Ce dernier décrit quelle est l'erreur entre le modèle et une population semblable à celle tirée dans l'échantillon, mais ne peut faire de prédiction sur la valeur réelle du stationnement. Cette procédure est développée séparément de l'outil principal. Ceci est dû à un manque de temps pour l'intégrer dans l'outil principal. Les scripts de validation peuvent être trouvés sur un dépôt Github supplémentaire\parencite{charbonneau_epmpaulpolyerror_propagation_2025}. La section \ref{sec:eval-park-pred-perf} montrera que certaines strates ont de fortes variations d'erreur avec le nombre de places prédites.
+        La procédure d'autoamorçage est ensuite initiée l'erreur moyenne et l'erreur moyenne absolue pour la catégorie. Les centiles sont extraits de la distribution sans modèle de correction du biais ou de la variance. On estime ainsi un intervalle d'erreurs de prédictions pour l'échantillon. Ce dernier décrit quelle est l'erreur entre le modèle et une population semblable à celle tirée dans l'échantillon, mais ne peut faire de prédiction sur la valeur réelle du stationnement. Cette procédure est développée séparément de l'outil principal. Ceci est dû à un manque de temps pour l'intégrer dans l'outil principal. Les scripts de validation peuvent être trouvés sur un dépôt Github supplémentaire \parencite{charbonneau_epmpaulpolyerror_propagation_2025}. La section \ref{sec:eval-park-pred-perf} montrera que certaines strates ont de fortes variations d'erreur avec le nombre de places prédites même en filtrant les données aberrantes facilement identifiables. La racine carrée de l'erreur quadratique moyenne (RMSE) est aussi quantifiée ponctuellement (sans auto amorçage). Cette métrique tend à être plus sensible aux fortes erreurs.
         
     \subsection{Structure de données de l'échantillon d'évaluation des prédictions}
-        L'évaluation du modèle requiert en elle-même une structure de données pour définir les catégories pour la validation, entreposer les résultats ainsi que d'entreposer des données accessoires. La figure \ref{fig:erd-validation-stat} montre le diagramme entité-relation des données utilisées pour les conditions de sélection des lots.
+        L'évaluation du modèle requiert en elle-même une structure de données pour définir les catégories pour la validation, d’entreposer les résultats ainsi que d'entreposer des données accessoires. La figure \ref{fig:erd-validation-stat} montre le diagramme entité-relation des données utilisées pour les conditions de sélection des lots.
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.8\linewidth]{images/ERD_stationnement_validation-2025-10-30.png}
-            \caption{Diagramme entité relation pour l'évaluation de performance du modèle de prédiction}
+            \caption{Diagramme entité association pour l'évaluation de performance du modèle de prédiction}
             \label{fig:erd-validation-stat}
         \end{figure}
-        \subsubsection{Définition des strates}
-        La table \ul{strates\_echantillonage} contient la définition des paramètres pour les catégories de validation. Les catégories sont définies de manière récursive c'est-à-dire qu'une catégorie peut définir des enfants avec la même structure de données. Les sous-catégories héritent des conditions fixées aux parents. Les parents ne se voient pas eux même fixer un échantillon mais servent de receptacle pour les sous-catégories. Cette approche permet de chaque catégorie avec une seule condition plutôt que de devoir affecter plusieurs conditions à une même catégorie. Si cette approche avait été poursuivie. Il aurait fallu définir une table de définition des catégories avec une association à plusieurs conditions qui seraient dans une table séparée. Le tableau \ref{tab:definition_strates} en donne la définition de la table \ul{strates\_echantillonage}.
+        \subsubsection{Définition des catégories de validation}
+        La table \ul{strates\_echantillonage} contient la définition des paramètres pour les catégories de validation. Les catégories sont définies de manière récursive c'est-à-dire qu'une catégorie peut définir des enfants avec la même structure de données. Les sous-catégories héritent des conditions fixées aux parents. Les parents ne se voient pas eux-mêmes fixer un échantillon, mais servent de réceptacle pour les sous-catégories. Cette approche permet de chaque catégorie avec une seule condition plutôt que de devoir affecter plusieurs conditions à une même catégorie. Si cette approche avait été poursuivie. Il aurait fallu définir une table de définition des catégories avec une association à plusieurs conditions qui seraient dans une table séparée. Le tableau \ref{tab:definition_strates} en donne la définition de la table \ul{strates\_echantillonage}.
         \begin{longtable}{m{0.2\textwidth}|m{0.4\textwidth}m{0.2\textwidth}m{0.075\textwidth}}
                 \caption{Colonnes pour la table \underline{strates\_echantillonage}}\label{tab:definition_strates}\\
                 \hline
@@ -76,7 +73,7 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
                 id\_strate & Identifiant de la strate & Entier & CP \\
                 nom\_strate & Description de la strate visible à l'usager & Texte & \\
                 est\_racine & Booléen pour indique que la strate est un point d'entrée & Booléen & \\
-                index\_ordre & Paramètre non-utilisé pour changer l'ordre d'affichage & Entier & \\
+                index\_ordre & Paramètre non utilisé pour changer l'ordre d'affichage & Entier & \\
                 nom\_colonne & Nom de la colonne à laquelle s'applique la condition & Texte & \\
                 condition\_type & Type de condition & Texte \begin{compactitem} \item \og{range}\fg{} \item \og{equals}\fg{} \end{compactitem} & \\
                 condition\_min & Minimum de l'étendue si condition\_type est range & Float & \\
@@ -89,9 +86,9 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
                 superf\_valide & Spécifie si les membres de la strate doivent avoir une superficie valide sur toutes les entrées & Booléen \begin{compactitem} \item Vrai = doit être vrai \item Faux = doit être faux \item NULL = est ignoré \end{compactitem} & \\
 
         \end{longtable}\clearpage
-        Une fois la définition des catégories complétées il est nécessaire de compléter quelques manipulations aux données du rôle et du cadastre pour pouvoir appliquer les conditions.
-    \subsubsection{Données intrantes pour sélectionner l'échantillon} 
-        Les données de lots pour la sélection sont agrégées dans la table \ul{inputs\_validation}. Ce sont des valeurs du rôle foncier agrégées par lot ainsi que des tests logiques pour le nombre de \ac{CUBF} sur le lot et une affectation de l'utilisation principale en fonction de la valeur au rôle. Les données sont compilées à l'aide de la requête présentée à l'annexe \ref{ann:intants-validation}. Les champs de la table sont donnés au tableau \ref{tab:definition_inputs_validation}. Toutes les colonnes à l'exception de random\_value et g\_no\_lot peuvent être sélectionné comme conditions dans la table \ul{strates\_echantillonage}
+        Une fois la définition des catégories complétées, il est nécessaire de discuter des quelques manipulations aux données du rôle et du cadastre pour pouvoir appliquer les conditions.
+    \subsubsection{Intrantes pour sélectionner l'échantillon} 
+        Les données de lots pour la sélection sont agrégées dans la table \ul{inputs\_validation}. Ce sont des valeurs du rôle foncier agrégées par lot ainsi que des tests logiques pour le nombre de \ac{CUBF} sur le lot et une affectation de l'utilisation principale en fonction de la valeur au rôle. Les données sont compilées à l'aide de la requête présentée à l'annexe \ref{ann:intants-validation}. Les champs de la table sont donnés au tableau \ref{tab:definition_inputs_validation}. Toutes les colonnes à l'exception de random\_value et g\_no\_lot peuvent être sélectionnées comme conditions dans la table \ul{strates\_echantillonage}.
         \begin{longtable}{m{0.25\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
             \caption{Colonnes pour la table \underline{inputs\_validation}}\label{tab:definition_inputs_validation}\\
             \hline
@@ -110,7 +107,7 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
             nb\_entrees & Nombre d'entrées du rôle pour le lot & Entier & \\
             cubf\_presents & Liste des \ac{CUBF} uniques pour le lot & Entier & \\
             n\_cubf & Nombre de codes d'utilisation du bien fonds & Entier & \\
-            toutes\_surfaces\_valides & Booléen indiquant que toutes les entrées du rôle ont l'aire d'étage entrée & Booléen & \\
+            toutes\_surfaces\_valides & Booléen indiquant que toutes les entrées du rôle ont l'aire d'étage disponible & Booléen & \\
             tous\_logements\_valides & Booléen indiquant que toutes les entrées du rôle ont un nombre de logements spécifiés & Booléen & \\
             toutes\_dates\_valides & Booléen indique que toutes les entrées du rôle ont des dates de construction entrées  & Booléen & \\
             sup\_planch\_tot & Superficie totale de plancher du lot & Float & \\
@@ -120,13 +117,13 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
             cubf\_principal & \ac{CUBF} de l'entrée du rôle avec la plus grande valeur & Entier & \\
             random\_value & Valeur pseudo-aléatoire affectée au lot & Réel & \\
         \end{longtable}
-        La valeur random\_value est générée par une fonction de hachâge à partir de l'identifiant du lot. Cette approche permet d'avoir toujours les mêmes lots dans la sélection pendant le développement. des approches alternatives seront discutées à la conclusion si l'outil venait à être mis en production. 
-        Une fois ces statistiques agrégées et un chiffre pseudo aléatoire affecté à chaque lot, il faut sélectionner l'échantillon de validation. Cela est fait en sélectionnant le nombre requis de lots $n_{sample}$. Les lots avec les $n_{sample}$ plus petites valeurs de la variable aléatoire sont sélectionnées et affectées à l'échantillon. L'outil crée aussi une table d'association à la strate pour tous les lots pour pouvoir trouver les lots avec des propriétés similaires après la validation. La section suivante donner les détails sur les tables contenant les affectations aux strates.
+        La valeur random\_value est générée par une fonction de hachage à partir de l'identifiant du lot. Cette approche permet d'avoir toujours les mêmes lots dans la sélection pendant le développement. Des approches alternatives seront discutées à la conclusion si l'outil venait à être mis en production. 
+        Une fois ces statistiques agrégées et un chiffre pseudoaléatoire affectés à chaque lot, il faut sélectionner l'échantillon de validation. Cela est fait en sélectionnant le nombre requis de lots $n_{sample}$. Les lots avec les $n_{sample}$ plus petites valeurs de la variable aléatoire sont sélectionnées et affectées à l'échantillon. L'outil crée aussi une table d'association à la strate pour tous les lots pour pouvoir trouver les lots avec des propriétés similaires après la validation. La section suivante donner les détails sur les tables contenant les affectations aux strates.
         \subsubsection{Association des lots aux strates et affectation à l'échantillon d'évaluation}     
         La table \ul{association\_strate} est principalement destinée à des fins de vérification d'affectation aux strates. Elle contient seulement deux champs: id\_strate, l'identifiant de strate et g\_no\_lot l'identifiant de lot. \par
-        La table \ul{assignation\_strate} contient les échantillons choisis pour l'évaluation et contient n\_sample entrées pour chaque strate. Les champs sont les suivants: id\_strate, g\_no\_lot et rn, le rang du chiffre aléatoire assigné au lot dasn la table \ref{tab:definition_inputs_validation}. Maintenant que l'échantillon est sélectionné, il reste à aller faire le comptage et sauvegarder cette valeur. La section suivante donnera les détails sur la table utilisée à cet effet.
+        La table \ul{assignation\_strate} contient les échantillons choisis pour l'évaluation et contient n\_sample entrées pour chaque strate. Les champs sont les suivants: id\_strate, g\_no\_lot et rn, le rang du chiffre aléatoire assigné au lot dans la table \ref{tab:definition_inputs_validation}. Maintenant que l'échantillon est sélectionné, il reste à aller faire le comptage et sauvegarder cette valeur. La section suivante donnera les détails sur la table utilisée à cet effet.
         \subsubsection{Résultats de validation}
-        La table \ul{resultats\_validation} contient l'information pertinente au nombre de places comptées sur le lot par l'analyste comme réalité terrain. Le fond de tuile utilisé pour le compte qui est récolté quand l'usager enregistre l'entrée, l'identifiant de strate et un identifiant unique sont aussi sauvegardées.
+        La table \ul{resultats\_validation} contient l'information pertinente au nombre de places comptées sur le lot par l'analyste comme réalité terrain. Le fond de tuile utilisé, l'identifiant de strate et un identifiant unique sont aussi sauvegardés.
         \begin{table}[H]
             \caption{Colonnes pour la table \underline{resultats\_validation}}
             \label{tab:definition_resultats_valid}
@@ -145,7 +142,7 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
         \end{table}
         \FloatBarrier\clearpage
         \subsubsection{Propriétés des catégories sans enfants}
-        Tel que mentionné au début de la section, les catégories sont définies de manière récursive. Cela fait en sorte que l'affichage de titre et la création des conditions nécessaires à la sélection des lots complexe La table \ul{conditions\_strates\_a\_echant} est donc une table de diagnostique et d'aide à l'affichage. Le tableau \ref{tab:def-conditions-feuilles} donne les champs de cette table. Il est important de noter que les conditions listées ici sont typiquement utilisées à des fins de diagnostic. Les conditions sont toujours régénérées dans le serveur à partir de la définition dans la table \ul{strates\_echantillonage} pour éviter des potentielles injections SQL.
+        Comme mentionné au début de la section, les catégories sont définies de manière récursive. Cela complique l’affichage de titres et la création des conditions nécessaires à la sélection des lots. La table \ul{conditions\_strates\_a\_echant} est donc une table de diagnostic et d'aide à l'affichage. Le tableau \ref{tab:def-conditions-feuilles} donne les champs de cette table. Il est important de noter que les conditions listées ici sont typiquement utilisées à des fins de diagnostic. Les conditions sont toujours régénérées dans le serveur à partir de la définition dans la table \ul{strates\_echantillonage} pour éviter de potentielles injections SQL.
         \begin{table}[h]
             \caption{Colonnes pour la table \underline{conditions\_strates\_a\_echant}}
             \label{tab:def-conditions-feuilles}
@@ -161,4 +158,4 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
                 \hline
            \end{tabular}
         \end{table}
-        Maintenant que la méthode d'évaluation et la structure de données qui y est rattachée est définie, il reste à détailler comment l'interface fonctionne.
+        Maintenant que la méthode d'évaluation et la structure de données qui y est rattachée sont définies, il reste à détailler comment l'interface fonctionne.
