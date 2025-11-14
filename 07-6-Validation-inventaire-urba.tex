@@ -4,27 +4,27 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
     \subsection{Sélection de lots pour l'évaluation}
         Un échantillon de lots a été tiré au hasard pour faire la validation du dénombrement. Puisqu'on essaie de qualifier le modèle par rapport à la réalité, les lots avec des données partielles ont été ignorés puisqu'on sait que les prédictions seront erronées pour ces lots. \par
         Une interface graphique a donc été créée pour permettre à l'utilisateur de créer l'ensemble de lots de validation et d'agréger des statistiques par catégorie. Ces catégories ont une définition récursive permettant à chaque strate d'avoir un ensemble de sous-catégories. Cette fonctionnalité peut être utile par exemple pour valider un segment de la population de lots cadastraux de manière plus fine. L'interface permet de modifier les strates laissant de la flexibilité à l'utilisateur final. 
-        \begin{table}[H]
+        \begin{table}[ht]
             \centering
             \caption{Synthèse de sélection de lots de validation}
             \label{tab:sampling-strata-description}
-            \begin{tabular}{m{3.25cm}                m{4.25cm}                          m{0.75cm}                    m{0.75cm}  m{0.75cm}m{1cm} m{1cm}  m{1cm}}
+            \begin{tabular}{m{4.5cm}                m{4.25cm}                          m{0.75cm}                     m{0.75cm}m{1cm} m{1cm}  m{1cm}}
                 \hline
-                \multirow{2}{3.5cm}{Description}    & \multirow{2}{4cm}{Conditions} & \multirow{2}{0.75cm}{$n_{choisis}$}    & \multirow{2}{0.75cm}{$n_{obs}$}  & \multirow{2}{1cm}{$N$}    & \multicolumn{3}{c}{Données valides?} \\ 
-                                                    &                               &                                       &                               &                           & Année & $N_{log}$ & Aire \\\hline
-                Usage mixte                         & $N_{\text{CUBF}}>1$                  & 30                                    & 17                            & 156                       & Oui   & N/A       & Oui \\
-                Usage unique                        & $N_{\text{CUBF}}=1$                  & N/A                                   & N/A                           & N/A                       & N/A   & N/A       & N/A \\
-                \quad Résidentiel                   & $1000 \leq \text{CUBF}\leq 1999$     & N/A                                   & N/A                           & N/A                       & N/A   & N/A       & N/A \\
-                \qquad Unifamilial                  & $N_{log}=1$                   & 30                                    & 30                            & 97748                     & Oui   & Oui       & N/A \\
-                \qquad Multi plex                 & $ 2 \leq N_{log}\leq 8 $      & 30                                    & 30                            & 23621                     & Oui   & Oui       & N/A \\
-                \qquad Grands immeubles résidentiels & $ 9 \leq N_{log}$             & 30                                    & 24                            & 2465                      & Oui   & Oui       & N/A \\
-                \quad Industriel                    & $2000 \leq\text{CUBF}\leq 3999$     & 30                                    & 27                            & 176                       & Oui   & N/A       & Oui \\
-                \quad Commerces                     & $5000 \leq \text{CUBF}\leq 5999$     & 30                                    & 30                            & 1552                      & Oui   & N/A       & Oui \\
-                \quad Services                      & $6000 \leq \text{CUBF} \leq 6999$    & 30                                    & 27                            & 1623                      & Oui   & N/A       & Oui \\
-                \quad Assemblée                     & $7000 \leq \text{CUBF} \leq 7999 $   & 30                                    & 23                            & 149                       & Oui   & N/A       & Oui \\ 
-                Résidus                             &                               & 0                                     & 0                             & 13286                     & N/A   & N/A       & N/A\\ 
+                \multirow{2}{4.5cm}{Description}    & \multirow{2}{4cm}{Conditions}        & \multirow{2}{0.75cm}{$n_{choisis}$}     & \multirow{2}{1cm}{$N$}    & \multicolumn{3}{c}{Données valides?} \\ 
+                                                    &                                       &                                        &                           & Année & $N_{log}$ & Aire \\\hline
+                Usage mixte                         & $N_{\text{CUBF}}>1$                  & 30                                    & 156                       & Oui   & s.o.       & Oui \\
+                Usage unique                        & $N_{\text{CUBF}}=1$                  & s.o.                                    & s.o.                       & s.o.   & s.o.       & s.o. \\
+                \quad Résidentiel                   & $1000 \leq \text{CUBF}\leq 1999$     & s.o.                                   & s.o.                       & s.o.   & s.o.       & s.o. \\
+                \qquad Unifamilial                  & $N_{log}=1$                          & 30                                   & 97748                     & Oui   & Oui       & s.o. \\
+                \qquad Multi plex                   & $ 2 \leq N_{log}\leq 8 $              & 30                                    & 23621                     & Oui   & Oui       & s.o. \\
+                \qquad Grands immeubles                 & $ 9 \leq N_{log}$                     & 30                                    & 2465                      & Oui   & Oui       & s.o. \\
+                \quad Industriel                    & $2000 \leq\text{CUBF}\leq 3999$     & 30                                     & 176                       & Oui   & s.o.       & Oui \\
+                \quad Commerces                     & $5000 \leq \text{CUBF}\leq 5999$     & 30                                     & 1552                      & Oui   & s.o.       & Oui \\
+                \quad Services                      & $6000 \leq \text{CUBF} \leq 6999$    & 30                                    & 1623                      & Oui   & s.o.       & Oui \\
+                \quad Assemblée                     & $7000 \leq \text{CUBF} \leq 7999 $   & 30                                    & 149                       & Oui   & s.o.       & Oui \\ 
+                Résidus                             &                               & 0                                     & 13286                     & s.o.   & s.o.       & s.o.\\ 
                 \hline
-                Total                           &                                    & 240                                  & 218                           & 140776                    &       &           & \\
+                Total                           &                                    & 240                                  & 140776                    &       &           & \\
             \end{tabular}
         \end{table}
         Tout cela étant dit, les études futures devraient utiliser la connaissance a priori de l'erreur de la méthode de prédiction pour modifier la structure des catégories pour obtenir des cas où l'on constate de fortes erreurs du modèle par rapport à la réalité pour mieux évaluer où et comment le modèle se comporte mal.\par
@@ -85,7 +85,7 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
                 dates\_valides & Spécifie si les membres de la strate doivent avoir une date de construction valide sur toutes les entrées & Booléen \begin{compactitem} \item Vrai = doit être vrai \item Faux = doit être faux \item NULL = est ignoré \end{compactitem} & \\
                 superf\_valide & Spécifie si les membres de la strate doivent avoir une superficie valide sur toutes les entrées & Booléen \begin{compactitem} \item Vrai = doit être vrai \item Faux = doit être faux \item NULL = est ignoré \end{compactitem} & \\
 
-        \end{longtable}\clearpage
+        \end{longtable}
         Une fois la définition des catégories complétées, il est nécessaire de discuter des quelques manipulations aux données du rôle et du cadastre pour pouvoir appliquer les conditions.
     \subsubsection{Intrantes pour sélectionner l'échantillon} 
         Les données de lots pour la sélection sont agrégées dans la table \ul{inputs\_validation}. Ce sont des valeurs du rôle foncier agrégées par lot ainsi que des tests logiques pour le nombre de \ac{CUBF} sur le lot et une affectation de l'utilisation principale en fonction de la valeur au rôle. Les données sont compilées à l'aide de la requête présentée à l'annexe \ref{ann:intants-validation}. Les champs de la table sont donnés au tableau \ref{tab:definition_inputs_validation}. Toutes les colonnes à l'exception de random\_value et g\_no\_lot peuvent être sélectionnées comme conditions dans la table \ul{strates\_echantillonage}.
@@ -140,7 +140,7 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
                 \hline
            \end{tabular}
         \end{table}
-        \FloatBarrier\clearpage
+        \FloatBarrier
         \subsubsection{Propriétés des catégories sans enfants}
         Comme mentionné au début de la section, les catégories sont définies de manière récursive. Cela complique l’affichage de titres et la création des conditions nécessaires à la sélection des lots. La table \ul{conditions\_strates\_a\_echant} est donc une table de diagnostic et d'aide à l'affichage. Le tableau \ref{tab:def-conditions-feuilles} donne les champs de cette table. Il est important de noter que les conditions listées ici sont typiquement utilisées à des fins de diagnostic. Les conditions sont toujours régénérées dans le serveur à partir de la définition dans la table \ul{strates\_echantillonage} pour éviter de potentielles injections SQL.
         \begin{table}[h]

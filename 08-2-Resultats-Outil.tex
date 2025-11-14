@@ -1,6 +1,6 @@
 \Chapter{RÉSULTATS}\label{sec:Resultats}
 Cette section va donner un aperçu des résultats obtenus. La section \ref{sec:outil_develope} montrera la structure de l'\ac{API} et de l'interface de l'outil développé. Ensuite, la section \ref{sec:pred_stationnement}donne un aperçu des prédictions émises par le modèle. La section \ref{sec:eval-park-pred-perf} montre les résultats du processus d'évaluation de la performance du modèle. Finalement, la section \ref{sec:exemples-analyse-resultats} montre comment l'outil peut être utilisé pour informer l'analyste sur l'état prédit du stationnement.
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
     \includegraphics[]{figures/logigramme-analyste.pdf}
     \caption{Procédure de génération de la prédiction de la capacité de stationnement}
@@ -16,7 +16,7 @@ Il est ensuite possible de formuler l'ensemble des requêtes que l'on veut poten
 
 D'autre part, de l'information peut être envoyée dans l'\ac{URI} ou dans le corps du message. Dans le cas de l'\ac{URI}, un identifiant peut être communiqué dans l'adresse directement qui peut être ainsi lu. Ceci est souvent le cas quand on connait l'identifiant unique de l'élément à obtenir. L'autre option pour l'URL consiste à communique l'information au moyen de requête de filtrage (\og{query parameters} \fg{} en anglais). Ces derniers sont implémentés en insérant un point d'interrogation dans l'\ac{URI} et en séparant les paramètres de recherche par des \&. Ce type d'implémentation est souvent mis en place pour faire de la recherche. Dans le cadre de ce mémoire, ce type d'implémentation est principalement mis en place pour la recherche de règlement. Ainsi, un appel d'\ac{API} pour des règlements dont la date de début est après 2008 serait un appel GET à l'adresse \og{/api/reglements/entetes?annee\_debut\_après=2008}\fg{}. Dans le cas de figure où l'on connait l'identifiant, par exemple si l'on veut voir les détails d'un règlement à la requête de l'utilisateur, on pourrait faire l'appel GET à l'adresse \og{/api/reglements/complet/<id>} \fg où l'identifiant est directement spécifié dans l'adresse sans chaîne de caractère supplémentaire. L'information peut aussi être contenue dans le corps du message plutôt que dans l'adresse. Ce type de fonctionnalité est principalement utilisé pour les cas de figure où l'on veut modifier ou créer un élément dans la base de données.\par\par
 
-Les figures \ref{fig:schema-api-parking-dev}, \ref{fig:api-schema-2}, \ref{figures/API-diagramme-3.pdf},\ref{figures/API-diagramme-4.pdf} et \ref{figures/API-diagramme-5.pdf} donnent une représentation des domaines de données et des fonctions implémentées. 
+Les figures \ref{fig:schema-api-parking-dev}, \ref{fig:api-schema-2}, \ref{fig:schema-api-3},\ref{fig:schema-api-4} et \ref{fig:schema-api-5} donnent une représentation des domaines de données et des fonctions implémentées. 
 \begin{landscape}
     \begin{figure}
         \centering
@@ -26,7 +26,7 @@ Les figures \ref{fig:schema-api-parking-dev}, \ref{fig:api-schema-2}, \ref{figur
     \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[]{figures/API-diagramme-2.pdf}
+        \includegraphics[scale=0.9]{figures/API-diagramme-2.pdf}
         \caption{Représentation schématique de l'\ac{API} pour l'inventaire et les ensembles de règlements}
         \label{fig:api-schema-2}
     \end{figure}
@@ -98,7 +98,7 @@ Normalement, les fonctions d'\ac{API} ont des fonctions de validations qui véri
          Valeur foncière totale du quartier & \ref{eq:val-tot-quart}& val-tot-quart & Non\\
          Valeur foncière résidentielle du quartier & \ref{eq:val-log-tot-quart} &  val-tot-log-quart& Non\\
          Valeur foncière totale par superficie brute de quartier & \ref{eq:val-tot-sup} & val-tot-sup & Non\\
-         Valeur foncière résidentielle par superficie brute de quartier & \ref{eq:val-tot-log-sup }& val-tot-log-sup & Non\\
+         Valeur foncière résidentielle par superficie brute de quartier & \ref{eq:val-tot-log-sup}& val-tot-log-sup & Non\\
          Nombre de voitures des résidents &\ref{eq:nb-voit} &nb-voit & Non\\
          Différence maximale signée &\ref{eq:nb-voit-delta} & nb-voit-delta & Non\\
          Nombre de voitures max & \ref{eq:nb-voit-max} & nb-voit-max & Non\\
@@ -168,7 +168,7 @@ La partie inférieure de l'écran permet de visualiser et modifier la définitio
 \subsubsection{Ensembles de règlements}
 La page d’ensembles de règlements permet de modifier les ensembles de règlements et est montrée à la figure \ref{fig:page-ensemble-reglements}. Le bandeau de gauche donne une liste de tous les ensembles de règlements entreposés dans la table \ul{ensembles\_reglement\_stat}. L'icône en haut de la page permet d'ajouter un nouvel ensemble de règlements. La corbeille à côté de chaque ensemble de règlements permet de le supprimer au besoin. \par 
 Le panneau de droite qui permet de voir les associations qui sont faites dans la table \ul{association\_er\_reg\_stat}. Ces associations spécifient les règlements à utiliser pour chaque utilisation du sol. Les icônes de crayons permettent de commencer la modification des différents éléments. La modification des associations est faite dans une fenêtre montrée à la figure \ref{fig:page-creation-ens-reg}. Les associations peuvent aussi être supprimées à l'aide de l'icône de corbeille. La fenêtre supplémentaire permet de sélectionner les \ac{CUBF} en commençant par la catégorie la plus générale. S'il désire plus de précision, les bandes déroulantes sous la bande déroulante initiale permettent de spécifier des \ac{CUBF} de plus en plus détaillés. Les ensembles de règlements sont ensuite associés aux territoires en utilisant la page des ensembles de règlements-territoires.\par
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.45\linewidth]{CreationAssociationEnsReg.png}
     \caption{Création d'une association entre un \ac{CUBF} et un règlement}
@@ -198,7 +198,7 @@ La figure \ref{fig:page-ens-reg-terr} montre l'interface qui a été complétée
 
 \subsubsection{Analyse Règlements}
 La page d'analyse de règlements permet de comparer les ensembles de règlements graphiquement. L'utilisateur peut choisir des ensembles de règlements par localisation (pour voir l'évolution dans le temps), par date de validité (pour voir la distribution spatiale) ou manuellement. Une fois les ensembles de règlements choisis, l'utilisateur doit choisir une utilisation du sol en cliquant sur le crayon en haut à gauche de chaque graphique. La figure \ref{fig:params-analyse-ens-reg} montre le menu d'édition des graphiques. Les limites de l'axe des X peuvent aussi être changées dans le panneau d'édition. Les règlements qui n'ont pas d'unités compatibles sont ensuite éliminés de la sélection. Une fois l'utilisation du sol choisie, les ensembles de règlements qui n'ont pas des unités compatibles sont automatiquement enlevés des graphiques. La figure \ref{fig:page-analyse-reg} montre la page avec les graphiques. Si l'utilisateur est satisfait, il peut passer à la phase d'estimation de la capacité de stationnement.
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{images/AnalyseEnsRegEdition.png}
     \caption{Édition des paramètres d'un graphique}
@@ -316,18 +316,12 @@ Une page de sommaire d'évaluation a aussi été développée pour pouvoir faire
     \end{figure}
 \end{landscape}
 \subsubsection{Page d'analyse agrégée}
-L'outil inclut aussi une page qui permet de graphiquement représenter les prédictions sous différentes formes. La figure \ref{fig:page-ana-quartier} montre le point d'atterrissage. L'utilisateur peut alors sélectionner quatre types de représentation graphique:
-\begin{itemize}
-    \item une carte choroplèthe
-    \item un histogramme
-    \item un graphique XY
-    \item un profile d'accumulation de véhicules
-\end{itemize}
-Au-delà de la représentation graphique, d'autres options s'offrent à l'utilisateur. La première permet de sélectionner l'ordre de préférence des méthodes d'estimations enregistrées pour un même lot. Cet ordre est utilisé pour toutes les variables reliées à au stationnement. D'autre part, deux boutons sont mis à disposition de l'utilisateur. Le premier met à jour les estimations  de stationnement agrégées par quartier. Le second met à jour les autres indicateurs qui doivent être calculés à partir de données brutes comme la part modale, le nombre de permis et la population.\par
-Une fois la méthodologie sélectionnée, l'apparence de la page change. Les paragraphes suivants donneront des détails sur chacune des visualisations disponibles:
-\paragraph{Cartographie} Dans le cas où l'utilisateur visualise les données sous forme de carte, il doit ensuite sélectionner une variable à cartographier. Les variables disponibles sont listées données dans la section \ref{ssec:indicateurs-secteurs-municipaux}. La figure \ref{fig:ana-quartier-carto} montre un exemple de ce type d'analyse. La couche de fond peut être modifiée à partir de la liste déroulante en haut à droite avec \ac{OSM}, Géodésie Québec et une couche fournie par \ac{ESRI} comme options. Ce choix de fond de carte est persistant entre les différentes pages.
+L'outil inclut aussi une page qui permet de graphiquement représenter les prédictions sous différentes formes. La figure \ref{fig:page-ana-quartier} montre le point d'atterrissage. L'utilisateur peut alors sélectionner quatre types de représentations graphique: une carte choroplèthe, un histogramme, un graphique XY ou un profile d'accumulation de véhicules. \par
+Au-delà de la représentation graphique, d'autres options s'offrent à l'utilisateur. La première permet de sélectionner l'ordre de préférence des méthodes d'estimations enregistrées pour un même lot. Cet ordre est utilisé pour toutes les variables reliées à au stationnement. D'autre part, deux boutons sont mis à disposition de l'utilisateur. Le premier met à jour les estimations  de stationnement agrégées par quartier. Le second met à jour les autres indicateurs qui doivent être calculés à partir de données brutes comme la part modale, le nombre de permis et la population.
+Une fois la méthodologie sélectionnée, l'apparence de la page change. Les paragraphes suivants donneront des détails sur chacune des visualisations disponibles.
+\paragraph{Cartographie} Dans le cas où l'utilisateur visualise les données sous forme de carte, il doit ensuite sélectionner une variable à cartographier. Les variables disponibles sont listées dans la section \ref{ssec:indicateurs-secteurs-municipaux}. La figure \ref{fig:ana-quartier-carto} montre un exemple de ce type d'analyse. La couche de fond peut être modifiée à partir de la liste déroulante en haut à droite avec \ac{OSM}, Géodésie Québec et une couche fournie par \ac{ESRI} comme options. Ce choix de fond de carte est persistant entre les différentes pages.
 \paragraph{Diagramme à barres} Les variables listées  à la section \ref{ssec:indicateurs-secteurs-municipaux} peuvent être visualisées sous forme de diagramme à barres. La figure \ref{fig:ana-quartier-diagramme-barre} montre le résultat.
-\paragraph{Graphique XY} Les variables listées \ref{à la section ssec:indicateurs-secteurs-municipaux} peuvent être affichées sous forme de diagramme XY entre deux variables. La figure \ref{fig:ana-quartier-XY} montre un exemple de graphique dans l'outil.
+\paragraph{Graphique XY} Les variables listées à la section \ref{ssec:indicateurs-secteurs-municipaux} peuvent être affichées sous forme de diagramme XY entre deux variables. La figure \ref{fig:ana-quartier-XY} montre un exemple de graphique dans l'outil.
 \paragraph{Profils d'accumulation de véhicules} Les profils d'accumulation de véhicules décrits initialement développés par \textcite{morency_characterizing_2008} et décrits à la section \ref{sec:meth_analyse} peuvent être calculés et visualisés à partir de cette page. Initialement, la méthode était utilisée pour inférer une capacité théorique de stationnement requise pour accommoder tous les déplacements en automobile recensés. Avec une autre estimation de la capacité, il est possible de comparer la capacité théorique à la capacité estimée avec l'outil. La figure \ref{fig:ana-quartier-PAV} montre l'interface.\par
 
 Une autre analyse potentielle est l'analyse de variabilité qui sera discutée à la section suivante.

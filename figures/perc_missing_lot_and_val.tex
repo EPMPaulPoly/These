@@ -1,0 +1,55 @@
+
+    \documentclass{standalone}
+    \usepackage[english,french]{babel} 
+    \usepackage{tikz}
+    \usetikzlibrary{calc}
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}         
+    \usepackage{pgfplotstable}
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=1.18}
+    \usepackage{siunitx}               
+    \usepackage{booktabs} 
+    \begin{document}
+    \begin{tikzpicture}
+    \begin{axis}[
+                height=10cm,
+                width=15cm,
+                tick align=outside,
+                tick pos=left,
+                ylabel={Proportion de la catégorie avec données manquante[\%]},
+                ymin= 0,
+                ymax= 100,
+                ytick={0,20,40,60,80,100},
+                yticklabels={0,20,40,60,80,100},
+                legend style={
+                    at={(0.5,1.02)},  % x=0..1, y=0..1 relative to axis
+                    anchor=south      % which part of the legend is placed at that point
+                },
+                x tick label style={rotate=45, anchor=east},
+                xtick={1,2,3,4,5,6,7,8,9,10},
+                xticklabels={Usage mixte,
+Résidentielle,
+Industrielle,
+Infrastructure,
+Commerciale,
+Services,
+Récréation,
+Ressources naturelles,
+Inexploité,
+Sans Rôle},
+                xlabel={Utilisation du sol},
+                xmin=-0.5,
+                xmax=10.5
+            ]\addplot[ybar,draw=none,fill=blue,legend image post style={/pgfplots/ybar legend},bar width= 8pt,bar shift=-4pt]
+                coordinates{
+                    (1,36.58536585365854)(2,0.37036153962312135)(3,48.5632183908046)(4,86.8037703513282)(5,34.56221198156682)(6,30.593220338983052)(7,75.68)(8,79.38931297709924)(9,97.06469079509831)(10,nan)
+                };
+            \addlegendentry{En nombre de lots};\addplot[ybar,draw=none,fill=orange,legend image post style={/pgfplots/ybar legend},bar width= 8pt,bar shift=4pt]
+                coordinates{
+                    (1,77.29676210547714)(2,1.4190601297424188)(3,65.01352732339161)(4,87.344971361682)(5,53.09431370368725)(6,67.30013730462127)(7,77.06616473206749)(8,82.76065603782936)(9,93.06007452581294)(10,nan)
+                };
+            \addlegendentry{En valeur foncière};
+        \end{axis}
+        \end{tikzpicture}
+        \end{document} 

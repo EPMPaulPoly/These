@@ -95,37 +95,75 @@
         \FloatBarrier
     
     \subsection{Analyse descriptive des données foncières}\label{ssec:analyse-descriptive-role-fonc}
-        Les données foncières sont centrales à la création de l'estimation. Il semble donc important de faire une courte description d'observations émises sur les données au fil de cette étude. Dans un premier temps, il semble important de noter à quel point la classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:lots-per-land-use}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans une même entrée du rôle foncier.
-        \begin{figure}[h]
+        Les données foncières sont centrales à la création de l'estimation. Il semble donc important de faire une courte description d'observations émises sur les données au fil de cette étude. Dans un premier temps, il semble important de noter à quel point la classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:perc-val-perc-lots-quebec}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans une même entrée du rôle foncier.\par
+        Ce constat est légèrement différent si on compare le nombre de lots à la valeur des lots. La figure  montre que les lots commerciaux, de service et à usage mixte prennent une plus grande partie de la valeur foncière totale que du nombre de lots.
+        \begin{figure}[H]
             \centering
-            \includegraphics[width=0.8\linewidth]{figures/distro-usage-lots.pdf}
-            \caption{Nombre de lots par utilisation du sol principale}
-            \label{fig:lots-per-land-use}
-        \end{figure}
-        D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal, mais est aussi présent dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une inférence de certaines propriétés en fonction de la valeur au rôle au besoin.
-        \begin{figure}[h]
-            \centering
-            \includegraphics[width=0.8\linewidth]{figures/distro-data-role-manquant.pdf}
-            \caption{Pourcentage des lots avec des propriétés manquantes}
-            \label{fig:role-missing-data}
-        \end{figure}
-        On peut aussi regarder le logement de manière plus fine en segmentant les lots de nature résidentiels en fonction du nombre de logements par lot. On constate que même si une majorité de lots ont un seul logement, la plupart des logements disponibles sont sur des lots multilogements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lots avec de multiples logements.
-        \begin{figure}
+            \includegraphics[width=0.7\linewidth]{figures/perc_val_perc_lot.pdf}
+            \caption{Proportion des lots et de la valeur foncière selon l'utilisation du sol pour la ville de Québec}
+            \label{fig:perc-val-perc-lots-quebec}
+        \end{figure}     
+        
+           
+        On peut aussi regarder le logement de manière plus fine en segmentant les lots de nature résidentiels en fonction du nombre de logements par lot. On constate que même si une majorité de lots ont un seul logement, la plupart des logements disponibles sont sur des lots avec plusieurs logements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lots avec de multiples logements.
+        \begin{figure}[H]
         \begin{subfigure}[t]{1\textwidth}
             \centering
-            \includegraphics[width=0.7\linewidth]{figures/distro-typ-log.pdf}
+            \includegraphics[width=0.625\linewidth]{figures/distro-typ-log.pdf}
             \caption{Compte par type}
             \label{fig:distro-typ-log}
         \end{subfigure}
         \begin{subfigure}[t]{1\textwidth}
             \centering
-            \includegraphics[width=0.8\linewidth]{figures/distro-typ-log-quartier.pdf}
+            \includegraphics[width=0.625\linewidth]{figures/distro-typ-log-quartier.pdf}
             \caption{Répartition par type et quartier}
             \label{fig:distro-typ-log-quartier}
         \end{subfigure}
         \caption{Nombre de logements et de lots par compte de logement par lot et quartier}
         \end{figure}
-        On peut aussi constater que les lots avec des données manquantes n'ont pas nécessairement des propriétés physiques similaires aux autres lots. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme la montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
+        D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal, mais est aussi présent dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une prédiction des propriétés requise en fonction de la valeur au rôle au besoin.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\linewidth]{figures/distro-data-role-manquant.pdf}
+            \caption{Pourcentage des lots avec des propriétés manquantes}
+            \label{fig:role-missing-data}
+        \end{figure}
+        Le constat est pire lorsque l'on prend en compte la valeur foncière des propriétés où les données sont manquantes. Les propriétés avec une donnée le nombre de logements (pour l'utilisation résidentielle) ou la superficie sont manquants tendent à représenter une plus grande proportion de la valeur foncière comme le montre la figure \ref{fig:prop-val-and-lots-missing-data}.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\linewidth]{figures/perc_missing_lot_and_val.pdf}
+            \caption{Proportion de chaque utilisation du sol avec des données manquantes }
+            \label{fig:prop-val-and-lots-missing-data}
+        \end{figure}
+        La figure \ref{fig:carte-chaleur-donnee-manquante} montre une carte de chaleur de la proportion de lots et de la valeur foncière où une donnée clé est absente. Les lignes de service et commercial ont 31\% et 35\% de lots avec des données manquantes mais 67\% et 53\% de la valeur foncière où une donnée est manquante. Les quartiers de la Cité Universitaire (CUNI) se démarque pour la quantité importante de valeur foncière avec des données absentes. L'inspection des données révèle que la majeure partie du campus universitaire n'a pas les propriétés requises remplies ainsi que les deux grands centres commerciaux.
+        \begin{landscape}
+            \begin{figure}
+                \centering
+                \includegraphics[width=1.2\linewidth]{images/prop_data_manquante_util_sol_geographie.png}
+                \caption{Carte de chaleur de la proportion de lots et de valeur foncière avec une donnée essentielle manquante}
+                \label{fig:carte-chaleur-donnee-manquante}
+            \end{figure}
+        \end{landscape}
+        La valeur au rôle des lots avec des données manquantes tend à être plus élevée que celle avec les données présentes. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Le tableau montre un sommaire des médianes en fonction de l'absence ou de présence de lots\par
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{lccccc}
+                \hline
+                 Utilisation du sol & \rotatebox{90}{\makecell[l]{$N_{lots}$ \\ donnée manquante}} & \rotatebox{90}{\makecell[l]{Médiane de la valeur au rôle \quad\\ donnée manquante}} &  \rotatebox{90}{\makecell[l]{$N_{lots}$ \\ donnée présente}} & \rotatebox{90}{\makecell[l]{Médiane de la valeur au rôle \\ donnée présente}} \\\hline
+                 Résidentiel & 466 & 254,500 & 125,363 & 296,000\\ 
+                 Industriel & 169 & 1,750,000 & 179 & 815,000 \\
+                 Infrastructure & 1,024 & 30,000 & 160 & 384,000\\
+                 Commercial & 826 & 1,280,000 & 1563 & 725,000\\
+                 Services & 723 & 1,555,000 & 1640 & 660,000\\
+                 Récréation & 477 & 394,000 & 153 & 1,400,000 \\
+                 Ressources naturelles & 420 & 112,000 & 108 & 119,000\\
+                 Inexploité & 6,830 & 19,000 & 206 & 206,000\\
+                 Usage Mixte & 52 & 2,840,000 & 417 & 1,691,000\\\hline
+            \end{tabular}
+            \caption{Récapitulatif de la médiane des valeurs au rôle en fonction de l'utilisation du sol et de l'absence de données requises }
+            \label{tab:table-recap-missing-data}
+        \end{table}
+        Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme la montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
         Pour conclure, les données du rôle foncier donnent un portrait  désagrégé de l'utilisation des sols partout dans la métropole, permettant lorsque les données sont présentes de déduire les différentes variables requises pour estimer une capacité de stationnement. Des acronymes ont été attribués au quartier pour rendre les graphiques plus lisibles. Le tableau \ref{tab:acro-quartiers} énumère les acronymes.
         \begin{landscape}
             \begin{figure}
@@ -1043,7 +1081,7 @@
 
     Cette section a donné un aperçu de l'organisation des classes créées pour faire le calcul de l'inventaire à partir des données entreposées dans la base de données détaillée auparavant. La section suivante montrera schématiquement comment les différentes fonctions et méthodes sont utilisées pour sélectionner, assembler, et faire le traitement des données avant de les retourner à l'utilisateur.
 
-    \subsection{Logigramme de la procédure de calcul de l'estimation de la capacité}\label{ssec:logigramme-calcul-stationnement}
+    \subsection{Logigramme de la procédure d'estimation de la capacité}\label{ssec:logigramme-calcul-stationnement}
         La méthode suivante est proposée pour le calcul de la capacité de stationnement basé sur les règlements de l'urbanisme. Ce calcul est déclenché soit en sélectionnant un quartier à analyser, soit en demandant de calculer pour un lot particulier. Dans les deux cas, la procédure est la même. Le script de calcul a été implémenté en utilisant le langage Python. La figure \ref{fig:logigramme_calcul_urbanisme} montre le logigramme de haut niveau pour l'approche par les minimums. \par
         
         On commence par sélectionner les points du rôle foncier dans une zone prescrite, on trouve les municipalités actuelles et historiques qui interceptent l'ensemble des points, on trouve les ensembles de règlements qui sont associés à chaque territoire, on segmente ensuite les données du rôle foncier en fonction de la réglementation qui s'y applique, et on applique les règlements. Une fois les calculs complétés, on agrège les calculs par lot pour l'ensemble des périodes avant de les sauvegarder dans la table appropriée.
@@ -1132,19 +1170,19 @@
             \end{tabular}
             
         \end{table}
-        
-    \subsection{Conversions d'unités}
-        À ce statut-ci, le logiciel aura nettoyé les données d'entrées de manière à avoir un \ac{TD} et un \ac{RST} prêts pour le calcul. Il faut maintenant convertir les unités du rôle foncier vers les unités dans lesquelles sont formulées les règlements. Ce processus est relativement simple et formalise simplement les associations décrites aux sections précédentes. La figure \ref{fig:logigramme-unites} montre le processus avec des données simples fixées comme exemple.
-        \begin{landscape}
-            \begin{figure}
-                \includegraphics[scale=0.6]{figures/logigramme-conversion-unites.pdf}
-                \caption{Logigramme et exemple de conversion d'unités}\label{fig:logigramme-unites}
-            \end{figure}
-        \end{landscape}
     \subsection{Procédure de calcul des minimums}
-        Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus sont utilisés comme intrants dans la fonction calculate\_parking\_for\_reg\_set\_territories pour calculer l'estimation. Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimation à utiliser s'il y a plusieurs méthodes de calcul.\clearpage
+        Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus voient d'abord un \ac{PCI} calculé avant de compléter l'estimation de la capacité à l'aide de la fonction calculate\_parking\_for\_reg\_set\_territories. La conversion d'unités est gérée par la fonction generate\_input\_from\_PRS\_TD. Une fois la conversion complétée, les données sont envoyées à calculate\_parking\_reg\_set.  Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimation à utiliser s'il y a plusieurs sous-ensembles.    
+        \subsubsection{Conversions d'unités}
+            À ce statut-ci, le logiciel aura nettoyé les données d'entrées de manière à avoir un \ac{TD} et un \ac{RST} prêts pour le calcul. Il faut maintenant convertir les unités du rôle foncier vers les unités dans lesquelles sont formulées les règlements. Ce processus est relativement simple et formalise simplement les associations décrites aux sections précédentes. La figure \ref{fig:logigramme-unites} montre le processus avec des données simples fixées comme exemple.
+            \begin{landscape}
+                \begin{figure}
+                    \includegraphics[scale=0.6]{figures/logigramme-conversion-unites.pdf}
+                    \caption{Logigramme et exemple de conversion d'unités}\label{fig:logigramme-unites}
+                \end{figure}
+            \end{landscape}
+    
         \subsubsection{Calcul des sous-ensembles: calculate\_parking\_specific\_reg}
-        Cette fonction calcule le nombre de places de stationnement pour un sous-ensemble de règlements. Le logigramme \ref{fig:logigramme_calcul_reg} détaille la procédure.
+        Cette fonction calcule le nombre de places de stationnement pour un sous-ensemble de règlements. Le logigramme \ref{fig:logigramme_calcul_reg} détaille la procédure. Le code est disponible à l'annexe \ref{ann:code-addition-subset} pour l'opérateur d'addition (1) et à l'annexe \ref{ann:code-thresh-subset} pour l'opérateur de seuil ou sur Github \parencite{charbonneau_epmpaulpolyinterface_backend_stationnement_maitrise_2025} 
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.9]{figures/logigramme-calcul-reglement.pdf}
@@ -1153,7 +1191,7 @@
         \end{figure}
         \clearpage
         \subsubsection{Arbitrage entre deux sous-ensembles: subset\_operation}
-        Une fois qu'une estimation est calculée pour chaque sous-ensemble d'un règlement, il est nécessaire d'arbitrer sur quel sous-ensemble prend préséance. Cet arbitrage est fait par une succession de décisions logiques. Deux conditions peuvent s'appliquer: un \og{ou simple} \fg{} ou un \og{ou plus contraignant} \fg{}. Le logigramme \ref{fig:logigramme_arbitrage_ss_ensemble} montre la procédure d'arbitrage.
+        Une fois qu'une estimation est calculée pour chaque sous-ensemble d'un règlement, il est nécessaire d'arbitrer sur quel sous-ensemble prend préséance. Cet arbitrage est fait par une succession de décisions logiques. Deux conditions peuvent s'appliquer: un \og{ou simple} \fg{} ou un \og{ou plus contraignant} \fg{}. Le logigramme \ref{fig:logigramme_arbitrage_ss_ensemble} montre la procédure d'arbitrage et le code est disponible à l'annexe \ref{ann:code-subset-oper}.
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.9]{figures/logigramme-arbitrage-2-se.pdf}

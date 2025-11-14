@@ -296,7 +296,11 @@
 	\renewcommand\cftchapfont{CHAPITRE }
     \renewcommand\cftchappagefont{}
 }
-
+\AtEveryBibitem{
+  \clearfield{note}
+  \clearfield{addendum}
+  \clearfield{annotation}
+}
 
 %%
 %% Il y a un document par chapitre du mémoire ou thèse.
@@ -425,8 +429,12 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 %	\bibliography{Document}
 %	\bibliographystyle{IEEEtran}			% Style bibliographique / Bibliography style 
 %}{
-	\renewcommand\bibname{RÉFÉRENCES}
-	\printbibliography{}
+\renewcommand{\bibname}{RÉFÉRENCES}
+\cleardoublepage
+\chapter*{\bibname}
+\addcontentsline{toc}{compteur}{\bibname}
+\markboth{\MakeUppercase{\bibname}}{\MakeUppercase{\bibname}}
+ \printbibliography[heading=none]
 %	\bibliographystyle{apa-uqac-fr}    % Style bibliographique / Bibliography style 
 %}
 %

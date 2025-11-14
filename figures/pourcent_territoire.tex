@@ -1,0 +1,71 @@
+
+    \documentclass{standalone}
+    \usepackage[english,french]{babel} 
+    \usepackage{tikz}
+    \usetikzlibrary{calc}
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}         
+    \usepackage{pgfplotstable}
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=1.18}
+    \usepackage{siunitx}               
+    \usepackage{booktabs} 
+    \begin{document}
+    \begin{tikzpicture}
+    \begin{axis}[
+                height=10cm,
+                width=15cm,
+                tick align=outside,
+                tick pos=left,
+                ylabel={\% territoire},
+                ymin= 0,
+                ymax= 25,
+                ytick={0,5,10,15,20,25},
+                yticklabels={0,5,10,15,20,25},
+                xtick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35},
+                xticklabels={SJBA,
+STRO,
+MCLM,
+LAIR,
+SSAC,
+VLIM,
+SSAU,
+VQ-CP,
+CUNI,
+4-6,
+MAIZ,
+PLAT,
+VANI,
+PSFO,
+JESU,
+STLO,
+4-5,
+NE-LB,
+DU-LS,
+VIBO,
+CHAT,
+VIMO,
+5-2,
+ORSA,
+SILR,
+CHMO,
+CARO,
+STEM,
+LRTV,
+4-3,
+VBEL,
+NDL,
+AÉRO,
+LSC,
+STLI},
+                xlabel={Quartier},
+                xmin=-0.5,
+                xmax=35.5,xticklabel style={rotate=90, anchor=east}
+            ]\addplot[ybar,draw=none,fill=blue,legend image post style={/pgfplots/ybar legend},bar width= 8pt,bar shift=0pt]
+                coordinates{
+                    (1,22.492163715233396)(2,11.897748208751725)(3,10.165445581174087)(4,8.573918168376824)(5,8.269459106457216)(6,8.229363883410889)(7,6.795597575735954)(8,6.323439058616214)(9,5.569445419471855)(10,5.559808605157528)(11,4.39465026479656)(12,4.277294270247883)(13,4.078765025340388)(14,4.0088279599055285)(15,3.5770802379066726)(16,2.8832615099673005)(17,2.7566773173961288)(18,2.6439094941622483)(19,2.47934287202898)(20,2.3209165350058574)(21,2.30484832933001)(22,2.136151353681366)(23,2.107139060446892)(24,2.028350874280927)(25,1.9908962337416551)(26,1.7162201827329588)(27,1.176278112901378)(28,1.0412344271062488)(29,1.02760288061623)(30,0.9927778640413812)(31,0.5039903889460531)(32,0.36784199428481956)(33,0.3327296673301082)(34,0.33251999410055827)(35,0.27469528334597054)
+                };
+            \addlegendentry{Pourcentage du territoire};
+        \end{axis}
+        \end{tikzpicture}
+        \end{document} 

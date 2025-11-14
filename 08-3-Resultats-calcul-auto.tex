@@ -1,25 +1,25 @@
 \section{Résultats du calcul automatique}\label{sec:pred_stationnement}
-Une estimation réglementaire de stationnement a été calculée pour l'ensemble des propriétés dans les limites de la ville de Québec. Les graphiques présentés dans cette section ont été générés avec des scripts python dédiés pour améliorer la lecture. La source est disponible dans un dépôt Github \parencite{charbonneau_epmpaulpolygraphiques_memoire_2025}.  Dans cette section, l'inventaire sera dressé en utilisant les minimums calculés sauf indication contraire. Au total, la méthode réglementaire donne une estimation de 498 800 places de stationnement. La figure \ref{fig:result-dist-places-par-usage} montre la distribution des places de stationnement entre les différents usages du sol.\par
+Une estimation réglementaire de stationnement a été calculée pour l'ensemble des propriétés dans les limites de la ville de Québec. Les graphiques présentés dans cette section ont été générés avec des scripts python dédiés pour améliorer la lecture. La source est disponible dans un dépôt Github \parencite{charbonneau_epmpaulpolygraphiques_memoire_2025}.  Dans cette section, les prédictions seront présentées en utilisant les minimums calculés sauf indication contraire. Au total, la méthode réglementaire donne une estimation de 498 800 places de stationnement. La figure \ref{fig:result-dist-places-par-usage} montre la distribution des places de stationnement entre les différents usages du sol.\par
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=1\textwidth]{figures/inventaire-reg-par-cubf.pdf}
+    \includegraphics[width=0.8\textwidth]{figures/inventaire-reg-par-cubf.pdf}
     \caption{Distribution des places des stationnements par utilisation du sol}
     \label{fig:result-dist-places-par-usage}
 \end{figure}
-On constate que les stationnements résidentiels (305 700 places) constituent 65\% du parc de stationnement hors rue. Même en tenant compte du plus fort taux de données absentes dans les propriétés commerciales (67 000 places de stationnement) et de services (58 800 places de stationnement) (environ 30 à 45\% de données manquantes). Le stationnement résidentiel demeurerait le contributeur majeur au parc total. \par 
+Le modèle prédit que les stationnements résidentiels (305 700 places) constituent 65\% du parc de stationnement hors rue. Même en tenant compte du plus fort taux de données absentes dans les propriétés commerciales (67 000 places de stationnement) et de services (58 800 places de stationnement), le stationnement résidentiel demeurerait le contributeur majeur au parc total. \par 
 \FloatBarrier
-Ce parc de stationnement n'est pas uniformément réparti sur le territoire. Les figures \ref{fig:result-dist-places-par-quartier} et \ref{fig:n-places-reg-carto} montrent la distribution spatiale du parc de stationnement dans la ville de Québec selon les quartiers administratifs. On constate que les secteurs Duberger-Les Saules et Neufchatel-Est et la Cité Universitaire contiennent une grande partie du parc de stationnement hors rue. 
-\begin{figure}[h]
+Ce parc de stationnement n'est pas uniformément réparti. Les figures \ref{fig:result-dist-places-par-quartier} et \ref{fig:n-places-reg-carto} montrent la distribution spatiale du parc de stationnement dans la ville de Québec selon les quartiers administratifs. On constate que les secteurs Duberger-Les Saules et Neufchatel-Est et la Cité Universitaire contiennent une grande partie du parc de stationnement hors rue. 
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.9\textwidth}
-        \includegraphics[width=1\textwidth]{figures/inventaire-reg-par-quartier.pdf}
+        \includegraphics[width=0.9\linewidth]{figures/inventaire-reg-par-quartier.pdf}
         \caption{Histogramme}
         \label{fig:result-dist-places-par-quartier}
     \end{subfigure}
     ~
     \begin{subfigure}[b]{0.9\textwidth}
         \centering
-        \includegraphics[width=1\linewidth]{images/n-places-reg.png}
+        \includegraphics[width=0.9\linewidth]{images/n-places-reg.png}
         \caption{Carte}
         \label{fig:n-places-reg-carto}
     \end{subfigure}
@@ -27,17 +27,17 @@ Ce parc de stationnement n'est pas uniformément réparti sur le territoire. Les
 \end{figure}
 \FloatBarrier
 La densité de stationnement suit essentiellement le même schéma que la densité de population comme le montrent les figures \ref{fig:dens-pop} et \ref{fig:dens-stat}.
-L'exception est la colline Parlementaire qui a un excédent de stationnements par rapport à sa population. \begin{figure}[!h]
+L'exception est la colline Parlementaire qui a un excédent de stationnements par rapport à sa population. 
+\begin{figure}[!h]
     \centering
     \begin{subfigure}[b]{0.725\textwidth}
-        \includegraphics[width=1\textwidth]{images/densite-pop.png}
+        \includegraphics[width=0.9\linewidth]{images/densite-pop.png}
         \caption{Population}
         \label{fig:dens-pop}
     \end{subfigure}
-    ~
+    
     \begin{subfigure}[b]{0.725\textwidth}
-        \centering
-        \includegraphics[width=1\linewidth]{images/densite-stat-reg.png}
+        \includegraphics[width=0.9\linewidth]{images/densite-stat-reg.png}
         \caption{Stationnement}
         \label{fig:dens-stat}
     \end{subfigure}

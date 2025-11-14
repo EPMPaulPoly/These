@@ -7,10 +7,12 @@
         \label{fig:diff-corrections}
     \end{figure}
 \section{Exemples d'analyse}\label{sec:exemples-analyse-resultats}
+Cette section montre comment les données pourraient être utilisées pour bonifier la compréhension du stationnement. Les résultats sont purement prospectifs et le fort taux d'absence de données crée des distorsions dans la disponibilité du parc de stationnement. La contribution du stationnement sur rue est complètement évacuée de l'analyse ajoutant un biais supplémentaire. Un important processus d'évaluation des données et de correction est requis pour rendre les constats de cette section valide sur les métriques liées au stationnement. Cela étant dit, la section vise à illustrer un potentiel.\par
+
 La motorisation a été estimée ainsi que les profils d'accumulation véhicule à partir des données de l'enquête OD. Elle est montrée à la figure \ref{fig:motorisation-par-quartier} à titre indicatif pour donner un contexte au reste de l'analyse. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{images/motorisation-par-quartier.png}
+    \includegraphics[width=0.8\linewidth]{images/motorisation-par-quartier.png}
     \caption{Motorisation selon les quartiers}
     \label{fig:motorisation-par-quartier}
 \end{figure}
@@ -38,7 +40,7 @@ On peut ensuite commencer à interroger la mesure dans laquelle le stationnement
 Cependant, même en regardant le nombre de places de stationnement par logement, on constate des tendances contre-intuitives, puisque les quartier centraux paraissent mieux lotis que certains quartiers péri-urbains comme le montre la figure \ref{fig:stationnement-residentiel-par-quartier}. Encore une fois, l'évaluation du modèle montre que ceci est probablement à le biais du modèle pour les propriétés unifamiliales particulièrement lorsqu'on s'éloigne du centre où ce type de logement est plus présent est constitue une plus grande partie du parc de stationnement. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.66\linewidth]{images/stat-res-par-log.png}
+    \includegraphics[width=0.8\linewidth]{images/stat-res-par-log.png}
     \caption{Stationnement résidentiel par logement}
     \label{fig:stationnement-residentiel-par-quartier}
 \end{figure}
@@ -108,3 +110,43 @@ L'analyse de variabilité peut servir à comprendre comment les politiques de st
     \caption{Exemple d'analyse de variation utilisant tous les ensembles de règlements}
     \label{fig:ana-var-example}
 \end{figure}
+Les prédiction peuvent aussi être utilisés pour pour estimer le pourcentage du territoire dédié au stationnement. Les quartiers voient une part plus grande de leur territoire dédié au stationnement. 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{1\textwidth}
+        \centering
+        \includegraphics[width=0.675\linewidth]{figures/pourcent_territoire.pdf}
+        \caption{Barres}
+    \end{subfigure}
+    \begin{subfigure}{1\textwidth}
+        \centering
+        \includegraphics[width=0.675\linewidth]{images/perc-terr-stat.png}
+        \caption{Carte}
+    \end{subfigure}
+    \caption{Pourcentage du territoire dédié au stationnement par quartier}\label{fig:perc-terr-occ-stat}
+\end{figure}
+Plusieurs facteurs contribuent à ce résultat, l'utilisation du sol variant selon les secteurs, l'absence de compensation pour le fait qu'un partie du stationnement est souterraine ou en étages dans les quartier centraux et la variation du taux de données absentes selon l'utilsation du sol et le quartier.\par
+
+On peut aussi déduire des taux d'occupation théoriques des quartiers à partir des profils d'accumulation de véhicules. En prenant la valeur maximale du profile d'accumulation et en la comparant au parc de stationnement prédit, il est possible de dresser un portrait de l'utilisation de la capacité. Ce portrait peut être dressé par catégorie. On peut déduire un taux d'occupation total maximal ou le différencier pour le parc public (usages autres que résidentiel) ou pour le parc résidentiel. Évidemment, les maximums d'occupation n'ont pas nécessairement lieu en même temps. La figure \ref{fig:occupancy-rate-total} montre le taux d'occupation pour le parc total. Les valeurs excèdent très largement 100\%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/taux-occup-total.png}
+    \caption{Taux d'occupation total maximal prédit }
+    \label{fig:occupancy-rate-total}
+\end{figure}\clearpage
+Une carte similaire peut être créée pour le parc de stationnement public 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/taux-occup-public.png}
+    \caption{Taux d'occupation public maximal prédit}
+    \label{fig:occupancy-rate-public}
+\end{figure}\clearpage
+Finalement, la figure \ref{fig:occupancy-rate-residentiel} montre le taux d'occupation maximal résidentiel calculé de manière similaire.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/taux-occup-res.png}
+    \caption{Taux d'occupation résidentiel maximal prédit}
+    \label{fig:occupancy-rate-residentiel}
+\end{figure}
+
+Ceci conclut la section sur les exemple d'analyse. Les données manquantes dans le rôle foncier et la complétion d'un processus de calibration des unités limite fortement la pertinence des constats, qui doivent tous être compris comme démonstratifs. La prochaine section donnera un récapitulatif du mémoire.
