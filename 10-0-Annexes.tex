@@ -411,6 +411,21 @@ Les appels d'\ac{API} suivants sont mis en place pour gérer les profils d'accum
 \end{itemize}
 \section{API: Validation}
 L'\ac{API} de validation a été mis en place pour permettre de rapidement assurer la qualité de l'inventaire créé. Bien que des développements méthodologiques demeurent, l'implémentation actuelle a les fonctionnalités de base pour créer une structure d'échantillonnage stratifiée, de sélectionner un ensemble de lots selon la méthodologie choisie, d'entrer les données de validation et de visualiser les résultats. Cette section documentera les appels d'\ac{API} mise en place pour soutenir cette fonctionnalité  
+\begin{itemize}
+    \item GET /api/valid/strate: obtiens les strates sauvegardées. Peut être filtré en fonction du nombre d'échantillons, de l'identifiant et du nom de la colonne de filtre
+    \item  POST /api/valid/strate: crée une nouvelle strate. L'information sur la nouvelle strate doit être fourni dans le corps de requête ainsi que l'identifiant du parent s'il y en a un. Si le parent existe il sera mis à jour
+    \item PUT /api/valid/strate/<$id_{strate}$>: mise à jour d'une state existante. Aucune information sur les parents ou les enfants n'est nécessaire
+    \item DELETE /api/valid/strate/<$id_{strate}$>: supprime une strate et ses enfants. Contient présentement un défaut puisque l'identifiant n'est pas enlevé des listes d'enfants pertinentes.
+    \item GET /api/valid/strate/donnees\_intrantes: recalcule les données requises pour la validation incluant la sélection de l'échantillon
+    \item GET /api/valid/strate/colonnes\_possibles: renvoie les colonnes qu'il est possible d'utiliser dans les filtres
+    \item GET /api/valid/feuilles: renvoie les strates qui n'ont pas d'enfants et qui sont donc les catégories finales d'échantillonnage
+    \item GET /api/valid/resultats: Renvoie les résultats de validation des paramètres de requête sont en place pour filtrer par identifiant de strate, par identifiant de lot, par fond de tuile et l'identifiant de validation
+    \item POST /api/valid/resultats: nouveau résultat créé dans la table pertinente selon le schéma du tableau \ref{tab:definition_resultats_valid}. Le résultat est fourni sans identifiant dans le corps de la requête.
+    \item PUT /api/valid/resultats/<$id_{val}$>: modifie un résultat de validation dont l'identifiant est spécifié. Le résultat est fourni dans le corps de requête et doit respecter le schéma spécifié dans le tableau \ref{tab:definition_resultats_valid}
+    \item DELETE /api/valid/resultats/<$id_{val}$>: permet de supprimer le résultat dont l'identifiant est fourni
+    \item GET /api/valid/graphiques: obtient les graphiques pour la page de validation. L'identifiant de strate, le type de graphique et la valeur max de x peuvent être spécifiés comme paramètres de requête. Le retour de la foncition est dans un format compatible avec react charts.
+    \item GET /api/valid/popu-strate: renvoie la taille de population d'une strate 
+\end{itemize}
 \clearpage
 
 \Annexe{Détails des données de réglementaires}
