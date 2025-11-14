@@ -9,7 +9,7 @@
         Dans un monde idéal, il serait possible d'avoir la localisation de chaque place de stationnement sur le territoire. Cela permettrait de déterminer des temps d'accès pour chaque place et d'affecter ce temps d'accès en fonction de l'achalandage du stationnement. Cette approche éviterait aussi des problèmes de microagrégation menant à de grands changements de stationnement accessible si un lot a un grand nombre de places de stationnement. Malheureusement, en utilisant la méthode à partir du rôle foncier, ce niveau de détail n'est pas possible et l'échelle la plus petite possible est au niveau du lot cadastral.\par
         
         
-        En ce qui concerne la méthode choisie, il y en a deux. La première est que la littérature émet beaucoup de recommandations sur l'abrogation de minimums de stationnement ainsi que des preuves supportant que ces derniers aient une influence. Cependant, dans la plupart des cas, le recensement des minimums et leur application est parfois approximatif. La mise à disposition des données foncières par le gouvernement du Québec donne une belle opportunité de tester l'hypothèse que les requis sont l'élément déterminant dans la construction de stationnement. En appliquant les règlements à un grand ensemble, les conditions sont mises en place pour vérifier que la règlementation est l'élément déterminant à la production de stationnement. La création d'un format de données pour entreposer ces minimums donne aussi le potentiel de prouver la nature arbitraire de ces règlements si assez de règlements sont numérisés. Finalement, en discussion avec les employés de la ville de Québec, il a été révélé qu'ils poursuivaient déjà une approche par \ac{AP}. L'approche par les règlements est complémentaire ici particulièrement pour les quartiers centraux avec plus de stationnements en structure qui ne sont pas nécessairement visbles. \par
+        En ce qui concerne la méthode choisie, il y en a deux. La première est que la littérature émet beaucoup de recommandations sur l'abrogation de minimums de stationnement ainsi que des preuves supportant que ces derniers aient une influence. Cependant, dans la plupart des cas, le recensement des minimums et leur application sont parfois approximatifs. La mise à disposition des données foncières par le gouvernement du Québec donne une opportunité de tester l'hypothèse que les requis sont l'élément déterminant dans la construction de stationnement. En appliquant les règlements à un grand ensemble, les conditions sont mises en place pour vérifier que la réglementation est l'élément déterminant à la production de stationnement. La création d'un format de données pour entreposer ces minimums donne aussi le potentiel de prouver la nature arbitraire de ces règlements si assez de règlements sont numérisés. Finalement, en discussion avec les employés de la ville de Québec, il a été révélé qu'ils poursuivaient déjà une approche par \ac{AP}. L'approche par les règlements est complémentaire ici particulièrement pour les quartiers centraux avec plus de stationnements en structure qui ne sont pas nécessairement visibles. \par
         Pour conclure, la structure de données est implémentée pour permettre que plusieurs méthodes d'estimations cohabitent pour un même lot. À terme, l'inclusion de méthodes inductives pourrait être contemplée pour donner une base de comparaison fiable.
     
     \subsection{Schéma relationnel de données}\label{ssec:inv-erd-survol}
@@ -128,14 +128,14 @@
             \caption{Pourcentage des lots avec des propriétés manquantes}
             \label{fig:role-missing-data}
         \end{figure}
-        Le constat est pire lorsque l'on prend en compte la valeur foncière des propriétés où les données sont manquantes. Les propriétés avec une donnée le nombre de logements (pour l'utilisation résidentielle) ou la superficie sont manquants tendent à représenter une plus grande proportion de la valeur foncière comme le montre la figure \ref{fig:prop-val-and-lots-missing-data}.
+        Le constat est pire lorsque l'on prend en compte la valeur foncière des propriétés où les données sont manquantes. Les propriétés où le nombre de logements (pour l'utilisation résidentielle) ou la superficie(pour les autres) sont manquants tendent à représenter une plus grande proportion de la valeur foncière comme le montre la figure \ref{fig:prop-val-and-lots-missing-data}.
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.6\linewidth]{figures/perc_missing_lot_and_val.pdf}
             \caption{Proportion de chaque utilisation du sol avec des données manquantes }
             \label{fig:prop-val-and-lots-missing-data}
         \end{figure}
-        La figure \ref{fig:carte-chaleur-donnee-manquante} montre une carte de chaleur de la proportion de lots et de la valeur foncière où une donnée clé est absente. Les lignes de service et commercial ont 31\% et 35\% de lots avec des données manquantes mais 67\% et 53\% de la valeur foncière où une donnée est manquante. Les quartiers de la Cité Universitaire (CUNI) se démarque pour la quantité importante de valeur foncière avec des données absentes. L'inspection des données révèle que la majeure partie du campus universitaire n'a pas les propriétés requises remplies ainsi que les deux grands centres commerciaux.
+        La figure \ref{fig:carte-chaleur-donnee-manquante} montre une carte de chaleur de la proportion de lots et de la valeur foncière où une donnée clé est absente. Les lignes de service et commercial ont 31\% et 35\% de lots avec des données manquantes, mais 67\% et 53\% de la valeur foncière où une donnée est manquante. Le quartier de la Cité Universitaire (CUNI) se démarque pour la quantité importante de valeur foncière avec des données absentes. L'inspection des données révèle que la majeure partie du campus universitaire n'a pas les propriétés requises remplies ainsi que les deux grands centres commerciaux.
         \begin{landscape}
             \begin{figure}
                 \centering
@@ -144,7 +144,7 @@
                 \label{fig:carte-chaleur-donnee-manquante}
             \end{figure}
         \end{landscape}
-        La valeur au rôle des lots avec des données manquantes tend à être plus élevée que celle avec les données présentes. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Le tableau montre un sommaire des médianes en fonction de l'absence ou de présence de lots\par
+        La valeur au rôle des lots avec des données manquantes tend à être plus élevée que celle avec les données présentes. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Le tableau montre un sommaire des médianes en fonction de l'absence ou de présence de données nécessaires.\par
         \begin{table}[H]
             \centering
             \begin{tabular}{lccccc}
@@ -169,7 +169,7 @@
             \begin{figure}
                 \centering  
                 \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
-                \caption{Distribution des valeurs selon d'utilisation et l'absence de données physiques}
+                \caption{Distribution des valeurs selon l'utilisation et l'absence de données physiques}
                 \label{fig:missing-data-value-distr}
             \end{figure}  
             \begin{figure}
@@ -246,7 +246,7 @@
     \subsection{Données de la géopolitique du territoire à l'étude} \label{ssec:data-geopolitique-territoire}
         \subsubsection{Structure de données}
             Les règlements régissant la capacité de stationnement changent dans le temps du fait de changements réglementaires et des variations spatiales des municipalités. Cette section va détailler la structure de données permettant de prendre en compte la variation temporelle de la réglementation. Cet historique est représenté au moyen de deux tables: \underline{historique\_geopol} et \underline{cartographie\_secteurs}. \underline{historique\_geopol} représente les grandes périodes où le territoire a été stable. 
-            Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table {historique\_geopol} \par
+            Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table \ul{historique\_geopol} \par
             \begin{table}[h]
                 \caption{Colonnes pour la table \underline{historique\_geopol}}
                 \label{tab:definition_historique_geopol}
@@ -304,7 +304,7 @@
                     7 & Harmonisation & 2010 & S.V.\\ \hline
                 \end{tabular}
             \end{table}
-            Le découpage spatial précis est synthétisé à l'annexe \ref{ann:political-split-up}. De manière général, les découpages suivent la géopolitique de la ville des figures \ref{fig:municipalites_1988}, \ref{fig:municipalites_1980}, \ref{fig:municipalites_1972} et \ref{fig:municipalites_1965}. Pour la ville centre, le découpage de la figure \ref{fig:types_unites_voisinage} est répliqué. Une exception est faite pour Québec: l'hypothèse que le zonage avant 1995 était tout de même différencié entre le secteur des Rivières et les quartiers centraux. 
+            Le découpage spatial précis est synthétisé à l'annexe \ref{ann:political-split-up}. De manière générale, les découpages suivent la géopolitique de la ville des figures \ref{fig:municipalites_1988}, \ref{fig:municipalites_1980}, \ref{fig:municipalites_1972} et \ref{fig:municipalites_1965}. Pour la ville centre, le découpage de la figure \ref{fig:types_unites_voisinage} est répliqué. Une exception est faite pour Québec: l'hypothèse que le zonage avant 1995 était tout de même différencié entre le secteur des Rivières et les quartiers centraux. 
             
     
     \subsection{Données représentant les règlements} \label{ssec:survol-repres-reglements}
@@ -337,8 +337,8 @@
                 n_{places,max} &=  c_{s,max} + p_{s,max} \times x_{entree} \label{eq:places_max}
             \end{align}
             où $R$ est la ligne du rôle foncier en train d'être calculée, $C_{conv,i}$ représente la colonne à utiliser pour l'unité $i$, $p_{conv,i}$ représente la pente de conversion pour l'unité i, $c_{conv,i} $ représente l'ordonnée à l'origine pour la conversion de l'unité i. Ces constantes sont stockées dans la table \ul{multiplicateur\_facteur\_colonne}. $p_{s,min}$ et $p_{s,max}$ représentent les pentes des requis minimums tandis que $c_{s,min}$ et $c_{s,max}$ sont les ordonnées à l'origine qui sont stockées dans la table \ul{reg\_stat\_empile} discutée plus loin. L'unité à utiliser $i$ est elle aussi spécifiée dans la même table avec les seuils d'applicabilités $t_{s,reg}$. \par
-            Chaque règlement peut être divisé en sous-ensembles si le règlement propose plusieurs méthodes de calcul. L'hypothèse fondamentale est que les règlements sont essentiellement des combinaisons de formules mathématiques linéaires. La première ligne de chaque sous-ensemble dénote l'opérateur à utiliser pour choisir entre l'estimation du sous-ensemble courant et du sous-ensemble précédent tandis que les lignes suivantes du sous-ensemble contiennent toutes le même opérateur qui dicte quel type d'opération à utiliser à l'intérieur du sous-ensemble.\par 
-            Si un opérateur de seuil (cf. tableau \ref{tab:operations_table}) est utilisé dans la formulation du règlement, les variables $p_{s,min}$,$p_{s,max}$,$c_{s,min}$ et $c_{s,max}$ sont sélectionnées en fonction de la condition $x_{entree} \geq t_{s,reg}$. Si plusieurs seuils existent, les variables sont sélectionnées par intervalles de $t_{s,reg}$.\par
+            Chaque règlement peut être divisé en sous-ensembles si le règlement propose plusieurs méthodes de calcul. L'hypothèse fondamentale est que les règlements sont essentiellement des combinaisons de formules mathématiques linéaires. La première ligne de chaque sous-ensemble dénote l'opération à utiliser pour choisir entre l'estimation du sous-ensemble courant et du sous-ensemble précédent tandis que les lignes suivantes du sous-ensemble contiennent toutes le même opérateur qui dicte quel type d'opération à utiliser à l'intérieur du sous-ensemble.\par 
+            Si un opérateur de seuil (cf. tableau \ref{tab:operations_table}) est utilisé dans la formulation du règlement, les variables $p_{s,min}$, $p_{s,max}$, $c_{s,min}$ et $c_{s,max}$ sont sélectionnées en fonction de la condition $x_{entree} \geq t_{s,reg}$. Si plusieurs seuils existent, les variables sont sélectionnées par intervalles de $t_{s,reg}$.\par
             Cette sélection s'opère en ordonnant les seuils avant sélection puis en identifiant automatiquement les intervalles. \begin{table}[H]
                 \caption{Colonnes pour la table \underline{reg\_stat\_empile}}
             \label{tab:definition_reg_stat_emp}
@@ -389,7 +389,7 @@
                     facteur\_correction & Facteur de multiplication pour l'unité $p_{conv,i}$ & Réel & \\
                     cubf & Pas implémenté: facteur différent pour un CUBF spécifique & Entier & \\
                     desc\_unite & Description de l'unité & Texte & \\
-                    abscisse\_correction & Ordonnée à l'origine de la pente de regression $c_{conv,i}$& Réel &  \\
+                    abscisse\_correction & Ordonnée à l'origine de la pente de régression $c_{conv,i}$& Réel &  \\
                     \hline
             \end{tabular}
             
@@ -404,10 +404,10 @@
                     id\_unite & colonne\_role\_foncier & facteur\_correction & ordonnée & desc\_unite \\ \hline
                     1 & rl0312a & 1 & 0 & chambre\\
                     2 & rl0311a & 1 & 0 & logement \\
-                    4 & rl0308a & 1 & 0 & metre carré d'étage\\
-                    5 & rl0308a & 1 & 0 & metre carré bureau\\
-                    6 & rl0308a & 1 & 0 & metre carré salle production \\
-                    7 & rl0302a & 1 & 0 & metre carré terrain\\
+                    4 & rl0308a & 1 & 0 & mètre carré d'étage\\
+                    5 & rl0308a & 1 & 0 & mètre carré bureau\\
+                    6 & rl0308a & 1 & 0 & mètre carré salle production \\
+                    7 & rl0302a & 1 & 0 & mètre carré terrain\\
                     8 & rl0308a & 0.5 & 0 & siège \\
                     9 & S.V. & 1 & 0 & poste de travail \\
                     10 & rl0308a & 0.04 & 0 & salle \\
@@ -641,7 +641,7 @@
             \begin{figure}[h]
                 \centering
                 \includegraphics[trim={0 0 155cm 105cm},clip,width=13cm]{images/ERD_stationnement_propre.png}
-                \caption{Diagramme entité assocation pour la définition d'ensembles de règlements et leur association au territoire}
+                \caption{Diagramme entité association pour la définition d'ensembles de règlements et leur association au territoire}
                 \label{fig:offstreet_db_erd_rulesets}
             \end{figure}
             \FloatBarrier
@@ -773,7 +773,7 @@
                 acro & Acronyme du quartier & Texte & \\ 
                 superf\_quartier & Superficie du quartier & Réel & \\
                 peri\_quartier & Périmètre du quartier & Réel & \\
-                geometry & Géométrie des quartier & Géométrie & \\
+                geometry & Géométrie des quartiers & Géométrie & \\
                 \hline
            \end{tabular}
            
@@ -921,7 +921,7 @@
             get\_city\_regs & Renvoie les règles dont l'attribut ville correspond à la chaîne de caractères fournie. \\
             get\_current\_reg & Renvoie les règlements dont l'année de fin est absente de l'entête. \\
             get\_regs\_for\_year & Renvoie les règlements en vigueur à l'année fournie. \\
-            get\_reg\_by\_id & Renvoie les règlements dont les identifiants correspondent aux entiers fournis en entrée. \\
+            get\_reg\_by\_id & Renvoie les règlements dont les identifiants correspondent aux entiers fournis. \\
             \midrule
             \multicolumn{2}{l}{\textbf{Fonctions utilitaires}} \\
             \midrule
@@ -930,8 +930,8 @@
             \end{tabular}
             \end{table}
         
-        \subsubsection{Classe ParkingRegulationSet ou ensemble de règlement}
-            Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il se distingue du règlement de deux manières. D'une part, il associe les règlements aux \ac{CUBF}. D'autre part, il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les paramètres suivants:
+        \subsubsection{Classe ParkingRegulationSet ou ensemble de règlements}
+            Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les paramètres suivants:
             \begin{longtable}{p{5cm}p{11cm}}
             \caption{Structure et méthodes principales de l'objet \textbf{ParkingRegulationSet}}
             \label{tab:parkingregulationset_structure}\\
@@ -1150,7 +1150,7 @@
 
         Cette boucle utilise deux fonctions: year\_filter et territory\_filter. Year filter extrait les points du rôle dont les dates de construction sont à l'intérieur de la plage de validité du \ac{RST}. La méthode year\_filter est donnée à l'extrait de code \ref{lst:year_filter}.
 
-        La méthode territory\_filter quant à elle élimine les points en dehors d'un territoire. On utilise alors la fonction python clip \parencite{geopandas_developers_geopandasclip_nodate}. L'extrait de code \ref{lst:territory_filter} montre la fonction territory\_filter.
+        La méthode territory\_filter quant à elle élimine les points en dehors d'un territoire. On utilise alors la fonction Python \og{clip}\fg{} \parencite{geopandas_developers_geopandasclip_nodate}. L'extrait de code \ref{lst:territory_filter} montre la fonction territory\_filter.
 
         La résultante de cet ensemble d'opérations est deux listes qui associent un \ac*{RST} avec un \ac*{TD} en fonction des limites géographiques et des dates de construction. Ces deux listes sont ensuite utilisées comme intrants pour le calcul. Le tableau \ref{tab:assignation-exemple-calcul} donne un aperçu de la liste pour le cas hypothétique dressée dans cette section.
         \begin{table}[H]
@@ -1173,7 +1173,7 @@
     \subsection{Procédure de calcul des minimums}
         Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus voient d'abord un \ac{PCI} calculé avant de compléter l'estimation de la capacité à l'aide de la fonction calculate\_parking\_for\_reg\_set\_territories. La conversion d'unités est gérée par la fonction generate\_input\_from\_PRS\_TD. Une fois la conversion complétée, les données sont envoyées à calculate\_parking\_reg\_set.  Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_specific\_reg\_subset et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimation à utiliser s'il y a plusieurs sous-ensembles.    
         \subsubsection{Conversions d'unités}
-            À ce statut-ci, le logiciel aura nettoyé les données d'entrées de manière à avoir un \ac{TD} et un \ac{RST} prêts pour le calcul. Il faut maintenant convertir les unités du rôle foncier vers les unités dans lesquelles sont formulées les règlements. Ce processus est relativement simple et formalise simplement les associations décrites aux sections précédentes. La figure \ref{fig:logigramme-unites} montre le processus avec des données simples fixées comme exemple.
+            À ce statut-ci, le logiciel aura nettoyé les données d'entrées de manière à avoir un \ac{TD} et un \ac{RST} prêts pour le calcul. Il faut maintenant convertir les unités du rôle foncier vers les unités dans lesquelles sont formulés les règlements. Ce processus est relativement simple et formalise simplement les associations décrites aux sections précédentes. La figure \ref{fig:logigramme-unites} montre le processus avec des données simples fixées comme exemple.
             \begin{landscape}
                 \begin{figure}
                     \includegraphics[scale=0.6]{figures/logigramme-conversion-unites.pdf}
@@ -1182,7 +1182,7 @@
             \end{landscape}
     
         \subsubsection{Calcul des sous-ensembles: calculate\_parking\_specific\_reg}
-        Cette fonction calcule le nombre de places de stationnement pour un sous-ensemble de règlements. Le logigramme \ref{fig:logigramme_calcul_reg} détaille la procédure. Le code est disponible à l'annexe \ref{ann:code-addition-subset} pour l'opérateur d'addition (1) et à l'annexe \ref{ann:code-thresh-subset} pour l'opérateur de seuil ou sur Github \parencite{charbonneau_epmpaulpolyinterface_backend_stationnement_maitrise_2025} 
+        Cette fonction calcule le nombre de places de stationnement pour un sous-ensemble de règlements. Le logigramme \ref{fig:logigramme_calcul_reg} détaille la procédure. Le code est disponible à l'annexe \ref{ann:code-addition-subset} pour l'opérateur d'addition (1) et à l'annexe \ref{ann:code-thresh-subset} pour l'opérateur de seuil ou sur Github \parencite{charbonneau_epmpaulpolyinterface_backend_stationnement_maitrise_2025}.
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.9]{figures/logigramme-calcul-reglement.pdf}

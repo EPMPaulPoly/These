@@ -57,12 +57,12 @@
 
                 \node (selection_seuil) [process,below of=unique_unit,yshift=-.6cm,text width=2cm]{Sel. proch. seuil et TD};
                 \draw [arrow] (unique_unit.south) --++(0,-0.1)  node[anchor=west] {O}-- (selection_seuil);
-                \node (calc_min) [process,below  of=selection_seuil,yshift=-.6cm,text width=2.25cm]{$n_{places} = a \times in +b$};
+                \node (calc_min) [process,below  of=selection_seuil,yshift=-.6cm,text width=2.25cm]{$n_{places} = p \times x_{entree} +c$};
                 \draw [arrow] (selection_seuil) -- (calc_min);
                 % operator =1
                 \node (select_next_unit) [process,right of=check_operator,xshift=3.5cm ,text width = 3cm]{Sel. Prochaine ligne SE};
                 \draw [arrow] (check_operator.east) -- ++(0.2,0)  node[anchor=south] {1} -- (select_next_unit.west);
-                \node (calc_min_sum) [process,anchor=base,text width=2.25cm,yshift=1.75cm] at (select_next_unit |-calc_min.east) {$n_{places} = a \times in +b$};
+                \node (calc_min_sum) [process,anchor=base,text width=2.25cm,yshift=1.75cm] at (select_next_unit |-calc_min.east) {$n_{places} = p \times x_{entree} +c$};
                 \draw [arrow] (select_next_unit) -- (calc_min_sum);
                 \node (agg_valeurs_2) [process,below of=calc_min_sum,yshift=-.4cm,text width=2cm]{Agg. par lot};
                 \draw [arrow] (calc_min_sum) -- (agg_valeurs_2);
