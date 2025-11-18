@@ -125,7 +125,7 @@ Normalement, l'\ac{API} ont des fonctions de validations qui vérifient que les 
          Part modale bus scolaire des déplacements provenant du quartier & \ref{eq:pm-ori}& pm-bs-ori& Non\\
     \end{longtable}
 \end{center}
-Cela conclut la section sur l'\ac{API}. Les pages web conçues pour modifier manipuler toutes les données  sont discutées à la section suivante.
+Cela conclut la section sur l'\ac{API}. Les pages web conçues pour modifier et manipuler toutes les données  sont discutées à la section suivante.
 \subsection{Pages de l'interface}
 Plusieurs pages ont été développées pour permettre à un analyste de visualiser, modifier les intrants et analyser les résultats de l'estimation. Ces pages seront décrites dans cette section. Il est important de noter qu'aucune page de modification ou d'association du rôle et du cadastre n'a encore été mise en place. Cette omission sera discutée dans les limites de l'étude.
 
@@ -314,7 +314,7 @@ Une page de sommaire d'évaluation a aussi été développée pour pouvoir faire
     \end{figure}
 \end{landscape}
 \subsubsection{Page d'analyse agrégée}
-L'outil inclut aussi une page qui permet de graphiquement représenter les prédictions sous différentes formes. La figure \ref{fig:page-ana-quartier} montre le point d'atterrissage. L'utilisateur peut alors sélectionner quatre types de représentations graphique: une carte choroplèthe, un histogramme, un graphique XY ou un profil d'accumulation de véhicules. \par
+L'outil inclut aussi une page qui permet de graphiquement représenter les prédictions sous différentes formes. La figure \ref{fig:page-ana-quartier} montre le point d'atterrissage. L'utilisateur peut alors sélectionner quatre types de représentations graphiques: une carte choroplèthe, un histogramme, un graphique XY ou un profil d'accumulation de véhicules. \par
 Au-delà de la représentation graphique, d'autres options s'offrent à l'utilisateur. La première permet de sélectionner l'ordre de préférence des méthodes d'estimations enregistrées pour un même lot. Cet ordre est utilisé pour toutes les variables reliées au stationnement. D'autre part, deux boutons sont mis à disposition de l'utilisateur. Le premier met à jour les estimations  de stationnement agrégées par quartier. Le second met à jour les autres indicateurs qui doivent être calculés à partir de données brutes comme la part modale, le nombre de permis et la population.
 Une fois la méthodologie sélectionnée, l'apparence de la page change. Les paragraphes suivants donneront des détails sur chacune des visualisations disponibles.
 \paragraph{Cartographie} Dans le cas où l'utilisateur visualise les données sous forme de carte, il doit ensuite sélectionner une variable à cartographier. Les variables disponibles sont listées dans la section \ref{ssec:indicateurs-secteurs-municipaux}. La figure \ref{fig:ana-quartier-carto} montre un exemple de ce type d'analyse. La couche de fond peut être modifiée à partir de la liste déroulante en haut à droite avec \ac{OSM}, Géodésie Québec et une couche fournie par \ac{ESRI} comme options. Ce choix de fond de carte est persistant entre les différentes pages.
@@ -360,7 +360,7 @@ Une page a été mise en place pour piloter l'analyse de variabilité. L'utilisa
  
 La deuxième visualisation à la figure \ref{fig:page-ana-var-hist} est un histogramme montrant la fréquence de prédiction d'un inventaire cumulé par utilisation du sol. L'histogramme peut avoir le nombre de places ou le ratio de l'estimation à l'inventaire actuel comme axe des x. \par
 
-Finalement, la troisième visualisation est spécifiquement faite pour visualiser l'effet de facteurs de conversion d'unité sur l'estimation du total. L'analyse est répétée en mettant un facteur d'échelle de 0.75, 1 et 1.25 sur le facteur $p_{conv,i}$ s'il est différent de 1. Chaque boîte représente un facteur d'échelle avec la position en y des points blancs dénotant une prédiction. Pour tous les graphiques, les ensembles de règlements d'intérêt peuvent être choisis par l'utilisateur. Cette section conclut la partie sur l'interface de l'outil développé. La section suivante donnera un aperçu des prédictions du modèle. 
+Finalement, la troisième visualisation est spécifiquement faite pour visualiser l'effet de facteurs de conversion d'unité sur l'estimation du total. L'analyse est répétée en mettant un facteur d'échelle de 0.75, 1 et 1.25 sur le facteur $p_{conv,i}$ s'il est différent de 1. Chaque boite représente un facteur d'échelle avec la position en y des points blancs dénotant une prédiction. Pour tous les graphiques, les ensembles de règlements d'intérêt peuvent être choisis par l'utilisateur. Cette section conclut la partie sur l'interface de l'outil développé. La section suivante donnera un aperçu des prédictions du modèle. 
 \begin{landscape}
     \begin{figure}
         \centering

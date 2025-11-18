@@ -34,7 +34,7 @@ Les appels d'API suivants sont proposés pour les objets de type inventaire:
         \item g\_no\_lot: l'identifiant de lot
         \item cubf: le code d'utilisation du bien fond applicable
         \item id\_reg\_stat: l'identifiant de règlement pertinent
-        \item id\_er: l'identifiant d'ensemble de règlement pertinent
+        \item id\_er: l'identifiant d'ensemble de règlements pertinent
         \item unite: l'identifiant d'unité de la valeur fournie
         \item valeur: la valeur manuelle entrée par l'utilisateur
     \end{itemize}
@@ -85,7 +85,7 @@ Les appels d'API suivants sont proposés pour les objets de type inventaire:
 \section{API: Règlements}
 Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement:
 \begin{itemize}
-    \item GET /api/reglements/entete: renvoie toutes les entêtes de règlements (description, information administrative). Les paramètres de filtrage suivants peuvent être fournis dans l'\ac{URI} pour réduire la liste de règlements renvoyés. Les éléments description, ville, texte, article et paragraphe utilisent les fonctions de recherches incluses dans PostgreSQL \parencite{postgresql_global_development_group_811_2025}
+    \item GET /api/reglements/entete: renvoie tous les entêtes de règlements (description, information administrative). Les paramètres de filtrage suivants peuvent être fournis dans l'\ac{URI} pour réduire la liste de règlements renvoyés. Les éléments description, ville, texte, article et paragraphe utilisent les fonctions de recherches incluses dans PostgreSQL. \parencite{postgresql_global_development_group_811_2025}
     \begin{itemize}
         \item annee\_debut\_avant
         \item annee\_debut\_apres
@@ -116,12 +116,12 @@ Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement
             \item id\_reg\_stat: identifiant du règlement
             \item ss\_ensemble: sous-ensemble du règlement auquel appartient la ligne
             \item seuil: seuil au dessus duquel le règlement s'applique quand l'opérateur à l'intérieur du sous-ensemble
-            \item oper: colonne contenant les opérateur. Le premier élément du sous-ensemble contient l'opérateur applicable entre ce sous ensemble et le précédent, les autres sont l'opérateur utilisé entre les lignes 
+            \item oper: colonne contenant les opérateurs. Le premier élément du sous-ensemble contient l'opérateur applicable entre ce sous-ensemble et le précédent, les autres sont l'opérateur utilisé entre les lignes 
             \item cases\_fix\_min: ordonnée à l'origine de la droite représentant le stationnement minimum
             \item pente\_min: pente de la droite représentant le stationnement minimum
             \item cases\_fix\_max: ordonnée à l'origine de la droite représentant le stationnement maximum
             \item pente\_max: pente de la droite représentant le stationnement maximum
-            \item unite: unité de l'axes des x de la droite pour les requis minimum et maximum
+            \item unite: unité de l'axe des x de la droite pour les requis minimum et maximum
         \end{itemize}
     \end{itemize}
     \item GET /api/reglements/operations: renvoie le contenu de la table \ul{liste\_operations} (Tableau \ref{tab:operations_table})
@@ -219,7 +219,7 @@ En plus des adresses basiques fournies ci-dessus, des adresses supplémentaires 
 \begin{itemize}
     \item GET /api/ens-reg/reg-associes/<id\_er> renvoie les entêtes des règlements qui sont utilisés dans l'ensemble de règlements dont l'identifiant est égal à id\_er.
     \item GET /api/ens-reg/entete-par-territoire/<id\_periode\_geo> renvoie les entêtes des ensembles de règlements associés au territoire dont l'identifiant est égal à id\_periode\_geo.
-    \item GET /api/ens-reg/par-role/<id\_provinc>: permet d'obtenir les entetes d'ensemble de règlements associées à l'inventaire pour une ou plusieurs entrées du rôle. Plusieurs identifiants séparés par des virgules peuvent être fournis entre <>
+    \item GET /api/ens-reg/par-role/<id\_provinc>: permet d'obtenir les entêtes d'ensemble de règlements associés à l'inventaire pour une ou plusieurs entrées du rôle. Plusieurs identifiants séparés par des virgules peuvent être fournis entre <>
     \item POST /api/ens-reg/informations-pour-graphique: permet d'obtenir les règlements pertinents et les unités formulées pour les ensembles de règlements et le \ac{CUBF} sélectionné. Les identifiants de règlements et le \ac{CUBF} sont envoyés dans le corps de la requête
 \end{itemize}
 
@@ -230,17 +230,17 @@ L'\ac{API} possède les appels suivants pour obtenir les territoires. Pour l'ins
     \item GET /api/territoire/periode-geo/<id\_periode\_geo> permet d'obtenir un territoire selon son identifiant unique.
 \end{itemize}
 \section{API: Ensembles de règlements territoire}
-Les ensemble de règlements territoire sont l'association entre les ensembles de règlements et les territoires. Il s'agit pour l'essentiel d'un assocation entre le territoire et l'ensemble de règlements. Les dates de validités du \ac{RST} sont inférées à partir des dates de validité de l'ensmble de règlement et du territoire. Cet objet a le complément complet d'options pour modifier les associations (contrairement aux territoires et aux quartiers d'analyse qui doivent être téléversés manuellement). Les adresses d'\ac{API} sont les suivants:
+Les ensembles de règlements territoire sont l'association entre les ensembles de règlements et les territoires. Il s'agit pour l'essentiel d'une association entre le territoire et l'ensemble de règlements. Les dates de validités du \ac{RST} t inférées à partir des dates de validité de l'ensemble de règlements et du territoire. Cet objet a le complément complet d'options pour modifier les associations (contrairement aux territoires et aux quartiers d'analyse qui doivent être téléversés manuellement). Les adresses d'\ac{API} sont les suivants:
 \begin{itemize}
     \item GET /api/ens-reg-terr/par-territoire/<id\_periode\_geo>: permet d'obtenir les \ac{RST} associés au territoire dont l'identifiant est spécifié
     \item GET /api/ens-reg-terr/associations: permet d'obtenir des associations en fonction de la latitude, la longitude ou les dates d'entrée en vigueur et d'abrogation au moyen des paramètres de requêtes suivants:
     \begin{itemize}
-        \item lat: Latitude en degrés décimal; doit être utilisé avec un longitude
-        \item long: Longitude en degrés décimal; doit être utilisé avec une latitude
-        \item annee\_debut\_avant: année de début de la période ou de l'ensemble de règlements est avant l'année specifiée
+        \item lat: Latitude en degrés décimale; doit être utilisé avec une longitude
+        \item long: Longitude en degrés décimale; doit être utilisé avec une latitude
+        \item annee\_debut\_avant: année de début de la période ou de l'ensemble de règlements est avant l'année spécifiée
         \item annee\_debut\_apres: année de début de la période ou de l'ensemble de règlements est après l'année spécifiée
         \item annee\_fin\_avant: année de fin de la période ou de l'ensemble de règlements est avant l'année spécifiée
-        \item annee\_fin\_apres: année de fin de la préiode ou de l'ensemble de règlements est après l'année spécifiée
+        \item annee\_fin\_apres: année de fin de la période ou de l'ensemble de règlements est après l'année spécifiée
         \item ville\_comme: la ville du territoire ressemble à la chaîne de caractères soumise
         \item secteur\_comme: le secteur du territoire ressemble à la chaîne de caractères soumise
     \end{itemize}
@@ -273,17 +273,17 @@ L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville
 
 
 \section{API: Lots cadastraux et entrées du rôle foncier}
-Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux et les entrées du rôle. Il est important de noter que des fonctions d'association, de création, de mise à jour et de suppression du rôle seraient pertinents pour une implémentation en production. Dans le cadre de ce mémoire, les information du rôle et du cadastre ont été créés manuellement dans la base de données. Finalement, les espaces dans la chaîne de caractères des identifiants doivent être remplacées par le caractère \_.
+Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux et les entrées du rôle. Il est important de noter que des fonctions d'association, de création, de mise à jour et de suppression du rôle seraient pertinentes pour une implémentation en production. Dans le cadre de ce mémoire, les informations du rôle et du cadastre ont été créées manuellement dans la base de données. Finalement, les espaces dans la chaîne de caractères des identifiants doivent être remplacés par le caractère \_.
 \begin{itemize}
     \item GET /api/cadastre/lot/quartier-ana/<$id_{quartier}$> permet d'obtenir l'ensemble des lots qui se situent à l'intérieur du quartier d'analyse dont l'identifiant est fourni dans l'\ac{URI}
     \item GET /api/cadastre/lot/<$g\_no\_lot$> permet d'obtenir le lot dont l'identifiant est égal à la valeur fournie de g\_no\_lot.
     \item GET /api/cadastre/role-associe/<$g\_no\_lot$> permet d'obtenir les entrées du rôle foncier associées au lot dont l'identifiant est fourni entre <>. L'identifiant spécifié est celui du lot
 \end{itemize}
-Une fonction permettant de faire des requêtes complexes en utilisant des boites englobantes est en cours de développement mais incomplète. Elle est principalement pensée pour permettre de réduire le nombre de données géospatiales à garder en mémoire en parcourant la carte. 
+Une fonction permettant de faire des requêtes complexes en utilisant des boites englobantes est en cours de développement, mais incomplète. Elle est principalement pensée pour permettre de réduire le nombre de données géospatiales à garder en mémoire en parcourant la carte. 
 \section{API: Codes d'utilisation du Bien-Fonds}
-Les appels pour les \ac{CUBF} sont principalement utilisés pour créer les assocations entre les règlements et les utilisations du sol. Pour rendre la recherche plus facile, des paramètres de requête ont été implémentés pour pouvoir obtenir des sous-ensembles pertinents de la liste des \ac{CUBF}. Sans paramètre de requête l'\ac{API} renvoie les 1700 \ac{CUBF}. La création, la modification et la suppression de \ac{CUBF} n'ont pas été implémentés
+Les appels pour les \ac{CUBF} sont principalement utilisés pour créer les associations entre les règlements et les utilisations du sol. Pour rendre la recherche plus facile, des paramètres de requête ont été implémentés pour pouvoir obtenir des sous-ensembles pertinents de la liste des \ac{CUBF}. Sans paramètre de requête l'\ac{API} renvoie les 1700 \ac{CUBF}. La création, la modification et la suppression de \ac{CUBF} n'ont pas été implémentés
 \begin{itemize}
-    \item GET /api/cubf: permet de renvoyer les \ac{CUBF} et leur description. Deux paramètres de requête sont mis en place pour permettre d'extraire des sous-ensembles
+    \item GET /api/cubf: permet de renvoyer les \ac{CUBF} et leur description. Deux paramètres de requête sont mis en place pour permettre d'extraire des sous-ensembles.
     \begin{itemize}
         \item cubf: un \ac{CUBF} numérique. Il est souvent fourni pour chercher les \ac{CUBF} enfants
         \item niveau: donne le niveau du \ac{CUBF}. Un niveau 1 implique un \ac{CUBF} entre 1 et 9, un niveau 2 implique un \ac{CUBF} entre 10 et 99, un niveau 3 implique un \ac{CUBF} entre 100 et 999 et un niveau 4 implique un \ac{CUBF} entre 1000 et 9999
@@ -376,41 +376,41 @@ L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse 
     \item GET /api/quartiers-analyse obtient l'ensemble des quartiers dans la table \ul{sec\_analyse}
 \end{itemize}
 \section{API: Analyse agrégée}
-Plusieurs indicateurs sont agrégés par quartier. Cette section donnera les détails des appels d'\ac{API} permettant de créer les divers graphiques. La ou les variables sélectionnées ainsi que l'ordre de priorité à sélectionner en cas de présence de plusieurs estimés de stationnement sont communiquées au serveur au moyen de paramètre de requête. 3 types d'analyse de quartier sont possibles: cartographique, par diagramme à barre et par diagramme XY. Chaque type d'analyse se voit attribuer un \ac{URI}. Les profils d'accumulation véhicule se voient attribués une \ac{URI} différente de par leur spécificité. D'autre part, les noms de variables doivent être codifiés dans les scripts clients et serveurs tandis que les requêtes SQL ne sont codifiées que dans le script serveur. Une implémentation future devrait permettre de capturer les variables et toutes les informations attenantes dans un seul fichier pour éviter la duplication et de potentielles erreurs. Les codes de variables sont donnés au Tableau \ref{tab:analysis-var-query-vals}.
+Plusieurs indicateurs sont agrégés par quartier. Cette section donnera les détails des appels d'\ac{API} permettant de créer les divers graphiques. La ou les variables sélectionnées ainsi que l'ordre de priorité à sélectionner en cas de présence de plusieurs estimations de stationnement sont communiquées au serveur au moyen de paramètre de requête. 3 types d'analyse de quartier sont possibles: cartographique, par diagramme à barre et par diagramme XY. Chaque type d'analyse se voit attribuer un \ac{URI}. Les profils d'accumulation de véhicules se voient attribués une \ac{URI} différente de par leur spécificité. D'autre part, les noms de variables doivent être codifiés dans les scripts clients et serveurs tandis que les requêtes SQL ne sont codifiées que dans le script serveur. Une implémentation future devrait permettre de capturer les variables et toutes les informations attenantes dans un seul fichier pour éviter la duplication et de potentielles erreurs. Les codes de variables sont donnés au Tableau \ref{tab:analysis-var-query-vals}.
 
 Les \ac{URI} sont listées ci-dessous:
 \begin{itemize}
-    \item GET /api/ana-par-quartier/carto: permet d'obtenir une variable pour une carte choroplèthe. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \item GET /api/ana-par-quartier/carto: permet d'obtenir une variable pour une carte choroplèthe. Si une variable liée au stationnement est requise, un ordre de priorité des estimations doit être spécifié. Les paramètres de requête sont les suivants:
     \begin{itemize}
         \item variable: identifiant de variable tel que spécifié au tableau \ref{tab:analysis-var-query-vals}
         \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
     \end{itemize}
-    \item GET /api/ana-par-quartier/histo: permet d'obtenir les variables pour un diagramme à barre en fonction du quartier. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \item GET /api/ana-par-quartier/histo: permet d'obtenir les variables pour un diagramme à barre en fonction du quartier. Si une variable liée au stationnement est requise, un ordre de priorité des estimations doit être spécifié. Les paramètres de requête sont les suivants:
     \begin{itemize}
         \item variable: identifiant de variable tel que spécifié au tableau \ref{tab:analysis-var-query-vals}
         \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
     \end{itemize}
-    \item GET /api/ana-par-quartier/XY: permet d'obtenir les quantités pour un diagramme XY. Les quartiers sont spécifiés dans l'entête de la réponse. Si une variable liée au stationnement est requise, un ordre de priorité des estimés doit être spécifié. Les paramètres de requête sont les suivants:
+    \item GET /api/ana-par-quartier/XY: permet d'obtenir les quantités pour un diagramme XY. Les quartiers sont spécifiés dans l'entête de la réponse. Si une variable liée au stationnement est requise, un ordre de priorité des estimations doit être spécifié. Les paramètres de requête sont les suivants:
     \begin{itemize}
         \item X: variable sur l'axe des x
         \item Y: variable sur l'axe des y
-        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules
+        \item ordre: ordre de priorité. Doit être spécifié comme la suite des chiffres 1 2 et 3 séparés de virgules.
     \end{itemize}
 \end{itemize}
-Ainsi, la requête pour obtenir la carte choroplèthe du stationnement total, avec l'ordre de priorité des inventaires étant fixé à \og{Manuel $\rightarrow$ réglementaire manuel $\rightarrow$ Réglementaire automatique} \fg{}  aurait la requête suivante \og{/api/ana-par-quartier/carto?variable=stat-tot\&ordre=1,3,2}\fg{}. Une requête pour les informations d'un graphique XY avec la population en 2021 sur l'axe des X et le stationnement total en axe des y serait \og{/api/ana-par/quartier/XY?X=popu-2021\&Y=stat-tot\&ordre=1,3,2} \fg{}. Les données sont renvoyées de manière à être directement utilisable dans la librairie de graphes de react-chart-js \parencite{ayerst_react-chartjs-2_2017}. Deux adresses supplémentaires sont créées pour recalculer les statistiques agrégées
+Ainsi, la requête pour obtenir la carte choroplèthe du stationnement total, avec l'ordre de priorité des inventaires étant fixé à \og{Manuel $\rightarrow$ réglementaire manuel $\rightarrow$ Réglementaire automatique} \fg{}  aurait la requête suivante \og{/api/ana-par-quartier/carto?variable=stat-tot\&ordre=1,3,2}\fg{}. Une requête pour les informations d'un graphique XY avec la population en 2021 sur l'axe des X et le stationnement total en axe des y serait \og{/api/ana-par/quartier/XY?X=popu-2021\&Y=stat-tot\&ordre=1,3,2} \fg{}. Les données sont renvoyées de manière à être directement utilisables dans la librairie de graphes de react-chart-js \parencite{ayerst_react-chartjs-2_2017}. Deux adresses supplémentaires sont créées pour recalculer les statistiques agrégées.
 \begin{itemize}
     \item GET /api/ana-par-quartier/recalcule-stat-agreg: permet de recalculer le nombre de places de stationnement pour chaque quartier
     \item GET /api/ana-par-quartier/recalcule-val-autres: permet de recalculer les statistiques issues de l'enquête OD, du recensement ou du rôle foncier pour chaque quartier
 \end{itemize}
 \section{API: Profiles d'accumulation véhicule}
-Les appels d'\ac{API} suivants sont mis en place pour gérer les profils d'accumulation véhicule \parencite{diallo_methodology_2015,morency_characterizing_2008} qui permettent de trouver la \og{population}\fg{} de véhicules dans une géographie en fonction de l'heure de la journée.
+Les appels d'\ac{API} suivants sont mis en place pour gérer les profils d'accumulation de véhicules \parencite{diallo_methodology_2015,morency_characterizing_2008} qui permettent de trouver la \og{population}\fg{} de véhicules dans une géographie en fonction de l'heure de la journée.
 \begin{itemize}
-    \item GET /api/PAV?order=<X,Y,Z>\&id\_quartier=<$id_{quartier}$> permet d'accéder au profile d'accumulation véhicule pour le quartier dont l'identifiant est spécifié. L'ordre spécifié donne l'ordre de préséance pour le relevé de l'inventaire du quartier. En effet, l'\ac{API} fournit l'inventaire du quartier en même temps pour visuellement constater l'utilisation de la capacité. Les données sont fournies de manière à être utilisées par react-chart-js \parencite{ayerst_react-chartjs-2_2017}.
+    \item GET /api/PAV?order=<X,Y,Z>\&id\_quartier=<$id_{quartier}$> permet d'accéder au profil d'accumulation véhicule pour le quartier dont l'identifiant est spécifié. L'ordre spécifié donne l'ordre de préséance pour le relevé de l'inventaire du quartier. En effet, l'\ac{API} fournit l'inventaire du quartier en même temps pour visuellement constater l'utilisation de la capacité. Les données sont fournies de manière à être utilisées par react-chart-js \parencite{ayerst_react-chartjs-2_2017}.
     \item GET /api/PAV/recalcule/<$id_{quartier}$> permet de refaire le calcul du profile d'accumulation véhicule à partir des données de l'enquête OD
     \item POST /api/PAV/<$id_{quartier}$> permet de mettre à jour le profile d'accumulation dans la base de données une fois que l'utilisateur l'a confirmé
 \end{itemize}
 \section{API: Validation}
-L'\ac{API} de validation a été mis en place pour permettre de rapidement assurer la qualité de l'inventaire créé. Bien que des développements méthodologiques demeurent, l'implémentation actuelle a les fonctionnalités de base pour créer une structure d'échantillonnage stratifiée, de sélectionner un ensemble de lots selon la méthodologie choisie, d'entrer les données de validation et de visualiser les résultats. Cette section documentera les appels d'\ac{API} mise en place pour soutenir cette fonctionnalité  
+L'\ac{API} de validation a été mis en place pour permettre de rapidement assurer la qualité de l'inventaire créé. Bien que des développements méthodologiques demeurent, l'implémentation actuelle a les fonctionnalités de base pour créer une structure d'échantillonnage stratifiée, de sélectionner un ensemble de lots selon la méthodologie choisie, d'entrer les données de validation et de visualiser les résultats. Cette section documentera les appels d'\ac{API} mise en place pour soutenir cette fonctionnalité.  
 \begin{itemize}
     \item GET /api/valid/strate: obtiens les strates sauvegardées. Peut être filtré en fonction du nombre d'échantillons, de l'identifiant et du nom de la colonne de filtre
     \item  POST /api/valid/strate: crée une nouvelle strate. L'information sur la nouvelle strate doit être fourni dans le corps de requête ainsi que l'identifiant du parent s'il y en a un. Si le parent existe il sera mis à jour
@@ -423,7 +423,7 @@ L'\ac{API} de validation a été mis en place pour permettre de rapidement assur
     \item POST /api/valid/resultats: nouveau résultat créé dans la table pertinente selon le schéma du tableau \ref{tab:definition_resultats_valid}. Le résultat est fourni sans identifiant dans le corps de la requête.
     \item PUT /api/valid/resultats/<$id_{val}$>: modifie un résultat de validation dont l'identifiant est spécifié. Le résultat est fourni dans le corps de requête et doit respecter le schéma spécifié dans le tableau \ref{tab:definition_resultats_valid}
     \item DELETE /api/valid/resultats/<$id_{val}$>: permet de supprimer le résultat dont l'identifiant est fourni
-    \item GET /api/valid/graphiques: obtient les graphiques pour la page de validation. L'identifiant de strate, le type de graphique et la valeur max de x peuvent être spécifiés comme paramètres de requête. Le retour de la foncition est dans un format compatible avec react charts.
+    \item GET /api/valid/graphiques: obtient les graphiques pour la page de validation. L'identifiant de strate, le type de graphique et la valeur max de x peuvent être spécifiés comme paramètres de requête. Le retour de la fonction est dans un format compatible avec react charts.
     \item GET /api/valid/popu-strate: renvoie la taille de population d'une strate 
 \end{itemize}
 \clearpage
@@ -695,7 +695,7 @@ Du fait de problèmes de complétude des données du rôle foncier, il est poten
     WHERE inv.methode_estime = 2
     GROUP BY cad.g_no_lot, inv.n_places_min;
 \end{lstlisting}
-\section{Code: calcul d'un sous ensemble d'addition}\label{ann:code-addition-subset}
+\section{Code: calcul d'un sous-ensemble d'addition}\label{ann:code-addition-subset}
 Le code pour le calcul d'un sous-ensemble d'addition est donné ci-dessous.
 \begin{lstlisting}[language=Python, caption=Calcul d'un sous-ensemble avec l'opérateur d'addition]
 def calculate_addition_based_subset_from_inputs_class(reg_to_calculate:PR.ParkingRegulations,subset:int,data:PII.ParkingCalculationInputs,methode_estime:int=3):
@@ -833,7 +833,7 @@ else:
     ValueError('Can only calculate one rule at a time')
 \end{lstlisting}
 \section{Code: Sélection entre deux sous-ensembles}\label{ann:code-subset-oper}
-Le code suivant donne la fonction utiliser pour choisir entre l'inventaire de deux sous-ensembles:
+Le code suivant donne la fonction utilisée pour choisir entre l'inventaire de deux sous-ensembles:
 \begin{lstlisting}[language=Python, caption=Fonction subset\_operation]
 def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingInventory) ->ParkingInventory:
     logger = logging.getLogger(__name__)
@@ -1160,7 +1160,7 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
 \end{lstlisting}
 
 \section{Code: Nombre d'automobiles résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
-Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménages pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profiles d'accumulation véhicule \parencite{diallo_methodology_2015}.
+Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménage pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profils d'accumulation véhicule \parencite{diallo_methodology_2015}.
 \begin{lstlisting}
     DELETE FROM motorisation_par_quartier;
     INSERT INTO motorisation_par_quartier (id_quartier, nb_voitures,nb_voitures_max_pav,nb_voitures_min_pav,diff_max_signee)
@@ -1198,7 +1198,7 @@ Le nombre de véhicules appartenant aux résidents d'un quartier peut être esti
         ad.nb_voitures;
 \end{lstlisting}
 \section{Code: Population issue du recensement}\label{sec:annexe_pop_quartiers}
-Les données de recensement peuvent être agrégées par quartier en utilisant une approche similaire à au nombre d'automobile. Cependant, puisque les aires de diffusions sont des polygones et qu'il y a le potentiel d'avoir des aires de diffusions qui touchent à plusieurs quartiers, une condition a été ajouté voulant que 90\% de l'aire de diffusion doit être dans le quartier pour être sommée. 
+Les données de recensement peuvent être agrégées par quartier en utilisant une approche similaire à au nombre d'automobiles. Cependant, puisque les aires de diffusions sont des polygones et qu'il y a le potentiel d'avoir des aires de diffusions qui touchent à plusieurs quartiers, une condition a été ajoutée voulant que 90\% de l'aire de diffusion doive être dans le quartier pour être sommée. 
 \begin{lstlisting}
     DELETE FROM population_par_quartier;
     INSERT INTO population_par_quartier (id_quartier,pop_tot_2016,pop_tot_2021)
@@ -1243,7 +1243,7 @@ Les données de recensement peuvent être agrégées par quartier en utilisant u
       c2016.id_quartier=c2021.id_quartier;
 \end{lstlisting}
 \section{Code: Valeurs foncières agrégées}\label{sec:annexe_val_fonc_agreg}
-Certaines valeurs foncières sont agrégées pour donner une indication du degré d'intensité d'utilisation du sol dans un quartier. Les valeurs sont agrégées pour le total mais aussi pour les logements seulement. La requête ci-dessous donne la méthode de calcul pour les donnnées foncières agrégées.
+Certaines valeurs foncières sont agrégées pour donner une indication du degré d'intensité d'utilisation du sol dans un quartier. Les valeurs sont agrégées pour le total, mais aussi pour les logements seulement. La requête ci-dessous donne la méthode de calcul pour les données foncières agrégées.
 \begin{lstlisting}[language=SQL]
     DELETE FROM donnees_foncieres_agregees;
     INSERT INTO donnees_foncieres_agregees (id_quartier,valeur_moyenne_logement,superf_moyenne_logement,valeur_fonciere_logement_totale,valeur_fonciere_totale)
@@ -1360,7 +1360,7 @@ Cette section va donner la requête SQL qui compile les différentes parts modal
 \end{lstlisting}
 
 \section{Requête SQL: Intrants de validation }\label{ann:intants-validation}
-La requête suivante est utilisée pour créer les données entrants pour l'assignation de lots à une strate de validation:
+La requête suivante est utilisée pour créer les données entrantes pour l'affectation de lots à une strate de validation:
 \begin{lstlisting}
 DROP TABLE inputs_validation;
 
@@ -1483,8 +1483,8 @@ FROM (
     SELECT * FROM aggregated
 ) AS src;
 \end{lstlisting}
-\section{Requête SQL: lot où l'estimé de stationnement dépend du nombre de sièges}\label{ann:recerche-inv-par-unite}
-Cette requête a été utilisé pendant la validation pour identifier les lots où le nombre de siège est utilisé pour générer leur estimé. Cette unité a été associée à une erreur importante dans la prédiction
+\section{Requête SQL: lot où l'estimation de stationnement dépend du nombre de sièges}\label{ann:recerche-inv-par-unite}
+Cette requête a été utilisée pendant la validation pour identifier les lots où le nombre de sièges est utilisé pour générer leur estimation. Cette unité a été associée à une erreur importante dans la prédiction
 \begin{lstlisting}[language=SQL]
 with lot_ass as (
     SELECT
@@ -1558,7 +1558,7 @@ left join reg_inventory ri on ri.g_no_lot = la.g_no_lot
 where 8 = ANY(u.list_unite)    
 \end{lstlisting}
 \section{Requête SQL: recherche de lot selon l'intensité de prédiction de stationnement}\label{ann:requete-intensite-stat}
-L'évaluation du modèle a soulevé l'intensité de prédiction de stationnement comme une métrique pour identifier des lots où les prédictions auraient d'importantes erreurs. La requête suivante montre comment compiler une liste de propriete a verifier selon cet indicateur
+L'évaluation du modèle a soulevé l'intensité de prédiction de stationnement comme une métrique pour identifier des lots où les prédictions auraient d'importantes erreurs. La requête suivante montre comment compiler une liste de propriété à vérifier selon cet indicateur
 \begin{lstlisting}
 with inventaire_reg AS(
 	SELECT
@@ -1591,7 +1591,7 @@ order by n_places_min desc
 \end{lstlisting}
 
 \Annexe{Découpage géopolitique utilisé}\label{ann:political-split-up}
-Tel que mentionné à la section \ref{ssec:data-geopolitique-territoire}, une légère modification du découpage municipal brut d'Élections Québec \parencite{elections_quebec_atlas_2021} a été fait pour maintenir une différentiation entre le zonage de la vieille partie de Québec et le secteur des Rivières.
+Tel que mentionné à la section \ref{ssec:data-geopolitique-territoire}, une légère modification du découpage municipal brut d'Élections Québec \parencite{elections_quebec_atlas_2021} a été faite pour maintenir une différentiation entre le zonage de la vieille partie de Québec et le secteur des Rivières.
 
 \begin{figure}[H]
     \centering
