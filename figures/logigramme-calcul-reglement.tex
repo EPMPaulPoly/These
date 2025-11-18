@@ -21,7 +21,7 @@
                 % Nodes de flowchart
                 \node (start) [startstop] {Début};
                 \node (regs) [io, below of=start, yshift=-0.5cm]{RD = PR.reg\_def};
-                \node (converted_values) [io,above of=start,yshift=0.5cm]{Intrants convertis };
+                \node (converted_values) [io,above of=start,yshift=0.5cm]{PCI = Intrants convertis };
                 \draw [arrow] (regs) -- (start);
                 \draw [arrow] (converted_values) -- (start);
                 \node (val_n_regs) [decision,right of=start,xshift=3cm] {$n_{reg} == 1$};
@@ -55,7 +55,7 @@
                 \node (error_n_unit)[startstop, above left of=unique_unit,xshift=-1.5cm,yshift=0.3cm]{Erreur};
                 \draw [arrow] (unique_unit.north) -- ++(0,0.1)  node[anchor=west] {N} |- (error_n_unit.east);
 
-                \node (selection_seuil) [process,below of=unique_unit,yshift=-.6cm,text width=2cm]{Sel. proch. seuil et TD};
+                \node (selection_seuil) [process,below of=unique_unit,yshift=-.6cm,text width=2cm]{Sel. proch. seuil et PCI };
                 \draw [arrow] (unique_unit.south) --++(0,-0.1)  node[anchor=west] {O}-- (selection_seuil);
                 \node (calc_min) [process,below  of=selection_seuil,yshift=-.6cm,text width=2.25cm]{$n_{places} = p \times x_{entree} +c$};
                 \draw [arrow] (selection_seuil) -- (calc_min);
@@ -89,6 +89,7 @@
                 
                 \node (oper_intra_def) [below of=se_def,yshift=0.45cm]{$oper_{inter}$: opération entre sous-ensembles};
                 \node (oper_inter_def) [below of=rd_def,yshift=0.45cm,xshift=-0.5cm]{$oper_{intra}$: opération interne du sous-ensemble};
+                \node (se_data_def) [below of=oper_inter_def,yshift=0.45cm]{$SE_{data}$: définition du sous-ensemble};
                 \node (debut_def) [startstop,below of=oper_intra_def,xshift=-2.5cm]{Début/Fin};
                 \node (dec_def) [decision, right of=debut_def,xshift=3cm]{Décision};
                 \node (proc_def) [process, right of=dec_def,xshift=3.5cm]{Processus / calcul};

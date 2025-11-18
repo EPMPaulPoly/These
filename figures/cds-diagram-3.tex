@@ -8,7 +8,11 @@
         \tikzstyle {propriete} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=orange!30]
         \tikzstyle{propriete_opt} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
         % Zone de stationnement
+        
         \node (zone)[objet]{Zone de bord de rue};
+        \node (debut)[above of=zone,color=red]{Débuter ici};
+        \draw [->](debut.south) --(zone.north);
+        
             % Colonne droit
             \node (identifiant)[propriete, below of=zone,xshift=0.4cm,yshift=-0.2cm]{Identifiant};
             \coordinate (joint) at ($ (identifiant.west) + (-0.1,0.5) $);

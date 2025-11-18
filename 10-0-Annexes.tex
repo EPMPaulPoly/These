@@ -623,7 +623,7 @@ else:
 RST_to_append = RegSetTerritory(relevant_territory,reg_set,start_year_RST,end_year_RST,association[id_assoc_er_ter])
 RST_list_to_return.append(RST_to_append)   
 \end{lstlisting}
-\section{Code: Assignation des données foncières aux RST}
+\section{Code: Assignation des données foncières aux RST}\label{ann:assignation-donnees-fonc}
 La section suivant donnera un aperçu du code requis pour assigner les données foncières aux différents \ac{RST}.
 \begin{lstlisting}[language=Python, caption=Procédure d'assignation du rôle foncier aux RST,label=lst:assign_tax_data]
 tax_dataset_match = []
@@ -971,191 +971,192 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
 \end{lstlisting}
 \section{Code: Inventaire compilé par quartier}\label{sec:annexe_inventaire_agrege_par_quartier}
 L'agrégation du stationnement est faite avec une requête spatiale assez onéreuse. D'autre part, un lot aurait potentiellement plusieurs inventaires avec différentes méthodes. L'application web permet de prioriser différents types d'inventaires en fonction de la préférence de l'analyste. Les colonnes inv\_XYZ représentent chacune une priorité entre les différentes méthodologies d'inventaire.
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
     DELETE FROM stat_agrege;
-        WITH LotNeighborhood AS (
-          SELECT 
-            c.g_no_lot, 
-            s.id_quartier,
-            s.superf_quartier,
-            s.geometry,
-            s.nom_quartier
-          FROM public.cadastre c
-          JOIN public.sec_analyse s 
-            ON ST_Area(ST_Intersection(s.geometry, c.geometry)) / ST_Area(c.geometry) > 0.9
-        ),
+            WITH LotNeighborhood AS (
+                SELECT 
+                    c.g_no_lot, 
+                    s.id_quartier,
+                    s.superf_quartier,
+                    s.geometry,
+                    s.nom_quartier
+                FROM public.cadastre c
+                JOIN public.sec_analyse s 
+                    ON ST_Area(ST_Intersection(s.geometry, c.geometry)) / ST_Area(c.geometry) > 0.9
+            ),
 
-        inv_123 AS (
-          SELECT ln.id_quartier, ln.geometry, ln.superf_quartier, ln.nom_quartier,
-                CEIL(SUM(COALESCE(sub.parking_estimate, 0))) AS inv_123
-          FROM LotNeighborhood ln
-          LEFT JOIN LATERAL (
+            role_augmente AS (
+                SELECT
+                    id_provinc,
+                    rl0105a::int AS cubf,
+                    rl0404a AS valeur_au_role
+                FROM role_foncier
+            ),
+
+            joined AS (
+                SELECT
+                    acr.g_no_lot,
+                    ra.cubf,
+                    ra.valeur_au_role,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY acr.g_no_lot
+                        ORDER BY ra.valeur_au_role DESC NULLS LAST, ra.cubf
+                    ) AS rn
+                FROM public.association_cadastre_role acr
+                LEFT JOIN role_augmente ra
+                    ON ra.id_provinc = acr.id_provinc
+                WHERE acr.g_no_lot IS NOT NULL
+            ),
+
+            aggregated AS (
+                SELECT
+                    g_no_lot,
+                    MAX(CASE WHEN rn = 1 THEN cubf END) AS cubf_principal,
+                    CASE 
+                        WHEN CARDINALITY(ARRAY_AGG(DISTINCT LEFT(cubf::text,1)::int)) = 1 
+                        THEN case WHEN LEFT(MAX(CASE WHEN rn = 1 THEN cubf END)::text,1)::int!=3 then LEFT(MAX(CASE WHEN rn = 1 THEN cubf END)::text,1)::int ELSE 2 END -- mettre toutes les proprietes industrielles dans un bucket CUBF galore
+                        ELSE -1
+                    END AS cubf_principal_first_digit
+                FROM joined
+                GROUP BY g_no_lot
+            ),
+
+            rpd AS (
+                SELECT
+                    g_no_lot,
+                    COALESCE(
+                        CASE 
+                            WHEN methode_estime = 1 THEN n_places_mesure
+                            ELSE n_places_min
+                        END, 0
+                    ) AS n_places,
+                    methode_estime,
+                    id_inv
+                FROM inventaire_stationnement
+            ),
+            invent_count AS(
+                SELECT 
+                    g_no_lot,
+                    COUNT(g_no_lot) as n_inv
+                from
+                    inventaire_stationnement
+                group by g_no_lot
+            ),
+
+            lot_park_data AS (
+                SELECT
+                    ln.g_no_lot,
+                    ln.id_quartier,
+                    ln.superf_quartier,
+                    ln.nom_quartier,
+                    ic.n_inv,
+                    ag.cubf_principal,
+                    ag.cubf_principal_first_digit,
+                    ln.geometry
+                FROM LotNeighborhood ln
+                LEFT JOIN aggregated ag
+                    ON ag.g_no_lot = ln.g_no_lot
+                left join invent_count ic
+                    on ag.g_no_lot=ic.g_no_lot
+            ),
+            inv_123_per_lot AS (
+                SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
+                FROM rpd
+                ORDER BY g_no_lot,
+                    CASE methode_estime WHEN 1 THEN 1 WHEN 2 THEN 2 WHEN 3 THEN 3 ELSE 4 END
+            ),
+
+            inv_132_per_lot AS (
+                SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
+                FROM rpd
+                ORDER BY g_no_lot,
+                    CASE methode_estime WHEN 1 THEN 1 WHEN 3 THEN 2 WHEN 2 THEN 3 ELSE 4 END
+            ),
+
+            inv_213_per_lot AS (
+                SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
+                FROM rpd
+                ORDER BY g_no_lot,
+                    CASE methode_estime WHEN 2 THEN 1 WHEN 1 THEN 2 WHEN 3 THEN 3 ELSE 4 END
+            ),
+
+            inv_231_per_lot AS (
+                SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
+                FROM rpd
+                ORDER BY g_no_lot,
+                    CASE methode_estime WHEN 2 THEN 1 WHEN 3 THEN 2 WHEN 1 THEN 3 ELSE 4 END
+            ),
+
+            inv_312_per_lot AS (
+                SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
+                FROM rpd
+                ORDER BY g_no_lot,
+                    CASE methode_estime WHEN 3 THEN 1 WHEN 1 THEN 2 WHEN 2 THEN 3 ELSE 4 END
+            ),
+
+            inv_321_per_lot AS (
+                SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
+                FROM rpd
+                ORDER BY g_no_lot,
+                    CASE methode_estime WHEN 3 THEN 1 WHEN 2 THEN 2 WHEN 1 THEN 3 ELSE 4 END
+            ),
+            inv_1_per_lot as (
+                SELECT g_no_lot, n_places,id_inv
+                FROM rpd
+                WHERE methode_estime = 1
+            ),
+            inv_2_per_lot AS (
+                SELECT g_no_lot, n_places,id_inv
+                FROM rpd
+                WHERE methode_estime = 2
+            ),
+            inv_3_per_lot AS (
+                SELECT g_no_lot, n_places,id_inv
+                FROM rpd
+                WHERE methode_estime = 3
+            ),
+            desc_cubf AS (
+                SELECT *
+                from (values (-1,'Usage mixte'),(1,'Residentielle'),(2,'Industrielle'),(4,'Infrastructure'),(5,'Commerciale'),(6,'Services'),(7,'Recreation'),(8,'Ressources naturelles'),(9,'Inexploite'),(NULL,'Sans Role'))as sub(cubf_principal_first_digit,desc_usage)
+            )
+
+            INSERT INTO stat_agrege (id_quartier,cubf_principal_n1,inv_123,inv_132,inv_213,inv_231,inv_312,inv_321,inv_1,inv_2,inv_3,n_lots)
             SELECT 
-              COALESCE(
-                CASE WHEN i.methode_estime = 1 THEN i.n_places_mesure
-                    ELSE i.n_places_min
-                END, 0
-              ) AS parking_estimate
-            FROM inventaire_stationnement i
-            WHERE i.g_no_lot = ln.g_no_lot
-            ORDER BY CASE i.methode_estime
-                      WHEN 1 THEN 1
-                      WHEN 2 THEN 2
-                      WHEN 3 THEN 3
-                      ELSE 4
-                    END
-            LIMIT 1
-          ) sub ON true
-          GROUP BY ln.id_quartier, ln.geometry, ln.superf_quartier,ln.nom_quartier
-        ),
-
-        inv_132 AS (
-          SELECT ln.id_quartier, ln.geometry, ln.superf_quartier, 
-                CEIL(SUM(COALESCE(sub.parking_estimate, 0))) AS inv_132
-          FROM LotNeighborhood ln
-          LEFT JOIN LATERAL (
-            SELECT 
-              COALESCE(
-                CASE WHEN i.methode_estime = 1 THEN i.n_places_mesure
-                    ELSE i.n_places_min
-                END, 0
-              ) AS parking_estimate
-            FROM inventaire_stationnement i
-            WHERE i.g_no_lot = ln.g_no_lot
-            ORDER BY CASE i.methode_estime
-                      WHEN 1 THEN 1
-                      WHEN 3 THEN 2
-                      WHEN 2 THEN 3
-                      ELSE 4
-                    END
-            LIMIT 1
-          ) sub ON true
-          GROUP BY ln.id_quartier, ln.geometry, ln.superf_quartier
-        ),
-
-        inv_213 AS (
-          SELECT ln.id_quartier, ln.geometry, ln.superf_quartier, 
-                CEIL(SUM(COALESCE(sub.parking_estimate, 0))) AS inv_213
-          FROM LotNeighborhood ln
-          LEFT JOIN LATERAL (
-            SELECT 
-              COALESCE(
-                CASE WHEN i.methode_estime = 2 THEN i.n_places_min
-                    WHEN i.methode_estime = 1 THEN i.n_places_mesure
-                    ELSE i.n_places_min
-                END, 0
-              ) AS parking_estimate
-            FROM inventaire_stationnement i
-            WHERE i.g_no_lot = ln.g_no_lot
-            ORDER BY CASE i.methode_estime
-                      WHEN 2 THEN 1
-                      WHEN 1 THEN 2
-                      WHEN 3 THEN 3
-                      ELSE 4
-                    END
-            LIMIT 1
-          ) sub ON true
-          GROUP BY ln.id_quartier, ln.geometry, ln.superf_quartier
-        ),
-
-        inv_231 AS (
-          SELECT ln.id_quartier, ln.geometry, ln.superf_quartier, 
-                CEIL(SUM(COALESCE(sub.parking_estimate, 0))) AS inv_231
-          FROM LotNeighborhood ln
-          LEFT JOIN LATERAL (
-            SELECT 
-              COALESCE(
-                CASE WHEN i.methode_estime = 2 THEN i.n_places_min
-                    WHEN i.methode_estime = 1 THEN i.n_places_mesure
-                    ELSE i.n_places_min
-                END, 0
-              ) AS parking_estimate
-            FROM inventaire_stationnement i
-            WHERE i.g_no_lot = ln.g_no_lot
-            ORDER BY CASE i.methode_estime
-                      WHEN 2 THEN 1
-                      WHEN 3 THEN 2
-                      WHEN 1 THEN 3
-                      ELSE 4
-                    END
-            LIMIT 1
-          ) sub ON true
-          GROUP BY ln.id_quartier, ln.geometry, ln.superf_quartier
-        ),
-
-        inv_312 AS (
-          SELECT ln.id_quartier, ln.geometry, ln.superf_quartier, 
-                CEIL(SUM(COALESCE(sub.parking_estimate, 0))) AS inv_312
-          FROM LotNeighborhood ln
-          LEFT JOIN LATERAL (
-            SELECT 
-              COALESCE(
-                CASE WHEN i.methode_estime = 3 THEN i.n_places_min
-                    WHEN i.methode_estime = 1 THEN i.n_places_mesure
-                    ELSE i.n_places_min
-                END, 0
-              ) AS parking_estimate
-            FROM inventaire_stationnement i
-            WHERE i.g_no_lot = ln.g_no_lot
-            ORDER BY CASE i.methode_estime
-                      WHEN 3 THEN 1
-                      WHEN 1 THEN 2
-                      WHEN 2 THEN 3
-                      ELSE 4
-                    END
-            LIMIT 1
-          ) sub ON true
-          GROUP BY ln.id_quartier, ln.geometry, ln.superf_quartier
-        ),
-
-        inv_321 AS (
-          SELECT ln.id_quartier, ln.geometry, ln.superf_quartier, 
-                CEIL(SUM(COALESCE(sub.parking_estimate, 0))) AS inv_321
-          FROM LotNeighborhood ln
-          LEFT JOIN LATERAL (
-            SELECT 
-              COALESCE(
-                CASE WHEN i.methode_estime = 3 THEN i.n_places_min
-                    WHEN i.methode_estime = 2 THEN i.n_places_min
-                    ELSE i.n_places_mesure
-                END, 0
-              ) AS parking_estimate
-            FROM inventaire_stationnement i
-            WHERE i.g_no_lot = ln.g_no_lot
-            ORDER BY CASE i.methode_estime
-                      WHEN 3 THEN 1
-                      WHEN 2 THEN 2
-                      WHEN 1 THEN 3
-                      ELSE 4
-                    END
-            LIMIT 1
-          ) sub ON true
-          GROUP BY ln.id_quartier, ln.geometry, ln.superf_quartier
-        )
-
-
-        -- Final merge + insert
-        INSERT INTO stat_agrege (
-          id_quartier, geom, superf_quartier,nom_quartier,
-          inv_123, inv_132, inv_213, inv_231, inv_312, inv_321
-        )
-        SELECT 
-          i123.id_quartier,
-          i123.geometry,
-          i123.superf_quartier,
-          i123.nom_quartier,
-          i123.inv_123,
-          i132.inv_132,
-          i213.inv_213,
-          i231.inv_231,
-          i312.inv_312,
-          i321.inv_321
-        FROM inv_123 i123
-        LEFT JOIN inv_132 i132 ON i123.id_quartier = i132.id_quartier
-        LEFT JOIN inv_213 i213 ON i123.id_quartier = i213.id_quartier
-        LEFT JOIN inv_231 i231 ON i123.id_quartier = i231.id_quartier
-        LEFT JOIN inv_312 i312 ON i123.id_quartier = i312.id_quartier
-        LEFT JOIN inv_321 i321 ON i123.id_quartier = i321.id_quartier;
+                lpd.id_quartier,
+                lpd.cubf_principal_first_digit as cubf_principal_n1,
+                sum(CEIL(i123.n_places)) as inv_123,
+                sum(CEIL(i132.n_places)) as inv_132,
+                sum(CEIL(i213.n_places)) as inv_213,
+                sum(CEIL(i231.n_places)) as inv_231,
+                sum(CEIL(i312.n_places)) as inv_312,
+                sum(CEIL(i321.n_places)) as inv_321,
+                sum(CEIL(i1.n_places)) as inv_1,
+                sum(CEIL(i2.n_places)) as inv_2,
+                sum(CEIL(i3.n_places)) as inv_3,
+                count(*) as n_lots--
+            from lot_park_data lpd
+            left join 
+                inv_123_per_lot i123 on i123.g_no_lot = lpd.g_no_lot
+            left join
+                inv_132_per_lot i132 on i132.g_no_lot=lpd.g_no_lot
+            left join
+                inv_213_per_lot i213 on i213.g_no_lot=lpd.g_no_lot
+            left join 
+                inv_231_per_lot i231 on i231.g_no_lot=lpd.g_no_lot
+            left join 
+                inv_312_per_lot i312 on i312.g_no_lot=lpd.g_no_lot
+            left join
+                inv_321_per_lot i321 on i321.g_no_lot=lpd.g_no_lot
+            left join
+                inv_1_per_lot i1 on i1.g_no_lot=lpd.g_no_lot
+            left join
+                inv_2_per_lot i2 on i2.g_no_lot=lpd.g_no_lot
+            left join
+                inv_3_per_lot i3 on i3.g_no_lot=lpd.g_no_lot
+            left join 
+                desc_cubf dc on dc.cubf_principal_first_digit=lpd.cubf_principal_first_digit or (dc.cubf_principal_first_digit IS NULL AND lpd.cubf_principal_first_digit IS NULL)
+            group by lpd.id_quartier,lpd.cubf_principal_first_digit
+            order by lpd.id_quartier,lpd.cubf_principal_first_digit
 \end{lstlisting}
 
 \section{Code: Nombre d'automobiles résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
@@ -1243,7 +1244,7 @@ Les données de recensement peuvent être agrégées par quartier en utilisant u
 \end{lstlisting}
 \section{Code: Valeurs foncières agrégées}\label{sec:annexe_val_fonc_agreg}
 Certaines valeurs foncières sont agrégées pour donner une indication du degré d'intensité d'utilisation du sol dans un quartier. Les valeurs sont agrégées pour le total mais aussi pour les logements seulement. La requête ci-dessous donne la méthode de calcul pour les donnnées foncières agrégées.
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
     DELETE FROM donnees_foncieres_agregees;
     INSERT INTO donnees_foncieres_agregees (id_quartier,valeur_moyenne_logement,superf_moyenne_logement,valeur_fonciere_logement_totale,valeur_fonciere_totale)
     WITH role_quartier_log AS(
@@ -1288,10 +1289,10 @@ Certaines valeurs foncières sont agrégées pour donner une indication du degr�
     left join
       role_quartier_tout rqt on rqt.id_quartier = sa.id_quartier;
 \end{lstlisting}
-\
+
 \section{Code: Parts modales}\label{sec:annexe_parts_modales}
 Cette section va donner la requête SQL qui compile les différentes parts modales définies dans la section \ref{sec:meth_analyse}. 
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
     DELETE FROM parts_modales;
     INSERT INTO parts_modales(id_quartier,ac_res,ap_res,tc_res,mv_res,bs_res,ac_ori,ap_ori,tc_ori,mv_ori,bs_ori,ac_des,ap_des,tc_des,mv_des,bs_des,ac_int,ap_int,tc_int,mv_int,bs_int)
     WITH trips AS (
@@ -1484,7 +1485,7 @@ FROM (
 \end{lstlisting}
 \section{Requête SQL: lot où l'estimé de stationnement dépend du nombre de sièges}\label{ann:recerche-inv-par-unite}
 Cette requête a été utilisé pendant la validation pour identifier les lots où le nombre de siège est utilisé pour générer leur estimé. Cette unité a été associée à une erreur importante dans la prédiction
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
 with lot_ass as (
     SELECT
         *

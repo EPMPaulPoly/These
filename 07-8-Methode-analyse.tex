@@ -1,41 +1,60 @@
 \section{Indicateurs utilisés pour l'analyse} \label{sec:meth_analyse}
-    La majorité de l'analyse se basera sur le calcul d'indicateurs agrégés. Les indicateurs permettent de synthétiser de l'information complexe sous forme digestible pour le praticien. Cette section détaillera les indicateurs implémentés dans l'outil. Certains sont tirés de la littérature tandis que d'autres ont été mis en place pour essayer de comprendre les relations entre le stationnement, l'utilisation du territoire, la fiscalité municipale et les comportements de mobilité.
+    La majorité de l'analyse se basera sur le calcul d'indicateurs agrégés. Les indicateurs permettent de synthétiser de l'information complexe sous forme digestible pour le praticien. Cette section détaillera les indicateurs implémentés dans l'outil. Certains sont tirés de la littérature tandis que d'autres ont été mis en place pour essayer de comprendre les relations entre le stationnement, l'utilisation du territoire, la fiscalité municipale et les comportements de mobilité. Le tableau \ref{tab:symbols-indicators-section} résume les symboles pour la section.
+    \begin{table}[H]
+        \centering
+        \caption{Symboles utilisés dans la section}
+        \label{tab:symbols-indicators-section}
+        \begin{tabular}{c|c}
+            \hline
+            Expression & Veut dire \\ \hline
+            $A \cap B = \varnothing$ & A est à l'extérieur de B \\
+            $A \cap B \neq \varnothing$ & A est à l'intérieur de B \\
+            $A \wedge B$ & A et B sont vrais\\
+            $A \lor B$ & A ou B est vrai\\ 
+            $D(P_1,P_2)<50$ & Distance du point 1 au point 2 est inférieure à 50m\\
+            \hline
+        \end{tabular}
+        
+    \end{table}
     \subsection{Indicateurs issus des profils d'accumulation véhicule} \label{ssec:pav-calcs}
         Les \ac{PAV} ont été introduits par \textcite{morency_characterizing_2008} pour déterminer le nombre de véhicules dans une zone d'analyse en utilisant les données de l'enquête OD. 
             \subsubsection{Méthodologie de calcul des profils}
                 \paragraph{Initialisation du nombre de véhicules} En début de journée, un nombre de véhicules de résidents du quartier est calculé en utilisant les formules détaillées dans la section \ref{par:n_vehicules_quartiers}. Essentiellement, le nombre de quartiers est déduit à partir du nombre de véhicules déclarés par les ménages de l'enquête multiplié par le facteur de ménages.
                 \paragraph{Entrées et sorties de quartier} Pour chaque heure de la journée, les déplacements en mode autoconducteur entrants et sortants du quartier sont identifiés. Chaque déplacement est multiplié par le facteur de pondération de la personne pour obtenir un nombre de véhicules entrants et sortants comme montré aux équations suivantes.
                 \begin{align}
-                    N_{auto,ent,q,h} &= \sum{F_{dep}}\forall M_{dep} == 1 \wedge P_{ori} \disjoint G_q \wedge P_{des} \cap G_q \wedge H==h\\
-                    N_{auto,sor,q,h} &= \sum{F_{dep}} \forall M_{dep} == 1 \wedge P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \wedge H==h
+                    N_{auto,ent,q,h} &= \sum_{\substack{M_{dep} = 1 \\ P_{ori} \cap G_q= \varnothing \\ P_{des} \cap G_q\neq \varnothing \\ H=h}} {F_{dep}} \\
+                    N_{auto,sor,q,h} &= \sum_{\substack{M_{dep} = 1 \\ P_{ori} \cap G_q  \neq \varnothing \\ P_{des} \cap G_q = \varnothing \\ H=h}}{F_{dep}}
                 \end{align} 
-                où $F_{dep}$ est le facteur de déplacement, $P_{ori}$ est la position d'origine, $P_{des}$ est la position de destination, $G_{q}$ est le polygone représentant le quartier à l'étude, H est l'heure de départ du déplacement et h est l'heure pour laquelle le calcul est en cours. Le facteur de déplacement est utilisé ici en conformité avec le guide fourni avec les données \parencite{ministere_des_transports_et_de_la_mobilite_durable_enquete_2017}. Un calcul similaire peut être fait pour trouver le nombre de personnes et de permis à chaque heure dans un territoire en ignorant la contrainte de mode et en mettant une contrainte sur la variable de permis. 
+                où $F_{dep}$ est le facteur de déplacement,$M_{dep}=1$ dénote le mode autoconducteur, $P_{ori}$ est la position d'origine, $P_{des}$ est la position de destination, $G_{q}$ est le polygone représentant le quartier à l'étude, $H$ est l'heure de départ du déplacement et $h$ est l'heure pour laquelle le calcul est en cours. Le facteur de déplacement est utilisé ici en conformité avec le guide fourni avec les données \parencite{ministere_des_transports_et_de_la_mobilite_durable_enquete_2017}. Un calcul similaire peut être fait pour trouver le nombre de personnes et de permis à chaque heure dans un territoire en ignorant la contrainte de mode et en mettant une contrainte sur la variable de permis. 
                 \begin{align}
-                    N_{pers,ent,q,h} &= \sum{F_{dep}}\forall P_{ori} \disjoint G_q \wedge P_{des} \cap G_q \wedge H==h\\
-                    N_{pers,sor,q,h} &= \sum{F_{dep}} \forall  P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \wedge H==h \\
-                    N_{perm,ent,q,h} &= \sum{F_{dep}}\forall PP_{per} ==1 \wedge P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \wedge H==h \\
-                    N_{perm,sor,q,h} &= \sum{F_{dep}} \forall PP_{per} ==1 \wedge  P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \wedge H==h
+                    N_{pers,ent,q,h} &= \sum_{\substack{P_{ori} \cap G_q = \varnothing \\ P_{des} \cap G_q\neq \varnothing \\ H=h}}{F_{dep}} \\
+                    N_{pers,sor,q,h} &= \sum_{\substack{P_{ori} \cap G_q \neq \varnothing \\ P_{des} \cap G_q = \varnothing \\ H=h}}{F_{dep}}   \\
+                    N_{perm,ent,q,h} &= \sum_{\substack{PP_{per} =1 \\ P_{ori} \cap G_q = \varnothing\\ P_{des} \cap G_q \neq \varnothing \\ H=h }}{F_{dep}}\\
+                    N_{perm,sor,q,h} &= \sum_{\substack{PP_{per} =1 \\  P_{ori} \cap G_q \neq \varnothing \\ P_{des} \cap G_q = \varnothing \\ H=h}}{F_{dep}} 
                 \end{align}
+                où $PP_{per} = 1$ dénote la possession de permis de conduire. 
                 Il est par ailleurs possible d'améliorer l'analyse en segmentant le bassin de stationnement entre les stationnements résidentiels auxquels seuls les résidents ont accès et les stationnements autres qui seront utilisés pour les diverses activités. Il faut cependant à ce moment prendre en compte les transferts internes entre le stationnement résidentiel et le stationnement. Les équations suivantes résument les termes: 
                 \begin{align}
-                    N_{auto,ent,q,h,res} &= \sum{F_{dep}}\forall &&M_{dep}  == 1  \wedge P_{ori} \disjoint G_q \land P_{des} \cap G_q \nonumber \\ 
-                    & && \land H==h \land (D(P_{des},P_{res})<50 \lor M_{dep}==12)\\
-                     N_{auto,ent,q,h,pub} &= \sum{F_{dep}}\forall && M_{dep} == 1 \wedge P_{ori} \disjoint G_q \land P_{des} \cap G_q \nonumber \\ & &&\land H==h \land (D(P_{des},P_{res})>50)\\
-                     N_{auto,sor,q,h,res} &= \sum{F_{dep}} \forall &&M_{dep} == 1 \wedge P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \nonumber \\ & &&\wedge H==h \land (D(P_{ori},P_{res})<50)\\
-                     N_{auto,sor,q,h,pub} &= \sum{F_{dep}}  \forall && M_{dep} == 1 \wedge P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \nonumber \\ & &&\wedge H==h \land (D(P_{ori},P_{res})>50)
+                    N_{auto,ent,q,h,res} &= \sum_{\substack{M_{dep} = 1 \\ P_{ori} \cap G_q =\varnothing \\ P_{des} \cap G_q \neq\varnothing \\ H=h \\ (D(P_{des},P_{res})<50 \lor m_{dep}=12)}}{F_{dep}}\\
+                     N_{auto,ent,q,h,pub} &= \sum_{\substack{M_{dep} = 1 \\ P_{ori} \cap G_q\neq\varnothing \\ P_{des} \cap G_q =\varnothing \\ H=h \\ (D(P_{des},P_{res})\geq50)}}{F_{dep}}\\
+                     N_{auto,sor,q,h,res} &= \sum_{\substack{M_{dep} = 1 \\ P_{ori} \cap G_q =\varnothing\\ P_{des} \cap G_q \neq\varnothing \\  H=h \\ (D(P_{ori},P_{res})<50)}}{F_{dep}} \\
+                     N_{auto,sor,q,h,pub} &= \sum_{\substack{M_{dep} = 1 \\ P_{ori} \cap G_q \neq\varnothing\\ P_{des} \disjoint G_q =\varnothing \\  H=h \\ (D(P_{ori},P_{res})\geq50)}}F_{dep} 
                 \end{align}
-                Il faut aussi formuler le nombre de déplacements entre ces deux bassins de stationnement à l'intérieur du quartier:
+                où $m_{dep}=12 $ dénote le motif retour à la maison. Il faut aussi formuler le nombre de déplacements entre ces deux bassins de stationnement à l'intérieur du quartier:
                 \begin{align}
-                    N_{transfer,q,\text{pub-res}} & = \sum{F_{dep}}\forall &&M_{dep}  == 1  \wedge P_{ori} \cap G_q \land P_{des} \cap G_q \nonumber \\ 
-                    & && \land H==h \land (D(P_{des},P_{res})<50 \lor M_{dep}==12)\\
-                     N_{transfer,q,\text{res-pub}} & = \sum{F_{dep}}\forall &&M_{dep}  == 1  \wedge P_{ori} \cap G_q \land P_{des} \cap G_q \nonumber \\ 
-                    & && \land H==h \land D(P_{ori},P_{res})<50 
+                    N_{transfer,q,\text{pub-res}} & = \sum_{\substack{M_{dep}  == 1  \\ P_{ori} \cap G_q\neq\varnothing \\ P_{des} \cap G_q \neq\varnothing \\ H==h \\ (D(P_{des},P_{res})<50 \lor m_{dep}=12)}}{F_{dep}}\\
+                     N_{transfer,q,\text{res-pub}} & = \sum_{\substack{M_{dep}  == 1  \\ P_{ori} \cap G_q \neq\varnothing\\ P_{des} \cap G_q\neq\varnothing  \\ 
+                    \\ H=h \\ D(P_{ori},P_{res})<50 }}{F_{dep}}\forall 
                 \end{align}
-                La condition de transfert tient essentiellement à la distance au lieu de résidence. Une condition additionnelle utilise le motif de retour à la maison pour assurer que tous les retours sont bien capturés.
-                \paragraph{Nombre de véhicules à l'heure h} Une fois les entrées et sorties calculées, elles sont additionnées  à l'aide de la formule suivante pour obtenir la population de véhicules dans le quartier à l'heure donnée.
+                La condition de transfert tient à la distance au lieu de résidence. Une condition additionnelle utilise le motif de retour à la maison pour assurer que tous les retours sont bien capturés.
+                \paragraph{Nombre de véhicules ou de personnes à l'heure h} Une fois les entrées et sorties calculées, elles sont additionnées  à l'aide de la formule suivante pour obtenir la population de véhicules dans le quartier à l'heure donnée. Tous les véhicules sont affectés à la résidence en début de journée.
                 \begin{align}
-                    N_{auto,q,h} &=  N_{auto,q,h-1} + N_{auto,ent,q,h}-N_{auto,sor,q,h}
-                \end{align}
+                    N_{auto,q,h} &=  N_{auto,q,h-1} + N_{auto,ent,q,h}-N_{auto,sor,q,h}\\
+                    N_{pers,q,h} &= N_{pers,q,h-1} + N_{pers,ent,q,h} - N_{pers,sor,q,h}\\
+                    N_{perm,q,h} &= N_{perm,q,h-1} + N_{perm,ent,q,h} - N_{perm,sor,q,h}\\
+                    N_{auto,res,q,h} &= N_{auto,res,q,h-1} + N_{auto,res,ent,q,h} - N_{auto,res,sor,q,h} + N_{transfer,q,\text{pub-res}} - N_{transfer,q,\text{res-pub}}\\
+                    N_{auto,pub,q,h} &= N_{auto,pub,q,h-1} + N_{auto,pub,ent,q,h} - N_{auto,pub,sor,q,h} - N_{transfer,q,\text{pub-res}} + N_{transfer,q,\text{res-pub}}\\
+                \end{align} 
                 \paragraph{Itération} Le script itère chaque heure pour calculer la population d'automobiles dans le quartier. Le script renvoie le résultat à l'interface web pour approbation par l'analyste pour approbation avant d'être sauvegardé dans la base de données.
     \subsection{Indicateurs pour les lots}
         \subsubsection{Indicateurs de stationnement}
@@ -47,7 +66,7 @@
             
             \paragraph{Nombre de places mesurées} Cette colonne dans la table d'inventaire est utilisée pour tout inventaire manuel.  
             
-            \paragraph{Nombre de places par hectare} Le nombre de places par hectare est calculé en divisant la capacité de stationnement par la superficie du lot cadastral. La superficie est fournie dans les propriétés de chaque lot cadastral. Cette mesure peut utiliser les 4 types d'inventaire mentionnés plus haut dans le paragraphe. Cet indicateur est utilisé pour trouver les entrées du cadastre avec un inventaire erroné. La formule suivante dénote la méthode de calcul. 
+            \paragraph{Nombre de places par hectare} Le nombre de places par hectare est calculé en divisant la capacité de stationnement par la superficie du lot cadastral. La superficie est fournie dans les propriétés de chaque lot cadastral. Cette mesure peut utiliser les 4 types d'inventaire mentionnés plus haut dans le paragraphe. Cet indicateur est utilisé pour trouver les entrées du cadastre avec un inventaire erroné. La formule suivante dénote la méthode de calcul. Les hectares ont été choisis pour avoir une échelle raisonnable sur les valeurs.
             \begin{align}
                 d_s &= \frac{s_l \times 10000}{a_l} 
             \end{align}
@@ -55,21 +74,21 @@
             \paragraph{Valeur foncière par hectare}
         Cette métrique est principalement utilisée à titre indicatif comme proxy pour la rentabilité d'une propriété pour la municipalité. Cette métrique ne prend pas en compte les taux d'imposition différenciés entre différentes utilisations du sol ni entre différents secteurs. En effet, certains secteurs de la municipalité ont des taux préférentiels. Ces derniers sont dus à un taux d'endettement de la municipalité qui a été fusionné par rapport à la ville de Québec de l'époque. La valeur est calculée de la manière suivante:
         \begin{align}
-            d_f &= \frac{\sum{\left(f_l\right)} }{a_l}\forall P_{role}\cap G_l \label{eq:lot-tax-density}
+            d_f &= \frac{10000 \times \sum_{\substack{P_{role}\cap G_l\neq\varnothing}}{\left(f_l\right)} }{a_l}  \label{eq:lot-tax-density}
         \end{align}
 
         \subsubsection{Indicateurs combinés}
         
-        \paragraph{Intensité de stationnement prédit} L'intensité foncière de stationnement est un paramètre qui a été induit pendant le processus d'évaluation du modèle de prédiction. Lorsqu'il dépasse certains seuils, c'est un bon moyen d'identifier les lots avec des prédictions aberrantes. Elle est donnée par la formule suivante et sera discutée dans la section d'évaluation du modèle.
+        \paragraph{Intensité de stationnement prédit} L'intensité foncière de stationnement est un paramètre qui a été induit pendant le processus d'évaluation du modèle de prédiction. Lorsqu'il dépasse certains seuils, c'est un bon moyen d'identifier les lots avec des prédictions trop élevées. Elle est donnée par la formule suivante et sera discutée dans la section d'évaluation du modèle.
         \begin{align}
-            i_s = \frac{s_{pred,l} \times a_l}{\sum f_l} \forall P_{role} \cap G_l  \label{eq:intensite-stat-pred}
+            i_s = \frac{s_{pred,l} \times a_l}{\sum_{\substack{P_{role} \cap G_l\neq\varnothing}} f_l} \label{eq:intensite-stat-pred}
         \end{align}
         L'indicateur aurait pu être formulé en utilisant l'aire d'étages par mètre carré de lot, mais l'absence de telles données sur une proportion des lots rend l'indicateur potentiellement moins utile si des méthodes d'inférence de l'aire d'étage sont développées dans le futur et qu'il est souhaitable d'avoir un comparatif applicable à l'ensemble des lots, peu importe la méthode de prédiction.
     \subsection{Indicateurs de secteurs municipaux} \label{ssec:indicateurs-secteurs-municipaux}
         \subsubsection{Indicateurs de stationnement}
             \paragraph{Stationnement total} Le stationnement total est la somme des places de stationnement des lots cadastraux à l'intérieur d'un secteur municipal. Si plusieurs estimations existent pour un même lot, l'une des estimations doit être choisie. Ce choix est opéré en sélectionnant la préférence de méthode. Les estimations par quartiers sont compilées à l'aide de la requête spécifiée à l'annexe \ref{sec:annexe_inventaire_agrege_par_quartier}. Un lot est assigné à un quartier si 90\% ou plus de sa superficie se trouvent à l'intérieur du quartier. Cette approche (plutôt que de requérir que l'ensemble du lot soit à l'intérieur du quartier) est mise en place pour que les lots limitrophes soient tout de même pris en compte. On peut ainsi formuler l'indicateur ainsi:
                 \begin{align}
-                    S_q &= \sum{s_l} \forall \frac{A\left(G_l\cap G_q\right)}{A\left(G_l\right)}>0.9
+                    S_q &= \sum_{\substack{\frac{A\left(G_l\cap G_q\right)}{A\left(G_l\right)}>0.9}}{s_l} 
                     \label{eq:stat-tot}
                 \end{align}
         \subsubsection{Indicateurs d'utilisation du sol}
@@ -84,15 +103,16 @@
         \subsubsection{Indicateurs de mobilité et de population}
             \paragraph{Nombre de véhicules des résidents du quartier}\label{par:n_vehicules_quartiers} Le nombre de véhicules est inféré à l'aide des enquêtes OD en utilisant la formule suivante. Il s'agit d'une somme pondérée du nombre de véhicules pour tout entrée des données OD où le logis est à l'intérieur du quartier et la ligne est la tête d'un ménage. La requête SQL est donnée à l'annexe \ref{sec:annex_motorisation_par_quartier}.
             \begin{align}
-                V_{q} &= \sum{\left(v_{men} \times F_{men}\right)} \forall T_{men}  \wedge \left(P_{log}\cap G_q\right) \label{eq:nb-voit}
+                V_{q} &= \sum_{\substack{T_{men}  \\ P_{log}\cap G_q\neq\varnothing}}{\left(v_{men} \times F_{men}\right)}  \label{eq:nb-voit}
             \end{align}
+            où $v_{men}$ est le nombre de véhicules déclarés pour le ménage, $F_{men}$ est le facteur de pondération de ménages et $T_{men}$ est un booléen indiquant qu'il s'agit de la première entrée d'un ménage dans la base de données.
             \paragraph{Nombre de véhicules maximum dans le quartier} Cet indicateur est calculé en prenant le maximum du profil d'accumulation de véhicules. L'indicateur est calculé de la manière suivante. La requête SQL requise pour en faire le calcul est donnée à l'annexe \ref{sec:annex_motorisation_par_quartier}.
             \begin{align}
-                V_{q,max} &= max\left(N_{auto,q,h}\right) \forall h \in [4-28] \label{eq:nb-voit-max}
+                V_{q,max} &= \max_{h \in [4,\,28]} \;\left(N_{auto,q,h}\right)  \label{eq:nb-voit-max}
             \end{align}
             \paragraph{Nombre de véhicules minimum dans le quartier} Cet indicateur est calculé en prenant le minimum du profil d'accumulation de véhicules. L'indicateur est calculé de la manière suivante. La requête SQL requise pour en faire le calcul est donnée à l'annexe \ref{sec:annex_motorisation_par_quartier}.
             \begin{align}
-                V_{q,min} &= \min\left(N_{auto,q,h}\right) \forall h \in [4-28]
+                V_{q,min} &= \min_{h \in [4,\,28]} \;\left(N_{auto,q,h}\right)
             \end{align}
             \paragraph{Différence signée d'automobiles}
             Cet indicateur vise à rapidement indiquer si le nombre de voitures sur un territoire augmente ou diminue au fil de la journée. Pour ce faire, on trouve l'heure à laquelle le nombre de voitures a le plus grand écart par rapport au nombre de voitures appartenant aux résidents. Un signe positif indique que le quartier reçoit des voitures de l'extérieur, tandis qu'un nombre négatif que le quartier est débiteur. La requête SQL pour obtenir le résultat est donnée dans l'annexe \ref{sec:annex_motorisation_par_quartier}
@@ -106,55 +126,57 @@
             \end{align}
             \paragraph{Nombre de permis du quartier} Le nombre de permis dans un quartier peut être obtenu de manière similaire au nombre de voitures en utilisant les données de l'enquête OD. Dans ce cas-ci, on doit chercher la tête de liste pour chaque personne et sommer le facteur de pondération de personnes si la variable de permis de conduire est égale à 1. La formule suivante:
             \begin{align}
-                PT_{q} &= \sum{\left(F_{per}\right)} \forall T_{per}\wedge PP==1  \wedge \left(P_{log}\cap G_q\right) \label{eq:perm}
+                PT_{q} &= \sum_{\substack{T_{per}\\ PP_{per}=1  \\ P_{log}\cap G_q\neq\varnothing}}{\left(F_{per}\right)} \label{eq:perm}
             \end{align}
+            où $PP_{per}=1$ dénote la possession de permis et $T_{per}$ est un booléen indiquant que la ligne est la première entrée de la personne dans la base de données. 
             \paragraph{Population du quartier} Des estimations de population issues des recensements de 2016 et 2021 sont disponibles. Encore une fois pour assurer la robustesse des jointures spatiales, une approche utilisant un critère de 90\% de superposition entre l'aire de diffusion et le secteur municipal. La requête SQL requise pour obtenir cette variable est donnée en annexe \ref{sec:annexe_pop_quartiers}. Les variables sont entreposées dans une table supplémentaire pour améliorer la performance de la requête.
             \begin{align}
-                P_{q}&= \sum{p_{AD}} \forall \frac{A\left(G_{AD}\cap G_q\right)}{A\left(G_{AD}\right)}>0.9 \label{eq:popu}
+                P_{q}&= \sum_{\substack{\frac{A\left(G_{AD}\cap G_q\right)}{A\left(G_{AD}\right)}>0.9}}{p_{AD}} \label{eq:popu}
             \end{align}
             \paragraph{Part modale des résidents} La part modale des résidents vise à donner une indication des comportements de mobilité des personnes vivant dans un quartier. L'indicateur est potentiellement problématique puisque le nombre de déplacements varie entre les enquêtes, mais il est très utilisé. La formule est donnée ci-dessous et la requête SQL est listée en annexe \ref{sec:annexe_parts_modales}.
             \begin{align}
-                N_{depl,mode,res,q}  &= \sum{F_{per}} \forall P_{logis} \cap G_q \wedge M_{dep} == mode\\
-                N_{depl,res,q} &= \sum{F_{per}} \forall P_{logis} \cap G_q \\
+                N_{depl,mode,res,q}  &= \sum_{\substack{ P_{logis} \cap G_q\neq\varnothing \\ M_{dep} == mode}}{F_{dep}} \\
+                N_{depl,res,q} &= \sum_{\substack{P_{logis} \cap G_q\neq\varnothing}}{F_{dep}} \\
                 PM_{res,mode,q} &= \frac{N_{depl,mode,res,q}}{N_{depl,res,q}} \label{eq:pm-res}
             \end{align}
             \paragraph{Part modale déplacements internes} La part modale des déplacements internes vise à comprendre la mobilité dans un quartier, peu importe le lieu de résidence. L'indicateur est imparfait puisque les quartiers ont des superficies variables, mais donne une indication des comportements de mobilité à l'intérieur d'un quartier. Il est calculé selon la formule donnée ci-dessous et la requête SQL est donnée en annexe \ref{sec:annexe_parts_modales}.
             \begin{align}
-                N_{depl,mode,int,q} &= \sum{F_{per}} \forall P_{ori} \cap G_q \wedge P_{des} \cap G_q \wedge M_{dep}==mode \\
-                N_{depl,int,q} &= \sum{F_{per}} \forall P_{ori} \cap G_q \wedge P_{des} \cap G_q \\
+                N_{depl,mode,int,q} &= \sum_{\substack{P_{ori} \cap G_q \neq\varnothing\\ P_{des} \cap G_q\neq\varnothing \\ M_{dep}=mode}}{F_{dep}}  \\
+                N_{depl,int,q} &= \sum_{\substack{P_{ori} \cap G_q \neq\varnothing\\ P_{des} \cap G_q \neq\varnothing}}{F_{dep}}  \\
                 PM_{int,mode,q} &= \frac{N_{depl,mode,int,q}}{N_{depl,int,q}} \label{eq:pm-int}
             \end{align}
             \paragraph{Part modale des déplacements provenant d'un secteur} Cet indicateur donne la répartition des modes pour les déplacements provenant du secteur et qui ne sont pas des déplacements internes. La formule de calcul est donnée ci-dessous et la requête SQL est donnée en annexe \ref{sec:annexe_parts_modales}
             \begin{align}
-                N_{depl,mode,ori,q} &= \sum{F_{per}} \forall P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \wedge M_{dep}==mode \\
-                N_{depl,ori,q} &= \sum{F_{per}} \forall P_{ori} \cap G_q \wedge P_{des} \disjoint G_q \\
+                N_{depl,mode,ori,q} &= \sum_{\substack{P_{ori} \cap G_q\neq\varnothing \\ P_{des} \cap G_q=\varnothing \\ M_{dep}=mode}}{F_{dep}}  \\
+                N_{depl,ori,q} &= \sum_{\substack{P_{ori} \cap G_q\neq\varnothing \\ P_{des} \cap G_q=\varnothing}}{F_{dep}} \\
                 PM_{ori,mode,q} &= \frac{N_{depl,mode,ori,q}}{N_{depl,ori,q}} \label{eq:pm-ori}
             \end{align}
             \paragraph{Part modale des déplacements à destination d'un secteur }Cet indicateur donne la répartition des modes pour les déplacements provenant du secteur et qui ne sont pas des déplacements internes. La formule de calcul est donnée ci-dessous et la requête SQL est donnée en annexe \ref{sec:annexe_parts_modales}.
             \begin{align}
-                N_{depl,mode,des,q} &= \sum{F_{per}} \forall P_{ori}  \disjoint G_q \wedge P_{des} \cap G_q \wedge M_{dep}==mode \\
-                N_{depl,des,q} &= \sum{F_{per}} \forall P_{ori} \disjoint G_q \wedge P_{des} \cap G_q \\
+                N_{depl,mode,des,q} &= \sum_{\substack{P_{ori}  \cap G_q=\varnothing \\ P_{des} \cap G_q\neq\varnothing \\ M_{dep}=mode}}{F_{dep}}   \\
+                N_{depl,des,q} &= \sum_{\substack{P_{ori} \cap G_q=\varnothing \\ P_{des} \cap G_q\neq\varnothing}}{F_{dep}} \\
                 PM_{des,mode,q} &= \frac{N_{depl,mode,des,q}}{N_{depl,des,q}} \label{eq:pm-des}
             \end{align}
     
     
         \subsubsection{Indicateurs de fiscalité municipale}
         La requête SQL qui calcule les indicateurs de fiscalité est donnée à l'annexe \ref{sec:annexe_val_fonc_agreg}.
-            \paragraph{Valeur foncière totale du quartier} La valeur foncière totale du quartier est agrégée en faisant la somme des valeurs totales des entrées du rôle foncier (champs rl0404a de la table) pour tous les points qui sont à l'intérieur de la géométrie du quartier. La formule suivante montre la méthodologie de calcul
+            \paragraph{Valeur foncière totale du quartier} La valeur foncière totale du quartier est agrégée en faisant la somme des valeurs totales des entrées du rôle foncier (champs rl0404a de la table \ul{role\_foncier}) pour tous les points qui sont à l'intérieur de la géométrie du quartier. La formule suivante montre la méthodologie de calcul
             \begin{align}
-                F_{T,q} &= \sum{f_{l}}\forall P_{role}\cap G_q\label{eq:val-tot-quart}
+                F_{T,q} &= \sum_{\substack{ P_{role}\cap G_q\neq\varnothing}}{f_{l}}\label{eq:val-tot-quart}
             \end{align}
-            \paragraph{Valeur foncière résidentielle du quartier} Les propriétés résidentielles constituent la majorité des entrées du rôle et sont imposées différemment des autres utilisations du sol et sont directement attribuables aux résidents (alors que les autres propriétés sont potentiellement utilisées par des résidents d'autres quartiers). Il peut donc être intéressant de séparer la valeur foncière résidentielle des autres valeurs. La formule suivante en donne la méthode de calcul. La requête SQL est détaillée à l'annexe 
+            où $f_l$ est la somme des valeurs au rôle de toutes les entrées associées à un lot.
+            \paragraph{Valeur foncière résidentielle du quartier} Les propriétés résidentielles constituent la majorité des entrées du rôle et sont imposées différemment des autres utilisations du sol et sont directement attribuables aux résidents (alors que les autres propriétés sont potentiellement utilisées par des résidents d'autres quartiers). Il peut donc être intéressant de séparer la valeur foncière résidentielle des autres valeurs. La formule suivante en donne la méthode de calcul. La requête SQL est détaillée à l'annexe \ref{sec:annexe_val_fonc_agreg}.
             \begin{align}
-                F_{R,q} &= \sum{f_{l}} \forall P_{Role} \cap G_q \wedge \text{CUBF} == 1000 \label{eq:val-log-tot-quart}
+                F_{R,q} &= \sum_{\substack{P_{Role} \cap G_q\neq\varnothing \\ \text{CUBF} = 1000}}{f_{l}}  \label{eq:val-log-tot-quart}
             \end{align}
             \paragraph{Superficie moyenne des logements} La superficie moyenne des logements est pertinente pour comprendre les préférences des résidents des quartiers.
             \begin{align}
-                \bar{A}_{log,q} &= \frac{\sum{a_{etage}}}{\sum{n_{logements}}} \forall \text{CUBF} ==1000 \wedge P_{role} \cap G_q \label{eq:sup-moy-log}
+                \bar{A}_{log,q} &= \frac{\sum_{\substack{\text{CUBF} =1000 \\ P_{role} \cap G_q}}{a_{etage}}}{\sum_{\substack{\text{CUBF} =1000 \\ P_{role} \cap G_q}}n_{logements}}   \label{eq:sup-moy-log}
             \end{align}
             \paragraph{Valeur moyenne des logements} La valeur moyenne des logements peut être calculée de manière comme la superficie moyenne des logements
             \begin{align}
-                \bar{f}_{log,q} &= \frac{\sum{f_l}}{\sum{n_{logmements}}} \forall \text{CUBF} ==1000 \wedge P_{role} \cap G_q \label{eq:val-moy-log}
+                \bar{f}_{log,q} &= \frac{\sum_{\substack{\text{CUBF} ==1000 \\ P_{role} \cap G_q}}{f_l}}{\sum_{\substack{\text{CUBF} ==1000 \\ P_{role} \cap G_q}}{n_{logmements}}}   \label{eq:val-moy-log}
             \end{align}
         
         \subsubsection{Indicateurs combinés et ratios}
@@ -230,7 +252,7 @@
     \subsection{Structure de données pour l'analyse} \label{ssec:ana-data-struct}
         En plus des données entreposées pour créer l'estimation, un ensemble de tables ont été créées pour contenir les données annexes ou précurseurs aux différents indicateurs. Ces données doivent être précalculées pour accélérer l'affichage des graphiques. Le diagramme de relation entité pour ces données complémentaires est donné à la figure \ref{fig:erd-ancilary-tables}.
         \subsubsection{Stationnement agrégé}
-            Le stationnement calculé pour chaque lot est agrégé par quartier pour permettre de compléter l'analyse par quartiers et de comparer les résultats de l'estimation avec les profils d'accumulation de véhicule. Ces résultats sont précompilés dans la table \ul{stat\_agrege}. L'annexe \ref{sec:annexe_inventaire_agrege_par_quartier} donne la requête SQL utilisée. Cette requête est lancée à la demande de l'utilisateur et peut prendre jusqu'à une minute à compléter. Les champs de cette table sont au tableau \ref{tab:stat-agrege-fields}. L'estimation peut être compilée directement à partir de l'estimation réglementaire ou en utilisant une préférence entre les différentes estimations s'ils existent pour un même lot. Les chiffres 1,2 et 3 correspondent au type des estimations selon la définition du Tableau \ref{tab:definition_table_inventaire}. Ainsi, inv\_132 représente la prédiction agrégée où le comptage manuel sera d'abord choisi, puis la prédiction semi-automatique (donc avec des intrants fournis manuellement, mais les règlements spécifiés), puis la prédiction purement à partir du rôle. Puisque la prédiction réglementaire est la seule avec une couverture quasi complète du territoire, il forme la base de la plupart des lots. Cependant, la formulation prise permet de corriger ponctuellement certains lots en gardant les données de base de la prédiction réglementaire comme colonne vertébrale.
+            Le stationnement calculé pour chaque lot est agrégé par quartier pour permettre de compléter l'analyse par quartiers et de comparer les résultats de l'estimation avec les profils d'accumulation de véhicule. Ces résultats sont précompilés dans la table \ul{stat\_agrege}. L'annexe \ref{sec:annexe_inventaire_agrege_par_quartier} donne la requête SQL utilisée. Cette requête est lancée à la demande de l'utilisateur et peut prendre jusqu'à une minute à compléter. Les champs de cette table sont au tableau \ref{tab:stat-agrege-fields}. L'estimation peut être compilée directement à partir de l'estimation réglementaire ou en utilisant une préférence entre les différentes estimations s'ils existent pour un même lot. Les chiffres 1,2 et 3 correspondent au type des estimations selon la définition du Tableau \ref{tab:definition_table_inventaire}. Ainsi, inv\_132 représente la prédiction agrégée où le comptage manuel sera d'abord choisi, puis la prédiction semi-automatique (donc avec des intrants fournis manuellement, mais les règlements spécifiés), puis la prédiction purement à partir du rôle. Puisque la prédiction réglementaire est la seule avec une couverture quasi complète du territoire, elle forme la base de la plupart des lots. Cependant, la formulation prise permet de corriger ponctuellement certains lots en gardant les données de base de la prédiction réglementaire comme colonne vertébrale.
              \begin{table}[h]
                 \centering
                 \caption{Champs de la table \ul{donnees\_foncieres\_agregees}}
@@ -325,6 +347,7 @@
                  tper & Booléen indiquant la première entrée pour une personne & Booléen  \\
                  percond & Statut du permis de conduire & Entier \begin{compactitem} \item 1- Oui \item 2- Non \item 3- NSP/Refus \item 4- N/A (moins de 16 ans)  \end{compactitem}\\
                 cledeplacement & Identifiant unique de déplacement & Entier  \\
+                facdep & Facteur de pondération du déplcament & Réel \\
                 heure & Heure de départ pour le déplacement & Entier (4-28)  \\
                 mode1 & Mode du déplacement & \makecell[l]{Entier 1-17 selon le mode \\ 1 - Auto-conducteur}  \\
                 motif & Motif du déplacement & \makecell[l]{Entier 1-14 selon le motif \\ 12 - Retour au domicile}  \\
@@ -333,9 +356,8 @@
                 geom\_des & Localisation de la destination du déplacement & Géométrie  \\
                 \hline
             \end{longtable}
-            \clearpage
             \subsubsection{Données de motorisation}
-            Les données de motorisation sont calculées selon les équations données à l'équation \ref{eq:nb-voit}. Le tableau \ref{tab:motor-par-quartier} montre les colonnes de la 
+            Les données de motorisation sont calculées selon les équations données à l'équation \ref{eq:nb-voit}. Le tableau \ref{tab:motor-par-quartier} montre les colonnes de la table \ul{motorisation\_par\_quartier}
            \begin{table}[H]
                 \centering
                 \caption{Champs de la table \ul{motorisation\_par\_quartier}}

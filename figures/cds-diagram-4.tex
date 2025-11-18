@@ -9,6 +9,8 @@
         \tikzstyle{propriete_opt} =[rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=yellow!30]
         \tikzstyle{enumeration} = [rectangle, rounded corners, text width=3cm, minimum height=0.7cm,text centered,  draw=black, fill=cyan!30]
         \node (event) [objet]{Évènement};
+        \node (debut)[color=red,above of=event,yshift=5cm]{Débuter ici};
+        \draw [->] (debut.south) -- (event.north);
         \node (id) [propriete,below of=event,xshift=2cm]{Identifiant};
         % type et enumeration
         \node (type) [objet, below of=id]{Type d'évènement};

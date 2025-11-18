@@ -35,7 +35,7 @@
         \node (select_RST) [process, below of=segment, yshift=-0.5cm] {Sél. prochain RST-TD};
         
         \node (conver_data) [process, left of=select_RST,xshift=-4cm] {Conversion d'unités};
-        \node (select_data) [process, below of=conver_data,yshift=-1cm] {Sél. prochain: PR + TD};
+        \node (select_data) [process, below of=conver_data,yshift=-1cm] {Sél. prochain: PR + PCI pertinents};
         \node (calcul_minimum) [process,below of=select_data,yshift=-.6cm] {Sél. ss-ensemble};
         \node (calcul_ss_ensemble) [process,below of=calcul_minimum,yshift=-0.6cm] {Calcul sous-ensembles};
         \node (complete_subset) [decision,below of=calcul_ss_ensemble,yshift=-0.5cm] {Complet};
