@@ -14,7 +14,7 @@
 %%  All annexes must be included in this document one after the other.
 
 \Annexe{Méthodes statistiques recensées}\label{ann:meth-stat-recens}
-    Un cadre de quantification de l'incertitude utilisant des méthodes basées sur la statistique inférentielle ont été considérées pour l'évaluation de la performance de modèle. Cependant, un cadre plus basé sur la statistique prédictive a été adopté ou des tailles d'effets n'étaient pas immédiatement apparents et ont donc été conservés en annexe. Cette annexe contient le résultat de cette revue de littérature. Elle commencera par discuter des méthodes d'équivalence initialement utilisées pour déclarer deux médicaments assez proches, puis discutera des enjeux entourant les valeurs p communément utilisées statuer sur la validité de constats scientifiques et finalement des différentes caractéristiques qui peuvent être utilisées pour statuer sur la forme d'une distribution.
+    Un cadre de quantification de l'incertitude utilisant des méthodes basées sur la statistique inférentielle a été considéré pour l'évaluation de la performance de modèle. Cependant, un cadre  basé sur la statistique prédictive a été adopté car des tailles d'effets n'étaient pas immédiatement apparents et ont donc été conservés en annexe. Elle commencera par discuter des méthodes d'équivalence initialement utilisées pour déclarer deux médicaments équivalents, puis discutera des enjeux entourant les valeurs p communément utilisées statuer sur la validité de constats scientifiques et finalement des différentes caractéristiques qui peuvent être utilisées pour statuer sur la forme d'une distribution.
     \section{Test d'équivalence}
             Le test d'hypothèse nulle standard est typiquement formulé de la manière suivante: $H_0: \mu = \mu_0 $ où $\mu_0$ est une quantité fixe et $\mu$ est la moyenne de l'échantillon. Si la moyenne observée $\mu$ tombe en dehors de la région critique définie par la statistique de test, on rejette l'hypothèse nulle et conclut les valeurs différentes. Cependant, dans le cas opposé, on peut seulement dire qu'on ne rejette pas la nulle, ce qui implique que les données ne fournissent pas de preuve suffisante pour affirmer une différence. Ce type de conclusion est considéré comme une conclusion faible statistiquement \parencite{hines_probabilites_2005}. Or une conclusion faible n'est pas satisfaisante lorsque l'on veut statuer que deux valeurs sont assez proches pour être équivalentes, comme lorsque l'on veut dire qu'un modèle est équivalent à la réalité \parencite{robinson_model_2004}. \par
             Heureusement, la pharmacologie a développé un ensemble de méthodes d'inférence statistique qui visent à déterminer l'équivalence de deux produits \parencite{schuirmann_comparison_1987,lakens_equivalence_2018}. Ces méthodes dites d'équivalence utilisent deux tests (une borne inférieure et une borne supérieure) pour déterminer si l'effet est assez petit pour qu'il soit considéré équivalent. La taille d'effet minimale d'intérêt peut être fixée en utilisant des mesures objectives (à l'aide d'études ou d'enquêtes précédentes démontrant une détection par les sujets) ou subjectives (en déterminant les seuils d'études précédentes qui n'ont pas trouvé de significativité) \parencite{lakens_equivalence_2018}. Les seuils peuvent être fixés en termes standardisés (d de Cohen), en termes bruts ou en utilisant un log du terme brut pour permettre de spécifier des pourcentages d'erreur. Il est peu recommandé d'utiliser des ratios ou des pourcentages, car ces derniers créent des distributions peu robustes aux tests statistiques et sont peu utiles à l'interprétation s'ils sont différents de 1 \parencite{jasienski_fallacy_1999,curran-everett_explorations_2013}.\par
@@ -26,7 +26,7 @@
             Ces tests d'hypothèses sont donc l'inverse logique des tests d'hypothèses standards où l'hypothèse nulle est la différence des deux quantités \parencite{walker_understanding_2011}. Il est important de noter que deux quantités peuvent être équivalentes, mais tout de même différentes statistiquement si l'intervalle de confiance de la valeur d'intérêt n'inclut pas la valeur hypothétique, mais est tout de même à l'intérieur des bornes fixées par le test d'équivalence.\par
             Les méthodes d'équivalence ont déjà été utilisées pour l'évaluation de modèles de prédiction.  On trouve des articles utilisant ces méthodes pour des modèles de croissance et de séquestration de carbone d'arbres \parencite{robinson_model_2004,herbert_validation_2023}, l’équivalence de méthodes de tests pour le contrôle de procédé \parencite{manola_probability_2019} ou l'évaluation de méthodes de mesures en réalité virtuelle par rapport à des mesures physiques \parencite{anik_accuracy_2020} .\par
             Le choix de valeur pour la statistique $\alpha$ est lui-même problématique et a donné lieu à des abus qui seront discutés dans la section suivante.
-        \section{Valeurs-p, réplication, tailles d'effets et la nouvelle statistique}
+        \section{Valeurs p, réplication, tailles d'effets et la nouvelle statistique}
             Les valeurs p dénotent la probabilité d'obtenir des résultats si l'hypothèse nulle est vraie. Elles ont longtemps été utilisées pour dénoter la validité de certaines déclarations, utilisant le mot significativité  (\og{significance}\fg{} en anglais) pour dénoter qu'une variable était statistiquement valide dans un test d'hypothèse ou une régression. Cette pratique a donné lieu à des controverses dans certaines disciplines où les chercheurs essayaient de nombreux modèles, jusqu'à temps d'atteindre un seuil sans nécessairement déclarer les alternatives considérées \parencite{wasserstein_asa_2016,vidgen_p-values_2016}.  D'autre part, les valeurs p ne sont pas faciles à interpréter \parencite{cumming_understanding_2012} puisqu'elles ne distinguent pas l'effet moyen de l'incertitude entourant cet effet.\par
             \textcite{cumming_understanding_2012} suggère de donner des tailles d'effet (où la réponse d'un modèle ou d'une étude est normalisée) et des intervalles de confiance qui tendent à être plus faciles à interpréter et de privilégier la planification méthodologique des études avant la collecte des données afin de réduire les biais dans la sélection des résultats. 
         \section{Valeur d'intérêt}
@@ -173,7 +173,7 @@ Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement
     \end{itemize}
     \item PUT /api/reglements/ligne-def/<id>: permet de modifier la ligne de définition mathématique dont l'identifiant (id\_reg\_stat\_emp) est entre <>. Les même champs que la requête POST doivent être fournis.
     \item DELETE /api/reglements/ligne-def/<id>: permet la suppression de la ligne de définition mathématique dont l'identifiant est entre <>.
-    \item GET /api/reglements/graphiques: renvoit le nombre de places minimums requises pour le règlement en fonction de l'unité fournie dans les paramètres de requête. Au minimum, les identifiants séparés par des virgules et l'identifiant d'unité doivent être fournis. Les paramètres suivants peuvent être fournis pour raffiner le graphique:
+    \item GET /api/reglements/graphiques: renvoit le nombre de places minimums requis pour le règlement en fonction de l'unité fournie dans les paramètres de requête. Au minimum, les identifiants séparés par des virgules et l'identifiant d'unité doivent être fournis. Les paramètres suivants peuvent être fournis pour raffiner le graphique:
     \begin{itemize}
         \item min: valeur minimale de l'axe des x
         \item max: valeur maximale de l'axe des x
@@ -197,7 +197,7 @@ Les appels d'\ac{API} suivants sont proposés pour les ensembles de règlements.
         \item date\_fin\_er
     \end{itemize}
     \item POST /api/ens-reg/entete/: permet de créer un l'entête d'un nouvel ensemble de règlements. Les mêmes champs doivent être fournis que la fonction PUT.
-    \item PUT /api/ens-reg/assoc/<id\_assoc\_er\_reg>: permet de modifier une association spécifique dans un ensemble de règlements. Les champs décrits dans le tableau \ref{tab:definition_association_er_reg_stat}. Les entrées ayant un \ac{CUBF} entre 1 et 9 ne peuvent modifier que le règlement. En effet, au minimum, un ensemble de règlements doit contenir les CUBF 1 à 9. Les variables suivantes doivent être fournies dans le corps de la requête
+    \item PUT /api/ens-reg/assoc/<id\_assoc\_er\_reg>: permet de modifier une association spécifique dans un ensemble de règlements. Les champs décrits dans le tableau \ref{tab:definition_association_er_reg_stat}. Les entrées ayant un \ac{CUBF} entre 1 et 9 ne peuvent modifier que le règlement. En effet, au minimum, un ensemble de règlements doit contenir les CUBF 1 à 9. Les variables suivantes doivent être fournies dans le corps de la requête.
     \begin{itemize}
         \item id\_reg\_stat, l'identifiant du règlement
         \item cubf, le \ac{CUBF} pour l'utilisation du sol
@@ -210,7 +210,7 @@ Les appels d'\ac{API} suivants sont proposés pour les ensembles de règlements.
         \item id\_er, l'identifiant d'ensemble règlement
     \end{itemize}
     \item DELETE /api/ens-reg/assoc/<id\_assoc\_er\_reg> permet de supprimer l'association dont l'identifiant est fourni dans l'\ac{URL}.
-    \item GET /api/ens-reg/complet/<id\_er> renvoie  les données suivantes pour l'ensemble de règlement dont l'identifiant est égal à id\_er:
+    \item GET /api/ens-reg/complet/<id\_er> renvoie  les données suivantes pour l'ensemble de règlements dont l'identifiant est égal à id\_er:
         \begin{itemize}
             \item entete
                 \begin{itemize}
@@ -244,7 +244,7 @@ En plus des adresses basiques fournies ci-dessus, des adresses supplémentaires 
 \end{itemize}
 
 \section{API: Territoire}
-L'\ac{API} possède les appels suivants pour obtenir les territoires. Pour l'instant, aucune fonction n'a été implémenté pour modifier ou supprimer les territoires pour l'instant.
+L'\ac{API} possède les appels suivants pour obtenir les territoires. Pour l'instant, aucune fonction n'a été implémentée pour modifier ou supprimer les territoires pour l'instant.
 \begin{itemize}
     \item GET /api/territoire/periode/<id\_periode> permet d'obtenir l'ensemble des territoires associés qui sont associés à la période spécifiée dans l'\ac{URL}.
     \item GET /api/territoire/periode-geo/<id\_periode\_geo> permet d'obtenir un territoire selon son identifiant unique.
@@ -276,7 +276,7 @@ Les ensembles de règlements territoire sont l'association entre les ensembles d
 L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville:
 \begin{itemize}
     \item GET /api/historique obtient l'ensemble des entrées de la table \ul{historique\_geopol} avec les entrées du tableau \ref{tab:definition_historique_geopol}. Aucun paramètre de filtrage n'a été mis en place à l'heure actuelle pour l'historique du fait de la simplicité des données en cours. 
-    \item PUT /api/historique/<$id_{periode}$> permet de modifier un item de la table \ul{historique\_ geopol}. Les colonnes suivantes doivent être dans le corps du message selon les types 
+    \item PUT /api/historique/<$id_{periode}$> permet de modifier un item de la table \ul{historique\_ geopol}. Les colonnes suivantes doivent être dans le corps du message selon les types. 
     \begin{itemize}
         \item nom\_periode 
         \item date\_debut\_periode
@@ -297,7 +297,7 @@ Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux 
 \begin{itemize}
     \item GET /api/cadastre/lot/quartier-ana/<$id_{quartier}$> permet d'obtenir l'ensemble des lots qui se situent à l'intérieur du quartier d'analyse dont l'identifiant est fourni dans l'\ac{URI}
     \item GET /api/cadastre/lot/<$g\_no\_lot$> permet d'obtenir le lot dont l'identifiant est égal à la valeur fournie de g\_no\_lot.
-    \item GET /api/cadastre/role-associe/<$g\_no\_lot$> permet d'obtenir les entrées du rôle foncier associées au lot dont l'identifiant est fourni entre <>. L'identifiant spécifié est celui du lot
+    \item GET /api/cadastre/role-associe/<$g\_no\_lot$> permet d'obtenir les entrées du rôle foncier associées au lot dont l'identifiant est fourni entre <>. L'identifiant spécifié est celui du lot.
 \end{itemize}
 Une fonction permettant de faire des requêtes complexes en utilisant des boites englobantes est en cours de développement, mais incomplète. Elle est principalement pensée pour permettre de réduire le nombre de données géospatiales à garder en mémoire en parcourant la carte. 
 \section{API: Codes d'utilisation du Bien-Fonds}
@@ -391,7 +391,7 @@ L'appel à GET \og{/api/cubf/n\_entrees} \fg{} renvoit essentiellement toujours 
     
 \end{table}
 \section{API: Secteurs d'analyse}
-L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse qui sont définis à la section \ref{ssec:struct_donnees_sec_analyse}. Les fonctions d'édition et de suppression des quartiers d'analyse n'existent pas à l'heure actuelle. Elles devraient être mise en place dans une version de production de l'outil.
+L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse qui sont définis à la section \ref{ssec:struct_donnees_sec_analyse}. Les fonctions d'édition et de suppression des quartiers d'analyse n'existent pas à l'heure actuelle. Elles devraient être mises en place dans une version de production de l'outil.
 \begin{itemize}
     \item GET /api/quartiers-analyse obtient l'ensemble des quartiers dans la table \ul{sec\_analyse}
 \end{itemize}
@@ -1179,8 +1179,8 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
             order by lpd.id_quartier,lpd.cubf_principal_first_digit
 \end{lstlisting}
 
-\section{Code: Nombre d'automobiles résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
-Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménage pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profils d'accumulation véhicule \parencite{diallo_methodology_2015}.
+\section{Code: Nombre d'automobiles des résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
+Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménage pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profils d'accumulation de véhicules \parencite{diallo_methodology_2015}.
 \begin{lstlisting}
     DELETE FROM motorisation_par_quartier;
     INSERT INTO motorisation_par_quartier (id_quartier, nb_voitures,nb_voitures_max_pav,nb_voitures_min_pav,diff_max_signee)
@@ -1611,7 +1611,7 @@ order by n_places_min desc
 \end{lstlisting}
 
 \Annexe{Découpage géopolitique utilisé}\label{ann:political-split-up}
-Tel que mentionné à la section \ref{ssec:data-geopolitique-territoire}, une légère modification du découpage municipal brut d'Élections Québec \parencite{elections_quebec_atlas_2021} a été faite pour maintenir une différentiation entre le zonage de la vieille partie de Québec et le secteur des Rivières.
+Comme il est mentionné à la section \ref{ssec:data-geopolitique-territoire}, une légère modification du découpage municipal brut d'Élections Québec \parencite{elections_quebec_atlas_2021} a été faite pour maintenir une différentiation entre le zonage de la vieille partie de Québec et le secteur des Rivières.
 
 \begin{figure}[H]
     \centering

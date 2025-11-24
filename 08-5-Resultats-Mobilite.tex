@@ -1,5 +1,5 @@
 \section{Correctifs apportés à l'estimation réglementaire}
-    Des correctifs ont été apportés à l'inventaire de manière sporadique. Ça a été particulièrement le cas lorsqu'un gros générateur de déplacement n'avait pas d'estimation de stationnement ou qu'elle semblait surestimée. L'approche ici était purement opportuniste et une méthode plus systématique d'estimation pour affecter des estimations à ces propriétés devrait être développée. La figure montre le delta entre l'inventaire réglementaire et un inventaire agrégé où la valeur manuelle est prise en priorité, puis la valeur semi-automatique, où l'auteur a spécifié les valeurs à utiliser, et finalement, l'inventaire réglementaire était choisi pour chaque lot s'il n'y avait pas d'autre estimation. De manière descriptive, les ajustements de la Cité Universitaire sont liés au campus universitaire, au CÉGEP et à plusieurs centres commerciaux, l'ajustement dans Lairet est pour le Colisée, et l'ajustement dans le Vieux Limoilou était pour l'hôpital et le CÉGEP. L'ajustement dans Saint-Sacrement est pour l'hôpital Jeffrey Hale. Dans le cas de Val-Belair, plusieurs ajustements manuels ont été complétés sur des centres commerciaux. Les estimations revues à la baisse sont souvent pour des écoles ou des places d'assemblée où les conversions d'unités étaient problématiques. 
+    Des correctifs ont été apportés à l'inventaire de manière sporadique. Ça a été particulièrement le cas lorsqu'un gros générateur de déplacement n'avait pas d'estimation de stationnement ou qu'elle semblait surestimée. L'approche ici était purement opportuniste et une méthode plus systématique d'estimation pour affecter des estimations à ces propriétés devrait être développée. La figure montre le delta entre l'inventaire réglementaire et un inventaire agrégé où la valeur manuelle est prise en priorité, puis la valeur semi-automatique, où l'auteur a spécifié les valeurs à utiliser, et finalement, l'inventaire réglementaire était choisi pour chaque lot s'il n'y avait pas d'autre estimation. De manière descriptive, les ajustements de la Cité-Universitaire sont liés au campus universitaire, au CÉGEP et à plusieurs centres commerciaux, l'ajustement dans Lairet est pour le Colisée, et l'ajustement dans le Vieux Limoilou était pour l'hôpital et le CÉGEP. L'ajustement dans Saint-Sacrement est pour l'hôpital Jeffrey Hale. Dans le cas de Val-Bélair, plusieurs ajustements manuels ont été complétés sur des centres commerciaux. Les estimations revues à la baisse sont souvent pour des écoles ou des places d'assemblée où les conversions d'unités étaient problématiques. 
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.8\linewidth]{figures/delta-corrections.pdf}
@@ -37,7 +37,7 @@ On peut ensuite commencer à interroger la mesure dans laquelle le stationnement
 \end{figure}
 \FloatBarrier
 
-Cependant, même en regardant le nombre de places de stationnement par logement, on constate des tendances contre-intuitives, puisque les quartiers centraux paraissent mieux lotis que certains quartiers périurbains comme le montre la figure \ref{fig:stationnement-residentiel-par-quartier}. Encore une fois, l'évaluation du modèle montre que ceci est probablement à le biais du modèle pour les propriétés unifamiliales particulièrement lorsqu'on s'éloigne du centre où ce type de logement est plus présent est constitue une plus grande partie du parc de stationnement. 
+Cependant, même en regardant le nombre de places de stationnement par logement, on constate des tendances contre-intuitives, puisque les quartiers centraux paraissent mieux lotis que certains quartiers périurbains comme le montre la figure \ref{fig:stationnement-residentiel-par-quartier}. Encore une fois, l'évaluation du modèle montre que ceci est probablement dû au biais du modèle pour les propriétés unifamiliales particulièrement lorsqu'on s'éloigne du centre où ce type de logement constitue une plus grande partie du parc de stationnement. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{images/stat-res-par-log.png}
@@ -49,7 +49,7 @@ Les profils d'accumulation de véhicules peuvent aussi donner une idée de l'uti
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figures/basic_PAV_CUNI.pdf}
-    \caption{Profil d'accumulation de véhicules de la Cité Universitaire}
+    \caption{Profil d'accumulation de véhicules de la Cité-Universitaire}
     \label{fig:PAV-cite-univ}
 \end{figure}
 
@@ -91,7 +91,7 @@ La dynamique montrée pour la Cité-Universitaire n'est cependant pas la même q
         \includegraphics[width=0.8\linewidth]{figures/PAPERS_CUNI.pdf}
         \caption{Personnes}\label{fig:PAPERS-cuni}
     \end{subfigure}
-    \caption{Profils d'accumulation de personnes et permis pour la Cité Universitaire}
+    \caption{Profils d'accumulation de personnes et permis pour la Cité-Universitaire}
     \label{fig:pap-cuni}
 \end{figure}\clearpage
 
@@ -125,7 +125,7 @@ Les prédictions peuvent aussi être utilisées pour estimer le pourcentage du t
     \end{subfigure}
     \caption{Pourcentage du territoire dédié au stationnement par quartier}\label{fig:perc-terr-occ-stat}
 \end{figure}
-Plusieurs facteurs contribuent à ce résultat. Tout d'abord, l'utilisation du sol varie selon les quartiers. D'autre part, la métrique donne une mesure brute sans compenser pour le stationnement souterrain ou en structure étagée. Finalement, l'absence de compensation pour pour les données absentes rend les constats difficiles à interpréter.\par
+Plusieurs facteurs contribuent à ce résultat. Tout d'abord, l'utilisation du sol varie selon les quartiers. D'autre part, la métrique donne une mesure brute sans compenser pour le stationnement souterrain ou en structure étagée. Finalement, l'absence de compensation pour les données absentes rend les constats difficiles à interpréter.\par
 
 On peut aussi déduire des taux d'occupation théoriques des quartiers à partir des profils d'accumulation de véhicules. En prenant la valeur maximale du profil d'accumulation et en la comparant au parc de stationnement prédit, il est possible de dresser un portrait de l'utilisation de la capacité. Ce portrait peut être dressé par catégorie. On peut déduire un taux d'occupation total maximal ou le différencier pour le parc public (usages autres que résidentiels) ou pour le parc résidentiel. Évidemment, les maximums d'occupation n'ont pas nécessairement lieu en même temps. La figure \ref{fig:occupancy-rate-total} montre le taux d'occupation pour le parc total. Les valeurs excèdent très largement 100\%.\begin{figure}[H]
     \centering

@@ -58,9 +58,9 @@
                 \paragraph{Itération} Le script itère chaque heure pour calculer la population d'automobiles dans le quartier. Le script renvoie le résultat à l'interface web pour approbation par l'analyste avant d'être sauvegardé dans la base de données.
     \subsection{Indicateurs pour les lots}
         \subsubsection{Indicateurs de stationnement}
-            \paragraph{Nombre de places minimum} Le nombre de places minimum est le nombre de places requises par le règlement d'urbanisme qui a été calculé à l'aide des règlements. La méthode est détaillée à la section \ref{sec:meth_urb_based_inventory}.
+            \paragraph{Nombre de places minimums} Le nombre de places minimums est le nombre de places requises par le règlement d'urbanisme qui a été calculé à l'aide des règlements. La méthode est détaillée à la section \ref{sec:meth_urb_based_inventory}.
             
-            \paragraph{Nombre de places maximum} Le nombre de places maximum est le nombre de places maximales que le développeur a le droit de construire sur sa propriété. Ce type de règlements est apparu principalement après l'harmonisation des règlements d'urbanisme en 2009. Comme pour les minimums, il est calculé à l'aide de la méthode établie à la section \ref{sec:meth_urb_based_inventory}.
+            \paragraph{Nombre de places maximums} Le nombre de places maximums est le nombre de places maximales que le promoteur a le droit de construire sur sa propriété. Ce type de règlements est apparu principalement après l'harmonisation des règlements d'urbanisme en 2009. Comme pour les minimums, il est calculé à l'aide de la méthode établie à la section \ref{sec:meth_urb_based_inventory}.
             
             \paragraph{Nombre de places estimées} Cette colonne dans la table d'inventaire n'est pas présentement utilisée, mais serait remplie si des méthodes de détection automatique étaient implémentées pour estimer le nombre de places de stationnement ou en utilisant l'aire du stationnement si par exemple des données \ac{OSM} étaient utilisées comme source.
             
@@ -79,7 +79,7 @@
 
         \subsubsection{Indicateurs combinés}
         
-        \paragraph{Intensité de stationnement prédit} L'intensité foncière de stationnement est un paramètre qui a été identifié comme un indicateur de surprédiction du modèle pendant le processus d'évaluation du modèle. Elle est donnée par la formule suivante et sera discutée dans la section d'évaluation du modèle.
+        \paragraph{Intensité de stationnement prédit} L'intensité foncière de stationnement est un paramètre qui a été identifié comme un indicateur de surestimation du modèle pendant le processus d'évaluation. Elle est donnée par la formule suivante et sera discutée dans la section d'évaluation du modèle.
         \begin{align}
             i_s = \frac{s_{pred,l} \times a_l}{\sum_{\substack{P_{role} \cap G_l\neq\varnothing}} f_l} \label{eq:intensite-stat-pred}
         \end{align}
@@ -235,7 +235,7 @@
                 A_{I,q} &= \left(S_q - V_{q,max}\right)\times 14.3\label{eq:stat-inu-sup}
             \end{align}
     \subsection{Analyse de variabilité}
-    L'analyse de variabilité vise a aider à comprendre les différences de production de stationnement pour les ensembles de règlements définis par l'utilisateur. Pour ce faire, une estimation du nombre de places de stationnement requises est calculée pour tous les lots avec tous les ensembles de règlements. Les totaux sont ensuite agrégés pour estimer les totaux par utilisation du sol. Les résultats bruts sont entreposés dans la base de données. L'outil web permet ensuite d'accéder aux totaux et de les illustrer au moyen de différents graphiques. D'autre part, l'analyse de variabilité met aussi en place des facteurs d'échelle sur les conversions d'unités où le facteur de pente facteur\_correction est différent de 1 (indiquant qu'on ne transcrit pas simplement la valeur du rôle sans mise à l'échelle). \par
+    L'analyse de variabilité vise à améliorer la compréhension des différences de production de stationnement pour les ensembles de règlements définis par l'utilisateur. Pour ce faire, une estimation du nombre de places de stationnement requises est calculée pour tous les lots avec tous les ensembles de règlements. Les totaux sont ensuite agrégés pour estimer les totaux par utilisation du sol. Les résultats bruts sont entreposés dans la base de données. L'outil web permet ensuite d'accéder aux totaux et de les illustrer au moyen de différents graphiques. D'autre part, l'analyse de variabilité met aussi en place des facteurs d'échelle sur les conversions d'unités où le facteur de pente facteur\_correction est différent de 1 (indiquant qu'on ne transcrit pas simplement la valeur du rôle sans mise à l'échelle). \par
     
     
     
@@ -347,7 +347,7 @@
                  tper & Booléen indiquant la première entrée pour une personne & Booléen  \\
                  percond & Statut du permis de conduire & Entier \begin{compactitem} \item 1- Oui \item 2- Non \item 3- NSP/Refus \item 4- N/A (moins de 16 ans)  \end{compactitem}\\
                 cledeplacement & Identifiant unique de déplacement & Entier  \\
-                facdep & Facteur de pondération du déplcament & Réel \\
+                facdep & Facteur de pondération du déplacement & Réel \\
                 heure & Heure de départ pour le déplacement & Entier (4-28)  \\
                 mode1 & Mode du déplacement & \makecell[l]{Entier 1-17 selon le mode \\ 1 - Auto-conducteur}  \\
                 motif & Motif du déplacement & \makecell[l]{Entier 1-14 selon le motif \\ 12 - Retour au domicile}  \\
@@ -357,7 +357,7 @@
                 \hline
             \end{longtable}
             \subsubsection{Données de motorisation}
-            Les données de motorisation sont calculées selon les équations données à l'équation \ref{eq:nb-voit}. Le tableau \ref{tab:motor-par-quartier} montre les colonnes de la table \ul{motorisation\_par\_quartier}
+            Les données de motorisation sont calculées selon les équations données à l'équation \ref{eq:nb-voit}. Le tableau \ref{tab:motor-par-quartier} montre les colonnes de la table \ul{motorisation\_par\_quartier}.
            \begin{table}[H]
                 \centering
                 \caption{Champs de la table \ul{motorisation\_par\_quartier}}
@@ -369,7 +369,7 @@
                      nb\_voitures & Nombre de voitures des résidents & Entier & \\
                      nb\_voitures\_max\_pav & Maximum du profile d'accumulation de véhicules du quartier & Entier & \\
                      nb\_voitures\_min\_pav & Minimum du profile d'accumulation de véhicule & Entier & \\
-                     diff\_max\_signee & Différence max signée (cf. eq. \ref{eq:nb-voit-delta})& Entier & \\
+                     diff\_max\_signee & Différence max signée (cf. eq. \ref{eq:nb-voit-delta}) & Entier & \\
                      nb\_permis & Nombre de détenteurs de permis de conduire & Entier & \\
                      \hline
                 \end{tabular}
