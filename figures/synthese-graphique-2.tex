@@ -19,7 +19,7 @@
         \tikzstyle{donnees} = [rectangle,rounded corners = 0.25cm,minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=green!30, text width=2.5cm]
         \tikzstyle{hypothese} = [rectangle,rounded corners = 0.25cm,minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=purple!30, text width=4cm,align=left]
         \tikzstyle{proscons} = [rectangle,rounded corners = 0.25cm,minimum width=2cm, minimum height=0.7cm,text centered, draw=black, fill=orange!30, text width=4cm,align=left]
-        \node (off-street) [typologie] at (-4,0){Hors-rue};
+        \node (off-street) [typologie] at (-4,0){Hors rue};
             \node (off-trad-ded) [tradition] at (-8,-1) {Inductive / mesure};
                 \node (methode) [methode]at (-11,-2.5) {Comptage manuel};
                     \node (hypothese-incert-man)[hypothese,anchor=north] at (-10,-3) {Aucune hypothèse \\ Incertitudes de mesures \\ Erreur de comptage};
@@ -27,6 +27,6 @@
                 \node (sond) [methode]at (-5,-2.5) {Sondage};
                     \node (hypothese-incert-sond)[hypothese,anchor=north] at (-4,-3) {Échantillon représentatif \\ Incertitudes de mesures \\ Erreur de comptage};
                     \node (proscons-sond)[proscons,anchor=north,below of=hypothese-incert-sond,yshift=-0.6cm]{Plan échantillonage complexe \\ Coût moyen \\ Inventaire agrégé};
-        \node (on-street) [typologie] at (4,0){Sur-rue};
+        \node (on-street) [typologie] at (4,0){Sur rue};
     \end{tikzpicture}
 \end{document}

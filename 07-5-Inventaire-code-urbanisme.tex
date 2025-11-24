@@ -1,16 +1,17 @@
 \section{Prédiction de la capacité de stationnement à partir des règlements d'urbanisme}\label{sec:meth_urb_based_inventory}
 
-    \subsection{Structure de la section}
-        Cette section va couvrir la structure de données et la méthodologie pour l'estimation de la capacité par la méthode des règlements. La section commence par justifier le niveau d'agrégation choisi pour l'estimation et la méthode choisie. (sec. \ref{ssec:justif-ag-level-inventory}) avant d'introduire le schéma relationnel de données (sec. \ref{ssec:inv-erd-survol}). Ensuite, le chapitre rentre dans chaque détail de la structure de données en commençant par les données cadastrales et du rôle foncier (sec. \ref{ssec:data-cadastre-role}) ainsi qu'une analyse descriptive de leur distribution et des données manquantes (sec. \ref{ssec:analyse-descriptive-role-fonc}). La structure pour entreposer les estimations est  présentée (sec. \ref{ssec:survol-table-inventaire}) avant d'introduire la représentation de l'historique géopolitique (sec. \ref{ssec:data-geopolitique-territoire}),  la représentation des règlements (sec. \ref{ssec:survol-repres-reglements}) et leur association pour représenter la réglementation en vigueur sur un territoire (sec. \ref{ssec:ensembles_association}). Pour terminer la partie sur les données, une brève description du découpage de la ville utilisé pour l'analyse agrégée (sec. \ref{ssec:struct_donnees_sec_analyse}).\par 
+        Cette section va couvrir la structure de données et la méthodologie pour l'estimation de la capacité par la méthode des règlements. La section commence par justifier le niveau d'agrégation choisi pour l'estimation et la méthode choisie (sec. \ref{ssec:justif-ag-level-inventory}). Le schéma relationnel de données est par la suite présenté pour l'ensemble de la section(sec. \ref{ssec:inv-erd-survol}) et le format de données utilisé pour les quartiers qui sont utilisés pour l'analyse agrégée des données (sec. \ref{ssec:struct_donnees_sec_analyse}). Ensuite, le chapitre rentre dans chaque détail de la structure de données en commençant par les données cadastrales et du rôle foncier (sec. \ref{ssec:data-cadastre-role}) ainsi qu'une analyse descriptive de leur distribution et des données manquantes (sec. \ref{ssec:analyse-descriptive-role-fonc}). La structure pour entreposer les estimations est présentée (sec. \ref{ssec:survol-table-inventaire}) avant d'introduire la représentation de l'historique géopolitique (sec. \ref{ssec:data-geopolitique-territoire}),  la représentation des règlements (sec. \ref{ssec:survol-repres-reglements}) et leur association pour représenter la réglementation en vigueur sur un territoire (sec. \ref{ssec:ensembles_association}).\par
         
-        Cette partie du mémoire se tourne ensuite vers les objets informatiques implémentés pour représenter les différentes quantités d'intérêt (sec. \ref{ssec:obj-informatique-impl-stat}), l'introduction du logigramme du calcul de l'estimation de stationnement (sec. \ref{ssec:logigramme-calcul-stationnement}). Quatre parties du calcul sont ensuite détaillées en profondeur: la procédure de sélection des données foncières (sec. \ref{ssec:selection-donnees-foncieres}), la sélection des données du rôle géopolitiques et de réglementation (sec. \ref{ssec:select-reg-set-territories}), l'affectation des données du rôle foncier à ces dernières (sec. \ref{ssec:meth-assign-td-to-rst}). La section se termine en détaillant la procédure de calcul des minimums de stationnement (sec. \ref{ssec:meth-assign-td-to-rst}).
+        Cette partie du mémoire se tourne ensuite vers les objets informatiques implémentés pour représenter les différentes quantités d'intérêt (sec. \ref{ssec:obj-informatique-impl-stat}), l'introduction du logigramme du calcul de l'estimation de stationnement (sec. \ref{ssec:logigramme-calcul-stationnement}). Quatre parties du calcul sont ensuite détaillées en profondeur: la procédure de sélection des données foncières (sec. \ref{ssec:selection-donnees-foncieres}), la sélection des données du rôle géopolitiques et de réglementation (sec. \ref{ssec:select-reg-set-territories}), l'affectation des données du rôle foncier à ces dernières (sec. \ref{ssec:meth-assign-td-to-rst}). La section se termine en détaillant la procédure de calcul des minimums de stationnement (sec. \ref{ssec:meth-assign-td-to-rst}).\par
+        
+        Dans les sections qui suivent, le mot tableau fait référence à un tableau de résultats dans le texte. Ils sont référencés à l'aide du numéro de tableau. Le mot table fait référence à une table dans la base de données. Ces dernières seront nommées et soulignées dans le texte.\par
     
     \subsection{Choix d'une unité spatiale et d'une méthode d'estimation}\label{ssec:justif-ag-level-inventory}
-        Dans un monde idéal, il serait possible d'avoir la localisation de chaque place de stationnement sur le territoire. Cela permettrait de déterminer des temps d'accès pour chaque place et d'affecter ce temps d'accès en fonction de l'achalandage du stationnement. Cette approche éviterait aussi des problèmes de microagrégation menant à de grands changements de stationnement accessible si un lot a un grand nombre de places de stationnement. Malheureusement, en utilisant la méthode à partir du rôle foncier, ce niveau de détail n'est pas possible et l'échelle la plus petite possible est au niveau du lot cadastral.\par
+        Dans un monde idéal, il serait possible d'avoir la localisation de chaque place de stationnement sur le territoire. Cela permettrait de déterminer des temps d'accès pour chaque place et d'affecter ce temps d'accès en fonction de l'achalandage du stationnement. Cette approche éviterait aussi des problèmes de microagrégation menant à de grands changements du nombre de places de stationnement accessibles si un lot en a beaucoup et est à la marge d'une zone d'intérêt. Malheureusement, en utilisant la méthode à partir du rôle foncier, ce niveau de détail n'est pas possible et l'échelle la plus petite possible est au niveau du lot cadastral.\par
         
         
         En ce qui concerne la méthode choisie, il y en a deux. La première est que la littérature émet beaucoup de recommandations sur l'abrogation de minimums de stationnement ainsi que des preuves supportant que ces derniers aient une influence. Cependant, dans la plupart des cas, le recensement des minimums et leur application sont parfois approximatifs. La mise à disposition des données foncières par le gouvernement du Québec donne une opportunité de tester l'hypothèse que les requis sont l'élément déterminant dans la construction de stationnement. En appliquant les règlements à un grand ensemble, les conditions sont mises en place pour vérifier que la réglementation est l'élément déterminant à la production de stationnement. La création d'un format de données pour entreposer ces minimums donne aussi le potentiel de prouver la nature arbitraire de ces règlements si assez de règlements sont numérisés. Finalement, en discussion avec les employés de la ville de Québec, il a été révélé qu'ils poursuivaient déjà une approche par \ac{AP}. L'approche par les règlements est complémentaire ici particulièrement pour les quartiers centraux avec plus de stationnements en structure qui ne sont pas nécessairement visibles. \par
-        Pour conclure, la structure de données est implémentée pour permettre que plusieurs méthodes d'estimations cohabitent pour un même lot. À terme, l'inclusion de méthodes inductives pourrait être contemplée pour donner une base de comparaison fiable.
+        Pour conclure, la structure de données est implémentée pour permettre que plusieurs méthodes d'estimations cohabitent pour un même lot. À terme, l'inclusion de méthodes avec une plus forte base empirique permettrait de mieux comprendre les contextes où les règlements de stationnement imposent des contraintes aux promoteurs immobiliers.
     
     \subsection{Schéma relationnel de données}\label{ssec:inv-erd-survol}
         La figure \ref{fig:offstreet_db_erd} montre la structure de la base de données utilisée pour l'estimation de l'offre de stationnement. De manière simplifiée, les \textbf{règlements} sont réunis en \textbf{ensembles de règlements}. Ces ensembles de règlements sont associés à un \textbf{territoire}. Chaque territoire est associé à une \textbf{période} où les limites géographiques des municipalités sont restées stables.
@@ -23,7 +24,7 @@
         \end{landscape}
         La base de données est implémentée dans PostgreSQL avec PostGIS pour pouvoir gérer les données spatiales du rôle foncier, du cadastre ainsi que de la division géopolitique du territoire. \par
     \subsection{Structure des données représentant les secteurs d'analyse}\label{ssec:struct_donnees_sec_analyse}
-        Les quartiers énumérés par la ville de Québec sont utilisés comme base de comparaison et pour diviser le territoire dans la table sec\_analyse. Les colonnes du tableau sont listées dans le tableau \ref{tab:definition_sec_analyse}. Les acronymes listés au tableau \ref{tab:acro-quartiers} sont utilisés tout au long du mémoire pour réduire la taille des légendes et rendre les graphiques plus lisibles.
+        Les quartiers énumérés par la ville de Québec sont utilisés comme base de comparaison et pour diviser le territoire dans la table \ul{sec\_analyse}. Les colonnes de la table sont listées dans le tableau \ref{tab:definition_sec_analyse}. Les acronymes listés au tableau \ref{tab:acro-quartiers} sont utilisés tout au long du mémoire pour réduire la taille des légendes et rendre les graphiques plus lisibles.
         \begin{table}[h]
             \caption{Colonnes pour la table \underline{sec\_analyse}}
             \label{tab:definition_sec_analyse}
@@ -137,7 +138,7 @@
            
         \end{table}   
         La table \underline{association\_cadastre\_role} associe le cadastre avec le rôle foncier. En premier lieu, une jointure géométrique a été complétée et sauvegardée. Initialement, une nouvelle requête spatiale était lancée à chaque chargement de données mais cela ralentissait substantiellement la visualisation. \par
-        Ceci est différent de l'approche utilisée par la chaire, où les points du cadastre sont relocalisés sur l'entrée principale du bâtiment. L'approche proposée ici permet d'utiliser les données brutes issues de \textcite{gouvernement_du_quebec_manuel_2024}, sans avoir à manuellement remettre à jour les points chaque année. La clé primaire pour le cadastre est g\_no\_lot et la clé primaire pour le rôle est l'id\_provinc. Les champs de la table \underline{association\_cadastre\_role} sont donnés au tableau \ref{tab:definition_assoc_role_cadastre}:
+        L'approche proposée utilise directement les données brutes issues de \textcite{gouvernement_du_quebec_manuel_2024}. La clé primaire pour le cadastre est g\_no\_lot et la clé primaire pour le rôle est l'id\_provinc. Les champs de la table \underline{association\_cadastre\_role} sont donnés au tableau \ref{tab:definition_assoc_role_cadastre}:
         \begin{table}[h]
             \caption{Colonnes pour la table \underline{association\_cadastre\_role}}
             \label{tab:definition_assoc_role_cadastre}
@@ -176,8 +177,8 @@
         \FloatBarrier
     
     \subsection{Analyse descriptive des données foncières}\label{ssec:analyse-descriptive-role-fonc}
-        Les données foncières sont centrales à la création de l'estimation. Cette section fera une analyse descriptive des données. La classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126000 sont dans la classe résidentielle comme le montre la figure \ref{fig:perc-val-perc-lots-quebec}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans une même entrée du rôle foncier.\par
-        Ce constat est légèrement différent si on compare le nombre de lots à la valeur des lots. La figure  montre que les lots commerciaux, de service et à usage mixte prennent une plus grande partie de la valeur foncière totale que du nombre de lots.
+        Les données foncières sont centrales à la création de l'estimation. Cette section fera une analyse descriptive des données. La classe résidentielle forme la majorité des données foncières. Sur environ 175 000 lots, 126 000 sont dans la classe résidentielle comme le montre la figure \ref{fig:perc-val-perc-lots-quebec}. D'autre part, environ 35 000 lots n'ont pas d'affectation au rôle foncier. Ces lots peuvent être des routes ou des propriétés agricoles où plusieurs lots cadastraux sont entrés dans une même entrée du rôle foncier.\par
+        Ce constat est légèrement différent si on compare le nombre de lots à la valeur des lots. La figure montre que les lots commerciaux, de service et à usage mixte prennent une plus grande partie de la valeur foncière totale que du nombre de lots.
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.7\linewidth]{figures/perc_val_perc_lot.pdf}
@@ -186,7 +187,7 @@
         \end{figure}     
         
            
-        On peut aussi regarder le logement de manière plus fine en segmentant les lots de nature résidentiels en fonction du nombre de logements par lot. On constate que même si une majorité de lots ont un seul logement, la plupart des logements disponibles sont sur des lots avec plusieurs logements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lots avec de multiples logements.
+        On peut aussi regarder le logement de manière plus fine en segmentant les lots de nature résidentielle en fonction du nombre de logements par lot. On constate que même si une majorité de lots ont un seul logement, la plupart des logements disponibles sont sur des lots avec plusieurs logements comme le montre la figure \ref{fig:distro-typ-log}. Ce constat est cependant fortement lié à la géographie puisque le parc de logement n'est pas uniformément réparti sur le territoire comme le montre la figure \ref{fig:distro-typ-log-quartier}. Les quartiers centraux tendent à avoir plus de lots avec de multiples logements.
         \begin{figure}[H]
         \begin{subfigure}[t]{1\textwidth}
             \centering
@@ -216,7 +217,7 @@
             \caption{Proportion de chaque utilisation du sol avec des données manquantes }
             \label{fig:prop-val-and-lots-missing-data}
         \end{figure}
-        La figure \ref{fig:carte-chaleur-donnee-manquante} montre une carte de chaleur de la proportion de lots et de la valeur foncière où une donnée clé est absente. Pour la ville complète,  31\% et 35\% des lots de service et commerciaux respectivement ont des données manquantes, constituant 67\% et 53\% de la valeur foncière pour ces mêmes catégories. Le quartier de la Cité Universitaire (CUNI) se démarque pour la quantité importante de valeur foncière avec des données absentes. L'inspection des données révèle que la majeure partie du campus universitaire n'a pas les propriétés requises remplies ainsi que les deux grands centres commerciaux.
+        La figure \ref{fig:carte-chaleur-donnee-manquante} montre une carte de chaleur de la proportion de lots et de la valeur foncière où une donnée clé est absente. Pour la ville complète, 31\% et 35\% des lots de service et commerciaux respectivement ont des données manquantes, constituant 67\% et 53\% de la valeur foncière pour ces mêmes catégories. Le quartier de la Cité Universitaire (CUNI) se démarque pour la quantité importante de valeur foncière avec des données absentes. L'inspection des données révèle que la majeure partie du campus universitaire n'a pas les propriétés requises remplies ainsi que les deux grands centres commerciaux.
         \begin{landscape}
             \begin{figure}
                 \centering
@@ -225,9 +226,11 @@
                 \label{fig:carte-chaleur-donnee-manquante}
             \end{figure}
         \end{landscape}
-        La valeur au rôle des lots avec des données manquantes tend à être plus élevée que celle avec les données présentes. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Le tableau montre un sommaire des médianes en fonction de l'absence ou de présence de données nécessaires.\par
+        Les lots où il manque des données ont typiquement une plus grande valeur foncière que ceux où toutes les données sont présentes. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Le tableau \ref{tab:table-recap-missing-data} montre un sommaire des médianes en fonction de l'absence ou de la présence de données nécessaires.\par
         \begin{table}[H]
             \centering
+            \caption{Récapitulatif de la médiane des valeurs au rôle en fonction de l'utilisation du sol et de la présence ou l'absence de données physiques requises }
+            \label{tab:table-recap-missing-data}
             \begin{tabular}{lccccc}
                 \hline
                  Utilisation du sol & \rotatebox{90}{\makecell[l]{$N_{lots}$ \\ donnée manquante}} & \rotatebox{90}{\makecell[l]{Médiane de la valeur au rôle \quad\\ donnée manquante}} &  \rotatebox{90}{\makecell[l]{$N_{lots}$ \\ donnée présente}} & \rotatebox{90}{\makecell[l]{Médiane de la valeur au rôle \\ donnée présente}} \\\hline
@@ -241,11 +244,9 @@
                  Inexploité & 6,830 & 19,000 & 206 & 206,000\\
                  Usage Mixte & 52 & 2,840,000 & 417 & 1,691,000\\\hline
             \end{tabular}
-            \caption{Récapitulatif de la médiane des valeurs au rôle en fonction de l'utilisation du sol et de l'absence de données requises }
-            \label{tab:table-recap-missing-data}
         \end{table}
-        Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme la montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
-        Pour conclure, les données du rôle foncier donnent un portrait  désagrégé de l'utilisation des sols partout dans la métropole, permettant lorsque les données sont présentes de déduire les différentes variables requises pour estimer une capacité de stationnement. 
+        Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
+        Pour conclure, les données du rôle foncier illustrent l'utilisation des sols partout dans la métropole de manière désagrégée, permettant, lorsque les données sont présentes, de déduire les différentes variables requises pour estimer une capacité de stationnement. 
         \begin{landscape}
             \begin{figure}
                 \centering  
@@ -264,7 +265,7 @@
         \FloatBarrier
     
     \subsection{Structure des données de dénombrement}\label{ssec:survol-table-inventaire}
-            La table \underline{inventaire\_stationnement} contient les estimations de capacité. La table laisse la possibilité d'avoir plusieurs estimations par lot cadastral. À l'heure actuelle, l'usager peut utiliser une estimation réglementaire, entrer une valeur manuellement ou utiliser une méthode d'estimation utilisant les règlements avec des données manuelles pour remplir cette table. La table \ref{tab:definition_table_inventaire} résume les champs, le type de données et une brève description pour chaque variable:
+            La table \underline{inventaire\_stationnement} contient les estimations de capacité. La table laisse la possibilité d'avoir plusieurs estimations par lot cadastral. À l'heure actuelle, l'usager peut utiliser une estimation réglementaire, entrer une valeur manuellement ou utiliser une méthode d'estimation utilisant les règlements avec des données manuelles pour remplir cette table. Le tableau \ref{tab:definition_table_inventaire} résume les champs, le type de données et propose une brève description pour chaque variable:
             \begin{table}[h]
                 \caption{Colonnes pour la table \underline{inventaire\_stationnement}}
                 \label{tab:definition_table_inventaire}
@@ -326,8 +327,8 @@
 
     \subsection{Données de la géopolitique du territoire à l'étude} \label{ssec:data-geopolitique-territoire}
         \subsubsection{Structure de données}
-            Les règlements régissant la capacité de stationnement changent dans le temps du fait de changements réglementaires et des variations spatiales des municipalités. Cette section va détailler la structure de données permettant de prendre en compte la variation temporelle de la réglementation. Cet historique est représenté au moyen de deux tables: \underline{historique\_geopol} et \underline{cartographie\_secteurs}. \underline{historique\_geopol} représente les grandes périodes où le territoire a été stable. 
-            Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table. \ul{historique\_geopol} \par
+            Les règlements régissant la capacité de stationnement changent du fait de changements réglementaires, de fusions municipales et de l'altération du plan de zonage des municipalités. Cette section va détailler la structure de données permettant de prendre en compte la variation temporelle de la réglementation. Cet historique est représenté au moyen de deux tables: \underline{historique\_geopol} et \underline{cartographie\_secteurs}. \underline{historique\_geopol} représente les grandes périodes où le territoire a été stable. 
+            Le tableau \ref{tab:definition_historique_geopol} montre les colonnes de la table \ul{historique\_geopol}. \par
             \begin{table}[h]
                 \caption{Colonnes pour la table \underline{historique\_geopol}}
                 \label{tab:definition_historique_geopol}
@@ -411,7 +412,7 @@
                 \end{tabular}
                 
             \end{table}
-            Chaque règlement peut être divisé en sous-ensembles si le règlement propose plusieurs méthodes de calcul. L'hypothèse fondamentale est que les règlements sont essentiellement des combinaisons de formules mathématiques linéaires. La première ligne de chaque sous-ensemble dénote l'opération à utiliser pour choisir entre l'estimation du sous-ensemble courant et du sous-ensemble précédent tandis que les lignes suivantes du sous-ensemble contiennent toutes le même opérateur qui dicte quel type d'opération à utiliser à l'intérieur du sous-ensemble.\par 
+            Chaque règlement peut être divisé en sous-ensembles si le règlement propose plusieurs méthodes de calcul. L'hypothèse fondamentale est que les règlements sont essentiellement des combinaisons de formules mathématiques linéaires. La première ligne de chaque sous-ensemble dénote l'opération à utiliser pour choisir entre l'estimation du sous-ensemble courant et du sous-ensemble précédent tandis que les lignes suivantes du sous-ensemble contiennent toutes le même opérateur qui dicte le type d'opération à utiliser à l'intérieur du sous-ensemble.\par 
             Si un opérateur de seuil (cf. tableau \ref{tab:operations_table}) est utilisé dans la formulation du règlement, les variables $p_{s,min}$, $p_{s,max}$, $c_{s,min}$ et $c_{s,max}$ sont sélectionnées en fonction de la condition $x_{entree} \geq t_{s,reg}$. Si plusieurs seuils existent, les variables sont sélectionnées par intervalles de $t_{s,reg}$.\par
             La formulation mathématique du nombre de places requises est entreposée dans la table \underline{reg\_stat\_empile}. Les étapes mathématiques pour une ligne d'un règlement de stationnement sont données aux équations \ref{eq:x_entree}, \ref{eq:places_max} et \ref{eq:places_min}  .
             \begin{align}
@@ -419,7 +420,7 @@
                 n_{places,min} &= c_{s,min} + p_{s,min} \times x_{entree} \label{eq:places_min}\\
                 n_{places,max} &=  c_{s,max} + p_{s,max} \times x_{entree} \label{eq:places_max}
             \end{align}
-            où $R$ est la ligne du rôle foncier en train d'être calculée, $C_{conv,i}$ représente la colonne à utiliser pour l'unité $i$, $p_{conv,i}$ représente la pente de conversion pour l'unité i, $c_{conv,i} $ représente l'ordonnée à l'origine pour la conversion de l'unité i. Ces constantes sont stockées dans la table \ul{multiplicateur\_facteur\_colonne}. $p_{s,min}$ et $p_{s,max}$ représentent les pentes des requis minimums tandis que $c_{s,min}$ et $c_{s,max}$ sont les ordonnées à l'origine qui sont stockées dans la table \ul{reg\_stat\_empile} discutée plus loin. L'unité à utiliser $i$ est elle aussi spécifiée dans la même table avec les seuils d'applicabilités $t_{s,reg}$. \par
+            où $R$ est la ligne du rôle foncier en train d'être calculée, $C_{conv,i}$ représente la colonne à utiliser pour l'unité $i$, $p_{conv,i}$ représente la pente de conversion pour l'unité i, $c_{conv,i} $ représente l'ordonnée à l'origine pour la conversion de l'unité i. Ces constantes sont stockées dans la table \ul{multiplicateur\_facteur\_colonne}. $p_{s,min}$ et $p_{s,max}$ représentent les pentes des requis minimums tandis que $c_{s,min}$ et $c_{s,max}$ sont les ordonnées à l'origine qui sont stockées dans la table \ul{reg\_stat\_empile} discutée plus loin. L'unité à utiliser $i$ est elle aussi spécifiée dans la même table avec les seuils d'applicabilité $t_{s,reg}$. \par
             
             Cette sélection s'opère en ordonnant les seuils avant sélection puis en identifiant automatiquement les intervalles. \begin{table}[H]
                 \caption{Colonnes pour la table \underline{reg\_stat\_empile}}
@@ -438,7 +439,7 @@
                     cases\_fix\_max & Ordonnée à l'origine pour le maximum $c_{s,max}$ & Réel & \\ 
                     pente\_min & Pente de la droite pour le minimum $p_{s,min}$ & Réel & \\
                     pente\_max & Pente de la droite pour le maximum $p_{s,max}$& Réel & \\
-                    unite & Unité à utiliser. Cf tableau \ref{tab:operations_table} & Entier & \\
+                    unite & Unité à utiliser. cf. tableau \ref{tab:operations_table} & Entier & \\
                     \hline
             \end{tabular}
             
@@ -477,7 +478,7 @@
             
             \end{table}   
             \clearpage
-            Le tableau \ref{tab:unite_pertinentes_minimum_stat} donne  le contenu de la table multiplicateur\_facteur\_colonnes. Ce tableau contient les facteurs de conversion d'unités, toutes les conversions sont supposées linéaires.  Ces conversions ont été déterminées par heuristique sans en faire la calibration. Malgré l'intention initiale de permettre différents facteurs de conversions en fonction du \ac{CUBF}, cette fonctionnalité n'a pas été mise en place par manque de temps. \par
+            Le tableau \ref{tab:unite_pertinentes_minimum_stat} donne  le contenu de la table \ul{multiplicateur\_facteur\_colonnes}. Cette table contient les facteurs de conversion d'unités, toutes les conversions sont supposées linéaires.  Ces conversions ont été déterminées par heuristique sans en faire la calibration. Malgré l'intention initiale de permettre différents facteurs de conversions en fonction du \ac{CUBF}, cette fonctionnalité n'a pas été mise en place par manque de temps. \par
             \begin{table}[H]
                 \caption{Contenu type de la table \underline{multiplicateur\_facteur\_colonnes}}\label{tab:unite_pertinentes_minimum_stat}
                 \centering
@@ -597,7 +598,7 @@
             \clearpage
         
         \subsubsection{Exemple 2: Logements} 
-            Dans le cas d'un logement, les règlements changent souvent en fonction du nombre de logements au sein d'un même bâtiment. Dans ce cas hypothétique, le requis serait d'une case par logement pour des bâtiments de moins de 4 logements, 1.5 cases par logement pour les bâtiments entre 4 et 7 logements et 1.25 case par logement pour tout bâtiment de 8 logements ou plus. Dans ce cas, les entrées à la table seraient telles que montrées au tableau \ref{tab:ex_reg_logement}.
+            Dans le cas d'un logement, les règlements changent souvent en fonction du nombre de logements au sein d'un même bâtiment. Dans ce cas hypothétique, le requis serait d'une case par logement pour des bâtiments de moins de 4 logements, 1.5 case par logement pour les bâtiments entre 4 et 7 logements et 1.25 case par logement pour tout bâtiment de 8 logements ou plus. Dans ce cas, les entrées à la table seraient telles que montrées au tableau \ref{tab:ex_reg_logement}.
             \begin{table}[h]
                 \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour le logement}
                 \label{tab:ex_reg_logement}
@@ -619,7 +620,7 @@
             \clearpage
         
         \subsubsection{Exemple 3: Lieux d'assemblée} 
-            Dans le cas de lieux d'assemblée, les requis peuvent être exprimés en fonction du nombre de sièges ou en fonction de l'espace au sol. Dans notre cas hypothétique, le requis serait un minimum d'une place par 7 sièges jusqu'à 800 sièges et d'un minimum de 1 place par 9 sièges pour toute place au-delà de 800 sièges. Un maximum  d'une place par 5 sièges est applicable au-delà de 500 sièges. Quand il n'y a pas de sièges, un requis d'une place par 10 mètres carrés est applicable et il n'y a pas de maximum.
+            Dans le cas de lieux d'assemblée, les requis peuvent être exprimés en fonction du nombre de sièges ou en fonction de l'espace au sol. Dans notre cas hypothétique, le requis serait un minimum d'une place par 7 sièges jusqu'à 800 sièges et d'un minimum de 1 place par 9 sièges pour toute place au-delà de 800 sièges. Un maximum  d'une place par 5 sièges est applicable au-delà de 500 sièges. Quand il n'y a pas de siège, un requis d'une place par 10 mètres carrés est applicable et il n'y a pas de maximum.
             \begin{table}[h]
                 \caption{Exemple règlements dans la table \underline{reg\_stat\_empile} pour un lieu d'assemblée}
                 \label{tab:ex_reg_lieu_assemblee}
@@ -652,8 +653,8 @@
         
     \subsection{Ensemble des règlements et association à la géopolitique} \label{ssec:ensembles_association}
         \subsubsection{Structure des données}
-            Cette section va introduire le schéma relationnel de données qui permettent d'associer un ensemble de règlements à un territoire pour une période donnée. Quatre tables sont utilisées pour représenter la variation spatio-temporelle de la réglementation: \underline{ensembles\_reglements\_stat}, \underline{cubf}, \underline{association\_er\_reg\_stat} et \underline{assoc\_er\_territoire}.\par
-            \underline{ensembles\_reglements\_stat} contient une entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} montre les colonnes de la table \underline{ensembles\_reglements\_stat}. \par
+            Cette section va introduire le schéma relationnel de données qui permet d'associer un ensemble de règlements à un territoire pour une période donnée. Quatre tables sont utilisées pour représenter la variation spatio-temporelle de la réglementation: \underline{ensembles\_reglements\_stat}, \underline{cubf}, \underline{association\_er\_reg\_stat} et \underline{assoc\_er\_territoire}.\par
+            \underline{ensembles\_reglements\_stat} contient une entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} en montre les colonnes. \par
             \begin{table}[h]
                 \caption{Colonnes pour la table \underline{ensembles\_reglement\_stat}}
                 \label{tab:definition_er}
@@ -669,7 +670,7 @@
                         \hline
                 \end{tabular}
             \end{table}   
-            La table \ac{CUBF} reproduit les données du gouvernement sur le code d'utilisation du bien-fonds, associant un numéro à une description sommaire. Toutes les entrées dans le rôle foncier se voient attribuer un code à 4 chiffres entre 1000 et 9999 qui définit l'usage prédominant sur la propriété. En plus de ces codes. La table entreposée dans le cadre de ce projet contient les entêtes de chaque section (e.g., 1 - logement, 15 - Habitation en commun, 154 - Maison de retraite ou orphelinat, 1542 - Orphelinat). La description des colonnes de la table \underline{cubf} est donnée au tableau \ref{tab:definition_cubf}. \par
+            La table \ac{CUBF} reproduit les données du gouvernement sur le code d'utilisation du bien-fonds, associant un numéro à une description sommaire. Toutes les entrées dans le rôle foncier se voient attribuer un code à 4 chiffres entre 1000 et 9999 qui définit l'usage prédominant sur la propriété. En plus de ces codes, la table entreposée dans le cadre de ce projet contient les entêtes de chaque section (e.g., 1 - logement, 15 - Habitation en commun, 154 - Maison de retraite ou orphelinat, 1542 - Orphelinat). La description des colonnes de la table \underline{cubf} est donnée au tableau \ref{tab:definition_cubf}. \par
             \begin{table}[h]
                 \caption{Colonnes pour la table \underline{cubf}}
             \label{tab:definition_cubf}
@@ -746,7 +747,7 @@
         
         \subsubsection{Description des ensembles de règlements}
             Cette section donnera un survol de la structure des ensembles de règlements utilisés dans le cadre de ce mémoire. Ceci est loin d'être la seule structure possible. La version actuelle a été compilée en essayant d'assurer la couverture des catégories les plus communes sans devoir être  exhaustive. La méthode pourrait fonctionner avec seulement les \ac{CUBF} 1-9 spécifiés, ou avec tous les \ac{CUBF} individuellement spécifiés. \par
-            Le tableau \ref{tab:n-cubf-rep} donne le nombre d'association entre un ensemble de règlements et un règlement par \ac{CUBF}. De manière générale, les mêmes \ac{CUBF} apparaissent de manière répétée dans les 57 ensembles de règlements constitués.
+            Le tableau \ref{tab:n-cubf-rep} donne le nombre d'associations entre un ensemble de règlements et un règlement par \ac{CUBF}. De manière générale, les mêmes \ac{CUBF} apparaissent de manière répétée dans les 57 ensembles de règlements constitués.
             \begin{longtable}{p{13cm}r}
                 \caption{Nombre de définitions par utilisation du sol} \label{tab:n-cubf-rep} \\
                 \toprule
@@ -1082,7 +1083,7 @@
     Cette section a donné un aperçu de l'organisation des classes créées pour faire le calcul de l'inventaire à partir des données entreposées dans la base de données détaillée auparavant. La section suivante montrera schématiquement comment les différentes fonctions et méthodes sont utilisées pour sélectionner, assembler, et faire le traitement des données avant de les retourner à l'utilisateur.
 
     \subsection{Logigramme de la procédure d'estimation de la capacité}\label{ssec:logigramme-calcul-stationnement}
-        La méthode suivante est proposée pour le calcul de la capacité de stationnement basé sur les règlements de l'urbanisme. Ce calcul est déclenché soit en sélectionnant un quartier à analyser, soit en demandant de calculer pour un lot particulier. Dans les deux cas, la procédure est la même. Le script de calcul a été implémenté en utilisant le langage Python. La figure \ref{fig:logigramme_calcul_urbanisme} montre le logigramme de haut niveau pour l'approche par les minimums. \par
+        La méthode suivante est proposée pour le calcul de la capacité de stationnement basé sur les règlements d'urbanisme. Ce calcul est déclenché soit en sélectionnant un quartier à analyser, soit en demandant de calculer pour un lot particulier. Dans les deux cas, la procédure est la même. Le script de calcul a été implémenté en utilisant le langage Python. La figure \ref{fig:logigramme_calcul_urbanisme} montre le logigramme de haut niveau pour l'approche par les minimums. \par
         
         On commence par sélectionner les points du rôle foncier dans une zone prescrite, on trouve les municipalités actuelles et historiques qui interceptent l'ensemble des points, on trouve les ensembles de règlements qui sont associés à chaque territoire, on segmente ensuite les données du rôle foncier en fonction de la réglementation qui s'y applique, et on applique les règlements. Une fois les calculs complétés, on agrège les calculs par lot pour l'ensemble des périodes avant de les sauvegarder dans la table appropriée. Ce cas de figure arrive si deux entrées du rôle sur un même lot ont des dates de construction différentes. 
         \begin{figure}[H]
