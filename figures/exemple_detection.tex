@@ -1,0 +1,27 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+    \begin{tikzpicture}
+        % Draw the circle
+        \node[circle, draw=blue!50, fill=blue!20, minimum size=10mm] (circle) at (-0.66,0) {};
+        \node[draw=blue!50, very thick, minimum width=12mm, minimum height=12mm, anchor=center,label={Cercle}] at (circle) {};
+        \node[circle, draw=blue!50, fill=blue!20, minimum size=10mm] (circle2) at (0.66,0) {};
+        \node[draw=blue!50, very thick, minimum width=12mm, minimum height=12mm, anchor=center,label={Cercle}] at (circle2) {};
+        \node [star,draw=blue!50,fill=blue!20,minimum size=10mm] (star) at ( -2,0) {};
+        \node[draw=blue!50, very thick, minimum width=12mm, minimum height=12mm, anchor=center,label={Étoile}] at (star) {};
+        \node at ( 2,0)  [isosceles triangle,draw=blue!50,fill=blue!20,minimum size=10mm] (triangle) {};
+        \coordinate(triangle_centre) at ($(triangle)+(0.3,0)$);
+        \node[draw=blue!50, very thick, minimum width=14mm, minimum height=12mm, anchor=center,label={Triangle}] at (triangle_centre) {};
+        %\node at (0,2) [black] {Triangle, étoile, carré};
+    \end{tikzpicture}
+\end{document}

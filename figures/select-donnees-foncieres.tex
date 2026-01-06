@@ -32,16 +32,17 @@
                 \node (role-nselect-10) [role-non-select] at (1.4,4.0) {J};
                 \node (role-nselect-11) [role-non-select] at (2.8,4.25) {K};
                 \node (role-nselect-12) [role-non-select] at (3.9,3.9) {L};
-                \node (leg-rns-1) [role-non-select, below of=role-nselect-2,xshift=-2cm]{};
-                \node (leg-rns-1-text) [right of=leg-rns-1,anchor=west]{Entrée non-sélectionnée};
-                \node (leg-rs-1) [role-select, below of=leg-rns-1]{};
-                \node (leg-rs-1-text) [right of=leg-rs-1,anchor=west]{Entrée sélectionnée};\node (leg-sec-an) [
+                \node (leg-rns-1) [role-non-select, right of=role-nselect-8,xshift=0.2cm]{};
+                \node (leg-rns-1-text) [right of=leg-rns-1,anchor=west,xshift=-0.7cm]{Entrée non-sélectionnée};
+                \node (leg-rs-1) [role-select, below of=leg-rns-1,yshift=0.3cm]{};
+                \node (leg-rs-1-text) [right of=leg-rs-1,anchor=west,xshift=-0.7cm]{Entrée sélectionnée};
+                \node (leg-sec-an) [
                     below of=leg-rs-1,
                     rectangle,
                     draw=blue,
                     fill=blue!30,
-                    ultra thick
+                    ultra thick,yshift=0.3cm
                 ]{};
-                \node (leg-sec-an-text) [right of=leg-sec-an,anchor=west]{Secteur d'analyse choisi};
+                \node (leg-sec-an-text) [right of=leg-sec-an,anchor=west,xshift=-0.7cm]{Secteur d'analyse choisi};
             \end{tikzpicture}
 \end{document}

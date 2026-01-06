@@ -37,22 +37,22 @@
         \node (activite) [objet,below of=classes_utilisateurs]{Activités};
         \draw (classes_utilisateurs.west) -| ++(-0.1cm,-0.1cm) |- (activite.west);
         % Métrique
-        \node (sessions) [objet,below of=status,yshift=-1.5cm]{Sessions};
+        \node (sessions) [objet,below of=status,yshift=-1.25cm]{Sessions};
         \node (aggregates) [objet, left of=sessions, xshift=-2.5cm]{Statistiques agrégées};
         \draw (sessions.west) -- (aggregates.east);
-        \node (total_session) [objet, left of=aggregates,xshift=-3cm,yshift=0.5cm]{Sessions totales};
+        \node (total_session) [objet, left of=aggregates,xshift=-3cm,yshift=0.4cm]{Sessions totales};
         \draw (aggregates.west) -- (total_session.east);
         \node (taux_roulement)at ($ (regles |- total_session) $) [objet]{Taux de roulement};
         \draw (taux_roulement.east) -- (total_session.west);
-        \node (dwell_time) [objet,below of=total_session,yshift=-0.25cm]{Durée sessions};
+        \node (dwell_time) [objet, left of=aggregates,xshift=-3cm,yshift=-0.4cm]{Durée sessions};
         \draw (dwell_time.east) -- (aggregates.west);
         \node (taux_occupation) at ($ (taux_roulement |- dwell_time) $) [objet]{Taux d'occupation};
         \draw (taux_occupation.east) -- (dwell_time.west);
         \draw (evenements.east) -| ++(1.5cm,-2cm) |- (sessions.east);
         % Légende
-        \node (legend) [below of=sessions, text width=3cm,xshift=1cm,yshift=-2cm]{Légende};
+        \node (legend) [below of=sessions, text width=3cm,xshift=1cm,yshift=-0.75cm]{Légende};
         \coordinate (boite_top_left)at($(legend.north west)+ (-0.2,0.2)$);
-        \node (objet_desc)[objet,below of=legend]{Objet};
+        \node (objet_desc)[objet,below of=legend,yshift=0.3cm]{Objet};
         \coordinate (boite_bot_rght) at ($(objet_desc.south east)+ (0.2,-0.2)$);
         \draw[line width=2pt] (boite_top_left) -| (boite_bot_rght) -| (boite_top_left);
         % API domaines

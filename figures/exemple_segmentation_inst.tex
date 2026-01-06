@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}          
+\begin{document}
+    \begin{tikzpicture}
+        %[background rectangle/.style={fill=black}, show background rectangle]
+        % Draw the circle
+        \node[circle, draw=red, fill=red, minimum size=10mm,label={Cercle}] (circle) at (-0.66,0) {};
+        \node[circle, draw=purple, fill=purple, minimum size=10mm,label={Cercle}] (circle2) at (0.66,0) {};
+        \node [star,draw=blue,fill=blue,label={Étoile},minimum size=10mm] (star) at ( -2,0) {};
+        \node at ( 2,0)  [isosceles triangle,draw=green,fill=green,label={Triangle},minimum size=10mm] (triangle) {};
+    \end{tikzpicture}
+\end{document}

@@ -80,7 +80,7 @@
             La littérature discute du stationnement sans donner une définition précise de ce qu'est une unité de stationnement. Cette section vise à montrer en quoi cette définition est plus problématique qu'on ne le penserait. Certains lieux peuvent être polyfonctionnels et ne permettent pas facilement d’émettre un constat sur une capacité de stationnement. Quatre exemples seront donnés: les terrains vagues, deux lieux à vocation industrielle et les garages.
             \begin{figure}[H]
                 \centering
-                \includegraphics[width=0.8\linewidth]{images/combien-places.png}
+                \includegraphics[width=0.9\linewidth]{images/combien-places.png}
                 \caption{Terrain vague avec des voitures stationnées à Québec}
                 \label{fig:how-many-spots}
             \end{figure}
@@ -89,14 +89,14 @@
             Les deux prochains exemples proviennent de propriétés industrielles, une à Markham en Ontario et une à Napierville au Québec. La figure \ref{fig:combien-places-chargement} montre la propriété à Markham. Les murs en dent de scie à l'arrière de la propriété sont tous des quais de chargements pour les camions. Cependant, on constate que des voitures sont stationnées devant les quais, car les places délimitées sont remplies. Quelle capacité de stationnement affecterait-on à ce lot?
             \begin{figure}[H]
                 \centering
-                \includegraphics[width=1\linewidth]{images/places-ou-quai-chargement.png}
+                \includegraphics[width=0.9\linewidth]{images/places-ou-quai-chargement.png}
                 \caption{Polyfonctionnalité des quais de chargement}
                 \label{fig:combien-places-chargement}
             \end{figure}
             Le troisième exemple est une propriété industrielle à Napierville montrée sur la figure \ref{fig:parking-or-storage} (toit blanc au centre de la figure). La ville requiert une place par $75m^2$ pour les activités de fabrication et le rôle foncier révèle une superficie d'étages de $542m^2$, menant à un minimum de 8 places requises. Dans un contexte de segmentation d'image, où devrait-on délimiter le stationnement? Et si on devait aller compter un nombre de places, quel serait le chiffre exact affecté? La littérature est relativement silencieuse sur la manière de prendre cette décision.
             \begin{figure}[H]
                 \centering
-                \includegraphics[width=1\linewidth]{images/combien-places-2.png}
+                \includegraphics[width=0.9\linewidth]{images/combien-places-2.png}
                 \caption{Ambiguïté de l'espace dédié au stationnement }
                 \label{fig:parking-or-storage}
             \end{figure}
@@ -120,58 +120,27 @@
     \subsection{Méthodes d'estimation basées sur l'imagerie aérienne et l'apprentissage machine}\label{ref:sec-meth-orthophoto-ap}
         \subsubsection{Méthodes}
         L'augmentation de la capacité de calcul numérique et la démocratisation des méthodes d'apprentissage machine ont mené plusieurs auteurs à développer des méthodes spécifiques au stationnement. Ces méthodes se fient à des réseaux de neurones pour capturer la régularité statistique des images. Les tâches de vision machine se répartissent dans quatre grandes catégories: la classification, la détection, la segmentation sémantique et la segmentation d'instance \parencite{wallach_deep_2024}. La figure \ref{fig:computer_vision_problems} représente schématiquement ces tâches.
-        \begin{figure}[h]
-          \centering
+        \begin{figure}[H]
+            \centering
           \begin{subfigure}{0.4\textwidth}
             \centering
-            \begin{tikzpicture}
-              \node at ( -0.66,0)  [circle,draw=blue!50,fill=blue!20,minimum size=5mm] {};
-              \node at ( 0.66,0)  [circle,draw=blue!50,fill=blue!20,minimum size=5mm] {};
-              \node at ( -2,0) [star,draw=blue!50,fill=blue!20] {};
-              \node at ( 2,0)  [isosceles triangle,draw=blue!50,fill=blue!20] {};
-              \node at (0,1.0) [black] {Triangle, étoile, cercle};
-            \end{tikzpicture}
+            \includegraphics[width=1\linewidth]{figures/exemple_classification.pdf}
             \caption{Classification d'image}
-          \end{subfigure}
+          \end{subfigure}\hspace*{1cm}
           \begin{subfigure}{0.4\textwidth}
             \centering
-            \begin{tikzpicture}
-                % Draw the circle
-                \node[circle, draw=blue!50, fill=blue!20, minimum size=5mm] (circle) at (-0.66,0) {};
-                \node[draw=blue!50, very thick, minimum width=10mm, minimum height=10mm, anchor=center,label={Cercle}] at (circle) {};
-                \node[circle, draw=blue!50, fill=blue!20, minimum size=5mm] (circle2) at (0.66,0) {};
-                \node[draw=blue!50, very thick, minimum width=10mm, minimum height=10mm, anchor=center,label={Cercle}] at (circle2) {};
-                \node [star,draw=blue!50,fill=blue!20] (star) at ( -2,0) {};
-                \node[draw=blue!50, very thick, minimum width=10mm, minimum height=10mm, anchor=center,label={Étoile}] at (star) {};
-                \node at ( 2,0)  [isosceles triangle,draw=blue!50,fill=blue!20] (triangle) {};
-                \node[draw=blue!50, very thick, minimum width=12mm, minimum height=10mm, anchor=center,label={Triangle}] at (triangle) {};
-                %\node at (0,2) [black] {Triangle, étoile, carré};
-            \end{tikzpicture}
+            \includegraphics[width=1\linewidth]{figures/exemple_detection.pdf}
             \caption{Détection d'objet}
           \end{subfigure}~
           
           \begin{subfigure}{0.4\textwidth}
             \centering
-            \begin{tikzpicture}
-                %[background rectangle/.style={fill=black}, show background rectangle]
-                % Draw the circle
-                \node[circle, draw=red, fill=red, minimum size=5mm,label={Cercle}] (circle) at (-0.66,0) {};
-                \node[circle, draw=red, fill=red, minimum size=5mm,label={Cercle}] (circle2) at (0.66,0) {};
-                \node [star,draw=blue,fill=blue,label={Étoile}] (star) at ( -2,0) {};
-                \node at ( 2,0)  [isosceles triangle,draw=green,fill=green,label={Triangle}] (triangle) {};
-            \end{tikzpicture}
+            \includegraphics[width=1\linewidth]{figures/exemple_segmentation_sem.pdf}
             \caption{Segmentation sémantique}
-          \end{subfigure}
+          \end{subfigure}\hspace*{1cm}
           \begin{subfigure}{0.4\textwidth}
             \centering
-            \begin{tikzpicture}
-                %[background rectangle/.style={fill=black}, show background rectangle]
-                % Draw the circle
-                \node[circle, draw=red, fill=red, minimum size=5mm,label={Cercle}] (circle) at (-0.66,0) {};
-                \node[circle, draw=purple, fill=purple, minimum size=5mm,label={Cercle}] (circle2) at (0.66,0) {};
-                \node [star,draw=blue,fill=blue,label={Étoile}] (star) at ( -2,0) {};
-                \node at ( 2,0)  [isosceles triangle,draw=green,fill=green,label={Triangle}] (triangle) {};
-            \end{tikzpicture}
+            \includegraphics[width=1\linewidth]{figures/exemple_segmentation_inst.pdf}
             \caption{Segmentation d'instance}
           \end{subfigure}
           \caption{Résultats de différentes méthodes de vision par ordinateur pour une même image}
@@ -383,39 +352,39 @@
         La figure \ref{fig:cds-model-overview} donne un aperçu des domaines de données traités par l'\ac{API}.
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.725]{figures/cds-diagram-1.pdf}
+            \includegraphics[width=0.9\textwidth]{figures/cds-diagram-1.pdf}
             \caption{Survol des domaines de données de \ac{CDS}}
             \label{fig:cds-model-overview}
         \end{figure}
         Le premier domaine de données représente les places de stationnement et est similaire au modèle de données de CurbLR. Cependant, le modèle permet de représenter les places de stationnement et des zones qui regroupent des segments de bords de rue par des caractéristiques ou des zones d'intérêt ou administratives. La figure \ref{fig:cds-modele-donnees-bdr} montre le modèle de données pour les \ac{BDR} \parencite{open_mobility_foundation_curb_2024-2}. Cependant, contrairement à CurbLR, le système utilise plus de polygones pour représenter les bords de rue plutôt que de segments linéaires. Bien que le modèle de zone de rue permet l'utilisation de référencement linéaire, la géométrie obligatoire est polygonale. Il permet aussi la création d'aires de stationnement pour agréger plusieurs zones (on peut penser à des limites administratives ou des zones de permis résidents). La zone de stationnement est définie comme une zone ne dépassant pas un pâté de maisons, où la réglementation est la même. Les zones et les places ne peuvent pas se superposer tandis que les aires le peuvent.\par
         En plus du modèle de réglementation, l'\ac{API} permet de représenter les transactions et les évènements sur les places de stationnement \parencite{open_mobility_foundation_curb_2024}, créant un historique des transactions et des changements d'usage du \ac{BDR}. Un évènement représente un action sur une place, une zone ou une heure. La figure \ref{fig:cds-modele-evenement} donne un aperçu des paramètres qui sont définis dans la spécification. En plus de l'objet évènement, un objet de statut existe qui permet de lister l'état de l'ensemble des capteurs qui permettent de surveiller l'état du bord de rue. La figure \ref{fig:cds-status-object} montre la structure de l'objet de statut. \par
-        \begin{figure}[H]
+        \begin{figure}[ht]
             \centering
-            \includegraphics[scale=0.9]{figures/cds-diagram-2.pdf}
+            \includegraphics[width=0.95\textwidth]{figures/cds-diagram-2.pdf}
             \caption{Propriétés de l'objet statut dans l'\ac{API} métriques de CDS}
             \label{fig:cds-status-object}
         \end{figure}
         L'\ac{API} final est celui des métriques qui permet de données des statistiques agrégées par zone, aire ou place pour faciliter le portrait de l'occupation du bord de rue. Quatre statistiques principales sont disponibles dans l'\ac{API}: le temps d'arrêt, le taux d'occupation, le taux de roulement et le nombre de \og{sessions}\fg{}. Les \og{sessions}\fg{}  sont une combinaison de deux évènements ou plus représentant une action. Deux types de \og{sessions}\fg{} sont possibles: le stationnement et la présence dans une aire d'intérêt. Le temps d'arrêt est calculé à l'aide des propriétés d'heure de début et de fin d'une session. Les figures \ref{fig:modele-cds-statistiques} et \ref{fig:cds-modele-session-agreges} montrent les modèles de données pour les \og{sessions}\fg{} et les statistiques qui en découlent.\par
         \begin{landscape}
-            \begin{figure}
+            \begin{figure}[H]
                 \centering
-                \includegraphics[scale=0.925]{figures/cds-diagram-3.pdf}
+                \includegraphics[scale=0.875]{figures/cds-diagram-3.pdf}
                 \caption{Modèles de données des bords de rue de \ac{CDS}}
                 \label{fig:cds-modele-donnees-bdr}
             \end{figure}
-            \begin{figure}
+            \begin{figure}[ht]
                 \centering
-                \includegraphics{figures/cds-diagram-4.pdf}
+                \includegraphics[width=1\linewidth]{figures/cds-diagram-4.pdf}
                 \caption{Modèle de données pour les évènements de \ac{CDS}}
                 \label{fig:cds-modele-evenement}
             \end{figure}
-            \begin{figure}
+            \begin{figure}[ht]
                 \centering
-                \includegraphics{figures/cds-diagram-5.pdf}
+                \includegraphics[width=1\linewidth]{figures/cds-diagram-5.pdf}
                 \caption{Modèle de données pour les sessions de l'\ac{API} Métriques de CDS}
                 \label{fig:cds-modele-session-agreges}
             \end{figure}
-            \begin{figure}
+            \begin{figure}[ht]
                 \centering
                 \includegraphics{figures/cds-diagram-6.pdf}
                 \caption{Modèle de données pour les statistiques issues de l'\ac{API} Métriques de \ac{CDS}}
@@ -463,7 +432,7 @@
             \caption{Simple}
             \label{fig:hierarchie-lieu-simple}
         \end{subfigure}
-        ~\begin{subfigure}{0.7\textwidth}
+        ~\begin{subfigure}{0.75\textwidth}
             \includegraphics{figures/iso5206-lieu-complexe.pdf}
             \caption{Complexe}
             \label{fig:hierarchie-lieu-complex}

@@ -98,7 +98,7 @@
         La figure \ref{fig:sec-analyse} montre les secteurs utilisés qui sont les quartiers listés dans les données ouvertes de la ville\parencite{ville_de_quebec_quartiers_2024}. Une autre division géographique (comme les secteurs de l'enquête OD) pourrait être substituée au besoin.\par
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.6\linewidth]{images/secteurs_analyse.png}
+            \includegraphics[width=1\linewidth]{images/secteurs_analyse.png}
             \caption{Secteurs utilisés pour l'analyse}
             \label{fig:sec-analyse}
         \end{figure}
@@ -114,7 +114,7 @@
             \label{fig:offstreet_db_erd_input_data}
         \end{figure}
         Les données de départ sont le rôle foncier brut ainsi que le cadastre représenté dans les tables \underline{cadastre} et \underline{role\_foncier}. Le tableau \ref{tab:definition_role_foncier} donne une définition des colonnes pertinentes à ce mémoire. Certains champs qui ne sont pas utilisés ont été omis. Le tableau \ref{tab:definition_role_foncier} montre les colonnes pertinentes dans le rôle foncier. Les descriptions sont tirées de \textcite{gouvernement_du_quebec_donnees_2022}.\par
-        \begin{table}[h]
+        \begin{table}[ht]
             \caption{Colonnes pour la table \underline{role\_foncier}}
            \label{tab:definition_role_foncier}
            \centering
@@ -138,8 +138,8 @@
            
         \end{table}   
         La table \underline{association\_cadastre\_role} associe le cadastre avec le rôle foncier. En premier lieu, une jointure géométrique a été complétée et sauvegardée. Initialement, une nouvelle requête spatiale était lancée à chaque chargement de données mais cela ralentissait substantiellement la visualisation. \par
-        L'approche proposée utilise directement les données brutes issues de \textcite{gouvernement_du_quebec_manuel_2024}. La clé primaire pour le cadastre est g\_no\_lot et la clé primaire pour le rôle est l'id\_provinc. Les champs de la table \underline{association\_cadastre\_role} sont donnés au tableau \ref{tab:definition_assoc_role_cadastre}:
-        \begin{table}[h]
+        L'approche proposée utilise directement les données brutes issues de \textcite{gouvernement_du_quebec_manuel_2024}. La clé primaire pour le cadastre est g\_no\_lot et la clé primaire pour le rôle est l'id\_provinc. Les champs de la table \underline{association\_cadastre\_role} sont donnés au tableau \ref{tab:definition_assoc_role_cadastre}.
+        \begin{table}[ht]
             \caption{Colonnes pour la table \underline{association\_cadastre\_role}}
             \label{tab:definition_assoc_role_cadastre}
             \centering
@@ -155,7 +155,7 @@
         \end{table}   
         \par
         Le tableau \ref{tab:definition_cadastre} donne les détails sur les entrées dans la table \underline{cadastre}. D'autres colonnes existent, mais ne sont pas détaillées, car elles ne sont pas utilisées au sein de ce mémoire.\par
-        \begin{table}[!h]
+        \begin{table}[!ht]
             \caption{Colonnes pour la table \underline{cadastre}}
             \label{tab:definition_cadastre}
             \centering
@@ -181,7 +181,7 @@
         Ce constat est légèrement différent si on compare le nombre de lots à la valeur des lots. La figure montre que les lots commerciaux, de service et à usage mixte prennent une plus grande partie de la valeur foncière totale que du nombre de lots.
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.7\linewidth]{figures/perc_val_perc_lot.pdf}
+            \includegraphics[width=1\linewidth]{figures/perc_val_perc_lot.pdf}
             \caption{Proportion des lots et de la valeur foncière selon l'utilisation du sol pour la ville de Québec}
             \label{fig:perc-val-perc-lots-quebec}
         \end{figure}     
@@ -191,13 +191,13 @@
         \begin{figure}[H]
         \begin{subfigure}[t]{1\textwidth}
             \centering
-            \includegraphics[width=0.625\linewidth]{figures/distro-typ-log.pdf}
+            \includegraphics[width=0.7\linewidth]{figures/distro-typ-log.pdf}
             \caption{Compte par type}
             \label{fig:distro-typ-log}
         \end{subfigure}
         \begin{subfigure}[t]{1\textwidth}
             \centering
-            \includegraphics[width=0.625\linewidth]{figures/distro-typ-log-quartier.pdf}
+            \includegraphics[width=0.7\linewidth]{figures/distro-typ-log-quartier.pdf}
             \caption{Répartition par type et quartier}
             \label{fig:distro-typ-log-quartier}
         \end{subfigure}
@@ -206,14 +206,14 @@
         D'autre part, malgré leur exhaustivité apparente, une importante proportion des entrées ont des données physiques manquantes. Ce problème est généralement plus prononcé sur les propriétés agricoles ou d'infrastructure qui n'ont pas nécessairement de bâtiment principal, mais est aussi présent dans les propriétés affichées comme inexploitées au rôle (par exemple les logements vacants). De plus, la date de construction n'est pas toujours précisée ou même commune entre différentes entrées sur un même lot. La figure \ref{fig:role-missing-data} montre le pourcentage d'entrées où des données sont manquantes pour chaque catégorie d'utilisation du sol. Il est intéressant de noter que toutes les entrées du rôle ont une valeur affectée, ouvrant la porte à une prédiction des propriétés requise en fonction de la valeur au rôle au besoin.
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.6\linewidth]{figures/distro-data-role-manquant.pdf}
+            \includegraphics[width=1\linewidth]{figures/distro-data-role-manquant.pdf}
             \caption{Pourcentage des lots avec des propriétés manquantes}
             \label{fig:role-missing-data}
         \end{figure}
         Le constat est pire lorsque l'on prend en compte la valeur foncière des propriétés où les données sont manquantes. Les propriétés où le nombre de logements (pour l'utilisation résidentielle) ou la superficie (pour les autres) sont manquants tendent à représenter une plus grande proportion de la valeur foncière comme le montre la figure \ref{fig:prop-val-and-lots-missing-data}.
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.6\linewidth]{figures/perc_missing_lot_and_val.pdf}
+            \includegraphics[width=1\linewidth]{figures/perc_missing_lot_and_val.pdf}
             \caption{Proportion de chaque utilisation du sol avec des données manquantes }
             \label{fig:prop-val-and-lots-missing-data}
         \end{figure}
@@ -226,7 +226,7 @@
                 \label{fig:carte-chaleur-donnee-manquante}
             \end{figure}
         \end{landscape}
-        Les lots où il manque des données ont typiquement une plus grande valeur foncière que ceux où toutes les données sont présentes. Cette variation peut changer selon l'utilisation du sol comme le montre la figure \ref{fig:missing-data-value-distr}. Le tableau \ref{tab:table-recap-missing-data} montre un sommaire des médianes en fonction de l'absence ou de la présence de données nécessaires.\par
+        Les lots où il manque des données ont typiquement une plus grande valeur foncière que ceux où toutes les données sont présentes. Cette variation peut changer selon l'utilisation du sol comme le montrent les figures \ref{fig:ana-desc-role-res} à \ref{fig:ana-desc-role-usmixte}. Le tableau \ref{tab:table-recap-missing-data} montre un sommaire des médianes en fonction de l'absence ou de la présence de données nécessaires.\par
         \begin{table}[H]
             \centering
             \caption{Récapitulatif de la médiane des valeurs au rôle en fonction de l'utilisation du sol et de la présence ou l'absence de données physiques requises }
@@ -245,20 +245,74 @@
                  Usage Mixte & 52 & 2,840,000 & 417 & 1,691,000\\\hline
             \end{tabular}
         \end{table}
-        Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montre la figure \ref{fig:rel-val-role-vs-var-int}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. \par
+        Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montrent les figures \ref{fig:ana-desc-role-res} à \ref{fig:ana-desc-role-usmixte}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. D'autre part, pour certaines propriétés (parcs), d'autre métriques seraient potentiellement nécessaires pour imputer la capacité de stationnement pour certains lots.\par
         Pour conclure, les données du rôle foncier illustrent l'utilisation des sols partout dans la métropole de manière désagrégée, permettant, lorsque les données sont présentes, de déduire les différentes variables requises pour estimer une capacité de stationnement. 
         \begin{landscape}
-            \begin{figure}
-                \centering  
-                \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
-                \caption{Distribution des valeurs selon l'utilisation et l'absence de données physiques}
-                \label{fig:missing-data-value-distr}
-            \end{figure}  
-            \begin{figure}
+            %\begin{figure}
+            %    \centering  
+            %    \includegraphics[width=1\linewidth]{figures/Donnees_manquantes_role_foncier.png}
+            %    \caption{Distribution des valeurs selon l'utilisation et l'absence de données physiques}
+            %    \label{fig:missing-data-value-distr}
+            %\end{figure}  
+            %\begin{figure}
+            %    \centering
+            %    \includegraphics[width=1\linewidth]{images/valeur_au_role_vs_variable_interet.png}
+            %    \caption{Relation entre la valeur au rôle et la principale variable d'intérêt}
+            %    \label{fig:rel-val-role-vs-var-int}
+            %\end{figure}
+            \begin{figure}[ht]
                 \centering
-                \includegraphics[width=1\linewidth]{images/valeur_au_role_vs_variable_interet.png}
-                \caption{Relation entre la valeur au rôle et la principale variable d'intérêt}
-                \label{fig:rel-val-role-vs-var-int}
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_1.png}
+                \caption{Graphiques descriptifs du rôle foncier: Usage résidentiel}
+                \label{fig:ana-desc-role-res}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_2.png}
+                \caption{Graphiques descriptifs du rôle foncier: Usage Industriel}
+                \label{fig:ana-desc-role-ind}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_4.png}
+                \caption{Graphiques descriptifs du rôle foncier: Infrastructures}
+                \label{fig:ana-desc-role-inf}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_5.png}
+                \caption{Graphiques descriptifs du rôle foncier: Commercial}
+                \label{fig:ana-desc-role-com}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_6.png}
+                \caption{Graphiques descriptifs rôle foncier: Services}
+                \label{fig:ana-desc-role-serv}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_7.png}
+                \caption{Graphiques descriptifs rôle foncier: Récréation}
+                \label{fig:ana-desc-role-rec}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_8.png}
+                \caption{Graphiques descriptifs rôle foncier: Ressources naturelles}
+                \label{fig:ana-desc-role-resnat}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_9.png}
+                \caption{Graphiques descriptifs rôle foncier: Inexploité}
+                \label{fig:ana-desc-role-inex}
+            \end{figure}
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=1\linewidth]{images/ana_desc_role_-1.png}
+                \caption{Graphiques descriptifs rôle foncier: Usage mixte}
+                \label{fig:ana-desc-role-usmixte}
             \end{figure}
         \end{landscape}
         
@@ -514,14 +568,17 @@
                 \caption{Diagramme entité association pour les règlements}\label{fig:offstreet_db_erd_rules}
             \end{figure}
             \FloatBarrier
-         
-        \subsubsection{Analyse descriptive des règlements recensés}
-            \begin{figure}[H]
+         \begin{landscape}
+            \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\linewidth]{figures/distr-reg-par-ville.pdf}
-                \caption{Nombre de règlements par ville, règlement et date d'entrée en vigueur}
+                \caption{Nombre de règlements par ville, texte de loi et date d'entrée en vigueur}
                 \label{fig:nombre-reg-date}
             \end{figure}
+        \end{landscape}
+        \subsubsection{Analyse descriptive des règlements recensés}
+            
+            
             Les graphiques de cette section donnent un portrait des règlements recensés. Il est important de noter que les règlements n'ont été recensés que jusqu'au milieu des années '90. Les plus vieux règlements recensés ont été répliqués pour être utilisés pour les plus vieilles juridictions. Ceci implique que même les propriétés construites avant l'avènement de l'automobile sont modélisées comme ayant un nombre de places minimum. Cette approche peut sembler contre-intuitive puisque ces règlements n'existaient pas auparavant, mais beaucoup de vieilles propriétés ont vu des stationnements aménagés après construction. Aucune analyse de sensibilité n'a été complétée pour voir quel effet cela aurait sur l'offre de stationnement prédite, particulièrement dans les quartiers centraux.\par
             
             La figure \ref{fig:nombre-reg-date} montre la distribution des règlements par ville, texte de loi, année d'entrée en vigueur et d'abrogation et ville. On constate que les règlements après l'harmonisation des règlements dominent les comptes. Ceci est dû au fait que ces règlements étaient facilement disponibles et constitue un important biais de l'étude. \par 
@@ -614,7 +671,7 @@
             \end{table}
             \begin{figure}[H]
                 \centering
-                \includegraphics[scale=1]{figures/exemple_stationnement_logement.pdf}
+                \includegraphics[width=0.6\linewidth]{figures/exemple_stationnement_logement.pdf}
                 \caption{Exemple de règle de stationnement pour logement}
             \end{figure}
             \clearpage
@@ -833,14 +890,17 @@
                 CUBF = 9470 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS CULTURELLES & 57 \\
             \end{longtable}
             Le tableau \ref{tab:liste-er-crees} à l'annexe \ref{sec:annex-prs-created} donne une liste des ensembles de règlements créés. La figure \ref{fig:er-counts-byperiod} montre le nombre d'ensembles de règlements par période. La période après l'harmonisation des règlements d'urbanisme (2009-aujourd'hui) comporte le plus d'ensembles de règlements par territoire puisque l'historique détaillé est compilé pour cette période alors que les autres ont une couverture nettement plus faible.
-            \begin{figure}[H]
-                \centering
-                \includegraphics[width=1\linewidth]{figures/er-counts-by-period.pdf}
-                \caption{Compte d'ensembles de règlements par période géopolitique}
-                \label{fig:er-counts-byperiod}
-            \end{figure}
+            
             Ceci complète le survol des données requises pour stocker l'inventaire et la réglementation. La section suivante définira les objets informatiques implémentés pour représenter les quantités d'intérêts. 
-
+            \begin{landscape}
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=1\linewidth]{figures/er-counts-by-period.pdf}
+                    \caption{Compte d'ensembles de règlements par période géopolitique}
+                    \label{fig:er-counts-byperiod}
+                \end{figure}
+            \end{landscape}
+            
     \subsection{Objets informatiques: attributs, méthodes et utilitaires}\label{ssec:obj-informatique-impl-stat}
             Selon l'\ac{OQLF} \parencite{oqlf_langage_2006}, les langages à objets sont définis de la manière suivante: 
             \begin{definition}
@@ -1088,7 +1148,7 @@
         On commence par sélectionner les points du rôle foncier dans une zone prescrite, on trouve les municipalités actuelles et historiques qui interceptent l'ensemble des points, on trouve les ensembles de règlements qui sont associés à chaque territoire, on segmente ensuite les données du rôle foncier en fonction de la réglementation qui s'y applique, et on applique les règlements. Une fois les calculs complétés, on agrège les calculs par lot pour l'ensemble des périodes avant de les sauvegarder dans la table appropriée. Ce cas de figure arrive si deux entrées du rôle sur un même lot ont des dates de construction différentes. 
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.8\linewidth]{figures/logigramme-calcul-minimums.pdf}
+            \includegraphics[width=1\linewidth]{figures/logigramme-calcul-minimums.pdf}
             \caption{Logigramme de calcul}
             \label{fig:logigramme_calcul_urbanisme}
         \end{figure}
@@ -1181,21 +1241,21 @@
             
         \subsection{Procédure de calcul des minimums}
         Comme le montre le logigramme à la figure \ref{fig:logigramme_calcul_urbanisme}, les \ac{TD} et \ac{RST} obtenus voient d'abord un \ac{PCI} calculé avant de compléter l'estimation de la capacité à l'aide de la fonction calculate\_parking\_for\_reg\_set\_territories. La conversion d'unités est gérée par la fonction generate\_input\_from\_PRS\_TD. Une fois la conversion complétée, les données sont envoyées à calculate\_parking\_reg\_set.  Des boucles imbriquées sont utilisées pour traiter chaque \ac{RST}, \ac{PRS}, \ac{PR} et sous-ensembles de règlement successivement. Le cœur de la fonctionnalité se trouve dans deux fonctions: calculate\_parking\_subset\_ from\_inputs\_class et subset\_operation. La première calcule les requis de stationnement et la deuxième fait un choix de l'estimation à utiliser s'il y a plusieurs sous-ensembles.    
-        
+        \clearpage
         \subsubsection{Calcul des sous-ensembles: calculate\_parking\_specific\_reg}
         Cette fonction calcule le nombre de places de stationnement pour un sous-ensemble de règlements. Le logigramme \ref{fig:logigramme_calcul_reg} détaille la procédure. Le code est disponible à l'annexe \ref{ann:code-addition-subset} pour l'opérateur d'addition (1) et à l'annexe \ref{ann:code-thresh-subset} pour l'opérateur de seuil (4) ou sur GitHub \parencite{charbonneau_epmpaulpolyinterface_backend_stationnement_maitrise_2025}.
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.9]{figures/logigramme-calcul-reglement.pdf}
+            \includegraphics[width=0.9\linewidth]{figures/logigramme-calcul-reglement.pdf}
             \caption{Logigramme de calcul d'un règlement}
             \label{fig:logigramme_calcul_reg}
         \end{figure}
         \clearpage
         \subsubsection{Arbitrage entre deux sous-ensembles: subset\_operation}
         Une fois qu'une estimation est calculée pour chaque sous-ensemble d'un règlement, il est nécessaire d'arbitrer sur quel sous-ensemble prend préséance. Cet arbitrage est fait par une succession de décisions logiques. Deux conditions peuvent s'appliquer: un \og{ou simple} \fg{} ou un \og{ou plus contraignant} \fg{}. Le logigramme \ref{fig:logigramme_arbitrage_ss_ensemble} montre la procédure d'arbitrage et le code est disponible à l'annexe \ref{ann:code-subset-oper}.
-        \begin{figure}[H]
+        \begin{figure}[htb]
             \centering
-            \includegraphics[scale=0.9]{figures/logigramme-arbitrage-2-se.pdf}
+            \includegraphics[width=0.9\linewidth]{figures/logigramme-arbitrage-2-se.pdf}
             \caption{Arbitrage entre deux estimations}
             \label{fig:logigramme_arbitrage_ss_ensemble}
         \end{figure}

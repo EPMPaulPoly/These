@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage[english,french]{babel} 
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}          % needed for French accents
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{siunitx}                 % optional, nicer y‑axis numbers
+\usepackage{booktabs}                % pretty tables for the optional preview
+\begin{document}
+    \begin{tikzpicture}
+          \node at ( -0.66,0)  [circle,draw=blue!50,fill=blue!20,minimum size=10mm] {};
+          \node at ( 0.66,0)  [circle,draw=blue!50,fill=blue!20,minimum size=10mm] {};
+          \node at ( -2,0) [star,draw=blue!50,fill=blue!20,minimum size=10mm] {};
+          \node at ( 2,0)  [isosceles triangle,draw=blue!50,fill=blue!20,minimum size=10mm] {};
+          \node at (0,1.0) [black] {Triangle, étoile, cercle};
+    \end{tikzpicture}
+\end{document}
