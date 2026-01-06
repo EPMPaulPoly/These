@@ -137,7 +137,7 @@
            \end{tabular}
            
         \end{table}   
-        La table \underline{association\_cadastre\_role} associe le cadastre avec le rôle foncier. En premier lieu, une jointure géométrique a été complétée et sauvegardée. Initialement, une nouvelle requête spatiale était lancée à chaque chargement de données mais cela ralentissait substantiellement la visualisation. \par
+        La table \underline{association\_cadastre\_role} associe le cadastre avec le rôle foncier. En premier lieu, une jointure géométrique a été complétée et sauvegardée. Initialement, une nouvelle requête spatiale était lancée à chaque chargement de données, mais cela ralentissait substantiellement la visualisation. \par
         L'approche proposée utilise directement les données brutes issues de \textcite{gouvernement_du_quebec_manuel_2024}. La clé primaire pour le cadastre est g\_no\_lot et la clé primaire pour le rôle est l'id\_provinc. Les champs de la table \underline{association\_cadastre\_role} sont donnés au tableau \ref{tab:definition_assoc_role_cadastre}.
         \begin{table}[ht]
             \caption{Colonnes pour la table \underline{association\_cadastre\_role}}
@@ -245,7 +245,7 @@
                  Usage Mixte & 52 & 2,840,000 & 417 & 1,691,000\\\hline
             \end{tabular}
         \end{table}
-        Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montrent les figures \ref{fig:ana-desc-role-res} à \ref{fig:ana-desc-role-usmixte}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. D'autre part, pour certaines propriétés (parcs), d'autre métriques seraient potentiellement nécessaires pour imputer la capacité de stationnement pour certains lots.\par
+        Dans le cas des propriétés où les données physiques sont présentes, on constate une corrélation entre la valeur au rôle comme le montrent les figures \ref{fig:ana-desc-role-res} à \ref{fig:ana-desc-role-usmixte}. Un meilleur filtrage des données aberrantes pourrait en outre permettre d'améliorer l'accord entre les données et une régression simple pour imputer les données manquantes. D'autre part, pour certaines propriétés (parcs), d'autres métriques seraient potentiellement nécessaires pour imputer la capacité de stationnement pour certains lots.\par
         Pour conclure, les données du rôle foncier illustrent l'utilisation des sols partout dans la métropole de manière désagrégée, permettant, lorsque les données sont présentes, de déduire les différentes variables requises pour estimer une capacité de stationnement. 
         \begin{landscape}
             %\begin{figure}
@@ -269,7 +269,7 @@
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\linewidth]{images/ana_desc_role_2.png}
-                \caption{Graphiques descriptifs du rôle foncier: Usage Industriel}
+                \caption{Graphiques descriptifs du rôle foncier: Usage industriel}
                 \label{fig:ana-desc-role-ind}
             \end{figure}
             \begin{figure}[ht]
@@ -287,31 +287,31 @@
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\linewidth]{images/ana_desc_role_6.png}
-                \caption{Graphiques descriptifs rôle foncier: Services}
+                \caption{Graphiques descriptifs du rôle foncier: Services}
                 \label{fig:ana-desc-role-serv}
             \end{figure}
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\linewidth]{images/ana_desc_role_7.png}
-                \caption{Graphiques descriptifs rôle foncier: Récréation}
+                \caption{Graphiques descriptifs du rôle foncier: Récréation}
                 \label{fig:ana-desc-role-rec}
             \end{figure}
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\linewidth]{images/ana_desc_role_8.png}
-                \caption{Graphiques descriptifs rôle foncier: Ressources naturelles}
+                \caption{Graphiques descriptifs du rôle foncier: Ressources naturelles}
                 \label{fig:ana-desc-role-resnat}
             \end{figure}
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\linewidth]{images/ana_desc_role_9.png}
-                \caption{Graphiques descriptifs rôle foncier: Inexploité}
+                \caption{Graphiques descriptifs du rôle foncier: Inexploité}
                 \label{fig:ana-desc-role-inex}
             \end{figure}
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=1\linewidth]{images/ana_desc_role_-1.png}
-                \caption{Graphiques descriptifs rôle foncier: Usage mixte}
+                \caption{Graphiques descriptifs du rôle foncier: Usage mixte}
                 \label{fig:ana-desc-role-usmixte}
             \end{figure}
         \end{landscape}
@@ -328,15 +328,15 @@
                     \hline
                     Nom champ & Description & Type de données & CP/CS  \\
                     \hline
-                    id\_inv & Clé primaire  & Serial & CP \\ 
+                    id\_inv & Clé primaire  & Sériel & CP \\ 
 
                     n\_places\_min & 
-                    Nombres de places minimales requises par la code d'urbanisme & 
+                    Nombres de places minimales requises par le code d'urbanisme & 
                     Nombre réel &
                     \\ 
 
                     n\_places\_max & 
-                    Nombres de places minimales requises par la code d'urbanisme & 
+                    Nombres de places minimales requises par le code d'urbanisme & 
                     Nombre réel & 
                     \\ 
 
@@ -347,7 +347,7 @@
 
                     n\_places\_mesure & 
                     Entrée manuelle du nombre de places de stationnement & 
-                    Nombre réel&
+                    Nombre réel &
                     \\
 
                     methode\_estime & 
@@ -357,7 +357,7 @@
                     2 - Régl.\\
                     3 - Régl. entrée manuelle}  & \\ 
                     id\_reg\_stat & 
-                    Règlements utilisés pour générer l'estimé. Si plusieurs sont utilisés, il peuvent être séparés par des virgules ou \textbackslash & 
+                    Règlements utilisés pour générer l'estimé. Si plusieurs sont utilisés, ils peuvent être séparés par des virgules ou \textbackslash & 
                     Texte & 
                     \\ 
 
@@ -391,7 +391,7 @@
                         \hline
                         Nom champ & Description & Type de données & CP/CS  \\
                         \hline
-                        id\_periode & Clé primaire  & Serial & CP \\ 
+                        id\_periode & Clé primaire  & Sériel & CP \\ 
                         nom\_periode & Nom de la période à montrer & Texte & \\ 
                         date\_debut\_periode & Année de début de la période & Entier & \\ 
                         date\_fin\_periode & Année de fin de la période & Entier & \\ 
@@ -407,7 +407,7 @@
                         \hline
                         Nom champ & Description & Type de données & CP/CS  \\
                         \hline
-                        id\_periode\_geo & Clé primaire  & Serial & CP \\ 
+                        id\_periode\_geo & Clé primaire  & Seriel & CP \\ 
                         id\_periode & Colonne d'association à l'historique & Entier & CS\\ 
                         ville & Nom de la ville & Texte & \\ 
                         secteur & Secteur de la ville & Texte & \\ 
@@ -454,7 +454,7 @@
                     \hline
                     Nom champ & Description & Type de données & CP/CS  \\
                     \hline
-                    id\_reg\_stat & Clé primaire  & Serial & CP \\ 
+                    id\_reg\_stat & Clé primaire  & Sériel & CP \\ 
                     description & Description & Texte & \\ 
                     annee\_debut\_reg & Année où le règlement est entré en vigueur & Entier & \\ 
                     annee\_fin\_reg & Année d'abrogation du règlement & Entier & \\ 
@@ -484,7 +484,7 @@
                     \hline
                     Nom champ & Description & Type de données & CP/CS  \\
                     \hline
-                    id\_reg\_stat\_emp & Clé primaire  & Serial & CP \\ 
+                    id\_reg\_stat\_emp & Clé primaire  & Sériel & CP \\ 
                     id\_reg\_stat & Référence à l'entête du règlement & Entier & CS \\ 
                     ss\_ensemble & Sous-ensemble pour la ligne & Entier & \\ 
                     seuil & Seuil inférieur de validité du règlement $t_{s,reg}$& Entier & \\ 
@@ -521,7 +521,7 @@
                     \hline
                     Nom champ & Description & Type de données & CP/CS  \\
                     \hline
-                    id\_unite & Clé primaire  & Serial & CP \\  
+                    id\_unite & Clé primaire  & Sériel & CP \\  
                     colonne\_role\_foncier & Colonne du rôle foncier à utiliser pour cette unité $C_{conv,i}$ & Texte & \\
                     facteur\_correction & Facteur de multiplication pour l'unité $p_{conv,i}$ & Réel & \\
                     cubf & Pas implémenté: facteur différent pour un CUBF spécifique & Entier & \\
@@ -711,7 +711,8 @@
     \subsection{Ensemble des règlements et association à la géopolitique} \label{ssec:ensembles_association}
         \subsubsection{Structure des données}
             Cette section va introduire le schéma relationnel de données qui permet d'associer un ensemble de règlements à un territoire pour une période donnée. Quatre tables sont utilisées pour représenter la variation spatio-temporelle de la réglementation: \underline{ensembles\_reglements\_stat}, \underline{cubf}, \underline{association\_er\_reg\_stat} et \underline{assoc\_er\_territoire}.\par
-            \underline{ensembles\_reglements\_stat} contient une entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} en montre les colonnes. \par
+
+            \underline{ensembles\_reglements\_stat} contient un entête pour chaque ensemble de règlements. Le tableau \ref{tab:definition_er} en montre les colonnes. \par
             \begin{table}[h]
                 \caption{Colonnes pour la table \underline{ensembles\_reglement\_stat}}
                 \label{tab:definition_er}
@@ -720,7 +721,7 @@
                         \hline
                         Nom champ & Description & Type de données & CP/CS  \\
                         \hline
-                        id\_er & Clé primaire  & Serial & CP \\  
+                        id\_er & Clé primaire  & Sériel & CP \\  
                         date\_debut\_er & Année où l'ensemble de règlements entre en vigueur & Entier & \\
                         date\_fin\_er & Année où l'ensemble de règlements est abrogé & Entier & \\
                         description\_er & Description à la discrétion de l'utilisateur & Texte & \\
@@ -901,10 +902,10 @@
                 \end{figure}
             \end{landscape}
             
-    \subsection{Objets informatiques: attributs, méthodes et utilitaires}\label{ssec:obj-informatique-impl-stat}
+    \subsection{Objets informatiques: Attributs, méthodes et utilitaires}\label{ssec:obj-informatique-impl-stat}
             Selon l'\ac{OQLF} \parencite{oqlf_langage_2006}, les langages à objets sont définis de la manière suivante: 
             \begin{definition}
-                Langage de programmation dans lequel les composantes d'un programme sont modulaires et définies comme des objets indépendants.[...] Les concepts d'encapsulation et d'héritage sont à la base des langages orientés objet. Ainsi, l'encapsulation permet la réunion des données et des procédures dans une même entité appelée objet.
+                Langage de programmation dans lequel les composantes d'un programme sont modulaires et définies comme des objets indépendants. [...] Les concepts d'encapsulation et d'héritage sont à la base des langages orientés objet. Ainsi, l'encapsulation permet la réunion des données et des procédures dans une même entité appelée objet.
             \end{definition}
             Ces langages sont associés à un degré d'abstraction où les objets représentent un concept associé au problème résolu. Les objets sont définis par des classes. Les classes ont des attributs les définissant et des méthodes qui modifient leurs attributs. Des fonctions utilitaires additionnelles peuvent être associées à un objet, par exemple pour le créer. Cela permet une représentation fonctionnelle du problème et met l'emphase sur les structures de données utilisées et tend à être utilisé pour des problèmes plus complexes et pour faciliter la maintenance et la compréhension \parencite{lawhead_learning_2023}. Pour ce projet, les classes suivantes suivantes ont été définies dans le cadre du mémoire.
             \begin{itemize}
@@ -1081,14 +1082,14 @@
             \ac{CUBF} & Code d'utilisation du bien-fonds. \\
             unite & Unité représentée par la ligne. \\
             id\_reg\_stat & Identifiant du règlement à appliquer. \\
-            valeur & Valeur d'intérêt pour la prédictions en unités converties pour le lot et le règlement spécifiés \\
+            valeur & Valeur d'intérêt pour la prédiction en unités converties pour le lot et le règlement spécifiés \\
             \midrule
             \multicolumn{2}{l}{\textbf{Méthodes}} \\
             \midrule
             get\_by\_reg & Renvoie les entrées associées à un règlement. \\
             filter\_by\_threshold & Renvoie les entrées dont les valeurs se situent entre un seuil inférieur et un seuil supérieur. \\
             get\_by\_unites & Renvoie les données associées à l'identifiant d'unités. \\
-            check\_units\_present & Vérifie que, pour chaque lot, les unités fournies en entrée sont présentes. \\
+            check\_units\_present & Vérifie la présence des unités requises pour chaque règlement. \\
             \midrule
             \multicolumn{2}{l}{\textbf{Fonction additionnelle}} \\
             \midrule
@@ -1205,7 +1206,7 @@
         \end{figure}
         Les requêtes SQL et quelques morceaux de script Python sont présentés à l'annexe \ref{sec:annex-assign-rule-to-role}
     
-    \subsection{Procédure d'assignation des données foncières aux RST}\label{ssec:meth-assign-td-to-rst}
+    \subsection{Procédure d'affectation des données foncières aux RST}\label{ssec:meth-assign-td-to-rst}
         Les données foncières obtenues initialement doivent ensuite être assignées à chaque ensemble de règlements en préparation à l'estimation de la capacité de stationnement. Cette opération est complétée dans une boucle au sein de la fonction get\_rst\_by\_tax\_tax\_data. Les détails de cette boucle sont donnés à l'annexe \ref{ann:assignation-donnees-fonc}.
 
         Cette boucle utilise deux fonctions: year\_filter et territory\_filter. Year filter extrait les points du rôle dont les dates de construction sont à l'intérieur de la plage de validité du \ac{RST}. La méthode year\_filter est donnée à l'extrait de code \ref{lst:year_filter}.
@@ -1215,7 +1216,7 @@
         La résultante de cet ensemble d'opérations est deux listes qui associent un \ac*{RST} avec un \ac*{TD} en fonction des limites géographiques et des dates de construction. Ces deux listes sont ensuite utilisées comme intrants pour l'estimation de la capacité. Le tableau \ref{tab:assignation-exemple-calcul} donne un aperçu de la liste pour le cas hypothétique dressée dans cette section.
         \begin{table}[H]
             \centering
-            \caption{Assignation des éléments du rôle à un Ensemble de Règlements Territoire}
+            \caption{Affectation des éléments du rôle à un Ensemble de Règlements Territoire}
             \label{tab:assignation-exemple-calcul}
             \begin{tabular}{c||cccc}
                 \hline

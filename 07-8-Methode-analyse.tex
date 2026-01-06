@@ -139,7 +139,7 @@
                 N_{depl,res,q} &= \sum_{\substack{P_{logis} \cap G_q\neq\varnothing}}{F_{dep}} \\
                 PM_{res,mode,q} &= \frac{N_{depl,mode,res,q}}{N_{depl,res,q}} \label{eq:pm-res}
             \end{align}
-            \paragraph{Part modale déplacements internes} La part modale des déplacements internes vise à comprendre la mobilité dans un quartier, peu importe le lieu de résidence. L'indicateur est imparfait puisque les quartiers ont des superficies variables, mais donne une indication des comportements de mobilité à l'intérieur d'un quartier. Il est calculé selon la formule donnée ci-dessous et la requête SQL est donnée en annexe \ref{sec:annexe_parts_modales}.
+            \paragraph{Part modale des déplacements internes} La part modale des déplacements internes vise à comprendre la mobilité dans un quartier, peu importe le lieu de résidence. L'indicateur est imparfait puisque les quartiers ont des superficies variables, mais donne une indication des comportements de mobilité à l'intérieur d'un quartier. Il est calculé selon la formule donnée ci-dessous et la requête SQL est donnée en annexe \ref{sec:annexe_parts_modales}.
             \begin{align}
                 N_{depl,mode,int,q} &= \sum_{\substack{P_{ori} \cap G_q \neq\varnothing\\ P_{des} \cap G_q\neq\varnothing \\ M_{dep}=mode}}{F_{dep}}  \\
                 N_{depl,int,q} &= \sum_{\substack{P_{ori} \cap G_q \neq\varnothing\\ P_{des} \cap G_q \neq\varnothing}}{F_{dep}}  \\
@@ -340,7 +340,7 @@
                  \hline
                  \endfoot
                  nolog & Identifiant unique du logis & Entier  \\
-                 tlog& Booléen indiquant la première entrée pour un logis & Booléen \\
+                 tlog & Booléen indiquant la première entrée pour un logis & Booléen \\
                  facmen & Facteur de pondération du ménage & Nombre réel \\
                  nbveh & Nombre de véhicule du ménage & Entier  \\
                  clepersonne & Identifiant unique de personne & Entier  \\
