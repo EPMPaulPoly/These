@@ -695,7 +695,7 @@ return tax_data_to_out
 \end{lstlisting}
 \section{Identification lots problématiques}\label{sec:annexe_identification_lots_problématiques}
 Du fait de problèmes de complétude des données du rôle foncier, il est potentiellement nécessaire d'aider l'analyste à identifier des lots qui doivent potentiellement être revisités.
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
     SELECT
     	cad.g_no_lot,
     	COUNT(rf.id_provinc) AS compte_role,
@@ -1181,7 +1181,7 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
 
 \section{Code: Nombre d'automobiles des résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
 Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménage pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profils d'accumulation de véhicules \parencite{diallo_methodology_2015}.
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
     DELETE FROM motorisation_par_quartier;
     INSERT INTO motorisation_par_quartier (id_quartier, nb_voitures,nb_voitures_max_pav,nb_voitures_min_pav,diff_max_signee)
     WITH aggregated_data AS (
@@ -1219,7 +1219,7 @@ Le nombre de véhicules appartenant aux résidents d'un quartier peut être esti
 \end{lstlisting}
 \section{Code: Population issue du recensement}\label{sec:annexe_pop_quartiers}
 Les données de recensement peuvent être agrégées par quartier en utilisant une approche similaire à au nombre d'automobiles. Cependant, puisque les aires de diffusions sont des polygones et qu'il y a le potentiel d'avoir des aires de diffusions qui touchent à plusieurs quartiers, une condition a été ajoutée voulant que 90\% de l'aire de diffusion doive être dans le quartier pour être sommée. 
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
     DELETE FROM population_par_quartier;
     INSERT INTO population_par_quartier (id_quartier,pop_tot_2016,pop_tot_2021)
     WITH pop_2016_ag AS(
@@ -1381,7 +1381,7 @@ Cette section va donner la requête SQL qui compile les différentes parts modal
 
 \section{Requête SQL: Intrants de validation }\label{ann:intants-validation}
 La requête suivante est utilisée pour créer les données entrantes pour l'affectation de lots à une strate de validation:
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
 DROP TABLE inputs_validation;
 
 CREATE TABLE inputs_validation (
@@ -1579,7 +1579,7 @@ where 8 = ANY(u.list_unite)
 \end{lstlisting}
 \section{Requête SQL: recherche de lot selon l'intensité de prédiction de stationnement}\label{ann:requete-intensite-stat}
 L'évaluation du modèle a soulevé l'intensité de prédiction de stationnement comme une métrique pour identifier des lots où les prédictions auraient d'importantes erreurs. La requête suivante montre comment compiler une liste de propriété à vérifier selon cet indicateur
-\begin{lstlisting}
+\begin{lstlisting}[language=SQL]
 with inventaire_reg AS(
 	SELECT
 		g_no_lot,
