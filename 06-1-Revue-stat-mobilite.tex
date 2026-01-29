@@ -45,13 +45,17 @@
 
         L'offre de stationnement résidentiel affecte en premier lieu la possession automobile. Les études sont souvent basées sur des méthodes de régression logistique et sont synthétisées au tableau \ref{tab:assoc-disag-car-own}. Le stationnement résidentiel peut aussi être associé avec les comportements de mobilité au-delà de la possession automobile. Quelques études sont synthétisées au tableau \ref{tab:assoc-disag-car-behav} et trouvent souvent un lien avec les comportements comme le choix modal ou le nombre de kilomètres parcourus en véhicule personnel. Le lien avec les comportements de mobilité est souvent modulé par la possession automobile \parencite{currans_households_2023,chatman_does_2013}. Les lecteurs peuvent se référer à \textcite{currans_linking_2021} pour une feuille de route conceptuelle sur les liens entre le stationnement résidentiel et les habitudes de mobilité des résidents.
 
-
+        \newcommand{\TitreLongTableEtudeAgreg}{Sommaire des études agrégées liant le stationnement à la mobilité}
+        \newcommand{\TitreLongTableEtudMotoDesag}{Sommaire des études désagrégées liant le stationnement à la motorisation}
+        \newcommand{\TitreLongTableEtudCompDesag}{Sommaire des études désagrégées liant le stationnement résidentiel aux comportements}
         \begin{landscape}
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{longtable}{p{5cm}p{3cm}p{5cm}p{9cm}}
-                \caption{Sommaire des études agrégées liant le stationnement à la mobilité}\label{tab:assoc-agreg-stat-mobi}\\\hline
+                \caption{\TitreLongTableEtudeAgreg}\label{tab:assoc-agreg-stat-mobi}\\\hline
                 Étude & Contexte & Type & Constat \\\hline
                 \endfirsthead
-                \multicolumn{4}{c}{{ Tableau \thetable\ (suite)}} \\\hline
+                \multicolumn{4}{c}{{ \textsc{Tableau} \thetable\ \TitreLongTableEtudeAgreg\ (suite)}} \\[1em]\hline
                 Étude & Contexte & Type & Constat \\\hline
                 \endhead
                 \hline
@@ -66,10 +70,10 @@
             \end{longtable}
        
             \begin{longtable}{p{5cm}p{3cm}p{5cm}p{9cm}}
-                \caption{Sommaire des études désagrégées liant le stationnement à la motorisation}\label{tab:assoc-disag-car-own}\\\hline
+                \caption{\TitreLongTableEtudMotoDesag}\label{tab:assoc-disag-car-own}\\\hline
                 Étude & Contexte & Type & Constat \\\hline
                 \endfirsthead
-                \multicolumn{4}{c}{{ Tableau \thetable\ (suite)}} \\\hline
+                \multicolumn{4}{c}{{ \textsc{Tableau} \thetable\ \TitreLongTableEtudMotoDesag\ (suite)}} \\[1em]\hline
                 Étude & Contexte & Type & Constat \\\hline
                 \endhead
                 \hline
@@ -86,10 +90,10 @@
                 \end{longtable}
 
             \begin{longtable}{p{5cm}p{3cm}p{5cm}p{9cm}}
-                \caption{Sommaire des études désagrégées liant le stationnement résidentiel aux comportements}\label{tab:assoc-disag-car-behav}\\\hline
+                \caption{\TitreLongTableEtudCompDesag}\label{tab:assoc-disag-car-behav}\\\hline
                 Étude & Contexte & Type & Constat \\\hline
                 \endfirsthead
-                \multicolumn{4}{c}{{ Tableau \thetable\ (suite)}} \\\hline
+                \multicolumn{4}{c}{{ \textsc{Tableau} \thetable\ \TitreLongTableEtudCompDesag\  (suite)}} \\ [1em]\hline
                 Étude & Contexte & Type & Constat \\\hline
                 \endhead
                 \hline
@@ -100,6 +104,7 @@
                 \textcite{khordagui_commute_2019} & Los Angeles & Régression logistique binaire et multinomiale & Augmentation de 1\% de l'offre de stationnement sur rue à domicile augmente les chances de conduire de 0.12\% et le même pourcentage du stationnement hors rue augmente les chances de 0.06\%\\
                 \textcite{den_braver_development_2022} & Toronto & Ratio de risque avec un indice de \og{conduisabilité}\fg{} basé sur l'aire de stationnement OSM par aire de diffusion, combiné à d'autres facteurs par analyse de composantes principales & 1.8 fois plus de chances de conduire pour le 5\textsuperscript{e} d'indice de \og{conduisabilité}\fg{} que pour le premier \\
             \end{longtable}
+            }
         \end{landscape}
 
         
@@ -194,15 +199,18 @@
             \end{tabular}
             
         \end{table}
-        Il faut cependant noter que diverses solutions techniques sont en développement pour minimiser les effets sur l'hydrologie incluant des bassins de rétention ou des revêtements plus perméables \parencite{biswal_nature-based_2022,wang_performance_2022}. \par
-        Malgré les potentielles solutions techniques, la littérature est sans équivoque sur le fait que l'automobile requiert des taux d'occupation faibles dans les stationnements pour être fonctionnelle \parencite{heran_consommation_2008,davis_estimating_2010,hoehne_valley_2019}. Il y a donc le potentiel de faire du déport modal ou simplement réduire la capacité excédentaire pour réduire les dommages environnementaux. Ce constat a l'avantage de potentiellement mener à d'importantes réductions de coûts pour les ménages, les entreprises et les collectivités. La section suivante discutera des coûts de construction. 
+    Il faut cependant noter que diverses solutions techniques sont en développement pour minimiser les effets sur l'hydrologie incluant des bassins de rétention ou des revêtements plus perméables \parencite{biswal_nature-based_2022,wang_performance_2022}. \par
+    Malgré les potentielles solutions techniques, la littérature est sans équivoque sur le fait que l'automobile requiert des taux d'occupation faibles dans les stationnements pour être fonctionnelle \parencite{heran_consommation_2008,davis_estimating_2010,hoehne_valley_2019}. Il y a donc le potentiel de faire du déport modal ou simplement réduire la capacité excédentaire pour réduire les dommages environnementaux. Ce constat a l'avantage de potentiellement mener à d'importantes réductions de coûts pour les ménages, les entreprises et les collectivités. La section suivante discutera des coûts de construction. 
+    \newcommand{\TitreSommaireCoutsProvisions}{Sommaire des coûts de provision du stationnement dans les immeubles résidentiels}
     \begin{landscape}
+        {\captionsetup{justification=centering}
+        \setlength{\LTcapwidth}{\linewidth} 
             \begin{longtable}{p{1.25cm}|p{1cm}|p{1cm}|p{5cm}p{4cm} p{7cm}}
-                \caption{Sommaire des coûts de provision du stationnement dans les immeubles résidentiels}\label{tab:construction-costs} \\ 
+                \caption{\TitreSommaireCoutsProvisions}\label{tab:construction-costs} \\ 
                 \hline
                 Étude& Date & Où & Constat sur & Méthode &  Effet constaté \\\hline
                 \endfirsthead
-                \multicolumn{5}{c}{{ Tableau \thetable\ (suite)}} \\\hline
+                \multicolumn{6}{c}{{ \textsc{Tableau} \thetable\ \TitreSommaireCoutsProvisions\ (suite)}} \\[1em]\hline
                 Étude & Date & Où & Constat sur & Méthode &Effet constaté \\\hline
                 \endhead
                 \hline
@@ -282,7 +290,8 @@
                     \multirow{4}{*}{\rotatebox{90}{\citeauthor{cudney_parking_2017}}} & \multirow{4}{*}{\rotatebox{90}{2017}}    & \multirow{4}{*}{\rotatebox{90}{États Unis}}                   & Coût médian de construction stationnement étagé& Enquête industrie & 19700\$ par place \\\cline{4-6}
                                                                      &                                                          &   &    Coût médian par pied carré stationnement étagé & Enquête industrie & 59.06\$ par pied carré \\
             \end{longtable}
-        \end{landscape}
+        }
+    \end{landscape}
     \subsection{Coûts du stationnement}\label{sec:couts-effet-mobilite-stat}
         \subsubsection{Coûts de construction}
             La provision de stationnements génère des coûts pour une variété de parties prenantes: les individus paient indirectement pour le stationnement par les prix de différents biens et service, les collectivités locales doivent gérer les impacts du stationnement sur leurs infrastructures et le stationnement crée aussi des externalités \parencite{shoup_high_2005}. Cette section visera à identifier quels sont les coûts associés et qui les porte. La première catégorie de coûts est liée au logement. Le tableau \ref{tab:construction-costs} synthétise les coûts de construction liés au stationnement et leurs impacts sur les dépenses des ménages en logement. 

@@ -217,9 +217,28 @@
 \usepackage{algorithm}
 \usepackage{paralist,enumitem}
 \usepackage{algpseudocode}
+%%
+%% Définitions spécifiques au format de rédaction de Poly.
+%% Here we define the Poly formatting.
+\RequirePackage[\Langue]{MemoireThese}
+\newcommand{\annexsection}[1]{%
+  \refstepcounter{section}% increment section counter
+  \section*{#1}% print the title
+  \addcontentsline{app}{section}{\protect\numberline{\thesection}#1}% only to annex ToC
+}
 \usepackage{listings} % Si on veut ajouter des lignes de codes dans le texte / If you want to add lines of code to the text
-\renewcommand{\lstlistingname}{Extrait de code}
-\renewcommand{\lstlistlistingname}{LISTE DES EXTRAITS DE CODE}
+\usepackage[titles]{tocloft}
+%\newlistof{lstlisting}{lol}{\lstlistlistingname}
+% Nom et titre
+\renewcommand{\lstlistingname}{Extrait de code}          % pour le caption dans le texte
+\renewcommand{\lstlistlistingname}{LISTE DES EXTRAITS DE CODE} % pour la liste
+\makeatletter
+\renewcommand*{\l@lstlisting}[2]{%
+  \@dottedtocline{1}{1.5em}{3em}{\lstlistingname~#1}{#2}%
+}
+\makeatother
+
+% réduction du nombre d'alarmes
 \usepackage{silence}
 \WarningFilter{fancyhdr}{\headheight is too small}
 %\WarningFilter{latex}{Underfull \hbox}
@@ -238,10 +257,9 @@
     basicstyle=\ttfamily\footnotesize,
     breakatwhitespace=false,         
     breaklines=true,                 
-    captionpos=b,                    
+    captionpos=t,                    
     keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
+    numbers=none,                    
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
@@ -249,10 +267,7 @@
 }
 
 \lstset{style=mystyle}
-%%
-%% Définitions spécifiques au format de rédaction de Poly.
-%% Here we define the Poly formatting.
-\RequirePackage[\Langue]{MemoireThese}
+
 %%
 %% Définitions spécifiques à l'étudiant.
 %% Student-specific definitions.
@@ -279,7 +294,7 @@
 
 %% Ajoute en 2022 (ajout des titres complets des tables et figure et alignement)
 %% Added in 2022 (added full table and figure titles and alignment)
-\usepackage[titles]{tocloft}
+
   \renewcommand{\cftchapleader}{\cftdotfill{\cftsecdotsep}} % dotted chapter leaders
 
 \renewcommand\cfttabindent{0pt}
@@ -291,26 +306,32 @@
 \renewcommand\cftfigpresnum{\figurename\ }
 
 \ifthenelse{\equal{\Langue}{english}}{
-	\renewcommand\cftchapfont{CHAPTER }
-    \renewcommand\cftchappagefont{}
+	\renewcommand\cftchappresnum{\normalfont CHAPTER~}
+    \renewcommand\cftchappagefont{\normalfont}
 }{
-	\renewcommand\cftchapfont{CHAPITRE }
-    \renewcommand\cftchappagefont{}
+	\renewcommand\cftchappresnum{\normalfont CHAPITRE~}
+    \renewcommand\cftchappagefont{\normalfont}
+    \renewcommand{\cftchapfont}{\normalfont} 
 }
+\setlength{\cftchapnumwidth}{7.5em}
 \AtEveryBibitem{
   \clearfield{note}
   \clearfield{addendum}
   \clearfield{annotation}
 }
 
-%%
-%% Il y a un document par chapitre du mémoire ou thèse.
-%% There is one document per chapter of the thesis or dissertation.
 
+
+% Apparence caption tbale figure
 \captionsetup[table]{justification=centering, singlelinecheck=false,labelsep=space,margin=2cm}
 \captionsetup[figure]{justification=centering,singlelinecheck=false,labelsep=space,margin=2cm}
+
+% Commandes pour divers petits modif visuelles
 \newcommand{\mc}[2]{\makecell[{{p{#1cm}}}]{#2}}
 
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
+}
 \begin{document}
 %\bstctlcite{IEEEexample:BSTcontrol}
 
@@ -375,7 +396,12 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 }{
 	\renewcommand\contentsname{TABLE DES MATIÈRES}
 }
-\tableofcontents
+\begingroup
+\let\oldaddcontentsline\addcontentsline % on sauvegarde
+\renewcommand{\addcontentsline}[3]{}   % on bloque l'ajout d'entrées dans la ToC
+\tableofcontents                       % La ToC s'affiche, mais aucune entrée n'est créée
+\let\addcontentsline\oldaddcontentsline % on restaure
+\endgroup
 %%
 %% Liste des tableaux
 %% List of tables
@@ -392,17 +418,29 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 }{
 	\renewcommand\listfigurename{LISTE DES FIGURES}
 }\listoffigures
+\clearpage
+\phantomsection
+    \addcontentsline{toc}{chapter}{\lstlistlistingname}
+    %\addcontentsline{toc}{chapter}{LISTE DES EXTRAITS DE CODE}
+    
+    % Titre centré manuel
+    %\begin{center}
+    %\textbf{LISTE DES EXTRAITS DE CODE}
+    %\end{center}
+    %\hspace{0.5em} 
+    % Affiche la liste brute, sans saut de page
+    
+    \lstlistoflistings
+
+
+% List des sigles et abbrev
+\include{04-Sigles_Abrev}       % Liste des sigles et abréviations.
+
 %%
 %% Liste des annexes au besoin.
 %% List of appendices, if needed.
-}
-\lstlistoflistings
-\newcommand{\SubItem}[1]{
-    {\setlength\itemindent{15pt} \item[-] #1}
-}
-
-\include{04-Sigles_Abrev}       % Liste des sigles et abréviations.
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{\listofappendices}{}
+}
 \mainmatter
 \include{05-Introduction}       % Introduction au sujet de recherche.
 
@@ -439,6 +477,7 @@ a été dûment accepté\ifthenelse{\equal{\monDiplome}{M}}{}{e} par le jury d'e
 %	\bibliographystyle{apa-uqac-fr}    % Style bibliographique / Bibliography style 
 %}
 %
+\clearpage
 \ifthenelse{\equal{\AnnexesPresentes}{O}}{
 	\appendix%
 	\newcommand{\Annexe}[1]{\annexe{#1}\setcounter{figure}{0}\setcounter{table}{0}\setcounter{footnote}{0}}%

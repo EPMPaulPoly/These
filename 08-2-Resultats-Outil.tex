@@ -59,6 +59,9 @@ Les figures \ref{fig:schema-api-parking-dev}, \ref{fig:api-schema-2}, \ref{fig:s
 
 Normalement, l'\ac{API} a des fonctions de validations qui vérifient que les paramètres soient du bon type, dans des limites raisonnables et qu'elles ne présentent pas un risque à l'intégrité de la base de données. Ces fonctions de validation n'ont pas été mises en place. Les tests unitaires qui typiquement assurent la qualité et la robustesse du code n'ont pas été implémentés non plus. Pour les graphiques d'analyse agrégée, les variables que peuvent demander les analystes sont données au tableau \ref{tab:analysis-var-query-vals} ainsi que la référence à l'équation utilisée pour calculer l'indicateur. La colonne ordre dénote si la variable nécessite qu'un ordre de priorité des estimations de capacité soit spécifié.
 
+\newcommand{\TableSiglesAPI}{Sigles de variables pour les requêtes de graphique}
+{\captionsetup{justification=centering}
+\setlength{\LTcapwidth}{\linewidth} 
 \begin{center}
     \begin{longtable}{p{8cm}m{1.5cm}ll}
         \caption{Sigles de variables pour les requêtes de graphique}\label{tab:analysis-var-query-vals}\\
@@ -66,7 +69,7 @@ Normalement, l'\ac{API} a des fonctions de validations qui vérifient que les pa
         Variable & Équation & Sigle requête & Ordre? \\
         \midrule
         \endfirsthead
-        \multicolumn{3}{c}{\textsc{Tableau}~\ref{tab:analysis-var-query-vals} (suite)}\\
+        \multicolumn{3}{c}{\textsc{Tableau}~\thetable{} \TableSiglesAPI\ (suite)}\\[1em]
         \toprule
         Variable & Équation & Sigle requête & Ordre?  \\
         \midrule
@@ -124,7 +127,7 @@ Normalement, l'\ac{API} a des fonctions de validations qui vérifient que les pa
          Part modale marche vélo des déplacements provenant du quartier & \ref{eq:pm-ori} & pm-mv-ori& Non\\
          Part modale bus scolaire des déplacements provenant du quartier & \ref{eq:pm-ori} & pm-bs-ori& Non\\
     \end{longtable}
-\end{center}
+\end{center}}
 Cela conclut la section sur l'\ac{API}. Les pages web conçues pour modifier et manipuler toutes les données  sont discutées à la section suivante.
 \subsection{Pages de l'interface}
 Plusieurs pages ont été développées pour permettre à un analyste de visualiser, modifier les intrants et analyser les résultats de l'estimation. Ces pages seront décrites dans cette section. Il est important de noter qu'aucune page de modification ou d'association du rôle et du cadastre n'a encore été mise en place. Cette omission sera discutée dans les limites de l'étude.

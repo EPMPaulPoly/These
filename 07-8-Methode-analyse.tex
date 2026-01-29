@@ -327,13 +327,13 @@
         
         \subsubsection{Données d'enquête OD}
              Les données entrantes de l'enquête OD sont entreposées dans la table \ul{od\_data} dont les champs sont spécifiés au tableau \ref{tab:od-data-spec}.
-
+            \newcommand{\TableDonneesOD}{Champs de la table \ul{od\_data}}
             \begin{longtable}[c]{{m{0.15\linewidth}m{0.40\linewidth}m{0.4\linewidth}}}
-                \caption{Champs de la table \ul{od\_data}}
+                \caption{\TableDonneesOD}
                 \label{tab:od-data-spec}\\
                 \hline
                  Nom champ & Description & Type de données  \\ \hline \endfirsthead
-                 \multicolumn{3}{c}{{\tablename\ \thetable{} -- suite}} \\ % optional continuation label
+                 \multicolumn{3}{c}{{\textsc{Tableau}\thetable{} \TableDonneesOD\ (suite)}} \\ % optional continuation label
                  \hline
                  Nom champ & Description & Type de données \\ \hline 
                  \endhead
@@ -375,14 +375,17 @@
                 \end{tabular}
             \end{table}
             \subsubsection{Profils d'accumulation de véhicules}
-            Les détails de la méthode de calcul des profils d'accumulation de véhicules sont donnés à la section \ref{ssec:pav-calcs}. Les données d'enquête sont ensuite traitées comme indiqué dans la section \ref{ssec:pav-calcs} pour obtenir les profils d'accumulation de véhicules. Ces profils sont sauvegardés pour analyse dans la table \ul{profil\_accumulation\_vehicules}. Les détails de cette table sont indiqués au tableau \ref{tab:table-pav}.
+            Les détails de la méthode de calcul des profils d'accumulation de véhicules sont donnés à la section \ref{ssec:pav-calcs}. Les données d'enquête sont ensuite traitées comme indiqué dans la section \ref{ssec:pav-calcs} pour obtenir les profils d'accumulation de véhicules. Ces profils sont sauvegardés pour analyse dans la table \ul{profil\_accumulation\_vehicules}. Les détails de cette table sont indiqués au tableau \ref{tab:table-pav}.\clearpage
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
+            \newcommand{\TableCaptionPAV}{Champs de la table \ul{profil\_accumulation\_vehicules}}
             \begin{longtable}[c]{m{0.3\textwidth}|m{0.4\textwidth}m{0.1\textwidth}m{0.075\textwidth}}
                 
-                \caption{Champs de la table \ul{profil\_accumulation\_vehicules}}
+                \caption{\TableCaptionPAV}
                 \label{tab:table-pav} \\
                 \hline
                      Nom champ & Description & Type de données & CP/CS  \\ \hline \endfirsthead
-                     \multicolumn{4}{c}{{\tablename\ \thetable{} -- suite}} \\ % optional continuation label
+                     \multicolumn{4}{c}{{\textsc{Tableau} \thetable{} \TableCaptionPAV\ (suite)}} \\ [1em]% optional continuation label
                      \hline
                      Nom champ & Description & Type de données & CP/CS  \\ \hline 
                      \endhead
@@ -408,7 +411,7 @@
                      pers\_sortantes\_tot & Nombre de personnes sortant du quartier & Entier & \\
                      perm\_entrants\_tot & Nombre de détenteurs de permis entrant dans le quartier & Entier & \\
                      perm\_sortants\_tot & Nombre de détenteurs de permis sortant du quartier & Entier & \\    
-            \end{longtable}
+            \end{longtable}}
             
             %\begin{landscape}
                 

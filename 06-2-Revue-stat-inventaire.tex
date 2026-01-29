@@ -15,16 +15,18 @@
         
         Les deux cultures utilisent des métriques différentes pour décrire l'erreur: les métriques de statistique algorithmique sont souvent seulement sur l'erreur de la prédiction du modèle et pas nécessairement sur chaque paramètre à l'intérieur. D'autre part, la statistique algorithmique tend à se focaliser sur les données disponibles, alors que les plans d'échantillonnage dans la statistique inférentielle sont spécifiquement conçus pour aborder une population d'intérêt. Encore une fois, les mêmes outils peuvent être utilisés dans ces deux cadres: une régression linéaire peut être assez utilisée pour inférer la relation entre deux paramètres et utiliser des méthodes de validation croisée pour assurer que la formulation mathématique est assez robuste. Finalement, ces deux cultures tendent à ne pas statuer sur le même objet. La statistique inférentielle met en place les outils pour pouvoir inférer sur une population complète. Dans le cas de la statistique algorithmique, le modèle est conditionnel aux données; on se fie alors à l'analyste pour assurer que l'ensemble de données est représentatif du problème à l'étude, mais le degré de généralisation n'est pas garanti. 
 
-        
+        \newcommand{\TitreLongTableCultureModeles}{Récapitulatif des cadres et cultures des différents modèles}
         \begin{landscape}
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{longtable}{p{3cm}|p{2cm}p{2cm}p{5cm}p{4cm}p{4cm}}
-                \caption{Récapitulatif des cadres et cultures des différents modèles}
+                \caption{\TitreLongTableCultureModeles}
                 \label{tab:parking-dimensions-science}\\
                 \hline
                     Méthode & Mode de pensée & Culture statistique & Sources d'erreur & Quantification & Statue sur \\
                     \hline 
                     \endfirsthead
-                    \multicolumn{6}{c}{{ Tableau \thetable\ (suite)}} \\\hline
+                    \multicolumn{6}{c}{{ Tableau \thetable\ \TitreLongTableCultureModeles\ (suite)}} \\ [1em]\hline
                      Méthode & Mode de pensée & Culture statistique & Sources d'erreur & Quantification & Statue sur \\
                     \endhead
                     \hline
@@ -72,6 +74,7 @@
                     Superficie dédiée au stationnement ou nombre de places conditionnel à l'échantillon et aux données utilisées pour régresser au territoire complet \\ 
                     
                 \end{longtable}
+            }
         \end{landscape}
         \subsubsection{Quel est le rapport avec le stationnement?}    
         Le tableau \ref{tab:parking-dimensions-science} résume où les différentes méthodes se situent sur les différentes dimensions discutées dans la section. Il est possible de constater que les méthodes qui sont élaborées au sein de ce chapitre ne statuent pas toutes sur la même quantité rendant la comparaison difficile. Aux cadres méthodologiques différents s'ajoute un enjeu de sémantique sur la nature d'une place de stationnement. Si la figure \ref{fig:typos_stat} définit une nomenclature, elle ne fournit pas nécessairement un diagnostic sur ce qui devrait être comptabilisé (ou non) comme une place qui a un effet sur la mobilité des personnes (ou d'autres sujets d'intérêt). La section suivante abordera ce sujet.

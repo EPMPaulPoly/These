@@ -55,14 +55,17 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
         \end{figure}
         \subsubsection{Définition des catégories de validation}
         La table \ul{strates\_echantillonnage} contient la définition des paramètres pour les catégories de validation. Les catégories sont définies de manière récursive c'est-à-dire qu'une catégorie peut définir des enfants avec la même structure de données. Les sous-catégories héritent des conditions fixées aux parents. Les parents ne se voient pas eux-mêmes fixer un échantillon, mais servent de réceptacle pour les sous-catégories. Cette approche permet de créer chaque catégorie avec une seule condition plutôt que de devoir affecter plusieurs conditions à une même catégorie. Si cette approche avait été poursuivie, il aurait fallu définir une table de définition des catégories avec une association à plusieurs conditions qui seraient dans une table séparée. Le tableau \ref{tab:definition_strates} donne la définition de la table \ul{strates\_echantillonnage}.
+        \newcommand{\TitreTableStratesEch}{Colonnes pour la table \underline{strates\_echantillonnage}}
+        {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
         \begin{longtable}{m{0.2\textwidth}|m{0.4\textwidth}m{0.2\textwidth}m{0.075\textwidth}}
-                \caption{Colonnes pour la table \underline{strates\_echantillonnage}}\label{tab:definition_strates}\\
+                \caption{\TitreTableStratesEch}\label{tab:definition_strates}\\
                 \hline
                 Nom champ & Description & Type de données & CP/CS  \\
                 \hline
                 \endfirsthead
                 \multicolumn{4}{c}%
-                {{\tablename\ \thetable{} -- suite de la page précédente}} \\[0.5ex]
+                {{\textsc{Tableau} \thetable{} \TitreTableStratesEch\ (suite)}} \\[1em]
                 \hline
                 Nom champ & Description & Type de données & CP/CS  \\
                 \hline
@@ -85,7 +88,7 @@ Comme il est mentionné dans la revue de littérature, la validation de modèles
                 dates\_valides & Spécifie si les membres de la strate doivent avoir une date de construction valide sur toutes les entrées du lot & Booléen \begin{compactitem} \item Vrai = doit être vrai \item Faux = doit être faux \item NULL = est ignoré \end{compactitem} & \\
                 superf\_valide & Spécifie si les membres de la strate doivent avoir une superficie valide sur toutes les entrées du lot & Booléen \begin{compactitem} \item Vrai = doit être vrai \item Faux = doit être faux \item NULL = est ignoré \end{compactitem} & \\
 
-        \end{longtable}
+        \end{longtable}}
         Une fois la définition des catégories complétées, des manipulations sont nécessaires au rôle et au cadastre pour pouvoir appliquer les conditions spécifiées dans condition\_type, condition\_min, condition\_max et condition\_valeur. La table qui stocke les manipulations est discutée à la prochaine section.
     \subsubsection{Intrants pour sélectionner l'échantillon} 
         Les données de lots pour la sélection sont agrégées dans la table \ul{inputs\_validation}. Ce sont des valeurs du rôle foncier agrégées par lot ainsi que des tests logiques pour le nombre de \ac{CUBF} sur le lot et une affectation de l'utilisation principale en fonction de la valeur au rôle. Les données sont compilées à l'aide de la requête présentée à l'annexe \ref{ann:intants-validation}. Les champs de la table sont donnés au tableau \ref{tab:definition_inputs_validation}. Toutes les colonnes à l'exception de random\_value et g\_no\_lot peuvent être sélectionnées comme conditions dans la table \ul{strates\_echantillonnage}.

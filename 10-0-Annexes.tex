@@ -15,7 +15,7 @@
 
 \Annexe{Méthodes statistiques recensées}\label{ann:meth-stat-recens}
     Un cadre de quantification de l'incertitude utilisant des méthodes basées sur la statistique inférentielle a été considéré pour l'évaluation de la performance de modèle. Cependant, un cadre  basé sur la statistique prédictive a été adopté car des tailles d'effets n'étaient pas immédiatement apparents et ont donc été conservés en annexe. Elle commencera par discuter des méthodes d'équivalence initialement utilisées pour déclarer deux médicaments équivalents, puis discutera des enjeux entourant les valeurs p communément utilisées statuer sur la validité de constats scientifiques et finalement des différentes caractéristiques qui peuvent être utilisées pour statuer sur la forme d'une distribution.
-    \section{Test d'équivalence}
+    \annexsection{Test d'équivalence}
             Le test d'hypothèse nulle standard est typiquement formulé de la manière suivante: $H_0: \mu = \mu_0 $ où $\mu_0$ est une quantité fixe et $\mu$ est la moyenne de l'échantillon. Si la moyenne observée $\mu$ tombe en dehors de la région critique définie par la statistique de test, on rejette l'hypothèse nulle et conclut les valeurs différentes. Cependant, dans le cas opposé, on peut seulement dire qu'on ne rejette pas la nulle, ce qui implique que les données ne fournissent pas de preuve suffisante pour affirmer une différence. Ce type de conclusion est considéré comme une conclusion faible statistiquement \parencite{hines_probabilites_2005}. Or une conclusion faible n'est pas satisfaisante lorsque l'on veut statuer que deux valeurs sont assez proches pour être équivalentes, comme lorsque l'on veut dire qu'un modèle est équivalent à la réalité \parencite{robinson_model_2004}. \par
             Heureusement, la pharmacologie a développé un ensemble de méthodes d'inférence statistique qui visent à déterminer l'équivalence de deux produits \parencite{schuirmann_comparison_1987,lakens_equivalence_2018}. Ces méthodes dites d'équivalence utilisent deux tests (une borne inférieure et une borne supérieure) pour déterminer si l'effet est assez petit pour qu'il soit considéré équivalent. La taille d'effet minimale d'intérêt peut être fixée en utilisant des mesures objectives (à l'aide d'études ou d'enquêtes précédentes démontrant une détection par les sujets) ou subjectives (en déterminant les seuils d'études précédentes qui n'ont pas trouvé de significativité) \parencite{lakens_equivalence_2018}. Les seuils peuvent être fixés en termes standardisés (d de Cohen), en termes bruts ou en utilisant un log du terme brut pour permettre de spécifier des pourcentages d'erreur. Il est peu recommandé d'utiliser des ratios ou des pourcentages, car ces derniers créent des distributions peu robustes aux tests statistiques et sont peu utiles à l'interprétation s'ils sont différents de 1 \parencite{jasienski_fallacy_1999,curran-everett_explorations_2013}.\par
             Les tests d'équivalence débutent avec choix d'un niveau de significativité (typiquement $\alpha = 0.05$). On effectue alors deux tests unilatéraux (TOST, Two One-Sided Tests), chacun au niveau $\alpha$. Alternativement, on vérifie si l'intervalle de confiance bilatéral de $\mu_T - \mu_R $ à $100(1-2\alpha)\%$ (soit 90 \% si $\alpha=0.05$) est entièrement inclus dans les marges d'équivalence.
@@ -26,14 +26,14 @@
             Ces tests d'hypothèses sont donc l'inverse logique des tests d'hypothèses standards où l'hypothèse nulle est la différence des deux quantités \parencite{walker_understanding_2011}. Il est important de noter que deux quantités peuvent être équivalentes, mais tout de même différentes statistiquement si l'intervalle de confiance de la valeur d'intérêt n'inclut pas la valeur hypothétique, mais est tout de même à l'intérieur des bornes fixées par le test d'équivalence.\par
             Les méthodes d'équivalence ont déjà été utilisées pour l'évaluation de modèles de prédiction.  On trouve des articles utilisant ces méthodes pour des modèles de croissance et de séquestration de carbone d'arbres \parencite{robinson_model_2004,herbert_validation_2023}, l’équivalence de méthodes de tests pour le contrôle de procédé \parencite{manola_probability_2019} ou l'évaluation de méthodes de mesures en réalité virtuelle par rapport à des mesures physiques \parencite{anik_accuracy_2020} .\par
             Le choix de valeur pour la statistique $\alpha$ est lui-même problématique et a donné lieu à des abus qui seront discutés dans la section suivante.
-        \section{Valeurs p, réplication, tailles d'effets et la nouvelle statistique}
+        \annexsection{Valeurs p, réplication, tailles d'effets et la nouvelle statistique}
             Les valeurs p dénotent la probabilité d'obtenir des résultats si l'hypothèse nulle est vraie. Elles ont longtemps été utilisées pour dénoter la validité de certaines déclarations, utilisant le mot significativité  (\og{significance}\fg{} en anglais) pour dénoter qu'une variable était statistiquement valide dans un test d'hypothèse ou une régression. Cette pratique a donné lieu à des controverses dans certaines disciplines où les chercheurs essayaient de nombreux modèles, jusqu'à temps d'atteindre un seuil sans nécessairement déclarer les alternatives considérées \parencite{wasserstein_asa_2016,vidgen_p-values_2016}.  D'autre part, les valeurs p ne sont pas faciles à interpréter \parencite{cumming_understanding_2012} puisqu'elles ne distinguent pas l'effet moyen de l'incertitude entourant cet effet.\par
             \textcite{cumming_understanding_2012} suggère de donner des tailles d'effet (où la réponse d'un modèle ou d'une étude est normalisée) et des intervalles de confiance qui tendent à être plus faciles à interpréter et de privilégier la planification méthodologique des études avant la collecte des données afin de réduire les biais dans la sélection des résultats. 
-        \section{Valeur d'intérêt}
+        \annexsection{Valeur d'intérêt}
             Un autre enjeu réside dans la métrique à utiliser pour quantifier la validité d'un modèle ou d'une expérience. On veut ici définir la métrique qui servira à juger la validité du modèle de prédiction. Les moyennes peuvent être dictées par des échantillons erronés alors que les quantiles de la distribution (médianes, quartiles) donnent typiquement un portrait plus juste de la distribution. Les intervalles de confiances ou quantiles peuvent aussi être signalés pour décrire le degré de covariance de deux variables. Les quantiles ne sont pas des statistiques lisses et sont donc plus difficiles à estimer par autoamorçage \parencite{davison_bootstrap_1999}. \par
             
 \Annexe{Détails des différents domaines de données de l'\ac{API}}\label{ann:api-routes}
-\section{API: routes d'appel} 
+\annexsection{API: routes d'appel} 
 L'appel routes permet d'énumérer une liste des \ac{URI} disponibles, des méthodes possibles pour chaque \ac{URI} et des fonctions TypeScript appelées par chaque \ac{URI}
 \begin{itemize}
     \item GET /api/routes renvoie l'ensemble des routes implémentées sur le serveur. Les colonnes disponibles pour chaque entrée sont listées ci-dessous: 
@@ -43,7 +43,7 @@ L'appel routes permet d'énumérer une liste des \ac{URI} disponibles, des méth
         \item middlewares: le nom de la fonction TypeScript appelée par le serveur pour renvoyer l'information
     \end{itemize}
 \end{itemize}
-\section{API: Inventaire} 
+\annexsection{API: Inventaire} 
 Les appels d'API suivants sont proposés pour les objets de type inventaire:
 \begin{itemize}
     \item GET /api/inventaire/quartier/$<id_{quartier}>$: Renvoie l'inventaire pour un quartier complet
@@ -102,7 +102,7 @@ Les appels d'API suivants sont proposés pour les objets de type inventaire:
     
     \item DELETE /api/inventaire/$<id_{inv}>$: supprime l'entrée dont l'id\_inv est égal à la valeur entre <>.
 \end{itemize}
-\section{API: Règlements}
+\annexsection{API: Règlements}
 Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement:
 \begin{itemize}
     \item GET /api/reglements/entete: renvoie tous les entêtes de règlements (description, information administrative). Les paramètres de filtrage suivants peuvent être fournis dans l'\ac{URI} pour réduire la liste de règlements renvoyés. Les éléments description, ville, texte, article et paragraphe utilisent les fonctions de recherches incluses dans PostgreSQL. \parencite{postgresql_global_development_group_811_2025}
@@ -180,7 +180,7 @@ Les appels d'\ac{API} suivants sont proposés pour les objets de type règlement
         \item pas: pas pour les valeurs entre min et max
     \end{itemize}
 \end{itemize}
-\section{API: Ensembles de règlements}
+\annexsection{API: Ensembles de règlements}
 Les appels d'\ac{API} suivants sont proposés pour les ensembles de règlements.
 \begin{itemize}
     \item GET /api/ens-reg/entete: renvoie l'ensemble des entêtes de règlements de stationnement dont les propriétés sont listées dans le Tableau \ref{tab:definition_er}:
@@ -243,13 +243,13 @@ En plus des adresses basiques fournies ci-dessus, des adresses supplémentaires 
     \item POST /api/ens-reg/informations-pour-graphique: permet d'obtenir les règlements pertinents et les unités formulées pour les ensembles de règlements et le \ac{CUBF} sélectionné. Les identifiants de règlements et le \ac{CUBF} sont envoyés dans le corps de la requête
 \end{itemize}
 
-\section{API: Territoire}
+\annexsection{API: Territoire}
 L'\ac{API} possède les appels suivants pour obtenir les territoires. Pour l'instant, aucune fonction n'a été implémentée pour modifier ou supprimer les territoires pour l'instant.
 \begin{itemize}
     \item GET /api/territoire/periode/<id\_periode> permet d'obtenir l'ensemble des territoires associés qui sont associés à la période spécifiée dans l'\ac{URL}.
     \item GET /api/territoire/periode-geo/<id\_periode\_geo> permet d'obtenir un territoire selon son identifiant unique.
 \end{itemize}
-\section{API: Ensembles de règlements territoire}
+\annexsection{API: Ensembles de règlements territoire}
 Les ensembles de règlements territoire sont l'association entre les ensembles de règlements et les territoires. Il s'agit pour l'essentiel d'une association entre le territoire et l'ensemble de règlements. Les dates de validités du \ac{RST} t inférées à partir des dates de validité de l'ensemble de règlements et du territoire. Cet objet a le complément complet d'options pour modifier les associations (contrairement aux territoires et aux quartiers d'analyse qui doivent être téléversés manuellement). Les adresses d'\ac{API} sont les suivants:
 \begin{itemize}
     \item GET /api/ens-reg-terr/par-territoire/<id\_periode\_geo>: permet d'obtenir les \ac{RST} associés au territoire dont l'identifiant est spécifié
@@ -272,7 +272,7 @@ Les ensembles de règlements territoire sont l'association entre les ensembles d
     \item PUT /api/ens-reg-terr/association/<id\_asso\_er\_ter>: permet de modifier l'association dont l'identifiant est entre <>. Les mêmes champs doivent être spécifiés que pour la création d'une nouvelle association
     \item DELETE /api/ens-reg-terr/association/<id\_asso\_er\_ter>: permet de supprimer l'association dont l'identifiant est entre <>.
 \end{itemize}
-\section{API: Historique}
+\annexsection{API: Historique}
 L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville:
 \begin{itemize}
     \item GET /api/historique obtient l'ensemble des entrées de la table \ul{historique\_geopol} avec les entrées du tableau \ref{tab:definition_historique_geopol}. Aucun paramètre de filtrage n'a été mis en place à l'heure actuelle pour l'historique du fait de la simplicité des données en cours. 
@@ -292,7 +292,7 @@ L'\ac{API}  possède les appels suivants pour manipuler l'historique de la ville
 \end{itemize}
 
 
-\section{API: Lots cadastraux et entrées du rôle foncier}
+\annexsection{API: Lots cadastraux et entrées du rôle foncier}
 Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux et les entrées du rôle. Il est important de noter que des fonctions d'association, de création, de mise à jour et de suppression du rôle seraient pertinentes pour une implémentation en production. Dans le cadre de ce mémoire, les informations du rôle et du cadastre ont été créées manuellement dans la base de données. Finalement, les espaces dans la chaîne de caractères des identifiants doivent être remplacés par le caractère \_.
 \begin{itemize}
     \item GET /api/cadastre/lot/quartier-ana/<$id_{quartier}$> permet d'obtenir l'ensemble des lots qui se situent à l'intérieur du quartier d'analyse dont l'identifiant est fourni dans l'\ac{URI}
@@ -300,7 +300,7 @@ Les appels d'\ac{API} suivants ont été implémentés pour les lots cadastraux 
     \item GET /api/cadastre/role-associe/<$g\_no\_lot$> permet d'obtenir les entrées du rôle foncier associées au lot dont l'identifiant est fourni entre <>. L'identifiant spécifié est celui du lot.
 \end{itemize}
 Une fonction permettant de faire des requêtes complexes en utilisant des boites englobantes est en cours de développement, mais incomplète. Elle est principalement pensée pour permettre de réduire le nombre de données géospatiales à garder en mémoire en parcourant la carte. 
-\section{API: Codes d'utilisation du Bien-Fonds}
+\annexsection{API: Codes d'utilisation du Bien-Fonds}
 Les appels pour les \ac{CUBF} sont principalement utilisés pour créer les associations entre les règlements et les utilisations du sol. Pour rendre la recherche plus facile, des paramètres de requête ont été implémentés pour pouvoir obtenir des sous-ensembles pertinents de la liste des \ac{CUBF}. Sans paramètre de requête l'\ac{API} renvoie les 1700 \ac{CUBF}. La création, la modification et la suppression de \ac{CUBF} n'ont pas été implémentés
 \begin{itemize}
     \item GET /api/cubf: permet de renvoyer les \ac{CUBF} et leur description. Deux paramètres de requête sont mis en place pour permettre d'extraire des sous-ensembles.
@@ -390,12 +390,12 @@ L'appel à GET \og{/api/cubf/n\_entrees} \fg{} renvoit essentiellement toujours 
     \end{tabular}
     
 \end{table}
-\section{API: Secteurs d'analyse}
+\annexsection{API: Secteurs d'analyse}
 L'\ac{API} permet de manipuler les secteurs municipaux utilisés pour l'analyse qui sont définis à la section \ref{ssec:struct_donnees_sec_analyse}. Les fonctions d'édition et de suppression des quartiers d'analyse n'existent pas à l'heure actuelle. Elles devraient être mises en place dans une version de production de l'outil.
 \begin{itemize}
     \item GET /api/quartiers-analyse obtient l'ensemble des quartiers dans la table \ul{sec\_analyse}
 \end{itemize}
-\section{API: Analyse agrégée}
+\annexsection{API: Analyse agrégée}
 Plusieurs indicateurs sont agrégés par quartier. Cette section donnera les détails des appels d'\ac{API} permettant de créer les divers graphiques. La ou les variables sélectionnées ainsi que l'ordre de priorité à sélectionner en cas de présence de plusieurs estimations de stationnement sont communiquées au serveur au moyen de paramètre de requête. 3 types d'analyse de quartier sont possibles: cartographique, par diagramme à barre et par diagramme XY. Chaque type d'analyse se voit attribuer un \ac{URI}. Les profils d'accumulation de véhicules se voient attribués une \ac{URI} différente de par leur spécificité. D'autre part, les noms de variables doivent être codifiés dans les scripts clients et serveurs tandis que les requêtes SQL ne sont codifiées que dans le script serveur. Une implémentation future devrait permettre de capturer les variables et toutes les informations attenantes dans un seul fichier pour éviter la duplication et de potentielles erreurs. Les codes de variables sont donnés au Tableau \ref{tab:analysis-var-query-vals}.
 
 Les \ac{URI} sont listées ci-dessous:
@@ -422,14 +422,14 @@ Ainsi, la requête pour obtenir la carte choroplèthe du stationnement total, av
     \item GET /api/ana-par-quartier/recalcule-stat-agreg: permet de recalculer le nombre de places de stationnement pour chaque quartier
     \item GET /api/ana-par-quartier/recalcule-val-autres: permet de recalculer les statistiques issues de l'enquête OD, du recensement ou du rôle foncier pour chaque quartier
 \end{itemize}
-\section{API: Profiles d'accumulation véhicule}
+\annexsection{API: Profiles d'accumulation véhicule}
 Les appels d'\ac{API} suivants sont mis en place pour gérer les profils d'accumulation de véhicules \parencite{diallo_methodology_2015,morency_characterizing_2008} qui permettent de trouver la \og{population}\fg{} de véhicules dans une géographie en fonction de l'heure de la journée.
 \begin{itemize}
     \item GET /api/PAV?order=<X,Y,Z>\&id\_quartier=<$id_{quartier}$> permet d'accéder au profil d'accumulation véhicule pour le quartier dont l'identifiant est spécifié. L'ordre spécifié donne l'ordre de préséance pour le relevé de l'inventaire du quartier. En effet, l'\ac{API} fournit l'inventaire du quartier en même temps pour visuellement constater l'utilisation de la capacité. Les données sont fournies de manière à être utilisées par react-chart-js \parencite{ayerst_react-chartjs-2_2017}.
     \item GET /api/PAV/recalcule/<$id_{quartier}$> permet de refaire le calcul du profile d'accumulation véhicule à partir des données de l'enquête OD
     \item POST /api/PAV/<$id_{quartier}$> permet de mettre à jour le profile d'accumulation dans la base de données une fois que l'utilisateur l'a confirmé
 \end{itemize}
-\section{API: Validation}
+\annexsection{API: Validation}
 L'\ac{API} de validation a été mis en place pour permettre de rapidement assurer la qualité de l'inventaire créé. Bien que des développements méthodologiques demeurent, l'implémentation actuelle a les fonctionnalités de base pour créer une structure d'échantillonnage stratifiée, de sélectionner un ensemble de lots selon la méthodologie choisie, d'entrer les données de validation et de visualiser les résultats. Cette section documentera les appels d'\ac{API} mise en place pour soutenir cette fonctionnalité.  
 \begin{itemize}
     \item GET /api/valid/strate: obtiens les strates sauvegardées. Peut être filtré en fonction du nombre d'échantillons, de l'identifiant et du nom de la colonne de filtre
@@ -449,23 +449,24 @@ L'\ac{API} de validation a été mis en place pour permettre de rapidement assur
 \clearpage
 
 \Annexe{Détails des données de réglementaires}
-\section{Ensembles de règlements créés}\label{sec:annex-prs-created}
+\annexsection{Ensembles de règlements créés}\label{sec:annex-prs-created}
 Le tableau suivant donne une liste des ensembles de règlements créés:
+\newcommand{\TableEnsemblesReglements}{Liste des ensembles de règlements créés}
+{\captionsetup{justification=centering}
+\setlength{\LTcapwidth}{\linewidth} 
 \begin{longtable}{p{10cm}cc}
-\caption{Liste des ensembles de règlements crées} \label{tab:liste-er-crees} \\
+\caption{\TableEnsemblesReglements} \label{tab:liste-er-crees} \\
 \toprule
 Description & Année début & Année Fin \\
 \midrule
 \endfirsthead
 \multicolumn{3}{c}%
-{{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+{{\textsc{Tableau}~\thetable\ \TableEnsemblesReglements\ (suite)}} \\[1em] 
 \midrule
 Description & Année début & Année Fin \\
 \midrule
 \endhead
-\midrule
-\multicolumn{3}{r}{Continué à la page suivante} \\
-\midrule
+\bottomrule
 \endfoot
 \bottomrule
 \endlastfoot
@@ -527,11 +528,11 @@ Québec - abrogation minimums résidentiels - max industriel - urbain dense & 20
 Québec - abrogation minimums résidentiels - max industriel - structurant A & 2024 & En vigueur \\
 Québec - max industriel - général & 2024 & En vigueur \\
 Québec - abrogation minimums résidentiels - max industriel - structurant B & 2024 & En vigueur \\
-\end{longtable}
+\end{longtable}}
 
 \Annexe{Requêtes et morceaux de codes pertinents}
 Cette section détaillera certaines requêtes qui n'ont pas été listées dans le texte principal du mémoire, mais qui sont pertinentes.
-\section{Code: Sélection d'entrées du rôle foncier lors d'un calcul par quartier d'analyse}\label{sec:annex-select-tax-data}
+\annexsection{Code: Sélection d'entrées du rôle foncier lors d'un calcul par quartier d'analyse}\label{sec:annex-select-tax-data}
 \begin{lstlisting}[language=SQL, caption=Requête 1 dans tax\_database\_for\_analysis\_territory]
 SELECT 
     points.* 
@@ -554,7 +555,7 @@ FROM
     public.association_cadastre_role
 WHERE 
     id_provinc IN (LISTE FOURNIE)\end{lstlisting}
-    La table issue de la requête ci-dessus est gardée en mémoire. Les identifiants de lots uniques issus de cette requête sont ensuite utilisés comme intrants dans la requête suivante:
+    \clearpage La table issue de la requête ci-dessus est gardée en mémoire. Les identifiants de lots uniques issus de cette requête sont ensuite utilisés comme intrants dans la requête suivante:
         
         
     \begin{lstlisting}[language=SQL, caption=Requête 3 dans tax\_database\_for\_analysis\_territory]
@@ -566,7 +567,8 @@ WHERE
     g_no_lot IN (LISTE DE LOTS)\end{lstlisting}
     Ces trois tables forment l'ensemble de données foncières (TaxDataset) pour le calcul en cours.
 
-\section{Code: Assignation des ensembles de règlements aux entrées du rôle à l'intérieur du quartier}\label{sec:annex-assign-rule-to-role}
+\annexsection{Code: Affectation des ensembles de règlements aux entrées du rôle à l'intérieur du quartier}\label{sec:annex-assign-rule-to-role}
+On obtient tout d'abord les territoires historiques potentiellement affectés.
 \begin{lstlisting}[language=SQL, caption=Sélection des territoires touchant au rôle foncier]
 WITH unioned_geometry AS (
     SELECT 
@@ -583,41 +585,42 @@ FROM
 WHERE 
     (ST_Intersects(territories.geometry,unioned_geometry.geom))
 \end{lstlisting}
-
+On trouve l'ensemble des identifiants uniques:
 \begin{lstlisting}[language=python, caption= Ligne de code Python pour extraire les territoires pertinents]
-relevant_territory_ids = relevant_territories[id_periode_geo].unique().tolist()
-\end{lstlisting}
-
+relevant_territory_ids = relevant_territories['id_periode_geo'].unique().tolist()
+\end{lstlisting}\clearpage
+On cherche les associations aux ensembles de règlements pour trouver ceux qui sont nécessaire
 \begin{lstlisting}[language=SQL, caption=Sélection des associations d'ensembles de règlements aux territoires]
 SELECT * 
 FROM 
     public.association_er_territoire
 WHERE 
     id_periode_geo IN (LISTE DE TERRITOIRES TRANSMISE)\end{lstlisting}
+On  va chercher les géographies pertinentes
 \begin{lstlisting}[language=SQL, caption=Sélection des territoires pertinents]
 SELECT *
 FROM 
     public.cartographie_secteurs
 WHERE
     id_periode_geo IN (LISTE DE TERRITOIRES TRANSMISE)\end{lstlisting}
-
-\begin{lstlisting}[language=SQL, caption=Sélection des entêtes d'ensembles de règlemements]
+On obtient ensuite l'historique géopolitique pour la séparation temporelle des points du rôle foncier
+\begin{lstlisting}[language=SQL, caption=Sélection de l'historique géopolitique]
 SELECT 
     *
 FROM
     public.historique_geopol
-\end{lstlisting}        
-
+\end{lstlisting}     \clearpage   
+On crée ensuite les ensembles de règlements territoire et on renvoie une liste:
 \begin{lstlisting}[language=Python, caption=Coeur de la boucle pour créer la liste de RST, label=lst:RST_list_create] 
  # get the regset id to pull
-reg_set_to_get = association[id_er]
+reg_set_to_get = association['id_er']
 # get the relevant territory id
-relevant_territory_id = association[id_periode_geo]
+relevant_territory_id = association['id_periode_geo']
 # get actual territory in full
-relevant_territory = territories.loc[territories[id_periode_geo]==relevant_territory_id]
+relevant_territory = territories.loc[territories['id_periode_geo']==relevant_territory_id]
 # pull territory start and end year
-start_year_terr = history.loc[history[id_periode] == relevant_territory[id_periode].values[0],annee_debut_periode].values[0]
-end_year_terr = history.loc[history[id_periode] == relevant_territory[id_periode].values[0],annee_fin_periode].values[0]
+start_year_terr = history.loc[history[id_periode] == relevant_territory['id_periode'].values[0],'annee_debut_periode'].values[0]
+end_year_terr = history.loc[history[id_periode] == relevant_territory['id_periode'].values[0],'annee_fin_periode'].values[0]
 # get the reg set and years
 reg_set:PRS.ParkingRegulationSet = PRS.from_sql(int(reg_set_to_get),con=con)[0]
 start_year_regset = reg_set.start_date
@@ -640,18 +643,27 @@ elif  (end_year_regset is None or np.isnan(end_year_regset)) :
     end_year_RST = end_year_terr
 else:
     end_year_RST = min(end_year_terr,end_year_regset)
-RST_to_append = RegSetTerritory(relevant_territory,reg_set,start_year_RST,end_year_RST,association[id_assoc_er_ter])
+RST_to_append = RegSetTerritory(relevant_territory,reg_set,start_year_RST,end_year_RST,association['id_assoc_er_ter'])
 RST_list_to_return.append(RST_to_append)   
 \end{lstlisting}
-\section{Code: Assignation des données foncières aux RST}\label{ann:assignation-donnees-fonc}
-La section suivant donnera un aperçu du code requis pour assigner les données foncières aux différents \ac{RST}.
+\annexsection{Code: Affectation des données foncières aux RST}\label{ann:assignation-donnees-fonc}
+La section suivant donnera un aperçu du code requis pour assigner les données foncières aux différents \ac{RST}. On ceommence par filtrer par date
 \begin{lstlisting}[language=Python, caption=Procédure d'assignation du rôle foncier aux RST,label=lst:assign_tax_data]
 tax_dataset_match = []
 for rst_to_filter_by in relevant_rsts:
     filtered_tax_dataset = tax_data.year_filter(rst_to_filter_by.start_year,rst_to_filter_by.end_year).territory_filter(rst_to_filter_by.territory_info)
     tax_dataset_match.append(filtered_tax_dataset)
-\end{lstlisting}
-
+\end{lstlisting}La méthode territory filter permet de faire un filtre spatial des points du rôle à l'intérieur du polygone de juriction:
+\begin{lstlisting}[language=Python, caption= Fonction territory\_filter, label=lst:territory_filter]
+new_tax_table = self.tax_table.clip(territory).copy()
+tax_ids = new_tax_table['id_provinc'].unique().tolist()
+new_association_table = self.lot_association.loc[self.lot_association['id_provinc'].isin(tax_ids)].copy()
+lot_ids = new_association_table['g_no_lot'].unique().tolist()
+new_lot_table = self.lot_table.loc[self.lot_table['g_no_lot'].isin(lot_ids)].copy()
+tax_data_to_out = TaxDataset(new_tax_table,new_association_table,new_lot_table)
+return tax_data_to_out
+\end{lstlisting} \clearpage
+La fonction de filtre par date est donnée ci-dessous:
 \begin{lstlisting}[language=Python, caption=Méthode year\_filter, label=lst:year_filter]
 def year_filter(self,start_year=None,end_year=None):
     '''# year_filter
@@ -664,38 +676,23 @@ def year_filter(self,start_year=None,end_year=None):
     if start_year is None and end_year is None:
         raise ValueError
     elif start_year is None:
-        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table[rl0307a]<= end_year))]
+        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table['rl0307a']<= end_year))]
     elif end_year is None:
-        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table[rl0307a]>= start_year))]
+        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table['rl0307a']>= start_year))]
     else:
-        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table[rl0307a]>= start_year) & (self.tax_table[rl0307a]<= end_year))].copy()
-    
-    tax_ids = new_tax_table[id_provinc].unique().tolist()
-    
-    new_association_table:pd.DataFrame = self.lot_association.loc[self.lot_association[id_provinc].isin(tax_ids)].copy()
-    
-    lot_ids = new_association_table[g_no_lot].unique().tolist()
-    
-    new_lot_table:gpd.GeoDataFrame = self.lot_table.loc[self.lot_table[g_no_lot].isin(lot_ids)].copy()
-    
+        new_tax_table:gpd.GeoDataFrame = self.tax_table.loc[((self.tax_table['rl0307a']>= start_year) & (self.tax_table['rl0307a']<= end_year))].copy()
+    tax_ids = new_tax_table['id_provinc'].unique().tolist()
+    new_association_table:pd.DataFrame = self.lot_association.loc[self.lot_association['id_provinc'].isin(tax_ids)].copy()
+    lot_ids = new_association_table['g_no_lot'].unique().tolist()
+    new_lot_table:gpd.GeoDataFrame = self.lot_table.loc[self.lot_table['g_no_lot'].isin(lot_ids)].copy()
     new_tax_data = TaxDataset(new_tax_table,new_association_table,new_lot_table)
-    
     return new_tax_data
 \end{lstlisting}
 
-
-\begin{lstlisting}[language=Python, caption= fonction territory\_filter, label=lst:territory_filter]
-new_tax_table = self.tax_table.clip(territory).copy()
-tax_ids = new_tax_table[id_provinc].unique().tolist()
-new_association_table = self.lot_association.loc[self.lot_association[id_provinc].isin(tax_ids)].copy()
-lot_ids = new_association_table[g_no_lot].unique().tolist()
-new_lot_table = self.lot_table.loc[self.lot_table[g_no_lot].isin(lot_ids)].copy()
-tax_data_to_out = TaxDataset(new_tax_table,new_association_table,new_lot_table)
-return tax_data_to_out
-\end{lstlisting}
-\section{Identification lots problématiques}\label{sec:annexe_identification_lots_problématiques}
+\clearpage
+\annexsection{Identification lots problématiques}\label{sec:annexe_identification_lots_problématiques}
 Du fait de problèmes de complétude des données du rôle foncier, il est potentiellement nécessaire d'aider l'analyste à identifier des lots qui doivent potentiellement être revisités.
-\begin{lstlisting}[language=SQL]
+\begin{lstlisting}[language=SQL,caption=Identification de lots problématiques]
     SELECT
     	cad.g_no_lot,
     	COUNT(rf.id_provinc) AS compte_role,
@@ -714,10 +711,11 @@ Du fait de problèmes de complétude des données du rôle foncier, il est poten
     JOIN inventaire_stationnement inv ON cad.g_no_lot = inv.g_no_lot
     WHERE inv.methode_estime = 2
     GROUP BY cad.g_no_lot, inv.n_places_min;
-\end{lstlisting}
-\section{Code: calcul d'un sous-ensemble d'addition}\label{ann:code-addition-subset}
+\end{lstlisting}\clearpage
+\annexsection{Code: calcul d'un sous-ensemble d'addition}\label{ann:code-addition-subset}
 Le code pour le calcul d'un sous-ensemble d'addition est donné ci-dessous.
-\begin{lstlisting}[language=Python, caption=Calcul d'un sous-ensemble avec l'opérateur d'addition]
+\newcommand{\listingOpAdd}{Calcul d'un sous-ensemble avec l'opérateur d'addition}
+\begin{lstlisting}[language=Python, caption={\listingOpAdd},label={lst:add_sub}]
 def calculate_addition_based_subset_from_inputs_class(reg_to_calculate:PR.ParkingRegulations,subset:int,data:PII.ParkingCalculationInputs,methode_estime:int=3):
 if reg_to_calculate.check_subset_exists(subset) and reg_to_calculate.check_only_one_regulation():
     operator = reg_to_calculate.get_subset_intra_operation_type(subset)
@@ -725,61 +723,64 @@ if reg_to_calculate.check_subset_exists(subset) and reg_to_calculate.check_only_
         subset_def = reg_to_calculate.get_subset_def(subset)
         relevant_data = data.get_by_reg(reg_to_calculate.get_reg_id())
         reg_units = reg_to_calculate.get_subset_units(subset)
-
         if relevant_data.check_units_present(reg_units):
-            inventory = pd.DataFrame(relevant_data.loc[relevant_data[config_db.db_column_parking_unit_id].isin(reg_units)].merge(subset_def,on=[config_db.db_column_parking_regs_id,config_db.db_column_parking_unit_id],how='left'))
-            
-            # Create a mask for rows where both conditions are not None
+            inventory = pd.DataFrame(relevant_data.loc[relevant_data[unite].isin(reg_units)].merge(subset_def,on=['id_reg_stat','unite'],how='left'))
             mask_both_min_not_none = (
-                inventory[config_db.db_column_parking_zero_crossing_min].notna() & 
-                inventory[config_db.db_column_parking_slope_min].notna()
+                inventory['cases_fix_min'].notna() & 
+                inventory['pente_min'].notna()
             )
             mask_both_max_not_note = (
-                inventory[config_db.db_column_parking_zero_crossing_max].notna() & 
-                inventory[config_db.db_column_parking_slope_max].notna()
+                inventory['cases_fix_max'].notna() & 
+                inventory['pente_max'].notna()
             )
-            # Create a mask for rows where both conditions are not None
             mask_crossing_min_not_none = (
-                inventory[config_db.db_column_parking_zero_crossing_min].notna()& 
-                inventory[config_db.db_column_parking_slope_min].isna()
+                inventory['cases_fix_min'].notna()& 
+                inventory['pente_min'].isna()
             )
             mask_crossing_max_not_none = (
-                inventory[config_db.db_column_parking_zero_crossing_max].notna()& 
-                inventory[config_db.db_column_parking_slope_max].isna()
+                inventory['cases_fix_max'].notna()& 
+                inventory['pente_max'].isna()
             )
-
             mask_both_min_none = (
-                inventory[config_db.db_column_parking_zero_crossing_min].isna()& 
-                inventory[config_db.db_column_parking_slope_min].isna()
+                inventory['cases_fix_min'].isna()& 
+                inventory['pente_min'].isna()
             )
             mask_both_max_none = (
-                inventory[config_db.db_column_parking_zero_crossing_max].isna()& 
-                inventory[config_db.db_column_parking_slope_max].isna()
-            )
-
+                inventory['cases_fix_max'].isna()& 
+                inventory['pente_max'].isna())
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:add_sub} -- \listingOpAdd\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
             inventory.loc[mask_both_min_not_none,'n_places_min'] = inventory.loc[mask_both_min_not_none,
-                    config_db.db_column_parking_zero_crossing_min] + inventory.loc[mask_both_min_not_none,
-                        config_db.db_column_parking_slope_min] * inventory.loc[mask_both_min_not_none,'valeur']
-            inventory.loc[mask_crossing_min_not_none,'n_places_min'] = inventory.loc[mask_crossing_min_not_none,config_db.db_column_parking_zero_crossing_min]
+                    'cases_fix_min'] + inventory.loc[mask_both_min_not_none,
+                        'pente_min'] * inventory.loc[mask_both_min_not_none,'valeur']
+            inventory.loc[mask_crossing_min_not_none,'n_places_min'] = inventory.loc[mask_crossing_min_not_none,'cases_fix_min']
             inventory.loc[mask_both_min_none,'n_places_min'] = np.nan
 
             inventory.loc[mask_both_max_not_note,'n_places_max'] = inventory.loc[mask_both_max_not_note,
-                    config_db.db_column_parking_zero_crossing_max] + inventory.loc[mask_both_max_not_note,
-                        config_db.db_column_parking_slope_max] * inventory.loc[mask_both_max_not_note,'valeur']
-            inventory.loc[mask_crossing_max_not_none,'n_places_max'] = inventory.loc[mask_crossing_max_not_none,config_db.db_column_parking_zero_crossing_max]
+                    'cases_fix_max'] + inventory.loc[mask_both_max_not_note,
+                        'pente_max'] * inventory.loc[mask_both_max_not_note,'valeur']
+            inventory.loc[mask_crossing_max_not_none,'n_places_max'] = inventory.loc[mask_crossing_max_not_none,'cases_fix_max']
             inventory.loc[mask_both_max_none,'n_places_max'] = np.nan
             inventory.drop(columns=['id_reg_stat_emp','ss_ensemble','seuil','oper','cases_fix_min','cases_fix_max','pente_min','pente_max'],inplace=True)
-            inventory['commentaire'] = inventory.apply(lambda x: f'Unite: {x[config_db.db_column_parking_unit_id]} Val: {x['valeur']} ', axis=1)
+            inventory['commentaire'] = inventory.apply(lambda x: f'Unite: {x['unite']} Val: {x['valeur']} ', axis=1)
             if config_db.db_column_reg_sets_id not in inventory.columns:
-                inventory[config_db.db_column_reg_sets_id]=0
+                inventory['id_er']=0
             agg_dict = {
-                config_db.db_column_land_use_id: lambda x: '/'.join(map(str, x)),
-                config_db.db_column_parking_regs_id: lambda x: '/'.join(map(str, x)),
-                config_db.db_column_reg_sets_id: lambda x: '/'.join(map(str, x)), 
+                'cubf': lambda x: '/'.join(map(str, x)),
+                'id_reg_stat': lambda x: '/'.join(map(str, x)),
+                'id_er': lambda x: '/'.join(map(str, x)), 
                 'commentaire': lambda x: '/'.join(set(x)),    # Concatenate unique names
                 'n_places_min': 'sum',
-                'n_places_max':'sum'                         # Sum the values
+                'n_places_max':'sum' # Sum the values
             }
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:add_sub} -- \listingOpAdd\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
             inventory_out = inventory.groupby(by=config_db.db_column_lot_id).agg(agg_dict).reset_index()
             inventory_out.loc[inventory_out['n_places_max']<inventory_out['n_places_min'],'n_places_max']=None
             inventory_out['methode_estime'] = methode_estime
@@ -788,10 +789,11 @@ if reg_to_calculate.check_subset_exists(subset) and reg_to_calculate.check_only_
             return ParkingInventory(inventory_out)
         else:
             ValueError('You need to provide all relevant units for a regulation')
-\end{lstlisting}
-\section{Code: calcul d'un sous-ensemble de seuils}\label{ann:code-thresh-subset}
+\end{lstlisting} \clearpage
+\annexsection{Code: calcul d'un sous-ensemble de seuils}\label{ann:code-thresh-subset}
 Le code pour le calcul d'un sous-ensemble de seuil est donné ci-dessous:
-\begin{lstlisting}[language=Python, caption=Calcul d'un sous-ensemble de type seuils]
+\newcommand{\ListingOpThresh}{Calcul d’un sous-ensemble de type seuils}
+\begin{lstlisting}[language=Python, caption={\ListingOpThresh},label={lst:op_thrsh}]
 def calculate_threshold_based_subset_from_inputs_class(reg_to_calculate:PR.ParkingRegulations,subset:int,data:PII.ParkingCalculationInputs,methode_estime:int=3):
 if reg_to_calculate.check_subset_exists(subset) and reg_to_calculate.check_only_one_regulation():
     units = reg_to_calculate.get_subset_units(subset)
@@ -806,17 +808,21 @@ if reg_to_calculate.check_subset_exists(subset) and reg_to_calculate.check_only_
                 upper_thresh = float(previous_threshold)
             else:
                 upper_thresh = previous_threshold
-            
             relevant_data = data.get_by_reg(reg_to_calculate.get_reg_id()).get_by_units(units[0]).filter_by_threshold(lower_thresh, upper_thresh)
             previous_threshold=threshold
             if not relevant_data.empty:
                 line_def = reg_to_calculate.get_line_item_by_subset_threshold(subset,threshold)
-                zero_crossing_min = line_def[config_db.db_column_parking_zero_crossing_min].values[0]
-                zero_crossing_max = line_def[config_db.db_column_parking_zero_crossing_max].values[0]
-                slope_min = line_def[config_db.db_column_parking_slope_min].values[0]
-                slope_max = line_def[config_db.db_column_parking_slope_max].values[0]
+                zero_crossing_min = line_def['cases_fix_min'].values[0]
+                zero_crossing_max = line_def['cases_fix_max'].values[0]
+                slope_min = line_def['pente_min'].values[0]
+                slope_max = line_def['pente_max'].values[0]
                 parking_frame_thresh = pd.DataFrame()
-                parking_frame_thresh[config_db.db_column_lot_id] = relevant_data[config_db.db_column_lot_id]
+                parking_frame_thresh['g_no_lot'] = relevant_data['g_no_lot']
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:op_thrsh} -- \ListingOpThresh\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
                 if zero_crossing_min is not None and slope_min is not None:
                     parking_frame_thresh['n_places_min'] = zero_crossing_min + slope_min * relevant_data['valeur']
                 elif zero_crossing_min is not None:
@@ -829,18 +835,16 @@ if reg_to_calculate.check_subset_exists(subset) and reg_to_calculate.check_only_
                     parking_frame_thresh['n_places_max'] = zero_crossing_max
                 else: 
                     parking_frame_thresh['n_places_max'] = None
-
                 parking_frame_thresh.loc[parking_frame_thresh['n_places_max']<parking_frame_thresh['n_places_min'],'n_places_max']=None
                 parking_frame_thresh['n_places_mesure'] = None
                 parking_frame_thresh['n_places_estime'] = None
                 parking_frame_thresh['methode_estime'] = methode_estime
-                parking_frame_thresh[config_db.db_column_parking_regs_id] = relevant_data[config_db.db_column_parking_regs_id]
-                if config_db.db_column_reg_sets_id in relevant_data.columns:
-                    parking_frame_thresh[config_db.db_column_reg_sets_id] = relevant_data[config_db.db_column_reg_sets_id]
+                parking_frame_thresh['id_reg_stat'] = relevant_data['id_reg_stat']
+                if 'id_er' in relevant_data.columns:
+                    parking_frame_thresh['id_er'] = relevant_data['id_er']
                 else: 
-                    parking_frame_thresh[config_db.db_column_reg_sets_id]=0
-                parking_frame_thresh[config_db.db_column_land_use_id] = relevant_data[config_db.db_column_land_use_id]
-                parking_frame_thresh['commentaire'] = relevant_data.apply(lambda x: f'Unite: {x[config_db.db_column_parking_unit_id]} Val: {x['valeur']} ',axis=1)
+                    parking_frame_thresh['id_er']=0
+                parking_frame_thresh['cubf'] = relevant_data['cubf']
                 if parking_final.empty:
                     parking_final = parking_frame_thresh
                 else:
@@ -852,9 +856,10 @@ if reg_to_calculate.check_subset_exists(subset) and reg_to_calculate.check_only_
 else:
     ValueError('Can only calculate one rule at a time')
 \end{lstlisting}
-\section{Code: Sélection entre deux sous-ensembles}\label{ann:code-subset-oper}
+\annexsection{Code: Sélection entre deux sous-ensembles}\label{ann:code-subset-oper}
 Le code suivant donne la fonction utilisée pour choisir entre l'inventaire de deux sous-ensembles:
-\begin{lstlisting}[language=Python, caption=Fonction subset\_operation]
+\newcommand{\CaptionSubOp}{Fonction subset\_operation}
+\begin{lstlisting}[language=Python, caption={\CaptionSubOp},label={lst:sub_op}]
 def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingInventory) ->ParkingInventory:
     logger = logging.getLogger(__name__)
     if isinstance(operator,int):
@@ -877,6 +882,11 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
                     parking_frame_right.rename(columns={'n_places_min':'n_places_min_right'},inplace=True)
                     #merge data
                     parking_frame_out = parking_frame_out.merge(parking_frame_right,on=config_db.db_column_lot_id)
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:sub_op} -- \CaptionSubOp\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
                     # case 1 min<=max
                     parking_frame_out.loc[parking_frame_out['n_places_min_right']<=parking_frame_out['n_places_max_left'],'n_places_min_final'] = parking_frame_out.loc[parking_frame_out['n_places_min_right']<=parking_frame_out['n_places_max_left'],'n_places_min_right'] 
                     parking_frame_out.loc[parking_frame_out['n_places_min_right']<=parking_frame_out['n_places_max_left'],'n_places_max_final'] = parking_frame_out.loc[parking_frame_out['n_places_min_right']<=parking_frame_out['n_places_max_left'],'n_places_max_left'] 
@@ -895,6 +905,11 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
                     new_parking_frame.rename(columns={'n_places_min_final':'n_places_min','n_places_max_final':'n_places_max'},inplace=True)
                     #create parking inventory object
                     parking_inventory_object = ParkingInventory(new_parking_frame)
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:sub_op} -- \CaptionSubOp\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
                 elif (inventory_1.parking_frame['n_places_max'].isnull().all() and inventory_2.parking_frame['n_places_min'].isnull().all()): # one is a min, one is a max if min > max
                     logger.info('Entree dans loperation de subset par defaut')
                     # create dataframe
@@ -913,6 +928,11 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
                     # case 2 min>max
                     parking_frame_out.loc[parking_frame_out['n_places_min_left']>parking_frame_out['n_places_max_right'],'n_places_min_final'] = parking_frame_out.loc[parking_frame_out['n_places_min_left']<=parking_frame_out['n_places_max_right'],'n_places_max_right'] 
                     parking_frame_out.loc[parking_frame_out['n_places_min_left']>parking_frame_out['n_places_max_right'],'n_places_max_final'] = parking_frame_out.loc[parking_frame_out['n_places_min_left']<=parking_frame_out['n_places_max_right'],'n_places_max_right'] 
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:sub_op} -- \CaptionSubOp\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
                     # clean up the right left stuff
                     parking_frame_out.drop(columns=['n_places_min_left','n_places_max_right'],inplace=True)
                     # copy old parking frame
@@ -937,6 +957,11 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
                     parking_frame_right.rename(columns={'n_places_min':'n_places_min_right','n_places_max':'n_places_max_right'},inplace=True)
                     # merge the dataframes
                     parking_frame_out = parking_frame_out.merge(parking_frame_right,on=config_db.db_column_lot_id)
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:sub_op} -- \CaptionSubOp\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
                     # mins and maxes and cleanup
                     parking_frame_out['n_places_min_final'] = parking_frame_out[['n_places_min_left','n_places_min_right']].max(axis=1)
                     parking_frame_out['n_places_max_final'] = parking_frame_out[['n_places_max_left','n_places_max_right']].min(axis=1)
@@ -958,6 +983,11 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
                 raise NotImplementedError('Subset Operator no implemented')
             case 5:
                 raise NotImplementedError('Obsolete operator')
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:sub_op} -- \CaptionSubOp\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
             case 6:
                 logger.info('Entree dans l''operation OU SIMPLE')
                 parking_frame_out = pd.DataFrame()
@@ -975,6 +1005,11 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
                 parking_frame_out.loc[parking_frame_out['n_places_min_left']>=parking_frame_out['n_places_min_right'],'n_places_max_final'] = parking_frame_out.loc[parking_frame_out['n_places_min_left']>=parking_frame_out['n_places_min_right'],'n_places_max_right']
                 # ramene le vieux frame
                 old_parking_frame = inventory_1.parking_frame.copy()
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:sub_op} -- \CaptionSubOp\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
                 # drop gauche/droite
                 parking_frame_out.drop(columns=['n_places_min_left','n_places_min_right','n_places_max_left','n_places_max_right'],inplace=True)
                 new_parking_frame = old_parking_frame.merge(parking_frame_out,how='left',on=config_db.db_column_lot_id)
@@ -988,10 +1023,11 @@ def subset_operation(inventory_1:ParkingInventory,operator,inventory_2:ParkingIn
     else:
         raise ValueError(f'Operator must be integer, you supplied {type(operator)}')
         
-\end{lstlisting}
-\section{Code: Inventaire compilé par quartier}\label{sec:annexe_inventaire_agrege_par_quartier}
+\end{lstlisting}\clearpage
+\annexsection{Code: Inventaire compilé par quartier}\label{sec:annexe_inventaire_agrege_par_quartier}
 L'agrégation du stationnement est faite avec une requête spatiale assez onéreuse. D'autre part, un lot aurait potentiellement plusieurs inventaires avec différentes méthodes. L'application web permet de prioriser différents types d'inventaires en fonction de la préférence de l'analyste. Les colonnes inv\_XYZ représentent chacune une priorité entre les différentes méthodologies d'inventaire.
-\begin{lstlisting}[language=SQL]
+\newcommand{\CaptionCompStatSect}{Compilation de l'inventaire par secteur}
+\begin{lstlisting}[language=SQL, caption={\CaptionCompStatSect},label={lst:agg_stat_quart}]
     DELETE FROM stat_agrege;
             WITH LotNeighborhood AS (
                 SELECT 
@@ -1003,17 +1039,13 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
                 FROM public.cadastre c
                 JOIN public.sec_analyse s 
                     ON ST_Area(ST_Intersection(s.geometry, c.geometry)) / ST_Area(c.geometry) > 0.9
-            ),
-
-            role_augmente AS (
+            ),role_augmente AS (
                 SELECT
                     id_provinc,
                     rl0105a::int AS cubf,
                     rl0404a AS valeur_au_role
                 FROM role_foncier
-            ),
-
-            joined AS (
+            ),joined AS (
                 SELECT
                     acr.g_no_lot,
                     ra.cubf,
@@ -1027,7 +1059,11 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
                     ON ra.id_provinc = acr.id_provinc
                 WHERE acr.g_no_lot IS NOT NULL
             ),
-
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:agg_stat_quart} -- \CaptionCompStatSect\ (suite)\par
+}
+\begin{lstlisting}[language=SQL,caption={}]
             aggregated AS (
                 SELECT
                     g_no_lot,
@@ -1039,9 +1075,7 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
                     END AS cubf_principal_first_digit
                 FROM joined
                 GROUP BY g_no_lot
-            ),
-
-            rpd AS (
+            ),rpd AS (
                 SELECT
                     g_no_lot,
                     COALESCE(
@@ -1053,8 +1087,7 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
                     methode_estime,
                     id_inv
                 FROM inventaire_stationnement
-            ),
-            invent_count AS(
+            ), invent_count AS(
                 SELECT 
                     g_no_lot,
                     COUNT(g_no_lot) as n_inv
@@ -1062,7 +1095,11 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
                     inventaire_stationnement
                 group by g_no_lot
             ),
-
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:agg_stat_quart} -- \CaptionCompStatSect\ (suite)\par
+}
+\begin{lstlisting}[language=SQL,caption={}]
             lot_park_data AS (
                 SELECT
                     ln.g_no_lot,
@@ -1078,59 +1115,51 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
                     ON ag.g_no_lot = ln.g_no_lot
                 left join invent_count ic
                     on ag.g_no_lot=ic.g_no_lot
-            ),
-            inv_123_per_lot AS (
+            ), inv_123_per_lot AS (
                 SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
                 FROM rpd
                 ORDER BY g_no_lot,
                     CASE methode_estime WHEN 1 THEN 1 WHEN 2 THEN 2 WHEN 3 THEN 3 ELSE 4 END
-            ),
-
-            inv_132_per_lot AS (
+            ),inv_132_per_lot AS (
                 SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
                 FROM rpd
                 ORDER BY g_no_lot,
                     CASE methode_estime WHEN 1 THEN 1 WHEN 3 THEN 2 WHEN 2 THEN 3 ELSE 4 END
-            ),
-
-            inv_213_per_lot AS (
+            ),inv_213_per_lot AS (
                 SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
                 FROM rpd
                 ORDER BY g_no_lot,
                     CASE methode_estime WHEN 2 THEN 1 WHEN 1 THEN 2 WHEN 3 THEN 3 ELSE 4 END
-            ),
-
-            inv_231_per_lot AS (
+            ), inv_231_per_lot AS (
                 SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
                 FROM rpd
                 ORDER BY g_no_lot,
                     CASE methode_estime WHEN 2 THEN 1 WHEN 3 THEN 2 WHEN 1 THEN 3 ELSE 4 END
             ),
-
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:agg_stat_quart} -- \CaptionCompStatSect\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
             inv_312_per_lot AS (
                 SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
                 FROM rpd
                 ORDER BY g_no_lot,
                     CASE methode_estime WHEN 3 THEN 1 WHEN 1 THEN 2 WHEN 2 THEN 3 ELSE 4 END
-            ),
-
-            inv_321_per_lot AS (
+            ), inv_321_per_lot AS (
                 SELECT DISTINCT ON (g_no_lot) g_no_lot, n_places
                 FROM rpd
                 ORDER BY g_no_lot,
                     CASE methode_estime WHEN 3 THEN 1 WHEN 2 THEN 2 WHEN 1 THEN 3 ELSE 4 END
-            ),
-            inv_1_per_lot as (
+            ), inv_1_per_lot as (
                 SELECT g_no_lot, n_places,id_inv
                 FROM rpd
                 WHERE methode_estime = 1
-            ),
-            inv_2_per_lot AS (
+            ), inv_2_per_lot AS (
                 SELECT g_no_lot, n_places,id_inv
                 FROM rpd
                 WHERE methode_estime = 2
-            ),
-            inv_3_per_lot AS (
+            ), inv_3_per_lot AS (
                 SELECT g_no_lot, n_places,id_inv
                 FROM rpd
                 WHERE methode_estime = 3
@@ -1139,7 +1168,11 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
                 SELECT *
                 from (values (-1,'Usage mixte'),(1,'Residentielle'),(2,'Industrielle'),(4,'Infrastructure'),(5,'Commerciale'),(6,'Services'),(7,'Recreation'),(8,'Ressources naturelles'),(9,'Inexploite'),(NULL,'Sans Role'))as sub(cubf_principal_first_digit,desc_usage)
             )
-
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:agg_stat_quart} -- \CaptionCompStatSect\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
             INSERT INTO stat_agrege (id_quartier,cubf_principal_n1,inv_123,inv_132,inv_213,inv_231,inv_312,inv_321,inv_1,inv_2,inv_3,n_lots)
             SELECT 
                 lpd.id_quartier,
@@ -1179,9 +1212,9 @@ L'agrégation du stationnement est faite avec une requête spatiale assez onére
             order by lpd.id_quartier,lpd.cubf_principal_first_digit
 \end{lstlisting}
 
-\section{Code: Nombre d'automobiles des résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
-Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD. Le nombre de véhicules des résidents est trouvé en multipliant le facteur ménage par le nombre de véhicules du ménage pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profils d'accumulation de véhicules \parencite{diallo_methodology_2015}.
-\begin{lstlisting}[language=SQL]
+\annexsection{Code: Nombre d'automobiles des résidents et nombre maximal et minimal d'automobiles par quartier}\label{sec:annex_motorisation_par_quartier}
+Le nombre de véhicules appartenant aux résidents d'un quartier peut être estimé à l'aide des données de l'enquête OD en multipliant le facteur ménage par le nombre de véhicules du ménage pour toutes les lignes qui sont en tête de ménage. Le nombre maximal de véhicules dans le quartier est issu des profils d'accumulation de véhicules \parencite{diallo_methodology_2015}. 
+\begin{lstlisting}[language=SQL,caption=Compilation de la motorisation par quartier]
     DELETE FROM motorisation_par_quartier;
     INSERT INTO motorisation_par_quartier (id_quartier, nb_voitures,nb_voitures_max_pav,nb_voitures_min_pav,diff_max_signee)
     WITH aggregated_data AS (
@@ -1213,13 +1246,12 @@ Le nombre de véhicules appartenant aux résidents d'un quartier peut être esti
     LEFT JOIN
         profile_accumulation_vehicule pav
         ON pav.id_quartier::int = ad.id_quartier::int
-    GROUP BY
-        ad.id_quartier,
-        ad.nb_voitures;
+    GROUP BY ad.id_quartier, ad.nb_voitures;
 \end{lstlisting}
-\section{Code: Population issue du recensement}\label{sec:annexe_pop_quartiers}
+\annexsection{Code: Population issue du recensement}\label{sec:annexe_pop_quartiers}
 Les données de recensement peuvent être agrégées par quartier en utilisant une approche similaire à au nombre d'automobiles. Cependant, puisque les aires de diffusions sont des polygones et qu'il y a le potentiel d'avoir des aires de diffusions qui touchent à plusieurs quartiers, une condition a été ajoutée voulant que 90\% de l'aire de diffusion doive être dans le quartier pour être sommée. 
-\begin{lstlisting}[language=SQL]
+\newcommand{\CaptionPopParQuartier}{Compilation de la population par quartier}
+\begin{lstlisting}[language=SQL,caption={\CaptionPopParQuartier},label={lst:pop_par_quartier}]
     DELETE FROM population_par_quartier;
     INSERT INTO population_par_quartier (id_quartier,pop_tot_2016,pop_tot_2021)
     WITH pop_2016_ag AS(
@@ -1251,6 +1283,11 @@ Les données de recensement peuvent être agrégées par quartier en utilisant u
       GROUP BY
         z.id_quartier
     )
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:pop_par_quartier} -- \CaptionPopParQuartier\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
     SELECT
       c2016.id_quartier,
       c2016.pop_tot_2016,
@@ -1262,9 +1299,10 @@ Les données de recensement peuvent être agrégées par quartier en utilisant u
     ON
       c2016.id_quartier=c2021.id_quartier;
 \end{lstlisting}
-\section{Code: Valeurs foncières agrégées}\label{sec:annexe_val_fonc_agreg}
+\annexsection{Code: Valeurs foncières agrégées}\label{sec:annexe_val_fonc_agreg}
 Certaines valeurs foncières sont agrégées pour donner une indication du degré d'intensité d'utilisation du sol dans un quartier. Les valeurs sont agrégées pour le total, mais aussi pour les logements seulement. La requête ci-dessous donne la méthode de calcul pour les données foncières agrégées.
-\begin{lstlisting}[language=SQL]
+\newcommand{\CaptionCompFoncParQuart}{Compilation des données foncières par quartier}
+\begin{lstlisting}[language=SQL,caption={\CaptionCompFoncParQuart},label={lst:fonc_par_quartier}]
     DELETE FROM donnees_foncieres_agregees;
     INSERT INTO donnees_foncieres_agregees (id_quartier,valeur_moyenne_logement,superf_moyenne_logement,valeur_fonciere_logement_totale,valeur_fonciere_totale)
     WITH role_quartier_log AS(
@@ -1283,8 +1321,14 @@ Certaines valeurs foncières sont agrégées pour donner une indication du degr�
         and rf.rl0308a IS not null 
         and rf.rl0311a IS not null
       group by sa.id_quartier
-      
-    ), role_quartier_tout AS(
+    ), 
+\end{lstlisting}\clearpage
+{
+\noindent\centering
+    Extrait de code \ref{lst:fonc_par_quartier} -- \CaptionCompFoncParQuart\ (suite)\par
+}
+\begin{lstlisting}[language=Python,caption={}]
+    role_quartier_tout AS(
       SELECT 
         sa.id_quartier::int,
         ceil(SUM(rf.rl0404a)) as val_tot_tout
@@ -1309,10 +1353,11 @@ Certaines valeurs foncières sont agrégées pour donner une indication du degr�
     left join
       role_quartier_tout rqt on rqt.id_quartier = sa.id_quartier;
 \end{lstlisting}
-
-\section{Code: Parts modales}\label{sec:annexe_parts_modales}
+\clearpage
+\annexsection{Code: Parts modales}\label{sec:annexe_parts_modales}
 Cette section va donner la requête SQL qui compile les différentes parts modales définies dans la section \ref{sec:meth_analyse}. 
-\begin{lstlisting}[language=SQL]
+\newcommand{\CaptionPartModales}{Compilation des parts modales par quartier}
+\begin{lstlisting}[language=SQL,caption={\CaptionPartModales},label={lst:part_modales}]
     DELETE FROM parts_modales;
     INSERT INTO parts_modales(id_quartier,ac_res,ap_res,tc_res,mv_res,bs_res,ac_ori,ap_ori,tc_ori,mv_ori,bs_ori,ac_des,ap_des,tc_des,mv_des,bs_des,ac_int,ap_int,tc_int,mv_int,bs_int)
     WITH trips AS (
@@ -1343,7 +1388,12 @@ Cette section va donner la requête SQL qui compile les différentes parts modal
     )
     SELECT
         sa.id_quartier,
-
+\end{lstlisting}\clearpage
+{
+\noindent\centering
+    Extrait de code \ref{lst:part_modales} -- \CaptionPartModales\ (suite)\par
+}
+\begin{lstlisting}[language=SQL]
         -- Resident trips
         SUM(CASE WHEN trips.quartier_logis = sa.id_quartier AND trips.mode1 = 1 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_logis = sa.id_quartier THEN trips.facper END) * 100 AS AC_res,
         SUM(CASE WHEN trips.quartier_logis = sa.id_quartier AND trips.mode1 = 2 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_logis = sa.id_quartier THEN trips.facper END) * 100 AS AP_res,
@@ -1357,20 +1407,29 @@ Cette section va donner la requête SQL qui compile les différentes parts modal
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 = 6 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS TC_ori,
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 IN (5, 13) THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS MV_ori,
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 = 7 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS BS_ori,
-
+\end{lstlisting}\clearpage
+{
+\noindent\centering
+    Extrait de code \ref{lst:part_modales} -- \CaptionPartModales\ (suite)\par
+}
+\begin{lstlisting}[language=SQL]
         -- Destination trips (external)
         SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 = 1 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS AC_des,
         SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 = 2 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS AP_des,
         SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 = 6 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS TC_des,
         SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 IN (5, 13) THEN trips.facper END) / SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS MV_des,
         SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false AND trips.mode1 = 7 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_des = sa.id_quartier AND trips.internal_trip = false THEN trips.facper END) * 100 AS pBS_des,
-
         -- Internal trips
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true AND trips.mode1 = 1 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true THEN trips.facper END) * 100 AS AC_int,
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true AND trips.mode1 = 2 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true THEN trips.facper END) * 100 AS AP_int,
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true AND trips.mode1 = 6 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true THEN trips.facper END) * 100 AS TC_int,
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true AND trips.mode1 IN (5, 13) THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true THEN trips.facper END) * 100 AS MV_int,
         SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true AND trips.mode1 = 7 THEN trips.facper END) / SUM(CASE WHEN trips.quartier_ori = sa.id_quartier AND trips.internal_trip = true THEN trips.facper END) * 100 AS BS_int
+\end{lstlisting}\clearpage
+{\noindent\centering
+    Extrait de code \ref{lst:part_modales} -- \CaptionPartModales\ (suite)\par
+}
+\begin{lstlisting}[language=SQL]
     FROM sec_analyse sa
     LEFT JOIN trips ON 
         trips.quartier_logis = sa.id_quartier OR 
@@ -1379,11 +1438,11 @@ Cette section va donner la requête SQL qui compile les différentes parts modal
     GROUP BY sa.id_quartier, sa.geometry;
 \end{lstlisting}
 
-\section{Requête SQL: Intrants de validation }\label{ann:intants-validation}
+\annexsection{Requête SQL: Intrants de validation }\label{ann:intants-validation}
 La requête suivante est utilisée pour créer les données entrantes pour l'affectation de lots à une strate de validation:
-\begin{lstlisting}[language=SQL]
+\newcommand{\CaptionCompilationIntrantsValid}{Compilation des intrants de validation}
+\begin{lstlisting}[language=SQL,caption={\CaptionCompilationIntrantsValid},label={lst:comp_input_valid}]
 DROP TABLE inputs_validation;
-
 CREATE TABLE inputs_validation (
     g_no_lot                VARCHAR(255) PRIMARY KEY,
     nb_entrees              BIGINT,
@@ -1401,21 +1460,15 @@ CREATE TABLE inputs_validation (
     random_value            DOUBLE PRECISION
 );
 INSERT INTO inputs_validation (
-    g_no_lot,
-    nb_entrees,
-    cubf_presents,
-    n_cubf,
-    toutes_surfaces_valides,
-    toutes_dates_valides,
-    tous_logements_valides,
-    sup_planch_tot,
-    n_logements_tot,
-    premiere_constr,
-    valeur_totale,
-    cubf_principal,
-    valeur_maximale,
-    random_value
+    g_no_lot, nb_entrees, cubf_presents, n_cubf, toutes_surfaces_valides,
+    toutes_dates_valides, tous_logements_valides, sup_planch_tot,
+    n_logements_tot, premiere_constr, valeur_totale, cubf_principal,
+    valeur_maximale, random_value
 )
+\end{lstlisting}\clearpage{
+\noindent\centering
+    Extrait de code \ref{lst:comp_input_valid} -- \CaptionCompilationIntrantsValid\ (suite)\par}
+\begin{lstlisting}[language=SQL]
 SELECT
     g_no_lot,
     nb_entrees,
@@ -1431,9 +1484,7 @@ SELECT
     cubf_principal,
     valeur_maximale,
     random_value
-FROM (
-    
-    --enrichissement des roles
+FROM (--1 -enrichissement des roles
     WITH role_augmente AS (
         SELECT
             id_provinc,
@@ -1446,66 +1497,53 @@ FROM (
             rl0307a IS NOT NULL              AS annee_const_valid,
             rl0404a                          AS valeur_au_role
         FROM role_foncier
-    ),
-
-    /* -------------------------------------------------
-    2 -  Jointure + rang pour choisir le CUBF principal
-    ------------------------------------------------- */
+    ),-- 2 -  Jointure + rang pour choisir le CUBF principal
     joined AS (
         SELECT
-            acr.g_no_lot,
-            ra.id_provinc,
-            ra.cubf,
-            ra.valeur_au_role,
-            ra.sup_planch_valid,
-            ra.n_logements_valid,
-            ra.annee_const_valid,
-            ra.sup_planch,
-            ra.n_logements,
-            ra.annee_constr::int,
+            acr.g_no_lot, ra.id_provinc, ra.cubf, ra.valeur_au_role,
+            ra.sup_planch_valid, ra.n_logements_valid,  ra.n_logements,
+            ra.sup_planch,ra.annee_const_valid,  ra.annee_constr::int,
             ROW_NUMBER() OVER (
                 PARTITION BY acr.g_no_lot
                 ORDER BY ra.valeur_au_role DESC NULLS LAST, ra.cubf
             ) AS rn
         FROM public.association_cadastre_role AS acr
-        LEFT JOIN role_augmente AS ra
-            ON ra.id_provinc = acr.id_provinc
-        where acr.g_no_lot is not null
-    ),
-
-    /* -------------------------------------------------
-    3 - Agregation finale par lot
-    ------------------------------------------------- */
+        LEFT JOIN role_augmente AS ra ON ra.id_provinc = acr.id_provinc
+        WHERE acr.g_no_lot is not null
+    ), 
+\end{lstlisting}\clearpage{
+\noindent\centering
+    Extrait de code \ref{lst:comp_input_valid} -- \CaptionCompilationIntrantsValid\ (suite)\par}
+\begin{lstlisting}[language=SQL]
+    --3 - Agregation finale par lot
     aggregated AS (
         SELECT
             g_no_lot,
-            COUNT(id_provinc)                                   AS nb_entrees,
-            ARRAY_AGG(DISTINCT cubf)                            AS cubf_presents,
-            CARDINALITY(ARRAY_AGG(DISTINCT cubf))               AS n_cubf,
-            BOOL_AND(sup_planch_valid)                         AS toutes_surfaces_valides,
-            BOOL_AND(annee_const_valid)                        AS toutes_dates_valides,
-            BOOL_AND(n_logements_valid)                         AS tous_logements_valides,
-            SUM(sup_planch)                                    AS sup_planch_tot,
-            SUM(n_logements)::int                               AS n_logements_tot,
-            MIN(annee_constr)                                   AS premiere_constr,
-            SUM(valeur_au_role)                                 AS valeur_totale,
-            MAX(CASE WHEN rn = 1 THEN cubf END)                AS cubf_principal,
-            MAX(CASE WHEN rn = 1 THEN valeur_au_role END)      AS valeur_maximale,
-
-            /* -------------------------------------------------
-            Valeur pseudo aleatoire deterministe (hash)
-            ------------------------------------------------- */
+            COUNT(id_provinc)  AS nb_entrees,
+            ARRAY_AGG(DISTINCT cubf)  AS cubf_presents,
+            CARDINALITY(ARRAY_AGG(DISTINCT cubf))AS n_cubf,
+            BOOL_AND(sup_planch_valid) AS toutes_surfaces_valides,
+            BOOL_AND(annee_const_valid) AS toutes_dates_valides,
+            BOOL_AND(n_logements_valid) AS tous_logements_valides,
+            SUM(sup_planch)  AS sup_planch_tot,
+            SUM(n_logements)::int AS n_logements_tot,
+            MIN(annee_constr) AS premiere_constr,
+            SUM(valeur_au_role) AS valeur_totale,
+            MAX(CASE WHEN rn = 1 THEN cubf END)  AS cubf_principal,
+            MAX(CASE WHEN rn = 1 THEN valeur_au_role END) AS valeur_maximale,
+            --Valeur pseudo aleatoire deterministe (hash)
             (('x' || substr(md5(g_no_lot::text),1,8))::bit(32)::bigint )::numeric
-                / (power(2,31) - 1)                             AS random_value
+                / (power(2,31) - 1) AS random_value
         FROM joined
         GROUP BY g_no_lot
     )
     SELECT * FROM aggregated
 ) AS src;
-\end{lstlisting}
-\section{Requête SQL: lot où l'estimation de stationnement dépend du nombre de sièges}\label{ann:recerche-inv-par-unite}
+\end{lstlisting}\clearpage
+\annexsection{Requête SQL: lot où l'estimation de stationnement dépend du nombre de sièges}\label{ann:recerche-inv-par-unite}
 Cette requête a été utilisée pendant la validation pour identifier les lots où le nombre de sièges est utilisé pour générer leur estimation. Cette unité a été associée à une erreur importante dans la prédiction
-\begin{lstlisting}[language=SQL]
+\newcommand{\CaptionFindEstimateByUnit}{Recherche d'inventaires selon l'unité de formulation}
+\begin{lstlisting}[language=SQL,caption={\CaptionFindEstimateByUnit},label= {lst:find_estimate_by_unit}]
 with lot_ass as (
     SELECT
         *
@@ -1537,7 +1575,12 @@ with lot_ass as (
     FROM
         cadastre
     WHERE g_no_lot IN(select g_no_lot from lot_ass)
-),reg_inventory AS (
+),
+\end{lstlisting}\clearpage{
+\noindent\centering
+    Extrait de code \ref{lst:find_estimate_by_unit} -- \CaptionFindEstimateByUnit\ (suite)\par}
+\begin{lstlisting}[language=SQL]
+reg_inventory AS (
     SELECT
         g_no_lot,
         CEIL(n_places_min) as y_pred,
@@ -1576,10 +1619,10 @@ left join distance_to_parliament dtp on dtp.g_no_lot=la.g_no_lot
 left join units u on u.g_no_lot = la.g_no_lot
 left join reg_inventory ri on ri.g_no_lot = la.g_no_lot
 where 8 = ANY(u.list_unite)    
-\end{lstlisting}
-\section{Requête SQL: recherche de lot selon l'intensité de prédiction de stationnement}\label{ann:requete-intensite-stat}
+\end{lstlisting} \clearpage
+\annexsection{Requête SQL: recherche de lot selon l'intensité de prédiction de stationnement}\label{ann:requete-intensite-stat}
 L'évaluation du modèle a soulevé l'intensité de prédiction de stationnement comme une métrique pour identifier des lots où les prédictions auraient d'importantes erreurs. La requête suivante montre comment compiler une liste de propriété à vérifier selon cet indicateur
-\begin{lstlisting}[language=SQL]
+\begin{lstlisting}[language=SQL,caption=Recherche inventaire par intensité]
 with inventaire_reg AS(
 	SELECT
 		g_no_lot,

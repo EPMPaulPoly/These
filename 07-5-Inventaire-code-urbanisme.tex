@@ -43,19 +43,17 @@
            \end{tabular}
            
         \end{table}   
-        
+        \newcommand{\TitreAcronymesQuartiers}{Acronymes affectés aux quartiers}
         \begin{longtable}[c]{lll}
-            \caption{Acronymes affectés aux quartiers}\label{tab:acro-quartiers}\\
+            \caption{\TitreAcronymesQuartiers}\label{tab:acro-quartiers}\\
             \hline
              ID & Nom & Acronyme  \\ \hline
             \endfirsthead
-            \multicolumn{3}{c}%
-            {{\tablename\ \thetable{} -- suite de la page précédente}} \\[0.5ex]
+            \multicolumn{3}{c}{\textsc{Tableau} \thetable\ \TitreAcronymesQuartiers\ (suite)} \\ \\
             \hline
             ID & Nom & Acronyme \\ \hline
             \endhead
             \hline
-            \multicolumn{3}{r}{{Suite à la page suivante}} \\[0.5ex]
             \endfoot
             \hline                                 % from booktabs (optional)
             \endlastfoot
@@ -806,21 +804,22 @@
         \subsubsection{Description des ensembles de règlements}
             Cette section donnera un survol de la structure des ensembles de règlements utilisés dans le cadre de ce mémoire. Ceci est loin d'être la seule structure possible. La version actuelle a été compilée en essayant d'assurer la couverture des catégories les plus communes sans devoir être  exhaustive. La méthode pourrait fonctionner avec seulement les \ac{CUBF} 1-9 spécifiés, ou avec tous les \ac{CUBF} individuellement spécifiés. \par
             Le tableau \ref{tab:n-cubf-rep} donne le nombre d'associations entre un ensemble de règlements et un règlement par \ac{CUBF}. De manière générale, les mêmes \ac{CUBF} apparaissent de manière répétée dans les 57 ensembles de règlements constitués.
+            \newcommand{\TitreNombreDefinitionsCUBF}{Nombre de définitions par utilisation du sol}
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{longtable}{p{13cm}r}
-                \caption{Nombre de définitions par utilisation du sol} \label{tab:n-cubf-rep} \\
+                \caption{\TitreNombreDefinitionsCUBF} \label{tab:n-cubf-rep} \\
                 \toprule
                 Utilisation du sol & N \\
                 \midrule
                 \endfirsthead
                 \multicolumn{2}{c}%
-                {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+                {{\textsc{\tablename}  ~\thetable\ \TitreNombreDefinitionsCUBF\ (suite)}} \\[1em] 
                 \toprule
                 Utilisation du sol & N \\
                 \midrule
                 \endhead
-                \midrule
-                \multicolumn{2}{r}{Continué à la page suivante} \\
-                \midrule
+                \hline
                 \endfoot
                 \bottomrule
                 \endlastfoot
@@ -889,7 +888,7 @@
                 CUBF = 9459 - AUTRES ESPACES DE PLANCHER INOCCUPÉS DONT L'USAGE SERAIT COMMERCIAL & 57 \\
                 CUBF = 9460 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS DE SERVICES PROFESSIONNELS & 57 \\
                 CUBF = 9470 - ESPACE DE PLANCHER INOCCUPÉ DONT L'USAGE SERAIT POUR DES FINS CULTURELLES & 57 \\
-            \end{longtable}
+            \end{longtable}}
             Le tableau \ref{tab:liste-er-crees} à l'annexe \ref{sec:annex-prs-created} donne une liste des ensembles de règlements créés. La figure \ref{fig:er-counts-byperiod} montre le nombre d'ensembles de règlements par période. La période après l'harmonisation des règlements d'urbanisme (2009-aujourd'hui) comporte le plus d'ensembles de règlements par territoire puisque l'historique détaillé est compilé pour cette période alors que les autres ont une couverture nettement plus faible.
             
             Ceci complète le survol des données requises pour stocker l'inventaire et la réglementation. La section suivante définira les objets informatiques implémentés pour représenter les quantités d'intérêts. 
@@ -919,6 +918,8 @@
             \clearpage
         \subsubsection{Classe TaxDataset ou ensemble de données foncières}
             L'ensemble de données foncières est constitué de 3 attributs représentés au moyen des librairies Pandas et GeoPandas. Quatre méthodes ont été implémentées pour filtrer les données foncières selon des critères liés à leurs attributs.
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{longtable}{p{5cm}p{11cm}}
                 \caption{Attributs, méthodes et utilitaires de la classe \textbf{TaxDataset}}
                 \label{tab:taxdatabase_structure}\\
@@ -960,10 +961,12 @@
                 \midrule
                 tax\_database\_points\_ from\_date\_territory & Renvoie un ensemble de données en fonction de l'identifiant du territoire, d'une date de début et d'une date de fin. \\
                 tax\_database\_for\_ analysis\_territory & Renvoie un ensemble de données pour un territoire d'analyse en fournissant l'identifiant du quartier \\
-            \end{longtable}
+            \end{longtable}}
             \clearpage
         \subsubsection{Classe ParkingRegulation ou Règlement de Stationnement} 
             Cet objet représente un ou plusieurs règlements. Il est composé des tables suivantes:
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{table}[H]
             \centering
             \caption{Structure et méthodes principales de l'objet \textbf{ParkingRegulation}}
@@ -990,10 +993,12 @@
             from\_postgis & Renvoie un ou plusieurs règlements dont l'identifiant correspond à ceux fournis, en interrogeant la base de données \textit{PostGIS}. \\
             \bottomrule
             \end{tabular}
-            \end{table}
+            \end{table}}
         
         \subsubsection{Classe ParkingRegulationSet ou ensemble de règlements}
             Un ensemble de règlements représente une liste de règlements en vigueur au même moment et affecte les règlements aux \ac{CUBF}. Il a pour but de représenter un ensemble de règlements qui ont été en vigueur sur une période commune (et un territoire commun qui sera défini à l'aide d'un autre objet). Il hérite de l'objet \ac{PR} en reprenant reg\_def, reg\_head et units\_table auxquels s'ajoutent les attributs suivants:
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{longtable}{p{5cm}p{11cm}}
             \caption{Structure et méthodes principales de l'objet \textbf{ParkingRegulationSet}}
             \label{tab:parkingregulationset_structure}\\
@@ -1036,10 +1041,12 @@
                 \midrule
                 from\_sql & Renvoie un ensemble de règlements dont l'identifiant correspond à celui fourni, à partir d'une requête SQL. \\
                 
-            \end{longtable}
-        
+            \end{longtable}}
+        \clearpage
         \subsubsection{Classe RegSetTerritory ou ensemble de règlements de territoires}
             Un \ac{RST} associe un territoire à un ensemble de règlements. Ces paramètres sont listés ci-dessous:
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{table}[H]
                 \centering
                 \caption{Structure et fonctions principales de l'objet \textbf{RegSetTerritory} (RST)}
@@ -1063,11 +1070,13 @@
                 explore\_RST\_TD & Crée une carte dynamique dans un fichier HTML permettant de visualiser les ensembles de données. \\
                 \bottomrule
                 \end{tabular}
-            \end{table}
+            \end{table}}
             \clearpage
         
         \subsubsection{Classe ParkingCalculationInput ou intrant au calcul de stationnement}
             Le \ac{PCI} hérite des DataFrame Pandas \parencite{pandas_contributors_pandas_2025}. La table a les colonnes suivantes:
+            {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
             \begin{table}[H]
             \centering
             \caption{Structure et méthodes principales de l'objet \textbf{ParkingCalculationInput}}
@@ -1096,25 +1105,26 @@
             generate\_input\_ from\_PRS\_TD & Convertit les données foncières en données utilisables pour le calcul des capacités minimale et maximale selon les unités définies dans les règlements. \\
             \bottomrule
             \end{tabular}
-            \end{table}
+            \end{table}}
         \clearpage
         
         \subsubsection{Classe ParkingInventory ou inventaire de stationnement}
         L'inventaire de stationnement a un seul attribut qui est un DataFrame: 
+        \newcommand{\TableCaptionParkingInventory}{Structure et méthodes principales de l'objet \textbf{ParkingInventory}}
+        {\captionsetup{justification=centering}
+            \setlength{\LTcapwidth}{\linewidth} 
         \begin{longtable}{p{5cm} p{11cm} }
-            \caption{Structure et méthodes principales de l'objet \textbf{ParkingInventory}}\label{tab:obj_parking_inventory}\\
+            \caption{\TableCaptionParkingInventory}\label{tab:obj_parking_inventory}\\
             \toprule
             \textbf{Type} & \textbf{Description} \\
             \midrule
             \endfirsthead
             \multicolumn{2}{c}%
-            {{\tablename  ~\thetable{} -- suite de la page précédente}} \\[0.5ex] \\
+            {{\tablename  ~\thetable{} \TableCaptionParkingInventory\ (suite)}} \\[1em] 
             \toprule
             \textbf{Type} & \textbf{Description} \\
             \midrule
             \endhead
-            \midrule
-            \multicolumn{2}{r}{Continué à la page suivante} \\
             \midrule
             \endfoot
             \bottomrule
@@ -1137,9 +1147,9 @@
             to\_sql & Sauvegarde l'inventaire avec vérification des doublons. Permet à l'utilisateur de confirmer le remplacement d'un estimé existant. \\
             calculate\_parking\_for\_ reg\_set\_territories & Itère sur les \ac{RST} fournis. Lance generate\_input\_from\_PRS\_TD et calculate\_inventory\_from\_ inputs\_class\\
             calculate\_inventory\_from\_ inputs\_class & Itère sur les id\_reg\_set dans l'input classe et lance \\
-            calculate\_parking\_specific\_reg\_ from\_inputs\_class & Itère sur les sous-ensembles de chaque \ac{PR} et lance calculate\_parking\_subset\_ from\_inputs\_class  \\
+            calculate\_parking\_specific \_reg\_from\_inputs\_class & Itère sur les sous-ensembles de chaque \ac{PR} et lance calculate\_parking\_subset\_ from\_inputs\_class  \\
             calculate\_parking\_subset\_ from\_inputs\_class & Calcule la capacité de stationnement requise pour chaque sous-ensemble d'un règlement donné \\
-        \end{longtable}
+        \end{longtable}}
 
     Cette section a donné un aperçu de l'organisation des classes créées pour faire le calcul de l'inventaire à partir des données entreposées dans la base de données détaillée auparavant. La section suivante montrera schématiquement comment les différentes fonctions et méthodes sont utilisées pour sélectionner, assembler, et faire le traitement des données avant de les retourner à l'utilisateur.
 
@@ -1159,7 +1169,7 @@
         \begin{figure}[h]
             \centering
             \includegraphics[]{figures/select-donnees-foncieres.pdf}
-            \caption{Sélection des entrées du rôle pertinentes dans tax\_database\_for\_analysis\_territory}
+            \caption{Sélection des entrées du rôle pertinentes pour un territoire donné}
             \label{fig:select-tax-data}
         \end{figure}
         Les requêtes SQL pertinentes sont données en annexe \ref{sec:annex-select-tax-data}. Le résultat représente les limites et propriétés de lots, l'association entre les lots et les entrées du rôle. La figure \ref{fig:select-tax-dataset} donne une représentation schématique d'un \ac{TD} qui est une combinaison des données du rôle foncier et du cadastre.
